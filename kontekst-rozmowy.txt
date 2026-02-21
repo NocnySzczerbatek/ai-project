@@ -1,0 +1,210 @@
+================================================================
+PODSUMOWANIE ROZMOWY - Cobblemon Mastery Guide
+Data: 21 lutego 2026
+================================================================
+
+PROJEKT: c:\Users\Administrator\Documents\dev\ai-project\
+----------------------------------------------------------------
+
+PLIKI STWORZONE W PROJEKCIE:
+  1. tetris.html       - Gra Tetris w HTML/JS (Canvas API)
+  2. snake.html        - Gra Snake w HTML/JS (Canvas API)
+  3. cobblemon-guide.html - Główny projekt (Cobblemon Mastery Guide)
+  4. kontekst-rozmowy.txt - Ten plik
+
+================================================================
+SZCZEGÓŁY: cobblemon-guide.html
+================================================================
+
+CEL STRONY:
+  Dedykowana baza wiedzy dla graczy modyfikacji Cobblemon do Minecrafta.
+  Dane pobierane z PokeAPI (https://pokeapi.co) na żywo.
+  Całość w jednym pliku HTML (vanilla JS, bez frameworków).
+
+DESIGN:
+  - Czcionki: "Press Start 2P" (nagłówki) + "VT323" (body) z Google Fonts
+  - Styl: Minecraft Inventory / dark theme
+  - Kolory: zielony #55ff55, złoty #ffaa00, akwamaryna #55ffff
+  - Kanciaste panele (bevel borders jak w ekwipunku MC)
+
+STRUKTURA STRONY:
+  - Header (sticky): tytuł, przyciski nawigacji
+  - Sidebar lewy: wyszukiwarka + filtry generacji I-IX + lista Pokémonów
+  - Main area: zmienna treść (welcome / detail / items / apricorns)
+  - Status bar (dół): spinner + komunikat ładowania
+
+FUNKCJE SIDEBARU:
+  - Wyszukiwanie live po nazwie i ID
+  - Filtr generacji (Gen I-IX) z dokładnymi zakresami ID:
+      Gen I:   1-151
+      Gen II:  152-251
+      Gen III: 252-386
+      Gen IV:  387-493
+      Gen V:   494-649
+      Gen VI:  650-721
+      Gen VII: 722-809
+      Gen VIII:810-905
+      Gen IX:  906-1025
+  - Ikona ♥ = ewolucja przez przyjaźń (FRIENDSHIP_EVOS)
+  - Ikona ⇄ = ewolucja przez wymianę Link Cable (LINK_CABLE_EVOS)
+  - Infinite scroll (PAGE_SIZE = 80)
+  - Cache listy w localStorage ('cob_pokemon_list')
+
+================================================================
+WIDOK SZCZEGÓŁOWY POKÉMONA (loadDetail → renderDetail)
+================================================================
+
+Sekcja 1: PORTRET + DANE PODSTAWOWE (lewa kolumna)
+  - Artwork (official-artwork z PokeAPI)
+  - Typy z kolorami (18 typów)
+  - Wzrost, waga, habitat, capture rate, base exp
+  - Zdolności (kolor: #55ffff zwykłe, #a855f7 ukryte)
+  - Flavor text (angielski z PokeAPI)
+
+Sekcja 2: STATYSTYKI BAZOWE (prawa kolumna)
+  - Paski HP/ATK/DEF/SpATK/SpDEF/SPE z kolorami
+  - Suma statystyk
+
+Sekcja 3: IV (Individual Values) - skala 0-31
+  - Funkcja buildIVSection(stats)
+  - Automatyczna detekcja roli przez detectRole(statMap):
+      isPhys  = ATK >= SpATK + 15
+      isSpec  = SpATK >= ATK + 15
+      isMixed = ani jedno
+      isTank  = (DEF+SpDEF)/2 >= 90 && SPE < 80
+      isFast  = SPE >= 80
+      isTR    = SPE <= 50 (Trick Room kandydat)
+  - CEL per stat (31 / 0 / >=20) z uzasadnieniem
+  - ATK = 0 dla specjalnych atakujących (Foul Play / Confusion)
+  - SpATK = 0 dla fizycznych atakujących
+  - Pola input 0-31 z live paskami kolorowymi
+  - Skala: 28-31=Doskonałe(zielony), 20-27=Dobre(żółty),
+           10-19=Słabe(pomarańczowy), 0-9=Złe(czerwony)
+
+Sekcja 4: COMPETITIVE BUILD (fioletowa sekcja)
+  - Funkcja buildCompetitiveSection(stats, types, moves)
+  
+  4a. EV Spread (buildEVSection):
+      - Rozkłady 252/252/4 lub 252/128/128 zależnie od roli
+      - Przykłady:
+          Spec Fast:   252 SpATK / 252 SPE / 4 HP
+          Spec Tank:   252 HP / 252 SpDEF / 4 SpATK
+          Phys Fast:   252 ATK / 252 SPE / 4 HP
+          Trick Room:  252 ATK / 252 HP / 4 SPE
+          Full Tank:   252 HP / 128 DEF / 128 SpDEF
+      - Max 510 EV na Pokémona, max 252 na stat
+  
+  4b. Natura (buildNatureBox):
+      - Fizyczny szybki → Jolly (+SPE / -SpATK)
+      - Fizyczny wolny  → Adamant (+ATK / -SpATK)
+      - Trick Room fiz  → Brave (+ATK / -SPE)
+      - Spec szybki     → Timid (+SPE / -ATK)
+      - Spec wolny      → Modest (+SpATK / -ATK)
+      - Trick Room spec → Quiet (+SpATK / -SPE)
+      - Spec Tank       → Calm (+SpDEF / -ATK)
+      - Phys Tank       → Impish (+DEF / -SpATK)
+  
+  4c. Held Item (buildItemBox + HELD_ITEMS):
+      - SPE>=100 + Phys  → Choice Band
+      - SPE>=100 + Spec  → Choice Specs
+      - Phys/Spec Fast   → Life Orb
+      - Tank (Spec)      → Leftovers
+      - Tank (Phys)      → Rocky Helmet
+      - Mixed            → Life Orb
+  
+  4d. Best 4 Moveset (buildBest4):
+      - Baza danych MOVE_DATA: ~120+ ataków z [power, type, category]
+      - Algorytm scoringu:
+          base_score = power
+          × 1.4 jeśli kategoria pasuje do roli
+          × 1.5 jeśli STAB (typ pokémona)
+          + 25 pkt za priority moves
+          setup moves: 80pkt ofensywne, 70pkt defensywne (tank), 15pkt utility
+      - Wybór top 4 z diversyfikacją typów (max 2 same type)
+      - Każda karta: nazwa, Fiz./Spec./Status, PWR, STAB/coverage, gwiazdki ⭐
+
+Sekcja 5: EWOLUCJA (łańcuch klikalny)
+  - renderEvoChain(chain) - rekurencja przez chain z PokeAPI
+  - Trigger: Lv.X / item / trade / ♥ przyjaźń
+  - Kliknięcie na formę przechodzi do jej detali
+
+Sekcja 6: POLECANE DLA COBBLEMON (zielona sekcja)
+  - Ewolucja przez przyjaźń: FRIENDSHIP_EVOS (16 Pokémonów)
+      Komenda: /checkfriendship @s
+      Próg: 160/255 friendship
+  - Link Cable evolutions: LINK_CABLE_EVOS (21 Pokémonów)
+      np. Kadabra→Alakazam (bez przedmiotu)
+          Onix→Steelix (Metal Coat)
+          Seadra→Kingdra (Dragon Scale)
+
+Sekcja 7: PEŁNA LISTA ATAKÓW (zakładki)
+  - "Przez poziom" - tabela z Lv, nazwa, typ, PWR
+  - "TM/TR" - chipy z nazwami
+  - "Egg Moves" - fioletowe chipy (jeśli są)
+
+================================================================
+DANE COBBLEMON-SPECIFIC
+================================================================
+
+FRIENDSHIP_EVOS (Set 16 nazw):
+  pichu, cleffa, igglybuff, togepi, chansey, golbat, eevee,
+  azurill, budew, buneary, riolu, happiny, munchlax, chingling,
+  woobat, swadloon
+
+LINK_CABLE_EVOS (Object 21 wpisów):
+  kadabra, machoke, graveler, haunter, onix, scyther, seadra,
+  slowpoke, poliwhirl, porygon, porygon2, clamperl, boldore,
+  gurdurr, karrablast, shelmet, phantump, pumpkaboo, spritzee,
+  swirlix, feebas
+
+================================================================
+STRONY NAWIGACYJNE
+================================================================
+
+/welcome - Strona startowa (6 kart z opisami funkcji)
+/items   - 24 kluczowe przedmioty (kamienie, held items, Link Cable, Soothe Bell...)
+/apricorns - 7 kolorów Apricornów → Pokéballe z efektami:
+    Czarny → Heavy Ball, Niebieski → Lure Ball, Zielony → Friend Ball,
+    Różowy → Love Ball, Czerwony → Level Ball,
+    Biały → Fast Ball, Żółty → Moon Ball
+
+================================================================
+TECHNICZNE
+================================================================
+
+- Cache danych: localStorage 'cob_pokemon_list' (lista 1025 Pokémonów)
+- Detail cache: obiekt detailCache[id] w pamięci (session)
+- Fetch: Promise.all([pokemon/ID, pokemon-species/ID]) + evo chain
+- Global functions: updateIVBar(input), switchMovesTab(btn, panelId)
+- Fonts: Google Fonts (VT323 + Press Start 2P)
+- Nie używa żadnych zewnętrznych bibliotek JS
+
+================================================================
+MOŻLIWE DALSZE ULEPSZENIA (TODO)
+================================================================
+
+- [ ] Dodać filtr po typie (np. pokaż tylko Fire-type)
+- [ ] Porównywarka dwóch Pokémonów obok siebie
+- [ ] Tryb "Server Builder" - wybierz drużynę 6 Pokémonów
+- [ ] Export buildu do clipboard w formacie Showdown!
+- [ ] Zakładka Locations (gdzie złapać w Cobblemon)
+- [ ] Tryb offline (Service Worker / PWA)
+- [ ] Ulepszyć MOVE_DATA o opisy ataków (fetch z /move/{name}/)
+- [ ] Dodać sekcję "Counter" - na co uważać (typy słabości)
+- [ ] Tłumaczenie nazw ataków na polski
+
+================================================================
+WDROŻENIE (jak udostępnić publicznie)
+================================================================
+
+NAJSZYBCEJ: Netlify Drop
+  1. Wejdź na https://app.netlify.com/drop
+  2. Przeciągnij folder ai-project
+  3. Gotowy link np. https://losowa-nazwa.netlify.app/cobblemon-guide.html
+
+GITHUB PAGES:
+  1. github.com → nowe repo np. "cobblemon-guide"
+  2. Wgraj pliki, Settings → Pages → main → Save
+  3. Link: https://twoja-nazwa.github.io/cobblemon-guide/cobblemon-guide.html
+
+================================================================
