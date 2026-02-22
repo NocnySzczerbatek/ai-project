@@ -1708,7 +1708,7 @@ function setLang(lang){
   else if(currentPage==='apricorns')showPage('apricorns');
   else if(currentPage==='team-analyzer')showPage('team-analyzer');
   else if(currentPage==='type-chart')showPage('type-chart');
-  else if(currentPage==='battle-sim')showPage('battle-sim');
+  else if(currentPage==='battle-sim')window.location.href='arena.html';
   else if(selectedId){var f=allPokemon.find(function(p){return p.id===selectedId;});if(f)loadDetail(f.id,f.name);}
 }
 
@@ -3203,7 +3203,7 @@ function battleRenderArena() {
       (isWin ? t('battle.yourWon').replace('%p', p.name) : t('battle.yourLost').replace('%p', p.name)) + '</div>' +
       '<div class="battle-result-buttons">' +
       '<button class="mc-btn" onclick="battleStart()" style="background:#2a5a2a;border-top-color:#5a8a5a;border-left-color:#5a8a5a">' + t('battle.rematch') + '</button>' +
-      '<button class="mc-btn" onclick="showPage(\'battle-sim\')">' + t('battle.newBattle') + '</button></div></div>';
+      '<a class="mc-btn" href="arena.html" style="text-decoration:none">' + t('battle.newBattle') + '</a></div></div>';
   }
 
   main.innerHTML =
@@ -3359,7 +3359,7 @@ function showPage(page) {
       + '<div class="welcome-card"><h3>\ud83d\udce6 '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wa\u017cne przedmioty w jednym miejscu.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'items\')">\u2192 '+t('nav.items')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2694 '+t('nav.team')+'</h3><p>'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sk\u0142ad dru\u017cyny PvP i pokrycie typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'team-analyzer\')">\u2192 '+t('nav.team')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2696 '+t('nav.typechart')+'</h3><p>'+(currentLang==='en'?'Check your Pok\u00e9mon\'s weaknesses, resistances and immunities with dual-type support.':'Sprawd\u017a s\u0142abo\u015bci, odporno\u015bci i immunitety swojego Pok\u00e9mona z obs\u0142ug\u0105 podw\u00f3jnych typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'type-chart\')">\u2192 '+t('nav.typechart')+'</button></p></div>'
-      + '<div class="welcome-card" style="border-top-color:#8a5a5a;border-left-color:#8a5a5a"><h3 style="color:var(--red)">\u2694 '+t('nav.battle')+'</h3><p>'+t('battle.welcomeDesc')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'battle-sim\')" style="background:#5a2a2a;border-top-color:#8a5a5a;border-left-color:#8a5a5a">\u2192 '+t('nav.battle')+'</button></p></div>'
+      + '<div class="welcome-card" style="border-top-color:#8a5a5a;border-left-color:#8a5a5a"><h3 style="color:var(--red)">\u2694 '+t('nav.battle')+'</h3><p>'+t('battle.welcomeDesc')+'</p><p style="margin-top:6px"><a class="mc-btn" href="arena.html" style="background:#5a2a2a;border-top-color:#8a5a5a;border-left-color:#8a5a5a;text-decoration:none">\u2192 '+t('nav.battle')+'</a></p></div>'
       + '</div>';
   }
 
@@ -3398,9 +3398,8 @@ function showPage(page) {
   }
 
   if (page === 'battle-sim') {
-    battleState = null;
-    battleSetupData = { player: null, opponent: null };
-    main.innerHTML = renderBattleSetupPage();
+    window.location.href = 'arena.html';
+    return;
   }
 }
 
