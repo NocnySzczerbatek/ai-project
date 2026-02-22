@@ -478,7 +478,7 @@
       padding: 6px; border: 2px solid #444; background: #222;
       transition: border-color 0.1s; min-width: 70px;
     }
-    .evo-item:hover { border-color: var(--green); }
+    .evo-item:hover { border-color: var(--green); transform: scale(1.05); }
     .evo-item img { width: 56px; height: 56px; image-rendering: pixelated; }
     .evo-item span { font-size: 14px; color: var(--white); text-transform: capitalize; text-align: center; }
     .evo-arrow { font-size: 24px; color: var(--gold); }
@@ -495,6 +495,13 @@
     .evo-trigger .evo-cond-cobblemon {
       display: block; font-size: 10px; color: #55ff55; font-style: italic;
     }
+    .evo-condition {
+      font-size: 11px; color: var(--gold); text-align: center; max-width: 100px;
+      line-height: 1.3; margin-top: 4px; word-wrap: break-word;
+    }
+    .evo-condition .evo-cond { display: block; font-size: 11px; color: #aaa; text-transform: none; }
+    .evo-condition .evo-cond-special { display: block; font-size: 11px; color: #55ddff; text-transform: none; }
+    .evo-condition .evo-cond-cobblemon { display: block; font-size: 10px; color: #55ff55; font-style: italic; text-transform: none; }
 
     /* ── ITEMS PAGE ── */
     .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
@@ -2133,6 +2140,9 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   // ── CALCULATOR SECTION ──
   function buildCalculatorSection(stats, abilityDetailsArr) {
     var statMap={}; stats.forEach(function(s){statMap[s.stat.name]=s.base_stat;});
+    var calcEligible = getEligibleBuilds(statMap);
+    var _bLabels = {'physical':t('build.phys'),'special':t('build.spec'),'defensive':t('build.def'),'mixed':t('build.mixed'),'support':t('build.support'),'niche':t('build.niche')};
+    var calcBuildOpts = calcEligible.map(function(key){return '<option value="'+key+'">'+(_bLabels[key]||key)+'</option>';}).join('');
     var ORDER=['hp','attack','defense','special-attack','special-defense','speed'];
     var ivRows = ORDER.map(function(sn){
       return '<div class="calc-box"><label>'+(STAT_NAMES[sn]||sn)+' IV (0-31)</label><input class="calc-field" type="number" min="0" max="31" value="31" id="calc-iv-'+sn+'" /></div>';
@@ -2157,7 +2167,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       +'<div class="calc-grid">'+ivRows+'</div>'
       +'<div class="calc-grid"><div class="calc-box"><label>'+t('build.nature')+'</label><select class="calc-select" id="calc-nature">'+natureOpts+'</select></div>'
       +'<div class="calc-box"><label>'+t('build.ability')+'</label><select class="calc-select" id="calc-ability">'+abilityOpts+'</select></div></div>'
-      +'<div class="calc-grid"><div class="calc-box"><label>'+(currentLang==='en'?'Compare with build:':'Por\u00f3wnaj z buildem:')+'</label><select class="calc-select" id="calc-build-type"><option value="physical">'+t('build.phys')+'</option><option value="special">'+t('build.spec')+'</option><option value="defensive">'+t('build.def')+'</option></select></div>'
+      +'<div class="calc-grid"><div class="calc-box"><label>'+(currentLang==='en'?'Compare with build:':'Por\u00f3wnaj z buildem:')+'</label><select class="calc-select" id="calc-build-type">'+calcBuildOpts+'</select></div>'
       +'<div class="calc-box" style="display:flex;align-items:flex-end"><button class="mc-btn" onclick="evaluatePokemon()" style="width:100%">\ud83d\udcca '+t('gen.evaluate')+'</button></div></div>'
       +'<div class="calc-verdict" id="calc-verdict"><span class="verdict-emoji">\u2753</span>'+(currentLang==='en'?'Enter data and click "Rate!"':'Wpisz dane i kliknij "Oce\u0144!"')+'</div></div>';
   }
@@ -2240,6 +2250,12 @@ function evaluatePokemon() {
     idealIVs = {hp:31, attack:31, defense:20, 'special-attack':0, 'special-defense':20, speed:31};
   } else if (buildType === 'special') {
     idealIVs = {hp:31, attack:0, defense:20, 'special-attack':31, 'special-defense':20, speed:31};
+  } else if (buildType === 'mixed') {
+    idealIVs = {hp:31, attack:31, defense:20, 'special-attack':31, 'special-defense':20, speed:31};
+  } else if (buildType === 'support') {
+    idealIVs = {hp:31, attack:0, defense:31, 'special-attack':0, 'special-defense':31, speed:20};
+  } else if (buildType === 'niche') {
+    idealIVs = {hp:31, attack:31, defense:20, 'special-attack':31, 'special-defense':20, speed:31};
   } else {
     idealIVs = {hp:31, attack:0, defense:31, 'special-attack':0, 'special-defense':31, speed:20};
   }
@@ -2248,14 +2264,20 @@ function evaluatePokemon() {
   var idealNatures = {
     physical: ['Adamant','Jolly'],
     special: ['Modest','Timid'],
-    defensive: ['Bold','Calm','Impish','Careful']
+    defensive: ['Bold','Calm','Impish','Careful'],
+    mixed: ['Naive','Hasty','Lonely','Mild'],
+    support: ['Bold','Calm','Impish','Careful'],
+    niche: ['Brave','Quiet','Jolly','Timid','Adamant','Modest']
   };
 
   // Define key stats per build
   var keyStats = {
     physical: ['attack','speed'],
     special: ['special-attack','speed'],
-    defensive: ['hp','defense','special-defense']
+    defensive: ['hp','defense','special-defense'],
+    mixed: ['attack','special-attack','speed'],
+    support: ['hp','defense','special-defense'],
+    niche: ['attack','special-attack','speed']
   };
 
   // Score calculation
@@ -2457,21 +2479,22 @@ function renderEvoChain(chain) {
       return '<span class="' + (i===0?'evo-cond':'evo-cond-special') + '">' + p + '</span>';
     }).join('');
   }
-  function walk(node) {
+  function walk(node, incomingTrigger) {
     var name = node.species.name;
     var id = node.species.url.split('/').filter(Boolean).pop();
-    html += '<div class="evo-item" data-evo-name="'+name+'"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+id+'.png" alt="'+name+'"/><span>'+name+'</span></div>';
+    var condHTML = incomingTrigger ? '<div class="evo-condition">'+incomingTrigger+'</div>' : '';
+    html += '<div class="evo-item" data-evo-name="'+name+'" title="'+(currentLang==='en'?'Click to view details':'Kliknij aby zobaczy\u0107 szczeg\u00f3\u0142y')+'">' +'<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+id+'.png" alt="'+name+'"/>' +'<span>'+name+'</span>'+condHTML+'</div>';
     if (node.evolves_to && node.evolves_to.length > 0) {
       node.evolves_to.forEach(function(next) {
         var det = next.evolution_details && next.evolution_details[0];
         var toName = next.species.name;
         var triggerHtml = buildTriggerText(det, name, toName);
-        html += '<div style="display:flex;flex-direction:column;align-items:center"><span class="evo-arrow">\u2192</span><span class="evo-trigger">'+triggerHtml+'</span></div>';
-        walk(next);
+        html += '<span class="evo-arrow">\u2192</span>';
+        walk(next, triggerHtml);
       });
     }
   }
-  walk(chain);
+  walk(chain, '');
   return html;
 }
 
