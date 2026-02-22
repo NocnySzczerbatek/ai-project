@@ -526,7 +526,7 @@
     }
     .sidebar-overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6); z-index: 90;
+      background: rgba(0,0,0,0.6); z-index: 999;
     }
     .sidebar-overlay.active { display: block; }
 
@@ -756,7 +756,7 @@
       .app-layout { flex-direction: column; height: auto; min-height: calc(100vh - 80px); }
       aside {
         position: fixed; left: -280px; top: 0; bottom: 0;
-        width: 280px; min-width: 280px; z-index: 95; transition: left 0.25s ease;
+        width: 280px; min-width: 280px; z-index: 1000; transition: left 0.25s ease;
       }
       aside.mobile-open { left: 0; }
       .main-area { padding: 12px; padding-bottom: 50px; }
