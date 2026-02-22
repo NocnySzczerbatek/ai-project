@@ -362,6 +362,7 @@
       border-bottom: 2px solid #5a3a9a;
     }
     .comp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .comp-grid-full { margin-bottom: 14px; }
     .comp-box { background: #0a0818; border: 2px solid #3a2a6a; padding: 10px; }
     .comp-box-title {
       font-family: 'Press Start 2P', monospace; font-size: 8px;
@@ -384,6 +385,19 @@
       color: var(--gold); margin-bottom: 6px;
     }
     .item-big-desc { font-size: 16px; color: #aaa; line-height: 1.5; }
+    .ability-box { background: #0a0818; border: 2px solid #6a3aaa; padding: 10px; }
+    .ability-name {
+      font-family: 'Press Start 2P', monospace; font-size: 9px;
+      color: #c084fc; margin-bottom: 6px; text-transform: capitalize;
+    }
+    .ability-desc { font-size: 15px; color: #aaa; line-height: 1.5; }
+    .ability-hidden-tag {
+      font-size: 12px; color: #a855f7; margin-left: 4px;
+    }
+    .ability-rec-tag {
+      display: inline-block; font-size: 11px; color: #55ff55; margin-top: 6px;
+      border: 1px solid #2a5a2a; background: #0a1a0a; padding: 1px 6px;
+    }
     .best4-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .move-card {
       background: #0a0818; border: 2px solid #3a2a6a; padding: 8px 10px; position: relative;
@@ -1101,6 +1115,9 @@ const TR = {
   'build.ev':        {pl:'Rozk\u0142ad EV',en:'EV Spread'},
   'build.nature':    {pl:'Natura',en:'Nature'},
   'build.item':      {pl:'Przedmiot',en:'Item'},
+  'build.ability':   {pl:'Zdolno\u015b\u0107',en:'Ability'},
+  'build.abilityHidden': {pl:'[ukryta]',en:'[hidden]'},
+  'build.abilityRec':    {pl:'Zalecana dla tego buildu',en:'Recommended for this build'},
   'build.best4':     {pl:'Najlepsze 4 Ataki',en:'Best 4 Moves'},
   'build.copyLink':  {pl:'Kopiuj Link do Buildu',en:'Copy Build Link'},
   'gen.loading':     {pl:'\u0141adowanie...',en:'Loading...'},
@@ -1595,10 +1612,20 @@ async function loadDetail(id, name) {
       data = { p:p, s:s };
       detailCache[id] = data;
     }
+    // Fetch ability details
+    if (!data.abilityDetails) {
+      try {
+        var abilityPromises = data.p.abilities.map(function(a){
+          return fetch('https://pokeapi.co/api/v2/ability/'+a.ability.name).then(function(r){return r.json();});
+        });
+        data.abilityDetails = await Promise.all(abilityPromises);
+      } catch(e2) { data.abilityDetails = []; }
+      detailCache[id] = data;
+    }
     var evoChainUrl = data.s.evolution_chain ? data.s.evolution_chain.url : null;
     var evoChain = null;
     if (evoChainUrl) { var evoRes = await fetch(evoChainUrl); evoChain = await evoRes.json(); }
-    renderDetail(data.p, data.s, evoChain, name);
+    renderDetail(data.p, data.s, evoChain, name, data.abilityDetails);
     setStatus('#'+String(id).padStart(3,'0')+' '+name, false);
     window.location.hash = 'pokemon-'+id;
   } catch(e) {
@@ -1627,7 +1654,7 @@ function typeIconHTML(tpName, size) {
 /* ================================================================
    RENDER DETAIL
    ================================================================ */
-function renderDetail(p, s, evoChain, name) {
+function renderDetail(p, s, evoChain, name, abilityDetails) {
   var isFriendship = FRIENDSHIP_EVOS.has(p.name);
   var isTradeEvo = p.name in LINK_CABLE_EVOS;
   var flavor = '';
@@ -1698,7 +1725,52 @@ function renderDetail(p, s, evoChain, name) {
   }
 
   // ── BUILD GENERATOR ──
-  function generateBuild(statMap, pokemonTypes, moves, buildType) {
+  // ── ABILITY RECOMMENDATION LOGIC ──
+  var ABILITY_PREF = {
+    physical: ['huge-power','pure-power','tough-claws','sheer-force','iron-fist','moxie','technician','skill-link','guts','sand-rush','swift-swim','chlorophyll','reckless','adaptability','hustle','strong-jaw','no-guard','scrappy','defiant','intrepid-sword'],
+    special: ['adaptability','download','soul-heart','beast-boost','serene-grace','sheer-force','magic-guard','protean','libero','tinted-lens','drought','drizzle','electric-surge','psychic-surge','grassy-surge','misty-surge','transistor','dragons-maw','compound-eyes'],
+    defensive: ['regenerator','multiscale','magic-bounce','magic-guard','unaware','natural-cure','sturdy','intimidate','imposter','poison-heal','thick-fat','water-absorb','volt-absorb','flash-fire','levitate','marvel-scale','fur-coat','ice-scales','prankster','heatproof']
+  };
+
+  function pickAbility(pokemonAbilities, abilityDetails, buildType) {
+    var prefs = ABILITY_PREF[buildType] || [];
+    var abilities = pokemonAbilities || [];
+    var details = abilityDetails || [];
+    // Score each ability
+    var scored = abilities.map(function(a, idx) {
+      var slug = a.ability.name;
+      var prefIdx = prefs.indexOf(slug);
+      var score = prefIdx !== -1 ? (prefs.length - prefIdx) : 0;
+      if (a.is_hidden && score > 0) score += 5; // hidden competitive abilities are often best
+      if (!a.is_hidden && score === 0) score = 1; // prefer non-hidden as baseline
+      var detail = details[idx] || null;
+      return { slug: slug, isHidden: a.is_hidden, score: score, detail: detail };
+    });
+    scored.sort(function(a, b) { return b.score - a.score; });
+    return scored[0] || null;
+  }
+
+  function getAbilityText(abilityDetail) {
+    if (!abilityDetail) return { name: '?', desc: '' };
+    var eName = abilityDetail.name || '?';
+    // Get localized name
+    var nameEntry;
+    if (currentLang === 'pl') {
+      nameEntry = (abilityDetail.names || []).find(function(n){ return n.language.name === 'pl'; });
+    }
+    if (!nameEntry) nameEntry = (abilityDetail.names || []).find(function(n){ return n.language.name === 'en'; });
+    var displayName = nameEntry ? nameEntry.name : eName.replace(/-/g, ' ');
+    // Get localized description
+    var descEntry;
+    var langCode = currentLang === 'pl' ? 'pl' : 'en';
+    var flavorEntries = abilityDetail.flavor_text_entries || [];
+    descEntry = flavorEntries.filter(function(f){ return f.language.name === langCode; }).pop();
+    if (!descEntry && langCode === 'pl') descEntry = flavorEntries.filter(function(f){ return f.language.name === 'en'; }).pop();
+    var desc = descEntry ? descEntry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ') : '';
+    return { name: displayName, desc: desc };
+  }
+
+  function generateBuild(statMap, pokemonTypes, moves, buildType, pokemonAbilities, abilityDetails) {
     var r = detectRole(statMap);
     var spread,note,nName,nUp,nDown,nWhy,item,itemDesc;
     // Three build types: 'physical','special','defensive'
@@ -1739,10 +1811,18 @@ function renderDetail(p, s, evoChain, name) {
     var itemImgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+itemSlug+'.png" onerror="this.parentNode.innerHTML=\'<span style=color:#555;font-size:28px>\u25a1</span>\'" style="width:32px;height:32px" />';
     var itemHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udce6 '+t('build.item')+'</div><div style="text-align:center;margin:4px 0">'+itemImgTag+'</div><div class="item-big-name">'+item+'</div><div class="item-big-desc">'+itemDesc+'</div></div>';
 
+    // Ability box
+    var picked = pickAbility(pokemonAbilities, abilityDetails, buildType);
+    var abilText = picked ? getAbilityText(picked.detail) : { name: '?', desc: '' };
+    var hiddenTag = (picked && picked.isHidden) ? '<span class="ability-hidden-tag">'+t('build.abilityHidden')+'</span>' : '';
+    var recTag = (picked && picked.score > 1) ? '<div class="ability-rec-tag">\u2705 '+t('build.abilityRec')+'</div>' : '';
+    var abilityHTML='<div class="ability-box"><div class="comp-box-title">\u26a1 '+t('build.ability')+'</div><div class="ability-name">'+abilText.name+hiddenTag+'</div><div class="ability-desc">'+abilText.desc+'</div>'+recTag+'</div>';
+
     // Best 4 Moveset for this build type
     var movesHTML = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
 
-    return '<div class="comp-grid">'+evHTML+natureHTML+itemHTML+'</div>'
+    return '<div class="comp-grid-full">'+evHTML+'</div>'
+      +'<div class="comp-grid">'+natureHTML+itemHTML+abilityHTML+'</div>'
       +'<div class="comp-box-title" style="margin-bottom:8px">\u2694 '+t('build.best4')+'</div>'
       +'<div style="font-size:14px;color:#666;margin-bottom:8px">'+(currentLang==='en'?'Automatically selected based on types and stats.':'Automatycznie dobrane na podstawie typ\u00f3w i statystyk.')+'</div>'
       +'<div class="best4-grid">'+movesHTML+'</div>';
@@ -1802,7 +1882,7 @@ function renderDetail(p, s, evoChain, name) {
   }
 
   // ── COMPETITIVE SECTION WITH 3 BUILDS ──
-  function buildCompetitiveSection(stats, pokemonTypes, moves) {
+  function buildCompetitiveSection(stats, pokemonTypes, moves, pokemonAbilities, abilityDetails) {
     var statMap = {}; stats.forEach(function(s){statMap[s.stat.name]=s.base_stat;});
     var r = detectRole(statMap);
     // Store for calculator
@@ -1816,7 +1896,7 @@ function renderDetail(p, s, evoChain, name) {
       return '<button class="build-tab'+(i===0?' active':'')+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">'+(i+1)+'. '+b.icon+' '+b.label+'</button>';
     }).join('');
     var panelsHTML = builds.map(function(b,i){
-      return '<div class="build-panel'+(i===0?' active':'')+'" id="build-panel-'+i+'">'+generateBuild(statMap,pokemonTypes,moves,b.key)+'</div>';
+      return '<div class="build-panel'+(i===0?' active':'')+'" id="build-panel-'+i+'">'+generateBuild(statMap,pokemonTypes,moves,b.key,pokemonAbilities,abilityDetails)+'</div>';
     }).join('');
     return '<div class="comp-section"><h2>\ud83c\udfc6 '+t('sec.comp')+' \u2014 '+r.label+'  <button class="copy-link-btn" id="copy-link-btn" onclick="copyBuildLink()" style="float:right;margin-top:-4px">\ud83d\udd17 '+t('build.copyLink')+'</button></h2>'
       +'<div class="build-tabs">'+tabsHTML+'</div>'
@@ -1907,7 +1987,7 @@ function renderDetail(p, s, evoChain, name) {
     +buildIVSection(p.stats)
     +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83e\uddec '+t('sec.evo')+'</h2><div class="evo-chain" id="evo-chain-container">'+evoHTML+'</div></div></div></div>'
     +'<div class="cobblemon-section" style="margin-top:16px"><h2><span class="cob-icon">\u2694</span> '+t('sec.cobblemon')+'</h2>'+cobHTML+'</div>'
-    +buildCompetitiveSection(p.stats, p.types.map(function(tp){return tp.type.name;}), p.moves)
+    +buildCompetitiveSection(p.stats, p.types.map(function(tp){return tp.type.name;}), p.moves, p.abilities, abilityDetails || [])
     +buildMovesSection(p.moves)
     +buildCalculatorSection(p.stats)
     +'<div style="height:40px"></div>';
