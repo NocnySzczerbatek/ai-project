@@ -385,6 +385,33 @@
       color: var(--gold); margin-bottom: 6px;
     }
     .item-big-desc { font-size: 16px; color: #aaa; line-height: 1.5; }
+    .item-layout { display: flex; gap: 12px; }
+    .item-main {
+      flex: 1; background: #0d0a1a; border: 1px solid #5a3a9a;
+      border-radius: 4px; padding: 10px; text-align: center; min-width: 0;
+    }
+    .item-main-label {
+      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      color: #c084fc; margin-bottom: 8px; text-transform: uppercase;
+    }
+    .item-alt-section { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .item-alt-label {
+      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      color: #888; margin-bottom: 8px; text-transform: uppercase;
+    }
+    .item-alt-grid { display: flex; flex-direction: column; gap: 6px; }
+    .item-alt-card {
+      display: flex; align-items: center; gap: 8px;
+      background: #080614; border: 1px solid #2a1a4a;
+      padding: 6px 8px; border-radius: 3px; transition: border-color 0.15s;
+    }
+    .item-alt-card:hover { border-color: #5a3a9a; }
+    .item-alt-info { min-width: 0; }
+    .item-alt-name {
+      font-family: 'VT323', monospace; font-size: 16px;
+      color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .item-alt-desc { font-size: 13px; color: #777; line-height: 1.3; }
     .ability-box { background: #0a0818; border: 2px solid #6a3aaa; padding: 10px; }
     .ability-name {
       font-family: 'Press Start 2P', monospace; font-size: 9px;
@@ -926,7 +953,16 @@
       .apricorn-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
       .mc-badge { font-size: 12px; padding: 2px 6px; }
       .build-tabs { flex-wrap: wrap; }
-      .build-tab { font-size: 15px; padding: 4px 10px; }
+      .build-tab { font-size: 14px; padding: 4px 8px; }
+      .item-layout { flex-direction: column; }
+      .item-main { padding: 8px; }
+      .item-main .item-big-name { font-size: 8px; }
+      .item-main .item-big-desc { font-size: 14px; }
+      .item-alt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+      .item-alt-card { flex-direction: column; text-align: center; padding: 6px; gap: 4px; }
+      .item-alt-name { font-size: 14px; white-space: normal; }
+      .item-alt-desc { font-size: 11px; }
+      .item-alt-info { text-align: center; }
       .ad-container { min-height: 50px; font-size: 12px; }
       .team-slots { grid-template-columns: repeat(2, 1fr); }
       .defense-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
@@ -1077,11 +1113,60 @@ var ITEM_NAMES_PL = {
   'Assault Vest':'Kamizelka Szturmowa','Rocky Helmet':'Skalny Hełm','Eviolite':'Eviolit',
   'Ability Shield':'Tarcza Umiejętności','Sitrus Berry':'Jagoda Sitrus','Lum Berry':'Jagoda Lum',
   'Metal Coat':'Metalowa Powłoka','Dragon Scale':'Smocza Łuska',"King's Rock":'Skała Króla',
-  'Soothe Bell':'Dzwonek Łagodności'
+  'Soothe Bell':'Dzwonek Łagodności',
+  'Expert Belt':'Pas Eksperta','Weakness Policy':'Polityka Słabości',
+  'Light Clay':'Lekka Glina','Heavy-Duty Boots':'Ciężkie Buty',
+  'Toxic Orb':'Toksyczna Sfera','Flame Orb':'Płomienna Sfera',
+  'Air Balloon':'Balonik','Safety Goggles':'Okulary Ochronne',
+  'Mental Herb':'Zioło Psycho','Red Card':'Czerwona Kartka',
+  'Scope Lens':'Luneta','White Herb':'Białe Zioło',
+  'Loaded Dice':'Obciążone Kości','Throat Spray':'Spray do Gardła',
+  'Protective Pads':'Ochraniacze','Covert Cloak':'Maskujący Płaszcz',
+  'Black Sludge':'Czarny Szlam'
 };
 function itemName(enName) {
   if (currentLang === 'pl' && ITEM_NAMES_PL[enName]) return ITEM_NAMES_PL[enName];
   return enName;
+}
+var COMP_ITEM_DB = {
+  'Choice Band':      {slug:'choice-band',      desc:{pl:'Atak \u00d71.5 \u2014 tylko jeden ruch',en:'Atk \u00d71.5 \u2014 one move only'}},
+  'Choice Specs':     {slug:'choice-specs',      desc:{pl:'Sp.Atak \u00d71.5 \u2014 tylko jeden ruch',en:'SpAtk \u00d71.5 \u2014 one move only'}},
+  'Choice Scarf':     {slug:'choice-scarf',      desc:{pl:'Szybko\u015b\u0107 \u00d71.5 \u2014 tylko jeden ruch',en:'Speed \u00d71.5 \u2014 one move only'}},
+  'Life Orb':         {slug:'life-orb',          desc:{pl:'+30% obra\u017ce\u0144, -10% P\u017b za atak',en:'+30% damage, -10% HP per attack'}},
+  'Leftovers':        {slug:'leftovers',         desc:{pl:'Regeneruje 1/16 P\u017b co tur\u0119',en:'Restores 1/16 HP per turn'}},
+  'Focus Sash':       {slug:'focus-sash',        desc:{pl:'Przetrwa jeden cios z pe\u0142nego P\u017b',en:'Survives one hit at full HP'}},
+  'Assault Vest':     {slug:'assault-vest',      desc:{pl:'Sp.Obr \u00d71.5 \u2014 tylko ataki',en:'SpDef \u00d71.5 \u2014 attacks only'}},
+  'Rocky Helmet':     {slug:'rocky-helmet',      desc:{pl:'Zadaje 1/6 P\u017b przy kontakcie',en:'Deals 1/6 HP on contact'}},
+  'Eviolite':         {slug:'eviolite',          desc:{pl:'Obr i Sp.Obr \u00d71.5 (niewyewol.)',en:'Def & SpDef \u00d71.5 (NFE)'}},
+  'Expert Belt':      {slug:'expert-belt',       desc:{pl:'+20% do super-skutecznych',en:'+20% to super-effective moves'}},
+  'Weakness Policy':  {slug:'weakness-policy',   desc:{pl:'+2 Atk/SpAtk po super-skut. ciosie',en:'+2 Atk/SpAtk after SE hit'}},
+  'Light Clay':       {slug:'light-clay',        desc:{pl:'Reflect/L.Screen na 8 tur',en:'Reflect/L.Screen for 8 turns'}},
+  'Heavy-Duty Boots': {slug:'heavy-duty-boots',  desc:{pl:'Ignoruje pu\u0142apki wej\u015bcia',en:'Ignores entry hazards'}},
+  'Toxic Orb':        {slug:'toxic-orb',         desc:{pl:'Zatruwa po 1 turze (Guts)',en:'Poisons after 1 turn (Guts combo)'}},
+  'Flame Orb':        {slug:'flame-orb',         desc:{pl:'Podpala po 1 turze (Guts)',en:'Burns after 1 turn (Guts combo)'}},
+  'Black Sludge':     {slug:'black-sludge',      desc:{pl:'1/16 P\u017b/tur\u0119 (typy Poison)',en:'1/16 HP/turn (Poison types)'}},
+  'Air Balloon':      {slug:'air-balloon',       desc:{pl:'Immunitet na Ziemi\u0119 (do trafienia)',en:'Ground immunity (until hit)'}},
+  'Safety Goggles':   {slug:'safety-goggles',    desc:{pl:'Odporno\u015b\u0107 na pogod\u0119 i proszki',en:'Weather/powder immunity'}},
+  'Sitrus Berry':     {slug:'sitrus-berry',      desc:{pl:'+25% P\u017b poni\u017cej 50%',en:'+25% HP below 50%'}},
+  'Lum Berry':        {slug:'lum-berry',         desc:{pl:'Leczy status jednorazowo',en:'Cures status once'}},
+  'Mental Herb':      {slug:'mental-herb',       desc:{pl:'Blokuje Taunt/Encore raz',en:'Blocks Taunt/Encore once'}},
+  'Red Card':         {slug:'red-card',          desc:{pl:'Wymusza zmian\u0119 po trafieniu',en:'Forces switch after hit'}},
+  'Scope Lens':       {slug:'scope-lens',        desc:{pl:'+1 stopie\u0144 krytycznych',en:'+1 critical hit stage'}},
+  'White Herb':       {slug:'white-herb',        desc:{pl:'Resetuje obni\u017cone staty raz',en:'Resets lowered stats once'}},
+  'Loaded Dice':      {slug:'loaded-dice',       desc:{pl:'Multi-hit: 4-5 trafie\u0144',en:'Multi-hit: 4-5 hits'}},
+  'Protective Pads':  {slug:'protective-pads',   desc:{pl:'Blokuje efekty kontaktowe',en:'Blocks contact effects'}},
+  'Covert Cloak':     {slug:'covert-cloak',      desc:{pl:'Blokuje dodatkowe efekty atak\u00f3w',en:'Blocks additional effects'}},
+  'Throat Spray':     {slug:'throat-spray',      desc:{pl:'+1 SpAtk po ruchu d\u017awi\u0119kowym',en:'+1 SpAtk after sound move'}}
+};
+function getCompItemDesc(itemEN) {
+  var entry = COMP_ITEM_DB[itemEN];
+  if (!entry) return '';
+  return entry.desc[currentLang] || entry.desc.en || '';
+}
+function getCompItemSlug(itemEN) {
+  var entry = COMP_ITEM_DB[itemEN];
+  if (entry) return entry.slug;
+  return itemEN.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '');
 }
 const TYPE_NAMES_PL = {
   normal:'Normalny',fire:'Ogie\u0144',water:'Woda',electric:'Elektryczny',grass:'Trawa',
@@ -1170,6 +1255,11 @@ const TR = {
   'build.abilityRec':    {pl:'Zalecana dla tego buildu',en:'Recommended for this build'},
   'build.best4':     {pl:'Najlepsze 4 Ataki',en:'Best 4 Moves'},
   'build.copyLink':  {pl:'Kopiuj Link do Buildu',en:'Copy Build Link'},
+  'build.mixed':     {pl:'Mieszany',en:'Mixed'},
+  'build.support':   {pl:'Wsparcie',en:'Support'},
+  'build.niche':     {pl:'Niszowy',en:'Niche'},
+  'build.mainItem':  {pl:'G\u0142\u00f3wny',en:'Primary'},
+  'build.altItems':  {pl:'Alternatywy',en:'Alternatives'},
   'gen.loading':     {pl:'\u0141adowanie...',en:'Loading...'},
   'gen.noResults':   {pl:'Brak wynik\u00f3w',en:'No results'},
   'gen.all':         {pl:'Wszystkie',en:'All'},
@@ -1779,7 +1869,10 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   var ABILITY_PREF = {
     physical: ['huge-power','pure-power','tough-claws','sheer-force','iron-fist','moxie','technician','skill-link','guts','sand-rush','swift-swim','chlorophyll','reckless','adaptability','hustle','strong-jaw','no-guard','scrappy','defiant','intrepid-sword'],
     special: ['adaptability','download','soul-heart','beast-boost','serene-grace','sheer-force','magic-guard','protean','libero','tinted-lens','drought','drizzle','electric-surge','psychic-surge','grassy-surge','misty-surge','transistor','dragons-maw','compound-eyes'],
-    defensive: ['regenerator','multiscale','magic-bounce','magic-guard','unaware','natural-cure','sturdy','intimidate','imposter','poison-heal','thick-fat','water-absorb','volt-absorb','flash-fire','levitate','marvel-scale','fur-coat','ice-scales','prankster','heatproof']
+    defensive: ['regenerator','multiscale','magic-bounce','magic-guard','unaware','natural-cure','sturdy','intimidate','imposter','poison-heal','thick-fat','water-absorb','volt-absorb','flash-fire','levitate','marvel-scale','fur-coat','ice-scales','prankster','heatproof'],
+    mixed: ['protean','libero','adaptability','sheer-force','download','beast-boost','soul-heart','galvanize','pixilate','refrigerate','aerilate','tough-claws','hustle','no-guard'],
+    support: ['prankster','regenerator','magic-bounce','natural-cure','intimidate','drizzle','drought','snow-warning','sand-stream','unaware','poison-heal','levitate','thick-fat','serene-grace','synchronize','trace','healer'],
+    niche: ['speed-boost','contrary','magic-guard','simple','moody','disguise','wonder-guard','huge-power','pure-power','gorilla-tactics','ice-scales','fur-coat','skill-link','technician']
   };
 
   function pickAbility(pokemonAbilities, abilityDetails, buildType) {
@@ -1820,58 +1913,104 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     return { name: displayName, desc: desc };
   }
 
+  function renderItemBox(mainItem, altItems) {
+    var mainSlug = getCompItemSlug(mainItem);
+    var mainDesc = getCompItemDesc(mainItem);
+    var mainName = itemName(mainItem);
+    var mainImg = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+mainSlug+'.png" onerror="this.parentNode.innerHTML=\'<span style=color:#555;font-size:32px>\u25a1</span>\'" style="width:48px;height:48px" />';
+    var mainHTML = '<div class="item-main">' +
+      '<div class="item-main-label">\ud83d\udd39 '+t('build.mainItem')+'</div>' +
+      '<div style="margin:6px 0">'+mainImg+'</div>' +
+      '<div class="item-big-name">'+mainName+'</div>' +
+      (mainName !== mainItem ? '<div style="font-size:11px;color:#555">('+mainItem+')</div>' : '') +
+      '<div class="item-big-desc">'+mainDesc+'</div></div>';
+    var altsHTML = '';
+    if (altItems && altItems.length > 0) {
+      var altCards = altItems.map(function(ai) {
+        var aSlug = getCompItemSlug(ai);
+        var aName = itemName(ai);
+        var aDesc = getCompItemDesc(ai);
+        var aImg = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+aSlug+'.png" onerror="this.style.display=\'none\'" style="width:24px;height:24px" />';
+        return '<div class="item-alt-card">' + aImg +
+          '<div class="item-alt-info"><div class="item-alt-name">'+aName+'</div>' +
+          (aName !== ai ? '<div style="font-size:10px;color:#555">('+ai+')</div>' : '') +
+          '<div class="item-alt-desc">'+aDesc+'</div></div></div>';
+      }).join('');
+      altsHTML = '<div class="item-alt-section">' +
+        '<div class="item-alt-label">'+t('build.altItems')+'</div>' +
+        '<div class="item-alt-grid">' + altCards + '</div></div>';
+    }
+    return '<div class="comp-box"><div class="comp-box-title">\ud83d\udce6 '+t('build.item')+'</div>' +
+      '<div class="item-layout">' + mainHTML + altsHTML + '</div></div>';
+  }
+
   function generateBuild(statMap, pokemonTypes, moves, buildType, pokemonAbilities, abilityDetails) {
     var r = detectRole(statMap);
-    var spread,note,nName,nUp,nDown,nWhy,item,itemDesc;
-    // Three build types: 'physical','special','defensive'
+    var spread, note, nName, nUp, nDown, nWhy, item, altItems;
     if (buildType === 'physical') {
       if(r.isFast) spread=[['attack',252],['speed',252],['hp',4]]; else spread=[['attack',252],['hp',252],['defense',4]];
       note=currentLang==='en'?'Max physical damage.':'Maksuj fizyczne obra\u017cenia.';
       if(r.isFast){nName='Jolly';nUp='+Szybk.';nDown='-Sp.Atak';nWhy=currentLang==='en'?'Faster without losing Atk':'Szybszy bez straty Ataku';}
       else{nName='Adamant';nUp='+Atak';nDown='-Sp.Atak';nWhy=currentLang==='en'?'Max Atk':'Maks Atak';}
-      if(r.spe>=100){item='Choice Band';itemDesc=currentLang==='en'?'Atk \u00d71.5 \u2014 one move only':'Atak \u00d71.5 \u2014 tylko jeden atak';}
-      else{item='Life Orb';itemDesc=currentLang==='en'?'+30% damage, -10% HP per attack':'+30% obra\u017ce\u0144, -10% P\u017b za atak';}
+      if(r.spe>=100){item='Choice Band';altItems=['Life Orb','Focus Sash'];}
+      else{item='Life Orb';altItems=['Choice Band','Assault Vest'];}
     } else if (buildType === 'special') {
       if(r.isFast) spread=[['special-attack',252],['speed',252],['hp',4]]; else spread=[['special-attack',252],['hp',252],['special-defense',4]];
       note=currentLang==='en'?'Max special damage.':'Maksuj specjalne obra\u017cenia.';
       if(r.isFast){nName='Timid';nUp='+Szybk.';nDown='-Atak';nWhy=currentLang==='en'?'Faster without losing SpAtk':'Szybszy bez straty Sp.Atak';}
       else{nName='Modest';nUp='+Sp.Atak';nDown='-Atak';nWhy=currentLang==='en'?'Max SpAtk':'Maks Sp.Atak';}
-      if(r.spe>=100){item='Choice Specs';itemDesc=currentLang==='en'?'SpAtk \u00d71.5 \u2014 one move only':'Sp.Atak \u00d71.5 \u2014 tylko jeden atak';}
-      else{item='Life Orb';itemDesc=currentLang==='en'?'+30% damage, -10% HP per attack':'+30% obra\u017ce\u0144, -10% P\u017b za atak';}
-    } else {
-      // defensive
+      if(r.spe>=100){item='Choice Specs';altItems=['Life Orb','Focus Sash'];}
+      else{item='Life Orb';altItems=['Choice Specs','Assault Vest'];}
+    } else if (buildType === 'defensive') {
       var defMore = r.def >= r.spdef;
       if(defMore) spread=[['hp',252],['defense',252],['special-defense',4]]; else spread=[['hp',252],['special-defense',252],['defense',4]];
       note=currentLang==='en'?'Maximum endurance.':'Maksymalna wytrzyma\u0142o\u015b\u0107.';
       if(defMore){nName='Impish';nUp='+'+(currentLang==='en'?'Def':'Obrona');nDown='-Sp.Atak';nWhy=currentLang==='en'?'Physical endurance':'Fizyczna wytrzyma\u0142o\u015b\u0107';}
       else{nName='Calm';nUp='+'+(currentLang==='en'?'SpDef':'Sp.Obr');nDown='-Atak';nWhy=currentLang==='en'?'Special endurance':'Specjalna wytrzyma\u0142o\u015b\u0107';}
-      item='Leftovers';itemDesc=currentLang==='en'?'Restores 1/16 HP per turn':'Regeneruje 1/16 P\u017b co tur\u0119';
+      item='Leftovers';altItems=['Rocky Helmet','Sitrus Berry'];
+    } else if (buildType === 'mixed') {
+      spread=[['attack',128],['special-attack',128],['speed',252]];
+      note=currentLang==='en'?'Balanced offensive coverage.':'Zbalansowana ofensywa mieszana.';
+      if(r.isFast){nName='Naive';nUp='+Szybk.';nDown='-Sp.Obr';nWhy=currentLang==='en'?'Speed without losing offense':'Szybko\u015b\u0107 bez utraty ofensywy';}
+      else if(r.atk>r.spatk){nName='Lonely';nUp='+Atak';nDown='-Obrona';nWhy=currentLang==='en'?'Max physical for mixed':'Maks fiz. dla mieszanego';}
+      else{nName='Mild';nUp='+Sp.Atak';nDown='-Obrona';nWhy=currentLang==='en'?'Max special for mixed':'Maks spec. dla mieszanego';}
+      item='Life Orb';altItems=['Expert Belt','Weakness Policy'];
+    } else if (buildType === 'support') {
+      var defMore2 = r.def >= r.spdef;
+      spread=[['hp',252],[defMore2?'defense':'special-defense',252],[defMore2?'special-defense':'defense',4]];
+      note=currentLang==='en'?'Team support and utility.':'Wsparcie dru\u017cyny i u\u017cyteczno\u015b\u0107.';
+      if(defMore2){nName='Bold';nUp='+'+(currentLang==='en'?'Def':'Obrona');nDown='-Atak';nWhy=currentLang==='en'?'Max bulk for support':'Maks obrona dla wsparcia';}
+      else{nName='Calm';nUp='+'+(currentLang==='en'?'SpDef':'Sp.Obr');nDown='-Atak';nWhy=currentLang==='en'?'Max SpDef for support':'Maks Sp.Obr dla wsparcia';}
+      item='Light Clay';altItems=['Leftovers','Mental Herb','Red Card'];
+    } else {
+      // niche
+      if(r.spe<=50){
+        spread=[[r.isPhys?'attack':'special-attack',252],['hp',252],[r.isPhys?'defense':'special-defense',4]];
+        note=currentLang==='en'?'Trick Room abuser \u2014 minimum speed.':'Pod Trick Room \u2014 minimalna szybko\u015b\u0107.';
+        nName=r.isPhys?'Brave':'Quiet';nUp=r.isPhys?'+Atak':'+Sp.Atak';nDown='-Szybk.';nWhy=currentLang==='en'?'Min speed for Trick Room':'Min szybko\u015b\u0107 pod Trick Room';
+        item=r.isPhys?'Choice Band':'Choice Specs';altItems=['Life Orb','Assault Vest'];
+      } else {
+        spread=[[r.isPhys?'attack':'special-attack',252],['speed',252],['hp',4]];
+        note=currentLang==='en'?'Revenge killer / lead.':'Revenge killer / lead.';
+        nName=r.isPhys?'Jolly':'Timid';nUp='+Szybk.';nDown=r.isPhys?'-Sp.Atak':'-Atak';nWhy=currentLang==='en'?'Max speed for revenge kills':'Maks szybko\u015b\u0107 na revenge kille';
+        item='Focus Sash';altItems=['Choice Scarf','Heavy-Duty Boots','Air Balloon'];
+      }
     }
     var total = spread.reduce(function(s,e){return s+e[1];},0);
     var evRows = spread.map(function(e){
       var sn=e[0],val=e[1],color=STAT_COLORS[sn]||'#888',pct=Math.round(val/252*100);
       return '<div class="ev-row"><span class="ev-amount">'+val+'</span><span class="ev-stat-name" style="color:'+color+'">'+(STAT_NAMES[sn]||sn)+'</span><div class="ev-bar-bg"><div class="ev-bar" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
     }).join('');
-
     var evHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udcca '+t('build.ev')+' <span style="font-size:10px;color:#888;font-family:VT323,monospace">(max 510)</span></div>'+evRows+'<div class="ev-total">'+t('gen.sum')+': '+total+'/510</div><div style="font-size:14px;color:#666;margin-top:5px">'+note+'</div></div>';
     var natureHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udc8e '+t('build.nature')+'</div><div class="nature-badge">'+natureName(nName)+'</div><div style="font-size:12px;color:#555;margin-bottom:4px">('+nName+')</div><div class="nature-detail"><span class="nature-up">\u25b2 '+nUp+'</span> | <span class="nature-down">\u25bc '+nDown+'</span></div><div style="font-size:14px;color:#666;margin-top:6px">'+nWhy+'</div></div>';
-
-    // Item with PokeAPI icon only (no emoji)
-    var itemSlug = item.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
-    var itemImgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+itemSlug+'.png" onerror="this.parentNode.innerHTML=\'<span style=color:#555;font-size:28px>\u25a1</span>\'" style="width:32px;height:32px" />';
-    var itemDisplayName = itemName(item);
-    var itemHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udce6 '+t('build.item')+'</div><div style="text-align:center;margin:4px 0">'+itemImgTag+'</div><div class="item-big-name">'+itemDisplayName+'</div>'+(itemDisplayName!==item?'<div style="font-size:12px;color:#555;margin-bottom:4px">('+item+')</div>':'')+'<div class="item-big-desc">'+itemDesc+'</div></div>';
-
+    var itemHTML = renderItemBox(item, altItems);
     // Ability box
     var picked = pickAbility(pokemonAbilities, abilityDetails, buildType);
     var abilText = picked ? getAbilityText(picked.detail) : { name: '?', desc: '' };
     var hiddenTag = (picked && picked.isHidden) ? '<span class="ability-hidden-tag">'+t('build.abilityHidden')+'</span>' : '';
     var recTag = (picked && picked.score > 1) ? '<div class="ability-rec-tag">\u2705 '+t('build.abilityRec')+'</div>' : '';
     var abilityHTML='<div class="ability-box"><div class="comp-box-title">\u26a1 '+t('build.ability')+'</div><div class="ability-name">'+abilText.name+hiddenTag+'</div><div class="ability-desc">'+abilText.desc+'</div>'+recTag+'</div>';
-
-    // Best 4 Moveset for this build type
     var movesHTML = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
-
     return '<div class="comp-grid-full">'+evHTML+'</div>'
       +'<div class="comp-grid">'+natureHTML+itemHTML+abilityHTML+'</div>'
       +'<div class="comp-box-title" style="margin-bottom:8px">\u2694 '+t('build.best4')+'</div>'
@@ -1895,16 +2034,18 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       if(cat==='Z'){
         var offSetup=['swords-dance','dragon-dance','nasty-plot','quiver-dance','tail-glow','shell-smash','belly-drum','work-up','geomancy','calm-mind','bulk-up','coil'];
         var defSetup=['recover','roost','soft-boiled','slack-off','milk-drink','synthesis','moonlight','morning-sun','wish','rest','shore-up'];
-        if(buildType==='defensive'){
+        if(buildType==='defensive'||buildType==='support'){
           if(defSetup.includes(nm))score=90;else if(['stealth-rock','toxic','will-o-wisp','thunder-wave','spikes'].includes(nm))score=70;else if(offSetup.includes(nm))score=30;else score=20;
+          if(buildType==='support'){if(['stealth-rock','toxic','will-o-wisp','thunder-wave','spikes','reflect','light-screen','aurora-veil','tailwind','sticky-web','trick-room','healing-wish','rapid-spin','defog','u-turn','volt-switch','knock-off','encore','taunt','yawn','haze','whirlwind','roar'].includes(nm))score+=30;}
         } else {
           if(offSetup.includes(nm))score=80;else if(defSetup.includes(nm))score=15;else score=10;
         }
       } else {
         score = power;
-        if(buildType==='physical'&&cat==='P')score*=1.5;else if(buildType==='special'&&cat==='S')score*=1.5;else if(buildType==='defensive')score*=0.8;
+        if(buildType==='physical'&&cat==='P')score*=1.5;else if(buildType==='special'&&cat==='S')score*=1.5;else if(buildType==='mixed')score*=1.2;else if(buildType==='defensive'||buildType==='support')score*=0.8;
         if(buildType==='physical'&&cat==='S')score*=0.3;
         if(buildType==='special'&&cat==='P')score*=0.3;
+        if(buildType==='mixed'){if(cat==='P')score*=1.1;if(cat==='S')score*=1.1;}
         if(typeSet.has(mtype))score*=1.5;
         var prioMoves=['extreme-speed','quick-attack','aqua-jet','ice-shard','mach-punch','bullet-punch','sucker-punch','shadow-sneak','vacuum-wave','first-impression'];
         if(prioMoves.includes(nm))score+=25;
@@ -1932,17 +2073,33 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     }).join('');
   }
 
-  // ── COMPETITIVE SECTION WITH 3 BUILDS ──
+  // ── ELIGIBLE BUILDS ──
+  function getEligibleBuilds(statMap) {
+    var atk=statMap['attack']||0, spatk=statMap['special-attack']||0;
+    var def=statMap['defense']||0, spdef=statMap['special-defense']||0;
+    var spe=statMap['speed']||0, hp=statMap['hp']||0;
+    var builds = ['physical','special','defensive'];
+    if (atk >= 65 && spatk >= 65) builds.push('mixed');
+    if (hp >= 60 && (def >= 65 || spdef >= 65)) builds.push('support');
+    if (spe <= 50 || spe >= 100 || builds.length <= 3) builds.push('niche');
+    return builds;
+  }
+
+  // ── COMPETITIVE SECTION WITH UP TO 6 BUILDS ──
   function buildCompetitiveSection(stats, pokemonTypes, moves, pokemonAbilities, abilityDetails) {
     var statMap = {}; stats.forEach(function(s){statMap[s.stat.name]=s.base_stat;});
     var r = detectRole(statMap);
-    // Store for calculator
     lastBuildData = {statMap:statMap, pokemonTypes:pokemonTypes, r:r};
-    var builds = [
-      {key:'physical', label:t('build.phys'), icon:'\u2694'},
-      {key:'special', label:t('build.spec'), icon:'\u2728'},
-      {key:'defensive', label:t('build.def'), icon:'\ud83d\udee1'}
+    var allBuilds = [
+      {key:'physical',  label:t('build.phys'),    icon:'\u2694'},
+      {key:'special',   label:t('build.spec'),    icon:'\u2728'},
+      {key:'defensive', label:t('build.def'),     icon:'\ud83d\udee1'},
+      {key:'mixed',     label:t('build.mixed'),   icon:'\ud83d\udd00'},
+      {key:'support',   label:t('build.support'), icon:'\ud83d\udc9a'},
+      {key:'niche',     label:t('build.niche'),   icon:'\ud83c\udfaf'}
     ];
+    var eligible = getEligibleBuilds(statMap);
+    var builds = allBuilds.filter(function(b){ return eligible.indexOf(b.key) !== -1; });
     var tabsHTML = builds.map(function(b,i){
       return '<button class="build-tab'+(i===0?' active':'')+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">'+(i+1)+'. '+b.icon+' '+b.label+'</button>';
     }).join('');
