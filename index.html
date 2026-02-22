@@ -791,7 +791,58 @@
     .type-chart td.tc-x2   { background: #3a1a0a; color: #ff8855; font-weight: bold; }
     .type-chart td.tc-half  { background: #0a2a0a; color: #55aa55; }
     .type-chart td.tc-zero  { background: #0a0a1a; color: #4466aa; font-weight: bold; }
-    .type-chart td.tc-norm  { background: #1a1a1a; color: #555; }
+    .type-chart td.tc-norm  { background: #1a1a1a; color: #333; }
+    .type-chart td.tc-x4    { background: #4a0a0a; color: #ff4444; font-weight: bold; }
+
+    /* ── DUAL TYPE CALCULATOR ── */
+    .dual-calc {
+      background: #0f0f1f; border: 3px solid #3a3a5a; padding: 16px; margin-top: 16px;
+    }
+    .dual-calc h3 {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--aqua); margin-bottom: 14px; padding-bottom: 8px;
+      border-bottom: 2px solid #2a2a4a;
+    }
+    .dual-calc-row {
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .dual-calc-row label {
+      font-size: 16px; color: var(--gray); min-width: 60px;
+    }
+    .dual-calc-select {
+      font-family: 'VT323', monospace; font-size: 18px;
+      background: #0a0a1a; color: var(--white); border: 2px solid #3a3a5a;
+      padding: 4px 10px; outline: none; min-width: 140px;
+    }
+    .dual-calc-select:focus { border-color: var(--aqua); }
+    .dual-calc-results {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;
+    }
+    .dual-calc-group {
+      background: #111; border: 2px solid #2a2a3a; padding: 10px;
+    }
+    .dual-calc-group h4 {
+      font-family: 'VT323', monospace; font-size: 16px;
+      margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid #2a2a3a;
+    }
+    .dual-calc-group.dcg-x4 h4   { color: #ff4444; }
+    .dual-calc-group.dcg-x2 h4   { color: #ff8855; }
+    .dual-calc-group.dcg-half h4  { color: #55aa55; }
+    .dual-calc-group.dcg-quarter h4 { color: #338833; }
+    .dual-calc-group.dcg-zero h4  { color: #5588cc; }
+    .dual-calc-group .dcg-list {
+      display: flex; flex-wrap: wrap; gap: 4px;
+    }
+    .tc-legend {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; align-items: center;
+    }
+    .tc-legend-item {
+      display: inline-flex; align-items: center; gap: 4px; font-size: 15px;
+    }
+    .tc-legend-swatch {
+      width: 20px; height: 20px; display: inline-block; border: 1px solid #444; text-align: center;
+      font-family: 'VT323', monospace; font-size: 13px; line-height: 20px;
+    }
     .type-chart tr:hover td { filter: brightness(1.3); }
     .type-chart td.tc-highlight { outline: 2px solid var(--gold); outline-offset: -2px; }
     .type-chart .tc-col-header {
@@ -1058,8 +1109,23 @@ const TR = {
   'sec.typechart':   {pl:'Interaktywna Tabela Typ\u00f3w',en:'Interactive Type Chart'},
   'tc.atkLabel':     {pl:'ATAKUJ\u0104CY \u2193',en:'ATTACKER \u2193'},
   'tc.defLabel':     {pl:'BRONI\u0104CY \u2192',en:'DEFENDER \u2192'},
-  'tc.info':         {pl:'<strong>Jak czyta\u0107 tabel\u0119:</strong> Wiersze to typ <em>atakuj\u0105cy</em>, kolumny to typ <em>broni\u0105cy</em>.<br><span class="tc-x2">\u00d72</span> = super skuteczne \u2022 <span class="tc-half">\u00d70.5</span> = ma\u0142o skuteczne \u2022 <span class="tc-zero">\u00d70</span> = brak efektu \u2022 1 = neutralne.',en:'<strong>How to read:</strong> Rows = <em>attacking</em> type, columns = <em>defending</em> type.<br><span class="tc-x2">\u00d72</span> = super effective \u2022 <span class="tc-half">\u00d70.5</span> = not very effective \u2022 <span class="tc-zero">\u00d70</span> = no effect \u2022 1 = neutral.'},
-  'tc.dual':         {pl:'<strong>\ud83d\udca1 Podw\u00f3jne typy:</strong> Je\u015bli Pok\u00e9mon ma dwa typy, mno\u017cniki si\u0119 \u0142\u0105cz\u0105. Np. atak <span class="tc-x2">Wodny</span> na Pok\u00e9mona Ogniowy/Skalny zada <span class="tc-x4">\u00d74</span> obra\u017ce\u0144!',en:'<strong>\ud83d\udca1 Dual types:</strong> If a Pok\u00e9mon has two types, multipliers stack. E.g. a <span class="tc-x2">Water</span> attack on a Fire/Rock Pok\u00e9mon deals <span class="tc-x4">\u00d74</span> damage!'},
+  'tc.info':         {pl:'<strong>Jak czyta\u0107 tabel\u0119:</strong> Wiersze to typ <em>atakuj\u0105cy</em>, kolumny to typ <em>broni\u0105cy</em>. Puste pola = neutralne (\u00d71).',en:'<strong>How to read:</strong> Rows = <em>attacking</em> type, columns = <em>defending</em> type. Empty cells = neutral (\u00d71).'},
+  'tc.dual':         {pl:'<strong>\ud83d\udca1 Podw\u00f3jne typy:</strong> Tabela pokazuje bazowe mno\u017cniki. Je\u015bli Tw\u00f3j Pok\u00e9mon ma dwa typy (np. Woda/Ziemia), s\u0142abo\u015b\u0107 na Traw\u0119 sumuje si\u0119 do \u00d74 (\u00d72 \u00d7 \u00d72).',en:'<strong>\ud83d\udca1 Dual types:</strong> This table shows base multipliers. If your Pok\u00e9mon has two types (e.g. Water/Ground), weakness to Grass stacks to \u00d74 (\u00d72 \u00d7 \u00d72).'},
+  'tc.dualCalcTitle': {pl:'\ud83d\udd0d Sprawd\u017a Pok\u00e9mona z dwoma typami',en:'\ud83d\udd0d Check a dual-type Pok\u00e9mon'},
+  'tc.type1':        {pl:'Typ 1',en:'Type 1'},
+  'tc.type2':        {pl:'Typ 2',en:'Type 2'},
+  'tc.none':         {pl:'(brak)',en:'(none)'},
+  'tc.btnCalc':      {pl:'Oblicz',en:'Calculate'},
+  'tc.resX4':        {pl:'\u00d74 (podw\u00f3jna s\u0142abo\u015b\u0107)',en:'\u00d74 (double weakness)'},
+  'tc.resX2':        {pl:'\u00d72 (s\u0142abo\u015b\u0107)',en:'\u00d72 (weakness)'},
+  'tc.resHalf':      {pl:'\u00d70.5 (odporno\u015b\u0107)',en:'\u00d70.5 (resistance)'},
+  'tc.resQuarter':   {pl:'\u00d70.25 (podw\u00f3jna odporno\u015b\u0107)',en:'\u00d70.25 (double resistance)'},
+  'tc.resZero':      {pl:'\u00d70 (immunitet)',en:'\u00d70 (immunity)'},
+  'tc.legendX4':     {pl:'\u00d74 podw. s\u0142abo\u015b\u0107',en:'\u00d74 double weakness'},
+  'tc.legendX2':     {pl:'\u00d72 super skuteczne',en:'\u00d72 super effective'},
+  'tc.legendHalf':   {pl:'\u00d7\u00bd ma\u0142o skuteczne',en:'\u00d7\u00bd not very effective'},
+  'tc.legendZero':   {pl:'\u00d70 brak efektu',en:'\u00d70 no effect'},
+  'tc.legendNorm':   {pl:'\u00b7 neutralne',en:'\u00b7 neutral'},
 };
 function t(key){var e=TR[key];if(!e)return key;return e[currentLang]||e['pl']||key;}
 
@@ -1984,7 +2050,7 @@ function renderTypeChart(){
     html+='<tr><th class="tc-row-header"><span class="type-badge type-'+atk+'" style="font-size:11px;padding:1px 6px">'+typeName(atk)+'</span></th>';
     ALL_TYPES.forEach(function(def){
       var m=TYPE_OFFENSE[atk][def];
-      var cls='tc-norm',txt='1';
+      var cls='tc-norm',txt='\u00b7';
       if(m===2){cls='tc-x2';txt='2';}
       else if(m===0.5){cls='tc-half';txt='\u00bd';}
       else if(m===0){cls='tc-zero';txt='0';}
@@ -1994,6 +2060,64 @@ function renderTypeChart(){
   });
   html+='</table>';
   return html;
+}
+
+function renderTypeChartLegend(){
+  return '<div class="tc-legend">'
+    +'<span class="tc-legend-item"><span class="tc-legend-swatch" style="background:#4a0a0a;color:#ff4444">4</span> '+t('tc.legendX4')+'</span>'
+    +'<span class="tc-legend-item"><span class="tc-legend-swatch" style="background:#3a1a0a;color:#ff8855">2</span> '+t('tc.legendX2')+'</span>'
+    +'<span class="tc-legend-item"><span class="tc-legend-swatch" style="background:#0a2a0a;color:#55aa55">\u00bd</span> '+t('tc.legendHalf')+'</span>'
+    +'<span class="tc-legend-item"><span class="tc-legend-swatch" style="background:#0a0a1a;color:#4466aa">0</span> '+t('tc.legendZero')+'</span>'
+    +'<span class="tc-legend-item"><span class="tc-legend-swatch" style="background:#1a1a1a;color:#333">\u00b7</span> '+t('tc.legendNorm')+'</span>'
+    +'</div>';
+}
+
+function renderDualTypeCalc(){
+  var opts='<option value="">'+t('tc.none')+'</option>';
+  ALL_TYPES.forEach(function(tp){
+    opts+='<option value="'+tp+'">'+typeName(tp)+'</option>';
+  });
+  return '<div class="dual-calc"><h3>'+t('tc.dualCalcTitle')+'</h3>'
+    +'<div class="dual-calc-row">'
+    +'<label>'+t('tc.type1')+':</label><select class="dual-calc-select" id="dc-type1" onchange="calcDualType()">'+opts.replace('value=""','value="" selected')+'</select>'
+    +'<label>'+t('tc.type2')+':</label><select class="dual-calc-select" id="dc-type2" onchange="calcDualType()">'+opts.replace('value=""','value="" selected')+'</select>'
+    +'</div>'
+    +'<div id="dc-results"></div></div>';
+}
+
+function calcDualType(){
+  var t1=document.getElementById('dc-type1').value;
+  var t2=document.getElementById('dc-type2').value;
+  var out=document.getElementById('dc-results');
+  if(!t1){out.innerHTML='';return;}
+  var x4=[],x2=[],half=[],quarter=[],zero=[];
+  ALL_TYPES.forEach(function(atk){
+    var m=1;
+    if(TYPE_EFF[t1]){
+      if(TYPE_EFF[t1].immune.indexOf(atk)!==-1) m*=0;
+      else if(TYPE_EFF[t1].weak.indexOf(atk)!==-1) m*=2;
+      else if(TYPE_EFF[t1].resist.indexOf(atk)!==-1) m*=0.5;
+    }
+    if(t2 && t2!==t1 && TYPE_EFF[t2]){
+      if(TYPE_EFF[t2].immune.indexOf(atk)!==-1) m*=0;
+      else if(TYPE_EFF[t2].weak.indexOf(atk)!==-1) m*=2;
+      else if(TYPE_EFF[t2].resist.indexOf(atk)!==-1) m*=0.5;
+    }
+    var badge='<span class="type-badge type-'+atk+'" style="font-size:12px;padding:1px 6px">'+typeName(atk)+'</span>';
+    if(m===0) zero.push(badge);
+    else if(m>=4) x4.push(badge);
+    else if(m>=2) x2.push(badge);
+    else if(m<=0.25) quarter.push(badge);
+    else if(m<=0.5) half.push(badge);
+  });
+  var html='<div class="dual-calc-results">';
+  if(x4.length) html+='<div class="dual-calc-group dcg-x4"><h4>'+t('tc.resX4')+'</h4><div class="dcg-list">'+x4.join('')+'</div></div>';
+  if(x2.length) html+='<div class="dual-calc-group dcg-x2"><h4>'+t('tc.resX2')+'</h4><div class="dcg-list">'+x2.join('')+'</div></div>';
+  if(half.length) html+='<div class="dual-calc-group dcg-half"><h4>'+t('tc.resHalf')+'</h4><div class="dcg-list">'+half.join('')+'</div></div>';
+  if(quarter.length) html+='<div class="dual-calc-group dcg-quarter"><h4>'+t('tc.resQuarter')+'</h4><div class="dcg-list">'+quarter.join('')+'</div></div>';
+  if(zero.length) html+='<div class="dual-calc-group dcg-zero"><h4>'+t('tc.resZero')+'</h4><div class="dcg-list">'+zero.join('')+'</div></div>';
+  html+='</div>';
+  out.innerHTML=html;
 }
 
 function initTypeChartHover(){
@@ -2064,9 +2188,10 @@ function showPage(page) {
   if (page === 'type-chart') {
     main.innerHTML =
       '<div class="page-title"><span>\u2696 '+t('sec.typechart')+'</span></div>'
-      + '<div class="type-chart-info">'+t('tc.info')+'</div>'
+      + '<div class="type-chart-info">'+t('tc.info')+renderTypeChartLegend()+'</div>'
       + '<div class="type-chart-info">'+t('tc.dual')+'</div>'
-      + '<div class="type-chart-wrap">'+renderTypeChart()+'</div>';
+      + '<div class="type-chart-wrap">'+renderTypeChart()+'</div>'
+      + renderDualTypeCalc();
     initTypeChartHover();
   }
 }
