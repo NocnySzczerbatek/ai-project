@@ -152,6 +152,8 @@
       padding: 12px;
       border-bottom: 3px solid #000;
       background: #222;
+      position: relative;
+      z-index: 10;
     }
     .sidebar-search label {
       display: block;
@@ -159,6 +161,14 @@
       font-size: 14px;
       margin-bottom: 4px;
     }
+    .sidebar-close {
+      display: none; position: absolute; top: 8px; right: 8px;
+      background: none; border: 2px solid #555; color: var(--red);
+      font-size: 22px; width: 32px; height: 32px; cursor: pointer;
+      font-family: 'VT323', monospace; line-height: 1;
+      z-index: 11; text-align: center;
+    }
+    .sidebar-close:hover { background: #3a1a1a; border-color: var(--red); }
     .tabs { display: flex; gap: 0; border-bottom: 3px solid #000; }
     .tab-btn {
       flex: 1; background: var(--stone2); color: var(--gray); border: none;
@@ -748,6 +758,7 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .hamburger-btn { display: block; }
+      .sidebar-close { display: block; }
       header { flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
       .header-title { font-size: 11px; }
       .header-subtitle { font-size: 14px; }
@@ -813,6 +824,7 @@
   <!-- SIDEBAR -->
   <aside id="sidebar">
     <div class="sidebar-search">
+      <button class="sidebar-close" onclick="toggleHamburger()" title="Zamknij">&times;</button>
       <label>&#128269; SZUKAJ POK&Eacute;MONA</label>
       <input class="mc-input" id="search-input" type="text" placeholder="np. Pikachu..." autocomplete="off" />
     </div>
