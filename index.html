@@ -930,6 +930,172 @@
     }
     .wc-neutral-row .type-badge { opacity: 0.5; font-size: 13px; padding: 2px 8px; }
 
+    /* ── BATTLE SIM ── */
+    .battle-page { max-width: 1060px; margin: 0 auto; }
+    .battle-setup { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .battle-setup-card {
+      background: var(--stone2); border: 3px solid;
+      border-top-color: var(--slot-light); border-left-color: var(--slot-light);
+      border-right-color: #333; border-bottom-color: #333;
+      padding: 14px;
+    }
+    .battle-setup-card h3 {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #000;
+    }
+    .battle-setup-card.player h3 { color: var(--green); }
+    .battle-setup-card.opponent h3 { color: var(--red); }
+    .battle-start-wrap { text-align: center; margin: 20px 0; }
+    .battle-start-btn {
+      font-family: 'Press Start 2P', monospace; font-size: 14px;
+      background: linear-gradient(180deg, #3a7a3a, #1a4a1a); color: #fff;
+      border: 3px solid; border-top-color: #6c4; border-left-color: #6c4;
+      border-right-color: #142; border-bottom-color: #142;
+      padding: 12px 32px; cursor: pointer; text-shadow: 1px 1px #000;
+      transition: filter 0.15s;
+    }
+    .battle-start-btn:hover { filter: brightness(1.2); }
+    .battle-start-btn:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+    .battle-arena { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .battle-card {
+      background: var(--stone2); border: 3px solid;
+      border-top-color: var(--slot-light); border-left-color: var(--slot-light);
+      border-right-color: #333; border-bottom-color: #333;
+      padding: 14px; position: relative;
+    }
+    .battle-card.player-card { border-left: 4px solid var(--green); }
+    .battle-card.opponent-card { border-left: 4px solid var(--red); }
+    .battle-pokemon-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .battle-pokemon-img {
+      width: 96px; height: 96px; image-rendering: pixelated;
+      filter: drop-shadow(0 0 6px rgba(85,255,85,0.2));
+    }
+    .battle-pokemon-info { flex: 1; }
+    .battle-pokemon-name {
+      font-family: 'Press Start 2P', monospace; font-size: 11px;
+      color: var(--white); text-transform: capitalize; margin-bottom: 4px;
+    }
+    .battle-pokemon-types { display: flex; gap: 4px; flex-wrap: wrap; }
+    .battle-hp-section { margin: 8px 0; }
+    .battle-hp-label { display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 4px; }
+    .battle-hp-label .hp-text { color: var(--gray); }
+    .battle-hp-label .hp-val { color: var(--white); font-family: 'Press Start 2P', monospace; font-size: 10px; }
+    .battle-hp-bar-bg {
+      width: 100%; height: 16px; background: #1a1a1a; border: 2px solid #000;
+      overflow: hidden; position: relative;
+    }
+    .battle-hp-bar-fill {
+      height: 100%; transition: width 0.6s ease, background-color 0.3s ease;
+      position: relative;
+    }
+    .battle-hp-bar-fill::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent);
+    }
+    .battle-stat-preview {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 8px; font-size: 14px;
+    }
+    .battle-stat-item {
+      background: #1a1a1a; border: 1px solid #333; padding: 2px 6px;
+      display: flex; justify-content: space-between;
+    }
+    .battle-stat-item .bs-name { color: var(--gray); }
+    .battle-stat-item .bs-val { color: var(--white); }
+    .battle-moves-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .battle-move-btn {
+      font-family: 'VT323', monospace; font-size: 20px;
+      background: #1a1a2a; color: var(--white); border: 2px solid #3a3a6a;
+      padding: 10px 8px; cursor: pointer; transition: all 0.15s;
+      text-align: left; position: relative; display: flex; flex-direction: column; gap: 2px;
+    }
+    .battle-move-btn:hover:not(:disabled) { border-color: var(--aqua); background: #2a2a4a; }
+    .battle-move-btn:active:not(:disabled) { transform: scale(0.97); }
+    .battle-move-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .battle-move-btn.super-effective {
+      border-color: #33aa33; background: #0a2a0a;
+      box-shadow: 0 0 8px rgba(85,255,85,0.2);
+    }
+    .battle-move-btn.not-very-effective { border-color: #8a4a00; background: #1a0a00; }
+    .battle-move-btn.immune { border-color: #333; background: #111; opacity: 0.5; }
+    .battle-move-name { font-size: 18px; font-weight: bold; text-transform: capitalize; }
+    .battle-move-meta { font-size: 14px; color: var(--gray); display: flex; gap: 6px; }
+    .battle-move-eff { font-size: 12px; position: absolute; top: 4px; right: 6px; }
+    .battle-move-eff.se { color: var(--green); }
+    .battle-move-eff.nve { color: var(--gold); }
+    .battle-move-eff.imm { color: var(--red); }
+    .battle-log {
+      background: #0a0a0a; border: 3px solid #333; padding: 12px;
+      margin-top: 16px; max-height: 220px; overflow-y: auto; font-size: 17px; line-height: 1.8;
+    }
+    .battle-log-entry { border-bottom: 1px solid #1a1a1a; padding: 2px 0; }
+    .battle-log-entry.se { color: var(--green); }
+    .battle-log-entry.nve { color: var(--gold); }
+    .battle-log-entry.imm { color: var(--red); }
+    .battle-log-entry.faint { color: var(--red); font-family: 'Press Start 2P', monospace; font-size: 11px; }
+    .battle-log-entry.neutral { color: var(--white); }
+    .battle-result {
+      text-align: center; padding: 24px;
+      background: linear-gradient(135deg, #0a1a0a, #1a2a1a);
+      border: 3px solid; margin-top: 16px;
+    }
+    .battle-result.victory { border-color: var(--green); }
+    .battle-result.defeat { border-color: var(--red); }
+    .battle-result h2 { font-family: 'Press Start 2P', monospace; font-size: 16px; margin-bottom: 12px; }
+    .battle-result.victory h2 { color: var(--green); }
+    .battle-result.defeat h2 { color: var(--red); }
+    .battle-result-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+    .battle-search-wrap { position: relative; margin-bottom: 12px; }
+    .battle-search-results {
+      position: absolute; top: 100%; left: 0; right: 0; background: #1a1a2a;
+      border: 2px solid #3a3a7a; max-height: 200px; overflow-y: auto; z-index: 50; display: none;
+    }
+    .battle-search-results.open { display: block; }
+    .battle-iv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0; }
+    .battle-iv-box { background: #111; border: 1px solid #333; padding: 4px 6px; }
+    .battle-iv-box label { display: block; font-size: 13px; color: var(--gray); margin-bottom: 2px; }
+    .battle-iv-box input {
+      font-family: 'VT323', monospace; font-size: 18px;
+      background: #000; color: var(--white); border: 1px solid #333;
+      width: 100%; padding: 2px 4px; text-align: center; outline: none;
+    }
+    .battle-iv-box input:focus { border-color: var(--aqua); }
+    .battle-select-row { margin: 8px 0; }
+    .battle-select-row label { display: block; font-size: 14px; color: var(--gray); margin-bottom: 4px; }
+    .battle-select-row select {
+      font-family: 'VT323', monospace; font-size: 18px;
+      background: #000; color: var(--white); border: 2px solid #333;
+      padding: 4px 8px; width: 100%; outline: none;
+    }
+    .battle-select-row select:focus { border-color: var(--aqua); }
+    .battle-preview {
+      display: flex; align-items: center; gap: 12px; padding: 8px;
+      background: #1a1a1a; border: 1px solid #333; margin: 8px 0;
+    }
+    .battle-preview img { width: 64px; height: 64px; image-rendering: pixelated; }
+    .battle-preview-info { flex: 1; min-width: 0; }
+    .battle-preview-name {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--white); text-transform: capitalize;
+    }
+    .battle-preview-types { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+    .battle-moves-preview { margin-top: 8px; }
+    .battle-moves-preview-title { font-size: 14px; color: var(--gray); margin-bottom: 4px; }
+    .battle-move-chip {
+      display: inline-block; font-size: 14px; padding: 2px 8px; margin: 2px;
+      border: 1px solid #3a3a6a; background: #1a1a2a; color: var(--white); text-transform: capitalize;
+    }
+    .battle-random-btn {
+      font-family: 'VT323', monospace; font-size: 20px;
+      background: #2a4a2a; color: var(--green); border: 2px solid #55ff55;
+      padding: 6px 14px; cursor: pointer; width: 100%; margin-bottom: 8px; transition: filter 0.15s;
+    }
+    .battle-random-btn:hover { filter: brightness(1.2); }
+    .battle-waiting {
+      text-align: center; padding: 8px; color: var(--gold); font-size: 20px;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .wc-selector-row { flex-direction: column; align-items: stretch; }
@@ -973,6 +1139,13 @@
       .ad-container { min-height: 50px; font-size: 12px; }
       .team-slots { grid-template-columns: repeat(2, 1fr); }
       .defense-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+      .battle-setup { grid-template-columns: 1fr; }
+      .battle-arena { grid-template-columns: 1fr; }
+      .battle-card.opponent-card { order: -1; }
+      .battle-iv-grid { grid-template-columns: repeat(2, 1fr); }
+      .battle-moves-grid { grid-template-columns: 1fr; }
+      .battle-stat-preview { grid-template-columns: repeat(2, 1fr); }
+      .battle-start-btn { font-size: 11px; padding: 10px 20px; }
     }
   </style>
 </head>
@@ -991,6 +1164,7 @@
     </div>
     <span class="mc-badge" id="badge-gen">&#127807; Generacje 1&ndash;9</span>
     <span class="mc-badge">&#9874; PokeAPI</span>
+    <button class="mc-btn" onclick="showPage('battle-sim')" id="btn-battle" style="background:#5a2a2a;border-top-color:#8a5a5a;border-left-color:#8a5a5a">&#9876; Arena Walki</button>
     <button class="mc-btn" onclick="showPage('team-analyzer')" id="btn-team">&#9876; Zespół PvP</button>
     <button class="mc-btn" onclick="showPage('type-chart')" id="btn-typechart">&#9878; Tabela Typów</button>
     <button class="mc-btn" onclick="showPage('items')" id="btn-items">&#128230; Przedmioty</button>
@@ -1304,6 +1478,35 @@ const TR = {
   'tc.resX2':        {pl:'\u00d72',en:'\u00d72'},
   'tc.resHalf':      {pl:'\u00d70.5',en:'\u00d70.5'},
   'tc.resQuarter':   {pl:'\u00d70.25',en:'\u00d70.25'},
+  'nav.battle':      {pl:'Arena Walki',en:'Battle Arena'},
+  'battle.random':   {pl:'\ud83c\udfb2 Losuj Pok\u00e9mona',en:'\ud83c\udfb2 Random Pok\u00e9mon'},
+  'battle.searchPoke':{pl:'Szukaj Pok\u00e9mona...',en:'Search Pok\u00e9mon...'},
+  'battle.ivLabel':  {pl:'Individual Values (IV) \u2014 0-31',en:'Individual Values (IV) \u2014 0-31'},
+  'battle.selectFirst':{pl:'Najpierw wybierz Pok\u00e9mona',en:'Select a Pok\u00e9mon first'},
+  'battle.startBattle':{pl:'ROZPOCZNIJ WALK\u0118!',en:'START BATTLE!'},
+  'battle.intro':    {pl:'Wybierz Pok\u00e9mony, dostosuj IV, Natur\u0119 i Zdolno\u015b\u0107, a nast\u0119pnie walcz! System automatycznie dobierze 4 najlepsze ataki.',en:'Choose Pok\u00e9mon, customize IVs, Nature and Ability, then fight! The system auto-picks the 4 best moves.'},
+  'battle.yourPoke':  {pl:'\ud83d\udc64 TW\u00d3J POK\u00c9MON',en:'\ud83d\udc64 YOUR POK\u00c9MON'},
+  'battle.opponent':  {pl:'\ud83c\udfaf PRZECIWNIK',en:'\ud83c\udfaf OPPONENT'},
+  'battle.opponentThink':{pl:'\u23f3 Przeciwnik my\u015bli...',en:'\u23f3 Opponent is thinking...'},
+  'battle.victory':  {pl:'\ud83c\udfc6 ZWYCI\u0118STWO!',en:'\ud83c\udfc6 VICTORY!'},
+  'battle.defeat':   {pl:'\ud83d\udc80 PORA\u017bKA!',en:'\ud83d\udc80 DEFEAT!'},
+  'battle.rematch':  {pl:'\ud83d\udd04 Rewan\u017c',en:'\ud83d\udd04 Rematch'},
+  'battle.newBattle': {pl:'\u2699 Nowa Walka',en:'\u2699 New Battle'},
+  'battle.knownMoves':{pl:'Znane Ataki:',en:'Known Moves:'},
+  'battle.fasterOpp': {pl:'Przeciwnik jest szybszy!',en:'The opponent is faster!'},
+  'battle.superEff':  {pl:'Bardzo skuteczne!',en:"It's super effective!"},
+  'battle.notVeryEff':{pl:'Ma\u0142o skuteczne...',en:"It's not very effective..."},
+  'battle.noEffect':  {pl:'Brak efektu!',en:'It has no effect!'},
+  'battle.yourUsed':  {pl:'Tw\u00f3j %p u\u017cy\u0142 %m!',en:'Your %p used %m!'},
+  'battle.oppUsed':   {pl:'Przeciwny %p u\u017cy\u0142 %m!',en:"Opponent's %p used %m!"},
+  'battle.fainted':   {pl:'\ud83d\udc80 %p zemdla\u0142!',en:'\ud83d\udc80 %p fainted!'},
+  'battle.yourWon':   {pl:'Tw\u00f3j %p wygra\u0142 walk\u0119!',en:'Your %p won the battle!'},
+  'battle.yourLost':  {pl:'Tw\u00f3j %p zemdla\u0142!',en:'Your %p fainted!'},
+  'battle.se':        {pl:'BSkut!',en:'SE!'},
+  'battle.nve':       {pl:'MS',en:'NVE'},
+  'battle.phys':      {pl:'Fiz',en:'Phys'},
+  'battle.spec':      {pl:'Spec',en:'Spec'},
+  'battle.welcomeDesc':{pl:'Symuluj walk\u0119 Pok\u00e9mon\u00f3w z pe\u0142n\u0105 mechanik\u0105 obra\u017ce\u0144, IV, Natur i typ\u00f3w!',en:'Simulate Pok\u00e9mon battles with full damage mechanics, IVs, Natures and types!'},
 };
 function t(key){var e=TR[key];if(!e)return key;return e[currentLang]||e['pl']||key;}
 
@@ -1494,6 +1697,7 @@ function setLang(lang){
   var bs=document.getElementById('btn-start');if(bs)bs.innerHTML='\ud83c\udfe0 '+t('nav.start');
   var bt=document.getElementById('btn-team');if(bt)bt.innerHTML='\u2694 '+t('nav.team');
   var bc=document.getElementById('btn-typechart');if(bc)bc.innerHTML='\u2696 '+t('nav.typechart');
+  var bb=document.getElementById('btn-battle');if(bb)bb.innerHTML='\u2694 '+t('nav.battle');
   // Update donate bar
   var dt=document.getElementById('donate-title');if(dt)dt.textContent=t('gen.donate');
   var dd=document.getElementById('donate-desc');if(dd)dd.textContent=t('gen.donateDesc');
@@ -1504,6 +1708,7 @@ function setLang(lang){
   else if(currentPage==='apricorns')showPage('apricorns');
   else if(currentPage==='team-analyzer')showPage('team-analyzer');
   else if(currentPage==='type-chart')showPage('type-chart');
+  else if(currentPage==='battle-sim')showPage('battle-sim');
   else if(selectedId){var f=allPokemon.find(function(p){return p.id===selectedId;});if(f)loadDetail(f.id,f.name);}
 }
 
@@ -2636,6 +2841,505 @@ function wcCalc(){
 }
 
 /* ================================================================
+   BATTLE SIM ENGINE
+   ================================================================ */
+const NATURE_MODS = {
+  'Hardy':{up:null,down:null},'Lonely':{up:'attack',down:'defense'},
+  'Brave':{up:'attack',down:'speed'},'Adamant':{up:'attack',down:'special-attack'},
+  'Naughty':{up:'attack',down:'special-defense'},'Bold':{up:'defense',down:'attack'},
+  'Docile':{up:null,down:null},'Relaxed':{up:'defense',down:'speed'},
+  'Impish':{up:'defense',down:'special-attack'},'Lax':{up:'defense',down:'special-defense'},
+  'Timid':{up:'speed',down:'attack'},'Hasty':{up:'speed',down:'defense'},
+  'Serious':{up:null,down:null},'Jolly':{up:'speed',down:'special-attack'},
+  'Naive':{up:'speed',down:'special-defense'},'Modest':{up:'special-attack',down:'attack'},
+  'Mild':{up:'special-attack',down:'defense'},'Quiet':{up:'special-attack',down:'speed'},
+  'Bashful':{up:null,down:null},'Rash':{up:'special-attack',down:'special-defense'},
+  'Calm':{up:'special-defense',down:'attack'},'Gentle':{up:'special-defense',down:'defense'},
+  'Sassy':{up:'special-defense',down:'speed'},'Careful':{up:'special-defense',down:'special-attack'},
+  'Quirky':{up:null,down:null}
+};
+const ALL_NATURES = Object.keys(NATURE_MODS);
+const BATTLE_LEVEL = 50;
+const BATTLE_STAT_ORDER = ['hp','attack','defense','special-attack','special-defense','speed'];
+let battleState = null;
+let battleSetupData = { player: null, opponent: null };
+let battleSearchTimeout = null;
+
+function battleCalcStat(baseStat, iv, ev, statName, nature) {
+  if (statName === 'hp') {
+    return Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * BATTLE_LEVEL / 100)) + BATTLE_LEVEL + 10;
+  }
+  var raw = Math.floor(((2 * baseStat + iv + Math.floor(ev / 4)) * BATTLE_LEVEL / 100)) + 5;
+  var mod = NATURE_MODS[nature];
+  if (mod && mod.up === statName) raw = Math.floor(raw * 1.1);
+  if (mod && mod.down === statName) raw = Math.floor(raw * 0.9);
+  return raw;
+}
+
+function battleGetEff(moveType, defenderTypes) {
+  var mult = 1;
+  defenderTypes.forEach(function(dt) {
+    if (!TYPE_EFF[dt]) return;
+    if (TYPE_EFF[dt].immune.indexOf(moveType) !== -1) mult *= 0;
+    else if (TYPE_EFF[dt].weak.indexOf(moveType) !== -1) mult *= 2;
+    else if (TYPE_EFF[dt].resist.indexOf(moveType) !== -1) mult *= 0.5;
+  });
+  return mult;
+}
+
+function battleCalcDamage(attacker, defender, move) {
+  if (move.power === 0) return { damage: 0, effectiveness: 1 };
+  var atkStat, defStat;
+  if (move.category === 'P') {
+    atkStat = attacker.computedStats['attack'];
+    defStat = defender.computedStats['defense'];
+  } else {
+    atkStat = attacker.computedStats['special-attack'];
+    defStat = defender.computedStats['special-defense'];
+  }
+  var dmg = ((2 * BATTLE_LEVEL / 5 + 2) * move.power * atkStat / defStat) / 50 + 2;
+  if (attacker.types.includes(move.type)) dmg *= 1.5;
+  var eff = battleGetEff(move.type, defender.types);
+  dmg *= eff;
+  dmg *= (0.85 + Math.random() * 0.15);
+  return { damage: Math.max(1, Math.floor(dmg)), effectiveness: eff };
+}
+
+function detectRoleBattle(statMap) {
+  var atk = statMap['attack'] || 0, spatk = statMap['special-attack'] || 0;
+  var def = statMap['defense'] || 0, spdef = statMap['special-defense'] || 0;
+  var spe = statMap['speed'] || 0;
+  return {
+    isPhys: atk >= spatk + 15, isSpec: spatk >= atk + 15,
+    isMixed: !(atk >= spatk + 15) && !(spatk >= atk + 15),
+    isTank: (def + spdef) / 2 >= 90 && spe < 80, isFast: spe >= 80
+  };
+}
+
+function battleAutoEV(statMap) {
+  var r = detectRoleBattle(statMap);
+  var evs = { hp: 0, attack: 0, defense: 0, 'special-attack': 0, 'special-defense': 0, speed: 0 };
+  if (r.isPhys && r.isFast) { evs.attack = 252; evs.speed = 252; evs.hp = 4; }
+  else if (r.isPhys) { evs.attack = 252; evs.hp = 252; evs.defense = 4; }
+  else if (r.isSpec && r.isFast) { evs['special-attack'] = 252; evs.speed = 252; evs.hp = 4; }
+  else if (r.isSpec) { evs['special-attack'] = 252; evs.hp = 252; evs['special-defense'] = 4; }
+  else if (r.isTank) { evs.hp = 252; evs.defense = 128; evs['special-defense'] = 128; }
+  else { evs.hp = 4; evs.attack = 126; evs['special-attack'] = 126; evs.speed = 252; }
+  return evs;
+}
+
+function battleSelectMoves(pokemonData, types, statMap) {
+  var r = detectRoleBattle(statMap);
+  var typeSet = new Set(types);
+  var pool = [];
+  pokemonData.moves.forEach(function(m) {
+    var vgd = m.version_group_details.slice().sort(function(a, b) {
+      return b.version_group.url.localeCompare(a.version_group.url, undefined, { numeric: true });
+    })[0];
+    if (!vgd) return;
+    var method = vgd.move_learn_method.name;
+    if (!['level-up', 'machine', 'egg'].includes(method)) return;
+    var nm = m.move.name, md = MOVE_DATA[nm];
+    if (!md || md[0] === 0) return;
+    var power = md[0], mtype = md[1], cat = md[2];
+    if (cat === 'Z') return;
+    var score = power;
+    if ((r.isPhys && cat === 'P') || (r.isSpec && cat === 'S')) score *= 1.4;
+    if (typeSet.has(mtype)) score *= 1.5;
+    pool.push({ name: nm, power: power, type: mtype, category: cat, score: score });
+  });
+  var seen = new Set();
+  var unique = pool.filter(function(m) { if (seen.has(m.name)) return false; seen.add(m.name); return true; });
+  unique.sort(function(a, b) { return b.score - a.score; });
+  var chosen = [], typeCounts = {};
+  for (var i = 0; i < unique.length && chosen.length < 4; i++) {
+    var m = unique[i], tc = typeCounts[m.type] || 0;
+    if (tc >= 2) continue;
+    typeCounts[m.type] = (tc || 0) + 1; chosen.push(m);
+  }
+  for (var i = 0; i < unique.length && chosen.length < 4; i++) {
+    if (!chosen.includes(unique[i])) chosen.push(unique[i]);
+  }
+  if (chosen.length === 0) {
+    chosen.push({ name: 'tackle', power: 40, type: 'normal', category: 'P', score: 40 });
+  }
+  return chosen;
+}
+
+async function battleBuildPokemon(id, ivs, nature, abilitySlug) {
+  var data = detailCache[id];
+  if (!data) {
+    var res = await fetch('https://pokeapi.co/api/v2/pokemon/' + id);
+    var p = await res.json();
+    data = { p: p }; detailCache[id] = data;
+  }
+  var p = data.p;
+  var types = p.types.map(function(t) { return t.type.name; });
+  var statMap = {}; p.stats.forEach(function(s) { statMap[s.stat.name] = s.base_stat; });
+  var evs = battleAutoEV(statMap);
+  var computedStats = {};
+  BATTLE_STAT_ORDER.forEach(function(sn) {
+    computedStats[sn] = battleCalcStat(statMap[sn] || 50, ivs[sn] || 0, evs[sn] || 0, sn, nature);
+  });
+  var moves = battleSelectMoves(p, types, statMap);
+  var ability = abilitySlug || (p.abilities[0] ? p.abilities[0].ability.name : 'unknown');
+  return {
+    id: id, name: p.name, types: types, baseStats: statMap, ivs: ivs, evs: evs,
+    nature: nature, ability: ability, computedStats: computedStats, moves: moves,
+    maxHp: computedStats.hp, currentHp: computedStats.hp,
+    sprite: p.sprites.front_default || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + id + '.png',
+    artwork: (p.sprites.other && p.sprites.other['official-artwork'] ? p.sprites.other['official-artwork'].front_default : null)
+      || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + id + '.png'
+  };
+}
+
+function battleRandomIVs() {
+  var ivs = {};
+  BATTLE_STAT_ORDER.forEach(function(sn) { ivs[sn] = Math.floor(Math.random() * 32); });
+  return ivs;
+}
+
+async function battleRandomPokemon(side) {
+  var poke = allPokemon[Math.floor(Math.random() * allPokemon.length)];
+  var data = detailCache[poke.id];
+  if (!data) {
+    var res = await fetch('https://pokeapi.co/api/v2/pokemon/' + poke.id);
+    var pData = await res.json();
+    data = { p: pData }; detailCache[poke.id] = data;
+  }
+  var ivs = battleRandomIVs();
+  var nature = ALL_NATURES[Math.floor(Math.random() * ALL_NATURES.length)];
+  var abilities = data.p.abilities;
+  var ability = abilities.length ? abilities[Math.floor(Math.random() * abilities.length)].ability.name : 'unknown';
+  var pokemon = await battleBuildPokemon(poke.id, ivs, nature, ability);
+  battleSetupData[side] = { id: poke.id, ivs: ivs, nature: nature, ability: ability, pokemon: pokemon, data: data };
+  battleRenderSetupPreview(side);
+}
+
+async function battleSelectPokemon(side, id) {
+  var data = detailCache[id];
+  if (!data) {
+    var res = await fetch('https://pokeapi.co/api/v2/pokemon/' + id);
+    var pData = await res.json();
+    data = { p: pData }; detailCache[id] = data;
+  }
+  var ivs = {}; BATTLE_STAT_ORDER.forEach(function(sn) { ivs[sn] = 31; });
+  var statMap = {}; data.p.stats.forEach(function(s) { statMap[s.stat.name] = s.base_stat; });
+  var r = detectRoleBattle(statMap);
+  var nature;
+  if (r.isPhys && r.isFast) nature = 'Jolly';
+  else if (r.isPhys) nature = 'Adamant';
+  else if (r.isSpec && r.isFast) nature = 'Timid';
+  else if (r.isSpec) nature = 'Modest';
+  else nature = 'Hardy';
+  var ability = data.p.abilities[0] ? data.p.abilities[0].ability.name : 'unknown';
+  var pokemon = await battleBuildPokemon(id, ivs, nature, ability);
+  battleSetupData[side] = { id: id, ivs: ivs, nature: nature, ability: ability, pokemon: pokemon, data: data };
+  battleRenderSetupPreview(side);
+}
+
+function battleRenderSetupPreview(side) {
+  var setup = battleSetupData[side];
+  if (!setup) return;
+  var pokemon = setup.pokemon;
+  var container = document.getElementById('battle-preview-' + side);
+  if (!container) return;
+  var typesHTML = pokemon.types.map(function(tp) {
+    return '<span class="type-badge type-' + tp + '" style="font-size:12px;padding:1px 6px">' + typeName(tp) + '</span>';
+  }).join('');
+  var movesHTML = pokemon.moves.map(function(m) {
+    return '<span class="battle-move-chip">' + typeIconHTML(m.type, 14) + ' ' + m.name.replace(/-/g, ' ') + ' <span style="color:#f8d030;font-size:12px">' + m.power + '</span></span>';
+  }).join('');
+  container.innerHTML =
+    '<div class="battle-preview">' +
+    '<img src="' + pokemon.artwork + '" onerror="this.src=\'' + pokemon.sprite + '\'" />' +
+    '<div class="battle-preview-info"><div class="battle-preview-name">' + pokemon.name + '</div>' +
+    '<div class="battle-preview-types">' + typesHTML + '</div>' +
+    '<div style="font-size:14px;color:#888;margin-top:4px">HP: ' + pokemon.maxHp + ' | ' +
+    t('build.nature') + ': ' + natureName(pokemon.nature) + '</div></div></div>' +
+    '<div class="battle-moves-preview"><div class="battle-moves-preview-title">' + t('build.best4') + ':</div>' + movesHTML + '</div>';
+  // Update IV inputs
+  BATTLE_STAT_ORDER.forEach(function(sn) {
+    var inp = document.getElementById('biv-' + side + '-' + sn);
+    if (inp) inp.value = setup.ivs[sn];
+  });
+  var natSel = document.getElementById('bnat-' + side);
+  if (natSel) natSel.value = setup.nature;
+  var abilSel = document.getElementById('babil-' + side);
+  if (abilSel) {
+    abilSel.innerHTML = '';
+    setup.data.p.abilities.forEach(function(a) {
+      var opt = document.createElement('option');
+      opt.value = a.ability.name;
+      opt.textContent = a.ability.name.replace(/-/g, ' ') + (a.is_hidden ? ' [' + (currentLang === 'en' ? 'hidden' : 'ukryta') + ']' : '');
+      if (a.ability.name === setup.ability) opt.selected = true;
+      abilSel.appendChild(opt);
+    });
+  }
+  var startBtn = document.getElementById('battle-start-btn');
+  if (startBtn) startBtn.disabled = !(battleSetupData.player && battleSetupData.opponent);
+}
+
+async function battleUpdateFromInputs(side) {
+  var setup = battleSetupData[side];
+  if (!setup) return;
+  var ivs = {};
+  BATTLE_STAT_ORDER.forEach(function(sn) {
+    var inp = document.getElementById('biv-' + side + '-' + sn);
+    ivs[sn] = inp ? Math.min(31, Math.max(0, parseInt(inp.value) || 0)) : setup.ivs[sn];
+  });
+  var natSel = document.getElementById('bnat-' + side);
+  var nature = natSel ? natSel.value : setup.nature;
+  var abilSel = document.getElementById('babil-' + side);
+  var ability = abilSel ? abilSel.value : setup.ability;
+  setup.ivs = ivs; setup.nature = nature; setup.ability = ability;
+  var pokemon = await battleBuildPokemon(setup.id, ivs, nature, ability);
+  setup.pokemon = pokemon;
+  battleSetupData[side] = setup;
+  battleRenderSetupPreview(side);
+}
+
+function battleOnSearch(side, input) {
+  clearTimeout(battleSearchTimeout);
+  var q = input.value.trim().toLowerCase();
+  var results = document.getElementById('battle-search-results-' + side);
+  if (q.length < 2) { results.classList.remove('open'); return; }
+  battleSearchTimeout = setTimeout(function() {
+    var matches = allPokemon.filter(function(p) {
+      return p.name.includes(q) || String(p.id).includes(q);
+    }).slice(0, 8);
+    if (!matches.length) {
+      results.innerHTML = '<div class="team-search-item" style="color:#666">' + t('gen.noResults') + '</div>';
+      results.classList.add('open'); return;
+    }
+    results.innerHTML = matches.map(function(p) {
+      return '<div class="team-search-item" onclick="battlePickFromSearch(\'' + side + '\',' + p.id + ')">' +
+        '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + p.id + '.png" style="width:32px;height:32px"/>' +
+        '<span style="text-transform:capitalize">' + p.name + '</span>' +
+        '<span style="color:#666;margin-left:auto">#' + String(p.id).padStart(3, '0') + '</span></div>';
+    }).join('');
+    results.classList.add('open');
+  }, 200);
+}
+
+async function battlePickFromSearch(side, id) {
+  var results = document.getElementById('battle-search-results-' + side);
+  results.classList.remove('open');
+  var inp = document.getElementById('battle-search-' + side);
+  if (inp) inp.value = '';
+  await battleSelectPokemon(side, id);
+}
+
+async function battleStart() {
+  if (!battleSetupData.player || !battleSetupData.opponent) return;
+  await battleUpdateFromInputs('player');
+  await battleUpdateFromInputs('opponent');
+  battleState = {
+    player: JSON.parse(JSON.stringify(battleSetupData.player.pokemon)),
+    opponent: JSON.parse(JSON.stringify(battleSetupData.opponent.pokemon)),
+    log: [], turn: 0, isPlayerTurn: true, battleOver: false
+  };
+  if (battleState.opponent.computedStats.speed > battleState.player.computedStats.speed) {
+    battleState.isPlayerTurn = false;
+  }
+  battleRenderArena();
+  if (!battleState.isPlayerTurn) {
+    battleAddLog(t('battle.fasterOpp'), 'neutral');
+    battleRenderArena();
+    setTimeout(function() { battleAITurn(); }, 1000);
+  }
+}
+
+function battleAddLog(msg, type) {
+  battleState.log.push({ msg: msg, type: type || 'neutral' });
+}
+
+function getHpColor(pct) {
+  if (pct > 50) return '#55ff55';
+  if (pct > 20) return '#f8d030';
+  return '#ff5555';
+}
+
+function battleRenderArena() {
+  if (!battleState) return;
+  var main = document.getElementById('main-area');
+  var p = battleState.player, o = battleState.opponent;
+  var pHpPct = Math.max(0, p.currentHp / p.maxHp * 100);
+  var oHpPct = Math.max(0, o.currentHp / o.maxHp * 100);
+
+  var moveBtns = p.moves.map(function(m, i) {
+    var eff = battleGetEff(m.type, o.types);
+    var effClass = '', effText = '';
+    if (eff >= 2) { effClass = ' super-effective'; effText = '<span class="battle-move-eff se">' + t('battle.se') + '</span>'; }
+    else if (eff > 0 && eff < 1) { effClass = ' not-very-effective'; effText = '<span class="battle-move-eff nve">' + t('battle.nve') + '</span>'; }
+    else if (eff === 0) { effClass = ' immune'; effText = '<span class="battle-move-eff imm">IMM</span>'; }
+    var disabled = battleState.battleOver || !battleState.isPlayerTurn ? ' disabled' : '';
+    var catLabel = m.category === 'P' ? t('battle.phys') : t('battle.spec');
+    return '<button class="battle-move-btn' + effClass + '"' + disabled + ' onclick="battlePlayerMove(' + i + ')">' +
+      effText +
+      '<span class="battle-move-name">' + typeIconHTML(m.type, 16) + ' ' + m.name.replace(/-/g, ' ') + '</span>' +
+      '<span class="battle-move-meta"><span>' + catLabel + '</span> | <span style="color:#f8d030">PWR: ' + m.power + '</span></span></button>';
+  }).join('');
+
+  var pStatsHTML = BATTLE_STAT_ORDER.map(function(sn) {
+    return '<div class="battle-stat-item"><span class="bs-name" style="color:' + (STAT_COLORS[sn] || '#888') + '">' + (STAT_NAMES[sn] || sn) + '</span><span class="bs-val">' + p.computedStats[sn] + '</span></div>';
+  }).join('');
+  var oStatsHTML = BATTLE_STAT_ORDER.map(function(sn) {
+    return '<div class="battle-stat-item"><span class="bs-name" style="color:' + (STAT_COLORS[sn] || '#888') + '">' + (STAT_NAMES[sn] || sn) + '</span><span class="bs-val">' + o.computedStats[sn] + '</span></div>';
+  }).join('');
+  var pTypesHTML = p.types.map(function(tp) { return '<span class="type-badge type-' + tp + '" style="font-size:12px;padding:1px 6px">' + typeName(tp) + '</span>'; }).join('');
+  var oTypesHTML = o.types.map(function(tp) { return '<span class="type-badge type-' + tp + '" style="font-size:12px;padding:1px 6px">' + typeName(tp) + '</span>'; }).join('');
+  var logHTML = battleState.log.map(function(entry) {
+    return '<div class="battle-log-entry ' + entry.type + '">' + entry.msg + '</div>';
+  }).join('');
+  var waitingHTML = (!battleState.isPlayerTurn && !battleState.battleOver)
+    ? '<div class="battle-waiting">' + t('battle.opponentThink') + '</div>' : '';
+  var resultHTML = '';
+  if (battleState.battleOver) {
+    var isWin = o.currentHp <= 0;
+    resultHTML = '<div class="battle-result ' + (isWin ? 'victory' : 'defeat') + '">' +
+      '<h2>' + (isWin ? t('battle.victory') : t('battle.defeat')) + '</h2>' +
+      '<div style="font-size:18px;color:#aaa">' +
+      (isWin ? t('battle.yourWon').replace('%p', p.name) : t('battle.yourLost').replace('%p', p.name)) + '</div>' +
+      '<div class="battle-result-buttons">' +
+      '<button class="mc-btn" onclick="battleStart()" style="background:#2a5a2a;border-top-color:#5a8a5a;border-left-color:#5a8a5a">' + t('battle.rematch') + '</button>' +
+      '<button class="mc-btn" onclick="showPage(\'battle-sim\')">' + t('battle.newBattle') + '</button></div></div>';
+  }
+
+  main.innerHTML =
+    '<div class="page-title"><span>\u2694 ' + t('nav.battle') + '</span></div>' +
+    '<div class="battle-page">' +
+    '<div class="battle-arena">' +
+    '<div class="battle-card player-card">' +
+    '<div style="font-family:\'Press Start 2P\',monospace;font-size:9px;color:var(--green);margin-bottom:8px">' + t('battle.yourPoke') + '</div>' +
+    '<div class="battle-pokemon-header">' +
+    '<img class="battle-pokemon-img" src="' + p.artwork + '" onerror="this.src=\'' + p.sprite + '\'" />' +
+    '<div class="battle-pokemon-info"><div class="battle-pokemon-name">' + p.name + '</div>' +
+    '<div class="battle-pokemon-types">' + pTypesHTML + '</div>' +
+    '<div style="font-size:13px;color:#888;margin-top:2px">' + natureName(p.nature) + ' | ' + p.ability.replace(/-/g, ' ') + '</div></div></div>' +
+    '<div class="battle-hp-section"><div class="battle-hp-label"><span class="hp-text">HP</span><span class="hp-val">' + Math.max(0, p.currentHp) + ' / ' + p.maxHp + '</span></div>' +
+    '<div class="battle-hp-bar-bg"><div class="battle-hp-bar-fill" style="width:' + pHpPct + '%;background:' + getHpColor(pHpPct) + '"></div></div></div>' +
+    '<div class="battle-stat-preview">' + pStatsHTML + '</div>' +
+    '<div class="battle-moves-grid">' + moveBtns + '</div>' + waitingHTML + '</div>' +
+    '<div class="battle-card opponent-card">' +
+    '<div style="font-family:\'Press Start 2P\',monospace;font-size:9px;color:var(--red);margin-bottom:8px">' + t('battle.opponent') + '</div>' +
+    '<div class="battle-pokemon-header">' +
+    '<img class="battle-pokemon-img" src="' + o.artwork + '" onerror="this.src=\'' + o.sprite + '\'" />' +
+    '<div class="battle-pokemon-info"><div class="battle-pokemon-name">' + o.name + '</div>' +
+    '<div class="battle-pokemon-types">' + oTypesHTML + '</div>' +
+    '<div style="font-size:13px;color:#888;margin-top:2px">' + natureName(o.nature) + ' | ' + o.ability.replace(/-/g, ' ') + '</div></div></div>' +
+    '<div class="battle-hp-section"><div class="battle-hp-label"><span class="hp-text">HP</span><span class="hp-val">' + Math.max(0, o.currentHp) + ' / ' + o.maxHp + '</span></div>' +
+    '<div class="battle-hp-bar-bg"><div class="battle-hp-bar-fill" style="width:' + oHpPct + '%;background:' + getHpColor(oHpPct) + '"></div></div></div>' +
+    '<div class="battle-stat-preview">' + oStatsHTML + '</div>' +
+    '<div style="margin-top:12px"><div style="font-size:14px;color:#666;margin-bottom:4px">' + t('battle.knownMoves') + '</div>' +
+    o.moves.map(function(m) {
+      return '<span class="battle-move-chip">' + typeIconHTML(m.type, 14) + ' ' + m.name.replace(/-/g, ' ') + ' <span style="color:#f8d030;font-size:12px">' + m.power + '</span></span>';
+    }).join('') + '</div></div>' +
+    '</div>' + resultHTML +
+    '<div class="battle-log" id="battle-log">' + logHTML + '</div>' +
+    '</div>';
+  var logEl = document.getElementById('battle-log');
+  if (logEl) logEl.scrollTop = logEl.scrollHeight;
+}
+
+function battlePlayerMove(moveIdx) {
+  if (!battleState || battleState.battleOver || !battleState.isPlayerTurn) return;
+  var p = battleState.player, o = battleState.opponent;
+  var move = p.moves[moveIdx];
+  var result = battleCalcDamage(p, o, move);
+  o.currentHp -= result.damage;
+  if (o.currentHp < 0) o.currentHp = 0;
+  var effMsg = '', logType = 'neutral';
+  if (result.effectiveness >= 2) { effMsg = ' (' + t('battle.superEff') + ')'; logType = 'se'; }
+  else if (result.effectiveness > 0 && result.effectiveness < 1) { effMsg = ' (' + t('battle.notVeryEff') + ')'; logType = 'nve'; }
+  else if (result.effectiveness === 0) { effMsg = ' (' + t('battle.noEffect') + ')'; logType = 'imm'; }
+  var logMsg = t('battle.yourUsed').replace('%p', p.name).replace('%m', move.name.replace(/-/g, ' ')) + ' (-' + result.damage + ' HP)' + effMsg;
+  battleAddLog(logMsg, logType);
+  battleState.isPlayerTurn = false;
+  battleState.turn++;
+  if (o.currentHp <= 0) {
+    battleAddLog(t('battle.fainted').replace('%p', o.name), 'faint');
+    battleState.battleOver = true;
+    battleRenderArena(); return;
+  }
+  battleRenderArena();
+  setTimeout(function() { battleAITurn(); }, 1000);
+}
+
+function battleAITurn() {
+  if (!battleState || battleState.battleOver) return;
+  var o = battleState.opponent, p = battleState.player;
+  var bestMove = null, bestDmgEst = -1;
+  o.moves.forEach(function(m) {
+    var eff = battleGetEff(m.type, p.types);
+    var est = m.power * eff;
+    if (o.types.includes(m.type)) est *= 1.5;
+    if (m.category === 'P' && o.computedStats.attack > o.computedStats['special-attack']) est *= 1.1;
+    if (m.category === 'S' && o.computedStats['special-attack'] > o.computedStats.attack) est *= 1.1;
+    if (est > bestDmgEst) { bestDmgEst = est; bestMove = m; }
+  });
+  if (!bestMove) bestMove = o.moves[0];
+  var result = battleCalcDamage(o, p, bestMove);
+  p.currentHp -= result.damage;
+  if (p.currentHp < 0) p.currentHp = 0;
+  var effMsg = '', logType = 'neutral';
+  if (result.effectiveness >= 2) { effMsg = ' (' + t('battle.superEff') + ')'; logType = 'se'; }
+  else if (result.effectiveness > 0 && result.effectiveness < 1) { effMsg = ' (' + t('battle.notVeryEff') + ')'; logType = 'nve'; }
+  else if (result.effectiveness === 0) { effMsg = ' (' + t('battle.noEffect') + ')'; logType = 'imm'; }
+  var logMsg = t('battle.oppUsed').replace('%p', o.name).replace('%m', bestMove.name.replace(/-/g, ' ')) + ' (-' + result.damage + ' HP)' + effMsg;
+  battleAddLog(logMsg, logType);
+  battleState.isPlayerTurn = true;
+  if (p.currentHp <= 0) {
+    battleAddLog(t('battle.fainted').replace('%p', p.name), 'faint');
+    battleState.battleOver = true;
+  }
+  battleRenderArena();
+}
+
+function renderBattleSetupPage() {
+  var natureOpts = ALL_NATURES.map(function(n) {
+    var nm = NATURE_MODS[n];
+    var hint = '';
+    if (nm.up && nm.down) {
+      var upN = STAT_NAMES[nm.up] || nm.up, downN = STAT_NAMES[nm.down] || nm.down;
+      hint = ' (+' + upN + ' / -' + downN + ')';
+    }
+    return '<option value="' + n + '">' + natureName(n) + ' (' + n + ')' + hint + '</option>';
+  }).join('');
+
+  function buildSetupCard(side, label, color) {
+    var ivInputs = BATTLE_STAT_ORDER.map(function(sn) {
+      return '<div class="battle-iv-box"><label style="color:' + (STAT_COLORS[sn] || '#888') + '">' + (STAT_NAMES[sn] || sn) + '</label>' +
+        '<input type="number" min="0" max="31" value="31" id="biv-' + side + '-' + sn + '" onchange="battleUpdateFromInputs(\'' + side + '\')" /></div>';
+    }).join('');
+    return '<div class="battle-setup-card ' + side + '">' +
+      '<h3 style="color:' + color + '">' + label + '</h3>' +
+      '<button class="battle-random-btn" onclick="battleRandomPokemon(\'' + side + '\')">' + t('battle.random') + '</button>' +
+      '<div class="battle-search-wrap">' +
+      '<input class="mc-input" id="battle-search-' + side + '" type="text" placeholder="' + t('battle.searchPoke') + '" oninput="battleOnSearch(\'' + side + '\',this)" autocomplete="off" />' +
+      '<div class="battle-search-results" id="battle-search-results-' + side + '"></div></div>' +
+      '<div id="battle-preview-' + side + '" style="min-height:60px"><div style="color:#555;text-align:center;padding:20px;font-size:18px">' + t('battle.selectFirst') + '</div></div>' +
+      '<div style="margin-top:8px;font-size:14px;color:#888">' + t('battle.ivLabel') + ':</div>' +
+      '<div class="battle-iv-grid">' + ivInputs + '</div>' +
+      '<div class="battle-select-row"><label>' + t('build.nature') + '</label>' +
+      '<select id="bnat-' + side + '" onchange="battleUpdateFromInputs(\'' + side + '\')">' + natureOpts + '</select></div>' +
+      '<div class="battle-select-row"><label>' + t('build.ability') + '</label>' +
+      '<select id="babil-' + side + '" onchange="battleUpdateFromInputs(\'' + side + '\')"><option>' + t('battle.selectFirst') + '</option></select></div>' +
+      '</div>';
+  }
+  return '<div class="page-title"><span>\u2694 ' + t('nav.battle') + '</span></div>' +
+    '<div class="battle-page">' +
+    '<div style="text-align:center;margin-bottom:16px;font-size:16px;color:#888">' + t('battle.intro') + '</div>' +
+    '<div class="battle-setup">' +
+    buildSetupCard('player', t('battle.yourPoke'), 'var(--green)') +
+    buildSetupCard('opponent', t('battle.opponent'), 'var(--red)') +
+    '</div>' +
+    '<div class="battle-start-wrap">' +
+    '<button class="battle-start-btn" id="battle-start-btn" onclick="battleStart()" disabled>\u2694 ' + t('battle.startBattle') + '</button>' +
+    '</div></div>';
+}
+
+/* ================================================================
    PAGES
    ================================================================ */
 function showPage(page) {
@@ -2655,6 +3359,7 @@ function showPage(page) {
       + '<div class="welcome-card"><h3>\ud83d\udce6 '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wa\u017cne przedmioty w jednym miejscu.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'items\')">\u2192 '+t('nav.items')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2694 '+t('nav.team')+'</h3><p>'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sk\u0142ad dru\u017cyny PvP i pokrycie typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'team-analyzer\')">\u2192 '+t('nav.team')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2696 '+t('nav.typechart')+'</h3><p>'+(currentLang==='en'?'Check your Pok\u00e9mon\'s weaknesses, resistances and immunities with dual-type support.':'Sprawd\u017a s\u0142abo\u015bci, odporno\u015bci i immunitety swojego Pok\u00e9mona z obs\u0142ug\u0105 podw\u00f3jnych typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'type-chart\')">\u2192 '+t('nav.typechart')+'</button></p></div>'
+      + '<div class="welcome-card" style="border-top-color:#8a5a5a;border-left-color:#8a5a5a"><h3 style="color:var(--red)">\u2694 '+t('nav.battle')+'</h3><p>'+t('battle.welcomeDesc')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'battle-sim\')" style="background:#5a2a2a;border-top-color:#8a5a5a;border-left-color:#8a5a5a">\u2192 '+t('nav.battle')+'</button></p></div>'
       + '</div>';
   }
 
@@ -2690,6 +3395,12 @@ function showPage(page) {
       '<div class="page-title"><span>'+t('sec.typechart')+'</span></div>'
       + renderWeaknessChecker();
     wcUpdateDisplay();
+  }
+
+  if (page === 'battle-sim') {
+    battleState = null;
+    battleSetupData = { player: null, opponent: null };
+    main.innerHTML = renderBattleSetupPage();
   }
 }
 
