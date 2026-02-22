@@ -758,8 +758,56 @@
       width: 32px; height: 32px; image-rendering: pixelated;
     }
 
+    /* ── TYPE CHART TABLE ── */
+    .type-chart-wrap {
+      overflow-x: auto; margin-top: 12px;
+    }
+    .type-chart-info {
+      background: #1a1a2a; border: 2px solid #3a3a5a; padding: 12px 16px;
+      margin-bottom: 16px; font-size: 16px; color: var(--gray); line-height: 1.6;
+    }
+    .type-chart-info strong { color: var(--white); }
+    .type-chart-info .tc-x4 { color: #ff4444; font-weight: bold; }
+    .type-chart-info .tc-x2 { color: #ff8855; }
+    .type-chart-info .tc-half { color: #66bb66; }
+    .type-chart-info .tc-zero { color: #5588cc; }
+    .type-chart {
+      border-collapse: collapse; font-size: 13px;
+      font-family: 'VT323', monospace;
+    }
+    .type-chart th, .type-chart td {
+      width: 38px; height: 32px; text-align: center; vertical-align: middle;
+      border: 1px solid #2a2a2a; padding: 0;
+    }
+    .type-chart th {
+      background: #222; color: var(--gray); font-size: 11px;
+      font-weight: normal; position: sticky; top: 0; z-index: 2;
+    }
+    .type-chart th.tc-corner { background: #111; }
+    .type-chart th.tc-row-header {
+      background: #222; text-align: right; padding-right: 6px;
+      position: sticky; left: 0; z-index: 3; min-width: 70px;
+    }
+    .type-chart td.tc-x2   { background: #3a1a0a; color: #ff8855; font-weight: bold; }
+    .type-chart td.tc-half  { background: #0a2a0a; color: #55aa55; }
+    .type-chart td.tc-zero  { background: #0a0a1a; color: #4466aa; font-weight: bold; }
+    .type-chart td.tc-norm  { background: #1a1a1a; color: #555; }
+    .type-chart tr:hover td { filter: brightness(1.3); }
+    .type-chart td.tc-highlight { outline: 2px solid var(--gold); outline-offset: -2px; }
+    .type-chart .tc-col-header {
+      writing-mode: vertical-lr; text-orientation: mixed;
+      background: #222; color: var(--gray); font-size: 11px;
+      min-height: 60px; padding: 4px 2px;
+    }
+    .type-chart .tc-type-icon {
+      width: 16px; height: 16px; border-radius: 50%; vertical-align: middle;
+      image-rendering: pixelated; margin-right: 2px;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
+      .type-chart th, .type-chart td { width: 30px; height: 28px; font-size: 11px; }
+      .type-chart th.tc-row-header { min-width: 55px; font-size: 10px; }
       .hamburger-btn { display: block; }
       .sidebar-close { display: block; }
       header { flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
@@ -808,6 +856,7 @@
     <span class="mc-badge" id="badge-gen">&#127807; Generacje 1&ndash;9</span>
     <span class="mc-badge">&#9874; PokeAPI</span>
     <button class="mc-btn" onclick="showPage('team-analyzer')" id="btn-team">&#9876; Zespół PvP</button>
+    <button class="mc-btn" onclick="showPage('type-chart')" id="btn-typechart">&#9878; Tabela Typów</button>
     <button class="mc-btn" onclick="showPage('items')" id="btn-items">&#128230; Przedmioty</button>
     <button class="mc-btn" onclick="showPage('apricorns')" id="btn-apricorns">&#127822; Apricorny</button>
     <button class="mc-btn" onclick="showPage('welcome')" id="btn-start">&#127968; Start</button>
@@ -1005,6 +1054,12 @@ const TR = {
   'welcome.howUse':  {pl:'Jak u\u017cywa\u0107 bazy?',en:'How to use the database?'},
   'welcome.friend':  {pl:'Przyja\u017a\u0144 (/checkfriendship)',en:'Friendship (/checkfriendship)'},
   'welcome.link':    {pl:'Link Cable (Wymiana)',en:'Link Cable (Trade)'},
+  'nav.typechart':   {pl:'Tabela Typ\u00f3w',en:'Type Chart'},
+  'sec.typechart':   {pl:'Interaktywna Tabela Typ\u00f3w',en:'Interactive Type Chart'},
+  'tc.atkLabel':     {pl:'ATAKUJ\u0104CY \u2193',en:'ATTACKER \u2193'},
+  'tc.defLabel':     {pl:'BRONI\u0104CY \u2192',en:'DEFENDER \u2192'},
+  'tc.info':         {pl:'<strong>Jak czyta\u0107 tabel\u0119:</strong> Wiersze to typ <em>atakuj\u0105cy</em>, kolumny to typ <em>broni\u0105cy</em>.<br><span class="tc-x2">\u00d72</span> = super skuteczne \u2022 <span class="tc-half">\u00d70.5</span> = ma\u0142o skuteczne \u2022 <span class="tc-zero">\u00d70</span> = brak efektu \u2022 1 = neutralne.',en:'<strong>How to read:</strong> Rows = <em>attacking</em> type, columns = <em>defending</em> type.<br><span class="tc-x2">\u00d72</span> = super effective \u2022 <span class="tc-half">\u00d70.5</span> = not very effective \u2022 <span class="tc-zero">\u00d70</span> = no effect \u2022 1 = neutral.'},
+  'tc.dual':         {pl:'<strong>\ud83d\udca1 Podw\u00f3jne typy:</strong> Je\u015bli Pok\u00e9mon ma dwa typy, mno\u017cniki si\u0119 \u0142\u0105cz\u0105. Np. atak <span class="tc-x2">Wodny</span> na Pok\u00e9mona Ogniowy/Skalny zada <span class="tc-x4">\u00d74</span> obra\u017ce\u0144!',en:'<strong>\ud83d\udca1 Dual types:</strong> If a Pok\u00e9mon has two types, multipliers stack. E.g. a <span class="tc-x2">Water</span> attack on a Fire/Rock Pok\u00e9mon deals <span class="tc-x4">\u00d74</span> damage!'},
 };
 function t(key){var e=TR[key];if(!e)return key;return e[currentLang]||e['pl']||key;}
 
@@ -1194,6 +1249,7 @@ function setLang(lang){
   var ba=document.getElementById('btn-apricorns');if(ba)ba.innerHTML='\ud83c\udf4e '+t('nav.apricorns');
   var bs=document.getElementById('btn-start');if(bs)bs.innerHTML='\ud83c\udfe0 '+t('nav.start');
   var bt=document.getElementById('btn-team');if(bt)bt.innerHTML='\u2694 '+t('nav.team');
+  var bc=document.getElementById('btn-typechart');if(bc)bc.innerHTML='\u2696 '+t('nav.typechart');
   // Update donate bar
   var dt=document.getElementById('donate-title');if(dt)dt.textContent=t('gen.donate');
   var dd=document.getElementById('donate-desc');if(dd)dd.textContent=t('gen.donateDesc');
@@ -1203,6 +1259,7 @@ function setLang(lang){
   else if(currentPage==='items')showPage('items');
   else if(currentPage==='apricorns')showPage('apricorns');
   else if(currentPage==='team-analyzer')showPage('team-analyzer');
+  else if(currentPage==='type-chart')showPage('type-chart');
   else if(selectedId){var f=allPokemon.find(function(p){return p.id===selectedId;});if(f)loadDetail(f.id,f.name);}
 }
 
@@ -1898,6 +1955,64 @@ function renderEvoChain(chain) {
 }
 
 /* ================================================================
+   TYPE CHART RENDERER
+   ================================================================ */
+var TYPE_OFFENSE = {};
+(function buildOffenseChart(){
+  ALL_TYPES.forEach(function(atk){
+    TYPE_OFFENSE[atk]={};
+    ALL_TYPES.forEach(function(def){
+      var d=TYPE_EFF[def];
+      if(d.immune.indexOf(atk)!==-1) TYPE_OFFENSE[atk][def]=0;
+      else if(d.weak.indexOf(atk)!==-1) TYPE_OFFENSE[atk][def]=2;
+      else if(d.resist.indexOf(atk)!==-1) TYPE_OFFENSE[atk][def]=0.5;
+      else TYPE_OFFENSE[atk][def]=1;
+    });
+  });
+})();
+
+function renderTypeChart(){
+  var html='<table class="type-chart" id="type-chart-table">';
+  // header row
+  html+='<tr><th class="tc-corner">'+t('tc.atkLabel')+'<br><small>'+t('tc.defLabel')+'</small></th>';
+  ALL_TYPES.forEach(function(def){
+    html+='<th class="tc-col-header"><span class="type-badge type-'+def+'" style="font-size:10px;padding:1px 4px">'+typeName(def).substring(0,3).toUpperCase()+'</span></th>';
+  });
+  html+='</tr>';
+  // data rows
+  ALL_TYPES.forEach(function(atk){
+    html+='<tr><th class="tc-row-header"><span class="type-badge type-'+atk+'" style="font-size:11px;padding:1px 6px">'+typeName(atk)+'</span></th>';
+    ALL_TYPES.forEach(function(def){
+      var m=TYPE_OFFENSE[atk][def];
+      var cls='tc-norm',txt='1';
+      if(m===2){cls='tc-x2';txt='2';}
+      else if(m===0.5){cls='tc-half';txt='\u00bd';}
+      else if(m===0){cls='tc-zero';txt='0';}
+      html+='<td class="'+cls+'" data-atk="'+atk+'" data-def="'+def+'">'+txt+'</td>';
+    });
+    html+='</tr>';
+  });
+  html+='</table>';
+  return html;
+}
+
+function initTypeChartHover(){
+  var table=document.getElementById('type-chart-table');
+  if(!table)return;
+  table.addEventListener('mouseover',function(e){
+    var td=e.target.closest('td[data-def]');
+    if(!td)return;
+    var col=td.dataset.def;
+    table.querySelectorAll('td[data-def="'+col+'"]').forEach(function(c){c.classList.add('tc-highlight');});
+  });
+  table.addEventListener('mouseout',function(e){
+    var td=e.target.closest('td[data-def]');
+    if(!td)return;
+    table.querySelectorAll('.tc-highlight').forEach(function(c){c.classList.remove('tc-highlight');});
+  });
+}
+
+/* ================================================================
    PAGES
    ================================================================ */
 function showPage(page) {
@@ -1916,6 +2031,7 @@ function showPage(page) {
       + '<div class="welcome-card"><h3>\ud83c\udf4e '+t('nav.apricorns')+'</h3><p>'+(currentLang==='en'?'Collect Apricorns from trees and craft unique Pok\u00e9balls!':'Zbieraj Apricorny z drzew i craftuj unikalne Pokeballsy!')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'apricorns\')">\u2192 '+t('nav.apricorns')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\ud83d\udce6 '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wa\u017cne przedmioty w jednym miejscu.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'items\')">\u2192 '+t('nav.items')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2694 '+t('nav.team')+'</h3><p>'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sk\u0142ad dru\u017cyny PvP i pokrycie typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'team-analyzer\')">\u2192 '+t('nav.team')+'</button></p></div>'
+      + '<div class="welcome-card"><h3>\u2696 '+t('nav.typechart')+'</h3><p>'+(currentLang==='en'?'Interactive 18-type effectiveness chart with hover highlights.':'Interaktywna tabela skuteczno\u015bci 18 typ\u00f3w z pod\u015bwietlaniem.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'type-chart\')">\u2192 '+t('nav.typechart')+'</button></p></div>'
       + '</div>';
   }
 
@@ -1943,6 +2059,15 @@ function showPage(page) {
       + '<div class="team-section"><h2>\ud83d\udee1 '+t('sec.team')+'</h2>'
       + '<div id="team-analyzer-content"></div></div>';
     renderTeamPage();
+  }
+
+  if (page === 'type-chart') {
+    main.innerHTML =
+      '<div class="page-title"><span>\u2696 '+t('sec.typechart')+'</span></div>'
+      + '<div class="type-chart-info">'+t('tc.info')+'</div>'
+      + '<div class="type-chart-info">'+t('tc.dual')+'</div>'
+      + '<div class="type-chart-wrap">'+renderTypeChart()+'</div>';
+    initTypeChartHover();
   }
 }
 
@@ -1974,6 +2099,17 @@ var ITEMS_DATA = [
   { name:'Revive',            slug:'revive',         desc:{pl:'Przywraca omdla\u0142ego pok\u00e9mona do 50% P\u017b',en:'Revives fainted Pok\u00e9mon to 50% HP'}, tag:{pl:'Leczenie',en:'Healing'} },
   { name:'Soothe Bell',       slug:'soothe-bell',    desc:{pl:'Przyspiesza zdobywanie Friendship.',en:'Speeds up Friendship gain.'}, tag:{pl:'Przyja\u017a\u0144',en:'Friendship'} },
   { name:'Leftovers',         slug:'leftovers',      desc:{pl:'Regeneruje 1/16 P\u017b co tur\u0119.',en:'Restores 1/16 HP per turn.'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Ability Shield',    slug:'ability-shield',  desc:{pl:'Chroni umiej\u0119tno\u015b\u0107 posiadacza przed zmian\u0105 lub zablokowaniem.',en:'Protects the holder\u2019s Ability from being changed or suppressed.'}, tag:{pl:'PvP',en:'PvP'} },
+  { name:'Assault Vest',      slug:'assault-vest',    desc:{pl:'Zwi\u0119ksza Sp. Def o 50%, ale blokuje ruchy statusowe.',en:'Boosts Sp. Def by 50% but prevents status moves.'}, tag:{pl:'PvP',en:'PvP'} },
+  { name:'Choice Band',       slug:'choice-band',     desc:{pl:'Zwi\u0119ksza Atak o 50%, ale pozwala u\u017cywa\u0107 tylko jednego ruchu.',en:'Boosts Attack by 50% but locks into one move.'}, tag:{pl:'PvP',en:'PvP'} },
+  { name:'Choice Scarf',      slug:'choice-scarf',    desc:{pl:'Zwi\u0119ksza Szybko\u015b\u0107 o 50%, ale pozwala u\u017cywa\u0107 tylko jednego ruchu.',en:'Boosts Speed by 50% but locks into one move.'}, tag:{pl:'PvP',en:'PvP'} },
+  { name:'Choice Specs',      slug:'choice-specs',    desc:{pl:'Zwi\u0119ksza Sp. Atak o 50%, ale pozwala u\u017cywa\u0107 tylko jednego ruchu.',en:'Boosts Sp. Atk by 50% but locks into one move.'}, tag:{pl:'PvP',en:'PvP'} },
+  { name:'Eviolite',          slug:'eviolite',        desc:{pl:'Zwi\u0119ksza Def i Sp.Def o 50% dla Pok\u00e9mon\u00f3w, kt\u00f3re mog\u0105 jeszcze ewoluowa\u0107.',en:'Boosts Def and Sp.Def by 50% for Pok\u00e9mon that can still evolve.'}, tag:{pl:'PvP',en:'PvP'} },
+  { name:'Focus Sash',        slug:'focus-sash',      desc:{pl:'Pozwala prze\u017cy\u0107 atak z 1 HP przy pe\u0142nym zdrowiu (zu\u017cywa si\u0119).',en:'Survives a KO hit with 1 HP at full health (consumed).'}, tag:{pl:'PvP',en:'PvP'} },
+  { name:'Life Orb',          slug:'life-orb',        desc:{pl:'Zwi\u0119ksza moc atak\u00f3w o 30%, ale zabiera 10% HP przy ka\u017cdym trafieniu.',en:'Boosts move power by 30% but costs 10% HP per hit.'}, tag:{pl:'PvP',en:'PvP'} },
+  { name:'Rocky Helmet',      slug:'rocky-helmet',    desc:{pl:'Zadaje obra\u017cenia przeciwnikowi przy ataku fizycznym na posiadacza.',en:'Damages the attacker when they make contact.'}, tag:{pl:'PvP',en:'PvP'} },
+  { name:'Sitrus Berry',      slug:'sitrus-berry',    desc:{pl:'Leczy 25% HP, gdy zdrowie spadnie poni\u017cej 50%.',en:'Restores 25% HP when health drops below 50%.'}, tag:{pl:'Jagoda',en:'Berry'} },
+  { name:'Lum Berry',         slug:'lum-berry',       desc:{pl:'Leczy dowolny status (zatrucie, para\u017c, sen itp.).',en:'Cures any status condition (poison, paralysis, sleep, etc.).'}, tag:{pl:'Jagoda',en:'Berry'} },
 ];
 
 function renderItems() {
