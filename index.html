@@ -630,6 +630,121 @@
       image-rendering: pixelated; border-radius: 50%;
     }
 
+    /* ── LANGUAGE TOGGLE ── */
+    .lang-toggle {
+      display: flex; gap: 0; border: 2px solid var(--slot-dark); margin-left: 8px;
+    }
+    .lang-btn {
+      font-family: 'VT323', monospace; font-size: 16px;
+      background: var(--stone2); color: var(--gray); border: none;
+      padding: 4px 10px; cursor: pointer; transition: all 0.15s;
+    }
+    .lang-btn.active { background: #2a5a2a; color: var(--green); }
+    .lang-btn:hover:not(.active) { background: #444; color: var(--white); }
+
+    /* ── TEAM ANALYZER ── */
+    .team-section {
+      background: #1a0a2a; border: 3px solid #5a2a8a; padding: 14px; margin-top: 16px;
+    }
+    .team-section h2 {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: #c084fc; margin-bottom: 12px; padding-bottom: 6px;
+      border-bottom: 2px solid #5a2a8a;
+    }
+    .team-slots {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;
+    }
+    .team-slot {
+      background: #0a0818; border: 2px dashed #3a2a6a; padding: 12px;
+      text-align: center; min-height: 130px; position: relative;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .team-slot.filled { border-style: solid; border-color: #5a3a9a; }
+    .team-slot:hover { border-color: #c084fc; }
+    .team-slot img { width: 64px; height: 64px; image-rendering: pixelated; }
+    .team-slot .slot-name {
+      font-size: 16px; color: var(--white); text-transform: capitalize; margin-top: 4px;
+    }
+    .team-slot .slot-types { display: flex; gap: 4px; justify-content: center; margin-top: 4px; flex-wrap: wrap; }
+    .team-slot .slot-remove {
+      position: absolute; top: 4px; right: 6px; background: none; border: none;
+      color: var(--red); font-size: 18px; cursor: pointer; font-family: 'VT323', monospace;
+      opacity: 0.6; transition: opacity 0.15s;
+    }
+    .team-slot .slot-remove:hover { opacity: 1; }
+    .team-slot .slot-num {
+      position: absolute; top: 4px; left: 6px; font-size: 14px; color: #554488;
+    }
+    .team-search-wrap { position: relative; margin-bottom: 16px; max-width: 400px; }
+    .team-search-results {
+      position: absolute; top: 100%; left: 0; right: 0; background: #1a1a2a;
+      border: 2px solid #3a3a7a; max-height: 220px; overflow-y: auto; z-index: 50;
+      display: none;
+    }
+    .team-search-results.open { display: block; }
+    .team-search-item {
+      display: flex; align-items: center; gap: 8px; padding: 6px 10px;
+      cursor: pointer; border-bottom: 1px solid #2a2a4a; font-size: 18px;
+      color: var(--white); text-transform: capitalize;
+    }
+    .team-search-item:hover { background: #2a2a4a; }
+    .team-search-item img { width: 32px; height: 32px; image-rendering: pixelated; }
+    .defense-summary {
+      background: #0a0818; border: 2px solid #3a2a6a; padding: 14px; margin-top: 12px;
+    }
+    .defense-summary h3 {
+      font-family: 'Press Start 2P', monospace; font-size: 9px;
+      color: #c084fc; margin-bottom: 10px;
+    }
+    .defense-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px;
+    }
+    .defense-entry {
+      display: flex; align-items: center; gap: 4px; padding: 3px 6px;
+      font-size: 15px; border: 1px solid #222;
+    }
+    .defense-weak { background: #2a0a0a; border-color: #5a2020; color: var(--red); }
+    .defense-resist { background: #0a2a0a; border-color: #205a20; color: var(--green); }
+    .defense-immune { background: #1a1a2a; border-color: #3a3a5a; color: var(--aqua); }
+    .defense-neutral { background: #1a1a1a; border-color: #333; color: var(--gray); }
+
+    /* ── BIOME SECTION ── */
+    .biome-section {
+      background: #0a1a0a; border: 3px solid #1a5a1a; padding: 14px; margin-top: 12px;
+    }
+    .biome-section h2 {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--green); margin-bottom: 10px; padding-bottom: 6px;
+      border-bottom: 2px solid #1a5a1a;
+    }
+    .biome-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .biome-tag {
+      background: #0f2f0f; color: var(--green); border: 1px solid #2a5a2a;
+      padding: 3px 10px; font-size: 15px; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .time-tag {
+      background: #1a1a0a; color: var(--gold); border: 1px solid #3a3a0a;
+      padding: 3px 10px; font-size: 15px; display: inline-flex; align-items: center; gap: 4px;
+    }
+
+    /* ── APRICORN FRUIT ICON ── */
+    .apricorn-fruit {
+      width: 40px; height: 40px; border-radius: 50%; margin: 0 auto 6px;
+      border: 3px solid rgba(0,0,0,0.4); image-rendering: pixelated;
+      box-shadow: inset 0 -4px 6px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    /* ── ITEM CARD IMG-ONLY ── */
+    .item-icon-only {
+      width: 32px; height: 32px; image-rendering: pixelated;
+      display: flex; align-items: center; justify-content: center;
+      min-width: 40px;
+    }
+    .item-icon-only img {
+      width: 32px; height: 32px; image-rendering: pixelated;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .hamburger-btn { display: block; }
@@ -658,6 +773,8 @@
       .build-tabs { flex-wrap: wrap; }
       .build-tab { font-size: 15px; padding: 4px 10px; }
       .ad-container { min-height: 50px; font-size: 12px; }
+      .team-slots { grid-template-columns: repeat(2, 1fr); }
+      .defense-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
     }
   </style>
 </head>
@@ -670,11 +787,16 @@
     <div class="header-subtitle">Serwerowa Baza Cobblemon &middot; Minecraft Mod</div>
   </div>
   <div class="header-right" id="header-right">
-    <span class="mc-badge">&#127807; Generacje 1&ndash;9</span>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="pl" onclick="setLang('pl')">PL</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
+    <span class="mc-badge" id="badge-gen">&#127807; Generacje 1&ndash;9</span>
     <span class="mc-badge">&#9874; PokeAPI</span>
-    <button class="mc-btn" onclick="showPage('items')">&#128230; Przedmioty</button>
-    <button class="mc-btn" onclick="showPage('apricorns')">&#127822; Apricorny</button>
-    <button class="mc-btn" onclick="showPage('welcome')">&#127968; Start</button>
+    <button class="mc-btn" onclick="showPage('team-analyzer')" id="btn-team">&#9876; Zespół PvP</button>
+    <button class="mc-btn" onclick="showPage('items')" id="btn-items">&#128230; Przedmioty</button>
+    <button class="mc-btn" onclick="showPage('apricorns')" id="btn-apricorns">&#127822; Apricorny</button>
+    <button class="mc-btn" onclick="showPage('welcome')" id="btn-start">&#127968; Start</button>
   </div>
 </header>
 
@@ -786,6 +908,283 @@ const TYPE_NAMES_PL = {
   psychic:'Psycho',bug:'Robak',rock:'Ska\u0142a',ghost:'Duch',dragon:'Smok',
   dark:'Mrok',steel:'Stal',fairy:'Bajkowy'
 };
+
+/* ================================================================
+   LANGUAGE / TRANSLATIONS
+   ================================================================ */
+let currentLang = localStorage.getItem('cob_lang') || 'pl';
+const TR = {
+  'nav.items':       {pl:'Przedmioty',en:'Items'},
+  'nav.apricorns':   {pl:'Apricorny',en:'Apricorns'},
+  'nav.start':       {pl:'Start',en:'Home'},
+  'nav.team':        {pl:'Zesp\u00f3\u0142 PvP',en:'PvP Team'},
+  'nav.search':      {pl:'SZUKAJ POK\u00c9MONA',en:'SEARCH POK\u00c9MON'},
+  'nav.subtitle':    {pl:'Serwerowa Baza Cobblemon \u00b7 Minecraft Mod',en:'Cobblemon Server Database \u00b7 Minecraft Mod'},
+  'nav.genBadge':    {pl:'Generacje 1\u20139',en:'Generations 1\u20139'},
+  'stat.hp':{pl:'P\u017b',en:'HP'},'stat.atk':{pl:'ATAK',en:'ATK'},'stat.def':{pl:'OBR',en:'DEF'},
+  'stat.spatk':{pl:'Sp.ATAK',en:'SpATK'},'stat.spdef':{pl:'Sp.OBR',en:'SpDEF'},'stat.spe':{pl:'SZYB',en:'SPE'},
+  'sec.baseStats':   {pl:'Statystyki bazowe',en:'Base Stats'},
+  'sec.iv':          {pl:'Individual Values (IV)',en:'Individual Values (IV)'},
+  'sec.evo':         {pl:'\u0141a\u0144cuch ewolucji',en:'Evolution Chain'},
+  'sec.moves':       {pl:'Pe\u0142na lista atak\u00f3w',en:'Full Move List'},
+  'sec.comp':        {pl:'Competitive Build',en:'Competitive Build'},
+  'sec.cobblemon':   {pl:'Polecane dla Cobblemon',en:'Cobblemon Recommendations'},
+  'sec.biomes':      {pl:'Habitat / Biomy',en:'Habitat / Biomes'},
+  'sec.calc':        {pl:'Oce\u0144 mojego Pok\u00e9mona',en:'Rate My Pok\u00e9mon'},
+  'sec.items':       {pl:'Kluczowe Przedmioty Cobblemon',en:'Key Cobblemon Items'},
+  'sec.apricorns':   {pl:'Apricorny i Pok\u00e9balle',en:'Apricorns & Pok\u00e9balls'},
+  'sec.team':        {pl:'Analizator Zespo\u0142u PvP',en:'PvP Team Analyzer'},
+  'sec.favorites':   {pl:'Twoje Ulubione Buildy',en:'Your Favorite Builds'},
+  'sec.basicData':   {pl:'Dane podstawowe',en:'Basic Data'},
+  'team.search':     {pl:'Wyszukaj Pok\u00e9mona...',en:'Search Pok\u00e9mon...'},
+  'team.clear':      {pl:'Wyczy\u015b\u0107 Zesp\u00f3\u0142',en:'Clear Team'},
+  'team.empty':      {pl:'Kliknij aby doda\u0107',en:'Click to add'},
+  'team.weak':       {pl:'S\u0142abo\u015bci zespo\u0142u',en:'Team Weaknesses'},
+  'team.resist':     {pl:'Odporno\u015bci zespo\u0142u',en:'Team Resistances'},
+  'team.neutral':    {pl:'Neutralne',en:'Neutral'},
+  'team.immune':     {pl:'Immunitety',en:'Immunities'},
+  'team.desc':       {pl:'Dodaj do 6 Pok\u00e9mon\u00f3w i sprawd\u017a pokrycie typ\u00f3w.', en:'Add up to 6 Pok\u00e9mon and check your type coverage.'},
+  'det.height':      {pl:'Wzrost',en:'Height'},
+  'det.weight':      {pl:'Waga',en:'Weight'},
+  'det.types':       {pl:'Typy',en:'Types'},
+  'det.abilities':   {pl:'Zdolno\u015bci',en:'Abilities'},
+  'det.habitat':     {pl:'Habitat',en:'Habitat'},
+  'det.catch':       {pl:'Wsp. \u0142apania',en:'Catch Rate'},
+  'det.baseExp':     {pl:'Bazowe Do\u015bw.',en:'Base Exp.'},
+  'biome.spawn':     {pl:'Pora spawnu',en:'Spawn Time'},
+  'biome.day':       {pl:'Dzie\u0144',en:'Day'},
+  'biome.night':     {pl:'Noc',en:'Night'},
+  'biome.any':       {pl:'Dowolna',en:'Any'},
+  'biome.biomes':    {pl:'Biomy Minecraft',en:'Minecraft Biomes'},
+  'mv.level':        {pl:'Przez poziom',en:'Level Up'},
+  'mv.tm':           {pl:'TM/TR',en:'TM/TR'},
+  'mv.egg':          {pl:'Egg Moves',en:'Egg Moves'},
+  'mv.power':        {pl:'MOC',en:'PWR'},
+  'mv.lvl':          {pl:'Poz.',en:'Lv.'},
+  'mv.attack':       {pl:'Atak',en:'Attack'},
+  'mv.type':         {pl:'Typ',en:'Type'},
+  'build.phys':      {pl:'Fizyczny Atakuj\u0105cy',en:'Physical Attacker'},
+  'build.spec':      {pl:'Specjalny Atakuj\u0105cy',en:'Special Attacker'},
+  'build.def':       {pl:'Defensywny',en:'Defensive'},
+  'build.ev':        {pl:'Rozk\u0142ad EV',en:'EV Spread'},
+  'build.nature':    {pl:'Natura',en:'Nature'},
+  'build.item':      {pl:'Przedmiot',en:'Item'},
+  'build.best4':     {pl:'Najlepsze 4 Ataki',en:'Best 4 Moves'},
+  'build.copyLink':  {pl:'Kopiuj Link do Buildu',en:'Copy Build Link'},
+  'gen.loading':     {pl:'\u0141adowanie...',en:'Loading...'},
+  'gen.noResults':   {pl:'Brak wynik\u00f3w',en:'No results'},
+  'gen.all':         {pl:'Wszystkie',en:'All'},
+  'gen.evaluate':    {pl:'Oce\u0144!',en:'Rate!'},
+  'gen.sum':         {pl:'Suma',en:'Total'},
+  'gen.donate':      {pl:'Wesprzyj rozw\u00f3j projektu',en:'Support the Project'},
+  'gen.coffee':      {pl:'Postaw kawk\u0119',en:'Buy a Coffee'},
+  'gen.donateDesc':  {pl:'Cobblemon Mastery Guide to darmowy projekt. Je\u015bli pomaga Ci w grze, rozwa\u017c wsparcie!',en:'Cobblemon Mastery Guide is a free project. If it helps you, consider supporting us!'},
+  'gen.ad':          {pl:'Miejsce na Twoj\u0105 reklam\u0119 \u2014 skontaktuj si\u0119 z nami!',en:'Your ad here \u2014 contact us!'},
+  'gen.adLabel':     {pl:'REKLAMA',en:'AD'},
+  'gen.pokemon':     {pl:'Pok\u00e9mon\u00f3w',en:'Pok\u00e9mon'},
+  'apricorn.how':    {pl:'JAK ZBIERA\u0106 APRICORNY?',en:'HOW TO COLLECT APRICORNS?'},
+  'apricorn.howDesc':{pl:'Drzewa Apricorn\u00f3w rosn\u0105 naturalnie w r\u00f3\u017cnych biomach. Zbieraj owoce i craftuj Pok\u00e9balle w Cobblemon Crafting Bench.',en:'Apricorn trees grow naturally in various biomes. Collect fruits and craft Pok\u00e9balls at the Cobblemon Crafting Bench.'},
+  'welcome.what':    {pl:'Czym jest Cobblemon?',en:'What is Cobblemon?'},
+  'welcome.whatDesc':{pl:'Cobblemon to mod do Minecrafta integruj\u0105cy creatury inspirowane Pok\u00e9monami. \u0141ap, trenuj i ewoluuj swoje stworzenia w \u015bwiecie Minecrafta!',en:'Cobblemon is a Minecraft mod featuring Pok\u00e9mon-inspired creatures. Catch, train and evolve your creatures in the Minecraft world!'},
+  'welcome.howUse':  {pl:'Jak u\u017cywa\u0107 bazy?',en:'How to use the database?'},
+  'welcome.friend':  {pl:'Przyja\u017a\u0144 (/checkfriendship)',en:'Friendship (/checkfriendship)'},
+  'welcome.link':    {pl:'Link Cable (Wymiana)',en:'Link Cable (Trade)'},
+};
+function t(key){var e=TR[key];if(!e)return key;return e[currentLang]||e['pl']||key;}
+
+const TYPE_NAMES_EN = {
+  normal:'Normal',fire:'Fire',water:'Water',electric:'Electric',grass:'Grass',
+  ice:'Ice',fighting:'Fighting',poison:'Poison',ground:'Ground',flying:'Flying',
+  psychic:'Psychic',bug:'Bug',rock:'Rock',ghost:'Ghost',dragon:'Dragon',
+  dark:'Dark',steel:'Steel',fairy:'Fairy'
+};
+function typeName(n){return currentLang==='en'?(TYPE_NAMES_EN[n]||n):(TYPE_NAMES_PL[n]||n);}
+
+/* ================================================================
+   TYPE EFFECTIVENESS (DEFENSIVE)
+   ================================================================ */
+const TYPE_EFF = {
+  normal:  {weak:['fighting'],resist:[],immune:['ghost']},
+  fire:    {weak:['water','ground','rock'],resist:['fire','grass','ice','bug','steel','fairy'],immune:[]},
+  water:   {weak:['electric','grass'],resist:['fire','water','ice','steel'],immune:[]},
+  electric:{weak:['ground'],resist:['electric','flying','steel'],immune:[]},
+  grass:   {weak:['fire','ice','poison','flying','bug'],resist:['water','electric','grass','ground'],immune:[]},
+  ice:     {weak:['fire','fighting','rock','steel'],resist:['ice'],immune:[]},
+  fighting:{weak:['flying','psychic','fairy'],resist:['bug','rock','dark'],immune:[]},
+  poison:  {weak:['ground','psychic'],resist:['fighting','poison','bug','grass','fairy'],immune:[]},
+  ground:  {weak:['water','grass','ice'],resist:['poison','rock'],immune:['electric']},
+  flying:  {weak:['electric','ice','rock'],resist:['fighting','bug','grass'],immune:['ground']},
+  psychic: {weak:['bug','ghost','dark'],resist:['fighting','psychic'],immune:[]},
+  bug:     {weak:['fire','flying','rock'],resist:['fighting','ground','grass'],immune:[]},
+  rock:    {weak:['water','grass','fighting','ground','steel'],resist:['normal','fire','poison','flying'],immune:[]},
+  ghost:   {weak:['ghost','dark'],resist:['poison','bug'],immune:['normal','fighting']},
+  dragon:  {weak:['ice','dragon','fairy'],resist:['fire','water','electric','grass'],immune:[]},
+  dark:    {weak:['fighting','bug','fairy'],resist:['ghost','dark'],immune:['psychic']},
+  steel:   {weak:['fire','fighting','ground'],resist:['normal','grass','ice','flying','psychic','bug','rock','dragon','steel','fairy'],immune:['poison']},
+  fairy:   {weak:['poison','steel'],resist:['fighting','bug','dark'],immune:['dragon']}
+};
+const ALL_TYPES = Object.keys(TYPE_EFF);
+
+/* ================================================================
+   BIOME MAPPING
+   ================================================================ */
+const HABITAT_BIOMES = {
+  cave:            {biomes:['Lush Caves','Dripstone Caves','Deep Dark'],icon:'\u26f0'},
+  forest:          {biomes:['Forest','Birch Forest','Dark Forest','Flower Forest'],icon:'\ud83c\udf32'},
+  grassland:       {biomes:['Plains','Sunflower Plains','Meadow'],icon:'\ud83c\udf3f'},
+  mountain:        {biomes:['Stony Peaks','Jagged Peaks','Windswept Hills'],icon:'\ud83c\udfd4'},
+  rare:            {biomes:['Deep Dark','End Highlands','Mushroom Fields'],icon:'\u2728'},
+  'rough-terrain': {biomes:['Badlands','Savanna','Windswept Forest','Stony Shore'],icon:'\ud83c\udfdc'},
+  sea:             {biomes:['Ocean','Deep Ocean','Warm Ocean','Lukewarm Ocean'],icon:'\ud83c\udf0a'},
+  urban:           {biomes:['Plains (Villages)','Savanna (Villages)'],icon:'\ud83c\udfe0'},
+  'waters-edge':   {biomes:['River','Beach','Swamp','Mangrove Swamp'],icon:'\ud83c\udfd6'}
+};
+function getSpawnTime(types){
+  var tn=types.map(function(t){return t.type.name;});
+  if(tn.includes('ghost')||tn.includes('dark'))return 'night';
+  if(tn.includes('fairy')||tn.includes('psychic'))return 'day';
+  if(tn.includes('bug'))return 'day';
+  return 'any';
+}
+function buildBiomeSection(habitat,types){
+  var hab=habitat?habitat.name:null;
+  var biomeData=hab&&HABITAT_BIOMES[hab]?HABITAT_BIOMES[hab]:{biomes:['Plains','Forest','Meadow'],icon:'\ud83c\udf0d'};
+  var spawnTime=getSpawnTime(types);
+  var timeLabels={day:'\u2600 '+t('biome.day'),night:'\ud83c\udf19 '+t('biome.night'),any:'\u2600\ud83c\udf19 '+t('biome.any')};
+  var biomeTags=biomeData.biomes.map(function(b){return '<span class="biome-tag">'+biomeData.icon+' '+b+'</span>';}).join('');
+  var timeTag='<span class="time-tag">'+(timeLabels[spawnTime]||timeLabels['any'])+'</span>';
+  return '<div class="biome-section"><h2>\ud83c\udf0d '+t('sec.biomes')+'</h2>'
+    +'<div style="margin-bottom:8px;font-size:16px;color:#888">'+t('biome.biomes')+':</div>'
+    +'<div class="biome-tags">'+biomeTags+'</div>'
+    +'<div style="margin-top:10px;font-size:16px;color:#888">'+t('biome.spawn')+':</div>'
+    +'<div class="biome-tags" style="margin-top:4px">'+timeTag+'</div></div>';
+}
+
+/* ================================================================
+   TEAM ANALYZER
+   ================================================================ */
+const TEAM_KEY='cob_team';
+let teamSlots=[];
+function loadTeam(){try{var s=localStorage.getItem(TEAM_KEY);teamSlots=s?JSON.parse(s):[];}catch(e){teamSlots=[];}}
+function saveTeam(){localStorage.setItem(TEAM_KEY,JSON.stringify(teamSlots));}
+function clearTeam(){teamSlots=[];localStorage.removeItem(TEAM_KEY);renderTeamPage();}
+function removeFromTeam(id){teamSlots=teamSlots.filter(function(s){return s.id!==id;});saveTeam();renderTeamPage();}
+function computeTeamDefense(){
+  var result={};
+  ALL_TYPES.forEach(function(at){result[at]={weak:0,resist:0,immune:0,neutral:0};});
+  teamSlots.forEach(function(slot){
+    ALL_TYPES.forEach(function(at){
+      var mult=1;
+      slot.types.forEach(function(dt){
+        if(!TYPE_EFF[dt])return;
+        if(TYPE_EFF[dt].weak.includes(at))mult*=2;
+        else if(TYPE_EFF[dt].resist.includes(at))mult*=0.5;
+        else if(TYPE_EFF[dt].immune.includes(at))mult*=0;
+      });
+      if(mult===0)result[at].immune++;else if(mult>1)result[at].weak++;else if(mult<1)result[at].resist++;else result[at].neutral++;
+    });
+  });
+  return result;
+}
+let teamSearchTimeout=null;
+function onTeamSearch(input){
+  clearTimeout(teamSearchTimeout);
+  var q=input.value.trim().toLowerCase();
+  var results=document.getElementById('team-search-results');
+  if(q.length<2){results.classList.remove('open');return;}
+  teamSearchTimeout=setTimeout(function(){
+    var matches=allPokemon.filter(function(p){return p.name.includes(q)||String(p.id).includes(q);}).slice(0,8);
+    if(!matches.length){results.innerHTML='<div class="team-search-item" style="color:#666">'+t('gen.noResults')+'</div>';results.classList.add('open');return;}
+    results.innerHTML=matches.map(function(p){
+      return '<div class="team-search-item" onclick="addTeamPokemon('+p.id+',\''+p.name+'\')">'
+        +'<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png"/>'
+        +'<span>'+p.name+'</span><span style="color:#666;margin-left:auto">#'+String(p.id).padStart(3,'0')+'</span></div>';
+    }).join('');
+    results.classList.add('open');
+  },200);
+}
+async function addTeamPokemon(id,name){
+  if(teamSlots.length>=6||teamSlots.some(function(s){return s.id===id;}))return;
+  var results=document.getElementById('team-search-results');
+  results.classList.remove('open');
+  document.getElementById('team-search-input').value='';
+  try{
+    var data=detailCache[id];
+    if(!data){var res=await fetch('https://pokeapi.co/api/v2/pokemon/'+id);var p=await res.json();data={p:p};detailCache[id]=data;}
+    var types=data.p.types.map(function(t){return t.type.name;});
+    teamSlots.push({id:id,name:name,types:types});
+    saveTeam();renderTeamPage();
+  }catch(e){teamSlots.push({id:id,name:name,types:['normal']});saveTeam();renderTeamPage();}
+}
+function renderTeamPage(){
+  var container=document.getElementById('team-analyzer-content');
+  if(!container)return;
+  var slotsHTML='';
+  for(var i=0;i<6;i++){
+    if(i<teamSlots.length){
+      var slot=teamSlots[i];
+      var typeBadges=slot.types.map(function(tp){return '<span class="type-badge type-'+tp+'" style="font-size:11px;padding:1px 6px">'+typeName(tp)+'</span>';}).join('');
+      slotsHTML+='<div class="team-slot filled"><span class="slot-num">'+(i+1)+'</span>'
+        +'<button class="slot-remove" onclick="removeFromTeam('+slot.id+')" title="Usu\u0144">\u2715</button>'
+        +'<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+slot.id+'.png"/>'
+        +'<div class="slot-name">'+slot.name+'</div>'
+        +'<div class="slot-types">'+typeBadges+'</div></div>';
+    }else{
+      slotsHTML+='<div class="team-slot"><span class="slot-num">'+(i+1)+'</span>'
+        +'<div style="color:#555;font-size:32px">+</div>'
+        +'<div style="color:#555;font-size:14px">'+t('team.empty')+'</div></div>';
+    }
+  }
+  var defenseHTML='';
+  if(teamSlots.length>0){
+    var analysis=computeTeamDefense();
+    var weakTypes=ALL_TYPES.filter(function(tp){return analysis[tp].weak>analysis[tp].resist+analysis[tp].immune;});
+    var resistTypes=ALL_TYPES.filter(function(tp){return analysis[tp].resist+analysis[tp].immune>analysis[tp].weak;});
+    var immuneTypes=ALL_TYPES.filter(function(tp){return analysis[tp].immune>0;});
+    var neutralTypes=ALL_TYPES.filter(function(tp){return !weakTypes.includes(tp)&&!resistTypes.includes(tp);});
+    defenseHTML='<div class="defense-summary"><h3>\ud83d\udd34 '+t('team.weak')+' ('+weakTypes.length+')</h3>'
+      +'<div class="defense-grid">'+weakTypes.map(function(tp){return '<div class="defense-entry defense-weak">'+typeIconHTML(tp,18)+' '+typeName(tp)+' <span style="margin-left:auto;font-size:13px">'+analysis[tp].weak+'\u00d7</span></div>';}).join('')+'</div></div>'
+      +'<div class="defense-summary" style="margin-top:8px"><h3>\ud83d\udfe2 '+t('team.resist')+' ('+resistTypes.length+')</h3>'
+      +'<div class="defense-grid">'+resistTypes.map(function(tp){return '<div class="defense-entry defense-resist">'+typeIconHTML(tp,18)+' '+typeName(tp)+' <span style="margin-left:auto;font-size:13px">'+analysis[tp].resist+'\u00d7</span></div>';}).join('')+'</div></div>';
+    if(immuneTypes.length)defenseHTML+='<div class="defense-summary" style="margin-top:8px"><h3>\ud83d\udfe3 '+t('team.immune')+' ('+immuneTypes.length+')</h3>'
+      +'<div class="defense-grid">'+immuneTypes.map(function(tp){return '<div class="defense-entry defense-immune">'+typeIconHTML(tp,18)+' '+typeName(tp)+'</div>';}).join('')+'</div></div>';
+    defenseHTML+='<div class="defense-summary" style="margin-top:8px"><h3>\u26aa '+t('team.neutral')+' ('+neutralTypes.length+')</h3>'
+      +'<div class="defense-grid">'+neutralTypes.map(function(tp){return '<div class="defense-entry defense-neutral">'+typeIconHTML(tp,18)+' '+typeName(tp)+'</div>';}).join('')+'</div></div>';
+  }
+  container.innerHTML='<div style="font-size:16px;color:#888;margin-bottom:12px">'+t('team.desc')+'</div>'
+    +'<div class="team-search-wrap">'
+    +'<input class="mc-input" id="team-search-input" type="text" placeholder="'+t('team.search')+'" oninput="onTeamSearch(this)" autocomplete="off"/>'
+    +'<div class="team-search-results" id="team-search-results"></div></div>'
+    +'<div class="team-slots">'+slotsHTML+'</div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:16px">'
+    +'<button class="mc-btn" onclick="clearTeam()" style="background:#5a2020;border-top-color:#8a4040;border-left-color:#8a4040">\ud83d\uddd1 '+t('team.clear')+'</button></div>'
+    +defenseHTML;
+}
+
+/* ================================================================
+   LANGUAGE SWITCH
+   ================================================================ */
+function setLang(lang){
+  currentLang=lang;
+  localStorage.setItem('cob_lang',lang);
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===lang);});
+  // Update header text
+  var sub=document.querySelector('.header-subtitle');if(sub)sub.textContent=t('nav.subtitle');
+  var lbl=document.querySelector('.sidebar-search label');if(lbl)lbl.textContent='\ud83d\udd0d '+t('nav.search');
+  var inp=document.getElementById('search-input');if(inp)inp.placeholder=currentLang==='en'?'e.g. Pikachu...':'np. Pikachu...';
+  var gb=document.getElementById('badge-gen');if(gb)gb.innerHTML='\ud83c\udf3f '+t('nav.genBadge');
+  var ab=document.querySelector('.gen-filter-btn[data-gen="0"]');if(ab)ab.textContent=t('gen.all');
+  var bi=document.getElementById('btn-items');if(bi)bi.innerHTML='\ud83d\udce6 '+t('nav.items');
+  var ba=document.getElementById('btn-apricorns');if(ba)ba.innerHTML='\ud83c\udf4e '+t('nav.apricorns');
+  var bs=document.getElementById('btn-start');if(bs)bs.innerHTML='\ud83c\udfe0 '+t('nav.start');
+  var bt=document.getElementById('btn-team');if(bt)bt.innerHTML='\u2694 '+t('nav.team');
+  // Re-render current page
+  if(currentPage==='welcome')showPage('welcome');
+  else if(currentPage==='items')showPage('items');
+  else if(currentPage==='apricorns')showPage('apricorns');
+  else if(currentPage==='team-analyzer')showPage('team-analyzer');
+  else if(selectedId){var f=allPokemon.find(function(p){return p.id===selectedId;});if(f)loadDetail(f.id,f.name);}
+}
 
 const MOVE_DATA = {
   'hyper-voice':[90,'normal','S'],'boomburst':[140,'normal','S'],'body-slam':[85,'normal','P'],
@@ -923,11 +1322,17 @@ function copyBuildLink() {
    INIT
    ================================================================ */
 async function init() {
-  setStatus('Pobieranie listy Pok\u00e9mon\u00f3w z PokeAPI...', true);
+  // Load saved language
+  currentLang = localStorage.getItem('cob_lang') || 'pl';
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===currentLang);});
+  // Load saved team
+  loadTeam();
+
+  setStatus((currentLang==='en'?'Fetching Pok\u00e9mon list from PokeAPI...':'Pobieranie listy Pok\u00e9mon\u00f3w z PokeAPI...'), true);
   var cached = localStorage.getItem('cob_pokemon_list');
   if (cached) {
     allPokemon = JSON.parse(cached);
-    setStatus('Za\u0142adowano '+allPokemon.length+' Pok\u00e9mon\u00f3w z cache.', false);
+    setStatus((currentLang==='en'?'Loaded ':'Za\u0142adowano ')+allPokemon.length+(currentLang==='en'?' Pok\u00e9mon from cache.':' Pok\u00e9mon\u00f3w z cache.'), false);
   } else {
     try {
       var res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10000');
@@ -938,11 +1343,13 @@ async function init() {
         return { id: id, name: p.name };
       }).filter(function(p){ return p.id <= 1025; });
       localStorage.setItem('cob_pokemon_list', JSON.stringify(allPokemon));
-      setStatus('Za\u0142adowano '+allPokemon.length+' Pok\u00e9mon\u00f3w.', false);
+      setStatus((currentLang==='en'?'Loaded ':'Za\u0142adowano ')+allPokemon.length+(currentLang==='en'?' Pok\u00e9mon.':' Pok\u00e9mon\u00f3w.'), false);
     } catch (e) {
-      setStatus('B\u0142\u0105d po\u0142\u0105czenia z PokeAPI!', false);
+      setStatus((currentLang==='en'?'Connection error with PokeAPI!':'B\u0142\u0105d po\u0142\u0105czenia z PokeAPI!'), false);
     }
   }
+  // Apply saved language to header elements
+  if(currentLang==='en')setLang('en');
   applyFilters();
   showPage('welcome');
   // Check hash for deep link
@@ -971,9 +1378,9 @@ function applyFilters() {
 
 function renderList() {
   var container = document.getElementById('pokemon-list');
-  document.getElementById('pokemon-count').textContent = filteredList.length + ' Pok\u00e9mon\u00f3w';
+  document.getElementById('pokemon-count').textContent = filteredList.length + ' ' + t('gen.pokemon');
   if (!filteredList.length) {
-    container.innerHTML = '<div class="empty-state"><span class="big-icon">\ud83d\udd0d</span>Brak wynik\u00f3w</div>';
+    container.innerHTML = '<div class="empty-state"><span class="big-icon">\ud83d\udd0d</span>'+t('gen.noResults')+'</div>';
     return;
   }
   var chunk = filteredList.slice(0, listOffset + PAGE_SIZE);
@@ -1046,7 +1453,7 @@ async function loadDetail(id, name) {
 /* ================================================================
    TYPE ICON HELPER
    ================================================================ */
-function typeIconHTML(typeName, size) {
+function typeIconHTML(tpName, size) {
   size = size || 20;
   // Use colored circle badges as type icons
   var colors = {
@@ -1055,9 +1462,9 @@ function typeIconHTML(typeName, size) {
     psychic:'#f85888',bug:'#a8b820',rock:'#b8a038',ghost:'#705898',dragon:'#7038f8',
     dark:'#705848',steel:'#b8b8d0',fairy:'#ee99ac'
   };
-  var c = colors[typeName] || '#888';
-  var label = (TYPE_NAMES_PL[typeName] || typeName).substring(0,3).toUpperCase();
-  return '<span style="display:inline-block;width:'+size+'px;height:'+size+'px;border-radius:50%;background:'+c+';text-align:center;line-height:'+size+'px;font-size:'+(size*0.5)+'px;color:#fff;font-family:VT323,monospace;vertical-align:middle;margin-right:2px;border:1px solid rgba(0,0,0,0.3)" title="'+(TYPE_NAMES_PL[typeName]||typeName)+'">'+label+'</span>';
+  var c = colors[tpName] || '#888';
+  var label = typeName(tpName).substring(0,3).toUpperCase();
+  return '<span style="display:inline-block;width:'+size+'px;height:'+size+'px;border-radius:50%;background:'+c+';text-align:center;line-height:'+size+'px;font-size:'+(size*0.5)+'px;color:#fff;font-family:VT323,monospace;vertical-align:middle;margin-right:2px;border:1px solid rgba(0,0,0,0.3)" title="'+typeName(tpName)+'">'+label+'</span>';
 }
 
 /* ================================================================
@@ -1136,30 +1543,30 @@ function renderDetail(p, s, evoChain, name) {
   // ── BUILD GENERATOR ──
   function generateBuild(statMap, pokemonTypes, moves, buildType) {
     var r = detectRole(statMap);
-    var spread,note,nName,nUp,nDown,nWhy,item,itemIcon,itemDesc;
+    var spread,note,nName,nUp,nDown,nWhy,item,itemDesc;
     // Three build types: 'physical','special','defensive'
     if (buildType === 'physical') {
       if(r.isFast) spread=[['attack',252],['speed',252],['hp',4]]; else spread=[['attack',252],['hp',252],['defense',4]];
-      note='Maksuj fizyczne obra\u017cenia.';
-      if(r.isFast){nName='Jolly';nUp='+Szybk.';nDown='-Sp.Atak';nWhy='Szybszy bez straty Ataku';}
-      else{nName='Adamant';nUp='+Atak';nDown='-Sp.Atak';nWhy='Maks Atak';}
-      if(r.spe>=100){item='Choice Band';itemIcon='\ud83e\udde4';itemDesc='Atak \u00d71.5 \u2014 tylko jeden atak';}
-      else{item='Life Orb';itemIcon='\ud83d\udd2e';itemDesc='+30% obra\u017ce\u0144, -10% P\u017b za atak';}
+      note=currentLang==='en'?'Max physical damage.':'Maksuj fizyczne obra\u017cenia.';
+      if(r.isFast){nName='Jolly';nUp='+Szybk.';nDown='-Sp.Atak';nWhy=currentLang==='en'?'Faster without losing Atk':'Szybszy bez straty Ataku';}
+      else{nName='Adamant';nUp='+Atak';nDown='-Sp.Atak';nWhy=currentLang==='en'?'Max Atk':'Maks Atak';}
+      if(r.spe>=100){item='Choice Band';itemDesc=currentLang==='en'?'Atk \u00d71.5 \u2014 one move only':'Atak \u00d71.5 \u2014 tylko jeden atak';}
+      else{item='Life Orb';itemDesc=currentLang==='en'?'+30% damage, -10% HP per attack':'+30% obra\u017ce\u0144, -10% P\u017b za atak';}
     } else if (buildType === 'special') {
       if(r.isFast) spread=[['special-attack',252],['speed',252],['hp',4]]; else spread=[['special-attack',252],['hp',252],['special-defense',4]];
-      note='Maksuj specjalne obra\u017cenia.';
-      if(r.isFast){nName='Timid';nUp='+Szybk.';nDown='-Atak';nWhy='Szybszy bez straty Sp.Atak';}
-      else{nName='Modest';nUp='+Sp.Atak';nDown='-Atak';nWhy='Maks Sp.Atak';}
-      if(r.spe>=100){item='Choice Specs';itemIcon='\ud83d\udc53';itemDesc='Sp.Atak \u00d71.5 \u2014 tylko jeden atak';}
-      else{item='Life Orb';itemIcon='\ud83d\udd2e';itemDesc='+30% obra\u017ce\u0144, -10% P\u017b za atak';}
+      note=currentLang==='en'?'Max special damage.':'Maksuj specjalne obra\u017cenia.';
+      if(r.isFast){nName='Timid';nUp='+Szybk.';nDown='-Atak';nWhy=currentLang==='en'?'Faster without losing SpAtk':'Szybszy bez straty Sp.Atak';}
+      else{nName='Modest';nUp='+Sp.Atak';nDown='-Atak';nWhy=currentLang==='en'?'Max SpAtk':'Maks Sp.Atak';}
+      if(r.spe>=100){item='Choice Specs';itemDesc=currentLang==='en'?'SpAtk \u00d71.5 \u2014 one move only':'Sp.Atak \u00d71.5 \u2014 tylko jeden atak';}
+      else{item='Life Orb';itemDesc=currentLang==='en'?'+30% damage, -10% HP per attack':'+30% obra\u017ce\u0144, -10% P\u017b za atak';}
     } else {
       // defensive
       var defMore = r.def >= r.spdef;
       if(defMore) spread=[['hp',252],['defense',252],['special-defense',4]]; else spread=[['hp',252],['special-defense',252],['defense',4]];
-      note='Maksymalna wytrzyma\u0142o\u015b\u0107.';
-      if(defMore){nName='Impish';nUp='+Obrona';nDown='-Sp.Atak';nWhy='Fizyczna wytrzyma\u0142o\u015b\u0107';}
-      else{nName='Calm';nUp='+Sp.Obr';nDown='-Atak';nWhy='Specjalna wytrzyma\u0142o\u015b\u0107';}
-      item='Leftovers';itemIcon='\ud83c\udf5d';itemDesc='Regeneruje 1/16 P\u017b co tur\u0119';
+      note=currentLang==='en'?'Maximum endurance.':'Maksymalna wytrzyma\u0142o\u015b\u0107.';
+      if(defMore){nName='Impish';nUp='+'+(currentLang==='en'?'Def':'Obrona');nDown='-Sp.Atak';nWhy=currentLang==='en'?'Physical endurance':'Fizyczna wytrzyma\u0142o\u015b\u0107';}
+      else{nName='Calm';nUp='+'+(currentLang==='en'?'SpDef':'Sp.Obr');nDown='-Atak';nWhy=currentLang==='en'?'Special endurance':'Specjalna wytrzyma\u0142o\u015b\u0107';}
+      item='Leftovers';itemDesc=currentLang==='en'?'Restores 1/16 HP per turn':'Regeneruje 1/16 P\u017b co tur\u0119';
     }
     var total = spread.reduce(function(s,e){return s+e[1];},0);
     var evRows = spread.map(function(e){
@@ -1167,20 +1574,20 @@ function renderDetail(p, s, evoChain, name) {
       return '<div class="ev-row"><span class="ev-amount">'+val+'</span><span class="ev-stat-name" style="color:'+color+'">'+(STAT_NAMES[sn]||sn)+'</span><div class="ev-bar-bg"><div class="ev-bar" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
     }).join('');
 
-    var evHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udcca Rozk\u0142ad EV <span style="font-size:10px;color:#888;font-family:VT323,monospace">(max 510)</span></div>'+evRows+'<div class="ev-total">Suma: '+total+'/510</div><div style="font-size:14px;color:#666;margin-top:5px">'+note+'</div></div>';
-    var natureHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udc8e Natura</div><div class="nature-badge">'+nName+'</div><div class="nature-detail"><span class="nature-up">\u25b2 '+nUp+'</span> | <span class="nature-down">\u25bc '+nDown+'</span></div><div style="font-size:14px;color:#666;margin-top:6px">'+nWhy+'</div></div>';
+    var evHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udcca '+t('build.ev')+' <span style="font-size:10px;color:#888;font-family:VT323,monospace">(max 510)</span></div>'+evRows+'<div class="ev-total">'+t('gen.sum')+': '+total+'/510</div><div style="font-size:14px;color:#666;margin-top:5px">'+note+'</div></div>';
+    var natureHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udc8e '+t('build.nature')+'</div><div class="nature-badge">'+nName+'</div><div class="nature-detail"><span class="nature-up">\u25b2 '+nUp+'</span> | <span class="nature-down">\u25bc '+nDown+'</span></div><div style="font-size:14px;color:#666;margin-top:6px">'+nWhy+'</div></div>';
 
-    // Item with PokeAPI icon
+    // Item with PokeAPI icon only (no emoji)
     var itemSlug = item.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
-    var itemImgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+itemSlug+'.png" onerror="this.style.display=\'none\'" />';
-    var itemHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udce6 Przedmiot</div><div style="font-size:28px;text-align:center;margin:4px 0">'+itemIcon+'</div><div class="item-big-name">'+itemImgTag+' '+item+'</div><div class="item-big-desc">'+itemDesc+'</div></div>';
+    var itemImgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+itemSlug+'.png" onerror="this.parentNode.innerHTML=\'<span style=color:#555;font-size:28px>\u25a1</span>\'" style="width:32px;height:32px" />';
+    var itemHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udce6 '+t('build.item')+'</div><div style="text-align:center;margin:4px 0">'+itemImgTag+'</div><div class="item-big-name">'+item+'</div><div class="item-big-desc">'+itemDesc+'</div></div>';
 
     // Best 4 Moveset for this build type
     var movesHTML = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
 
     return '<div class="comp-grid">'+evHTML+natureHTML+itemHTML+'</div>'
-      +'<div class="comp-box-title" style="margin-bottom:8px">\u2694 Najlepsze 4 Ataki</div>'
-      +'<div style="font-size:14px;color:#666;margin-bottom:8px">Automatycznie dobrane na podstawie typ\u00f3w i statystyk.</div>'
+      +'<div class="comp-box-title" style="margin-bottom:8px">\u2694 '+t('build.best4')+'</div>'
+      +'<div style="font-size:14px;color:#666;margin-bottom:8px">'+(currentLang==='en'?'Automatically selected based on types and stats.':'Automatycznie dobrane na podstawie typ\u00f3w i statystyk.')+'</div>'
       +'<div class="best4-grid">'+movesHTML+'</div>';
   }
 
@@ -1231,7 +1638,7 @@ function renderDetail(p, s, evoChain, name) {
     var catLabel=function(cat){return cat==='P'?'<span class="move-cat-p">Fiz.</span>':cat==='S'?'<span class="move-cat-s">Spec.</span>':'<span class="move-cat-z">Status</span>';};
     return chosen.map(function(m,i){
       var isStab=typeSet.has(m.mtype);
-      var stabL=isStab?'<span class="move-stab">STAB</span>':'<span class="move-coverage">'+(TYPE_NAMES_PL[m.mtype]||m.mtype)+'</span>';
+      var stabL=isStab?'<span class="move-stab">STAB</span>':'<span class="move-coverage">'+typeName(m.mtype)+'</span>';
       var pwrStr=m.power>0?'<span class="move-power">MOC: '+m.power+'</span>':'<span class="move-power" style="color:#666">Status</span>';
       return '<div class="move-card"><span class="move-card-num">'+(i+1)+'</span><div class="move-card-name">'+typeIconHTML(m.mtype,18)+' '+m.nm.replace(/-/g,' ')+'</div><div class="move-card-meta">'+catLabel(m.cat)+stabL+pwrStr+'</div><div class="move-stars">'+stars(m.score)+'</div></div>';
     }).join('');
@@ -1244,9 +1651,9 @@ function renderDetail(p, s, evoChain, name) {
     // Store for calculator
     lastBuildData = {statMap:statMap, pokemonTypes:pokemonTypes, r:r};
     var builds = [
-      {key:'physical', label:'Fizyczny Atakuj\u0105cy', icon:'\u2694'},
-      {key:'special', label:'Specjalny Atakuj\u0105cy', icon:'\u2728'},
-      {key:'defensive', label:'Defensywny', icon:'\ud83d\udee1'}
+      {key:'physical', label:t('build.phys'), icon:'\u2694'},
+      {key:'special', label:t('build.spec'), icon:'\u2728'},
+      {key:'defensive', label:t('build.def'), icon:'\ud83d\udee1'}
     ];
     var tabsHTML = builds.map(function(b,i){
       return '<button class="build-tab'+(i===0?' active':'')+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">'+(i+1)+'. '+b.icon+' '+b.label+'</button>';
@@ -1254,7 +1661,7 @@ function renderDetail(p, s, evoChain, name) {
     var panelsHTML = builds.map(function(b,i){
       return '<div class="build-panel'+(i===0?' active':'')+'" id="build-panel-'+i+'">'+generateBuild(statMap,pokemonTypes,moves,b.key)+'</div>';
     }).join('');
-    return '<div class="comp-section"><h2>\ud83c\udfc6 Competitive Build \u2014 '+r.label+'  <button class="copy-link-btn" id="copy-link-btn" onclick="copyBuildLink()" style="float:right;margin-top:-4px">\ud83d\udd17 Kopiuj Link do Buildu</button></h2>'
+    return '<div class="comp-section"><h2>\ud83c\udfc6 '+t('sec.comp')+' \u2014 '+r.label+'  <button class="copy-link-btn" id="copy-link-btn" onclick="copyBuildLink()" style="float:right;margin-top:-4px">\ud83d\udd17 '+t('build.copyLink')+'</button></h2>'
       +'<div class="build-tabs">'+tabsHTML+'</div>'
       +panelsHTML
       +'</div>';
@@ -1272,10 +1679,10 @@ function renderDetail(p, s, evoChain, name) {
       else if(method==='egg')eggMoves.push({name:nm});
     });
     lvlMoves.sort(function(a,b){return a.lv-b.lv;});tmMoves.sort(function(a,b){return a.name.localeCompare(b.name);});eggMoves.sort(function(a,b){return a.name.localeCompare(b.name);});
-    var lvlHTML=lvlMoves.length?'<table class="move-table"><tr><th>Poz.</th><th>Atak</th><th>Typ</th><th>MOC</th></tr>'+lvlMoves.map(function(m){var md=MOVE_DATA[m.name];var mt=md?md[1]:'normal';return '<tr><td><span class="move-lv">'+(m.lv||'\u2014')+'</span></td><td class="move-name">'+typeIconHTML(mt,16)+' '+m.name.replace(/-/g,' ')+'</td><td><span class="type-badge type-'+mt+'" style="font-size:12px;padding:1px 6px">'+(TYPE_NAMES_PL[mt]||mt)+'</span></td><td style="color:#f8d030;font-size:17px">'+(md?md[0]||'\u2014':'\u2014')+'</td></tr>';}).join('')+'</table>':'<div style="color:#666">Brak.</div>';
-    var tmHTML=tmMoves.length?'<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px">'+tmMoves.map(function(m){var md=MOVE_DATA[m.name];var mt=md?md[1]:'normal';return '<span class="move-tm">'+typeIconHTML(mt,14)+' '+m.name.replace(/-/g,' ')+'</span>';}).join('')+'</div>':'<div style="color:#666">Brak.</div>';
-    var eggHTML=eggMoves.length?'<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px">'+eggMoves.map(function(m){var md=MOVE_DATA[m.name];var mt=md?md[1]:'normal';return '<span style="background:#1a0a1a;color:#c084fc;border:1px solid #7c3aed;padding:1px 8px;font-size:15px">'+typeIconHTML(mt,14)+' '+m.name.replace(/-/g,' ')+'</span>';}).join('')+'</div>':'<div style="color:#666">Brak.</div>';
-    return '<div class="moves-section"><h2>\ud83d\udcdc Pe\u0142na lista atak\u00f3w</h2><div class="moves-tabs"><button class="moves-tab active" onclick="switchMovesTab(this,\'mv-lvl\')">\ud83d\udcc8 Przez poziom ('+lvlMoves.length+')</button><button class="moves-tab" onclick="switchMovesTab(this,\'mv-tm\')">\ud83d\udcbf TM/TR ('+tmMoves.length+')</button>'+(eggMoves.length?'<button class="moves-tab" onclick="switchMovesTab(this,\'mv-egg\')">\ud83e\udd5a Egg Moves ('+eggMoves.length+')</button>':'')+'</div><div class="moves-panel active" id="mv-lvl">'+lvlHTML+'</div><div class="moves-panel" id="mv-tm">'+tmHTML+'</div>'+(eggMoves.length?'<div class="moves-panel" id="mv-egg">'+eggHTML+'</div>':'')+'</div>';
+    var lvlHTML=lvlMoves.length?'<table class="move-table"><tr><th>'+t('mv.lvl')+'</th><th>'+t('mv.attack')+'</th><th>'+t('mv.type')+'</th><th>'+t('mv.power')+'</th></tr>'+lvlMoves.map(function(m){var md=MOVE_DATA[m.name];var mt=md?md[1]:'normal';return '<tr><td><span class="move-lv">'+(m.lv||'\u2014')+'</span></td><td class="move-name">'+typeIconHTML(mt,16)+' '+m.name.replace(/-/g,' ')+'</td><td><span class="type-badge type-'+mt+'" style="font-size:12px;padding:1px 6px">'+typeName(mt)+'</span></td><td style="color:#f8d030;font-size:17px">'+(md?md[0]||'\u2014':'\u2014')+'</td></tr>';}).join('')+'</table>':'<div style="color:#666">'+(currentLang==='en'?'None.':'Brak.')+'</div>';
+    var tmHTML=tmMoves.length?'<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px">'+tmMoves.map(function(m){var md=MOVE_DATA[m.name];var mt=md?md[1]:'normal';return '<span class="move-tm">'+typeIconHTML(mt,14)+' '+m.name.replace(/-/g,' ')+'</span>';}).join('')+'</div>':'<div style="color:#666">'+(currentLang==='en'?'None.':'Brak.')+'</div>';
+    var eggHTML=eggMoves.length?'<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px">'+eggMoves.map(function(m){var md=MOVE_DATA[m.name];var mt=md?md[1]:'normal';return '<span style="background:#1a0a1a;color:#c084fc;border:1px solid #7c3aed;padding:1px 8px;font-size:15px">'+typeIconHTML(mt,14)+' '+m.name.replace(/-/g,' ')+'</span>';}).join('')+'</div>':'<div style="color:#666">'+(currentLang==='en'?'None.':'Brak.')+'</div>';
+    return '<div class="moves-section"><h2>\ud83d\udcdc '+t('sec.moves')+'</h2><div class="moves-tabs"><button class="moves-tab active" onclick="switchMovesTab(this,\'mv-lvl\')">\ud83d\udcc8 '+t('mv.level')+' ('+lvlMoves.length+')</button><button class="moves-tab" onclick="switchMovesTab(this,\'mv-tm\')">\ud83d\udcbf '+t('mv.tm')+' ('+tmMoves.length+')</button>'+(eggMoves.length?'<button class="moves-tab" onclick="switchMovesTab(this,\'mv-egg\')">\ud83e\udd5a '+t('mv.egg')+' ('+eggMoves.length+')</button>':'')+'</div><div class="moves-panel active" id="mv-lvl">'+lvlHTML+'</div><div class="moves-panel" id="mv-tm">'+tmHTML+'</div>'+(eggMoves.length?'<div class="moves-panel" id="mv-egg">'+eggHTML+'</div>':'')+'</div>';
   }
 
   // ── CALCULATOR SECTION ──
@@ -1288,15 +1695,15 @@ function renderDetail(p, s, evoChain, name) {
     var natures = ['Hardy','Lonely','Brave','Adamant','Naughty','Bold','Docile','Relaxed','Impish','Lax','Timid','Hasty','Serious','Jolly','Naive','Modest','Mild','Quiet','Bashful','Rash','Calm','Gentle','Sassy','Careful','Quirky'];
     var natureOpts = natures.map(function(n){return '<option value="'+n+'">'+n+'</option>';}).join('');
     var abilities = p.abilities.map(function(a){return a.ability.name;});
-    var abilityOpts = abilities.map(function(a){return '<option value="'+a+'">'+a+(p.abilities.find(function(ab){return ab.ability.name===a;}).is_hidden?' [ukryta]':'')+'</option>';}).join('');
-    return '<div class="calc-section"><h2>\ud83e\uddee Oce\u0144 mojego Pok\u00e9mona</h2>'
-      +'<div style="font-size:16px;color:#888;margin-bottom:10px">Wpisz swoje IV, wybierz Natur\u0119 i Zdolno\u015b\u0107, aby por\u00f3wna\u0107 z optymalnym buildem.</div>'
+    var abilityOpts = abilities.map(function(a){return '<option value="'+a+'">'+a+(p.abilities.find(function(ab){return ab.ability.name===a;}).is_hidden?' ['+(currentLang==='en'?'hidden':'ukryta')+']':'')+'</option>';}).join('');
+    return '<div class="calc-section"><h2>\ud83e\uddee '+t('sec.calc')+'</h2>'
+      +'<div style="font-size:16px;color:#888;margin-bottom:10px">'+(currentLang==='en'?'Enter your IVs, choose Nature and Ability to compare with the optimal build.':'Wpisz swoje IV, wybierz Natur\u0119 i Zdolno\u015b\u0107, aby por\u00f3wna\u0107 z optymalnym buildem.')+'</div>'
       +'<div class="calc-grid">'+ivRows+'</div>'
-      +'<div class="calc-grid"><div class="calc-box"><label>Natura</label><select class="calc-select" id="calc-nature">'+natureOpts+'</select></div>'
-      +'<div class="calc-box"><label>Zdolno\u015b\u0107 (Ability)</label><select class="calc-select" id="calc-ability">'+abilityOpts+'</select></div></div>'
-      +'<div class="calc-grid"><div class="calc-box"><label>Por\u00f3wnaj z buildem:</label><select class="calc-select" id="calc-build-type"><option value="physical">Fizyczny Atakuj\u0105cy</option><option value="special">Specjalny Atakuj\u0105cy</option><option value="defensive">Defensywny</option></select></div>'
-      +'<div class="calc-box" style="display:flex;align-items:flex-end"><button class="mc-btn" onclick="evaluatePokemon()" style="width:100%">\ud83d\udcca Oce\u0144!</button></div></div>'
-      +'<div class="calc-verdict" id="calc-verdict"><span class="verdict-emoji">\u2753</span>Wpisz dane i kliknij "Oce\u0144!"</div></div>';
+      +'<div class="calc-grid"><div class="calc-box"><label>'+t('build.nature')+'</label><select class="calc-select" id="calc-nature">'+natureOpts+'</select></div>'
+      +'<div class="calc-box"><label>'+t('det.abilities')+' (Ability)</label><select class="calc-select" id="calc-ability">'+abilityOpts+'</select></div></div>'
+      +'<div class="calc-grid"><div class="calc-box"><label>'+(currentLang==='en'?'Compare with build:':'Por\u00f3wnaj z buildem:')+'</label><select class="calc-select" id="calc-build-type"><option value="physical">'+t('build.phys')+'</option><option value="special">'+t('build.spec')+'</option><option value="defensive">'+t('build.def')+'</option></select></div>'
+      +'<div class="calc-box" style="display:flex;align-items:flex-end"><button class="mc-btn" onclick="evaluatePokemon()" style="width:100%">\ud83d\udcca '+t('gen.evaluate')+'</button></div></div>'
+      +'<div class="calc-verdict" id="calc-verdict"><span class="verdict-emoji">\u2753</span>'+(currentLang==='en'?'Enter data and click "Rate!"':'Wpisz dane i kliknij "Oce\u0144!"')+'</div></div>';
   }
 
   // Build stats HTML
@@ -1305,44 +1712,49 @@ function renderDetail(p, s, evoChain, name) {
     return '<div class="stat-row"><span class="stat-name">'+sname+'</span><span class="stat-val">'+val+'</span><div class="stat-bar-bg"><div class="stat-bar" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
   }).join('');
 
-  var typesHTML = p.types.map(function(t){return '<span class="type-badge type-'+t.type.name+'">'+(TYPE_NAMES_PL[t.type.name]||t.type.name)+'</span>';}).join('');
-  var evoHTML = evoChain ? renderEvoChain(evoChain.chain) : '<span style="color:#666">Brak danych ewolucji</span>';
+  var typesHTML = p.types.map(function(tp){return '<span class="type-badge type-'+tp.type.name+'">'+typeName(tp.type.name)+'</span>';}).join('');
+  var evoHTML = evoChain ? renderEvoChain(evoChain.chain) : '<span style="color:#666">'+(currentLang==='en'?'No evolution data':'Brak danych ewolucji')+'</span>';
 
   // Cobblemon section
   var cobHTML = '';
   if (isFriendship) {
-    var detail = FRIENDSHIP_DETAIL[p.name] || 'Wymaga wysokiej przyja\u017ani.';
-    cobHTML += '<div class="info-row"><span class="info-icon">\ud83d\udc9b</span><div class="info-text"><em>Ewolucja przez Przyja\u017a\u0144</em><br>'+detail+'<br>Sprawd\u017a poziom przyja\u017ani komend\u0105:<div class="cmd-block">/checkfriendship @s</div><div style="font-size:15px;color:#888;margin-top:4px;">Potrzebujesz \u2265 160 friendship do ewolucji (max 255).</div></div></div>';
+    var detail = FRIENDSHIP_DETAIL[p.name] || (currentLang==='en'?'Requires high friendship.':'Wymaga wysokiej przyja\u017ani.');
+    cobHTML += '<div class="info-row"><span class="info-icon">\ud83d\udc9b</span><div class="info-text"><em>'+(currentLang==='en'?'Friendship Evolution':'Ewolucja przez Przyja\u017a\u0144')+'</em><br>'+detail+'<br>'+(currentLang==='en'?'Check friendship level:':'Sprawd\u017a poziom przyja\u017ani komend\u0105:')+'<div class="cmd-block">/checkfriendship @s</div></div></div>';
   }
   if (isTradeEvo) {
-    var t = LINK_CABLE_EVOS[p.name];
-    cobHTML += '<div class="info-row"><span class="info-icon">\ud83d\udd17</span><div class="info-text"><em>Ewolucja przez Link Cable</em> \u2192 <em>'+t.result+'</em><br>'+(t.item?'Trzymany przedmiot: <code>'+t.item+'</code><br>':'Brak wymaganego przedmiotu.<br>')+'U\u017cyj <code>Link Cable</code> i aktywuj go w r\u0119ce.</div></div>';
+    var te = LINK_CABLE_EVOS[p.name];
+    cobHTML += '<div class="info-row"><span class="info-icon">\ud83d\udd17</span><div class="info-text"><em>'+(currentLang==='en'?'Link Cable Evolution':'Ewolucja przez Link Cable')+'</em> \u2192 <em>'+te.result+'</em><br>'+(te.item?(currentLang==='en'?'Held item: ':'Trzymany przedmiot: ')+'<code>'+te.item+'</code><br>':'')+(currentLang==='en'?'Use Link Cable and activate in hand.':'U\u017cyj Link Cable i aktywuj go w r\u0119ce.')+'</div></div>';
   }
 
   var abilitiesHTML = p.abilities.map(function(a){
-    return '<span style="color:'+(a.is_hidden?'#a855f7':'#55ffff')+'">'+a.ability.name+(a.is_hidden?' <span style="font-size:13px;color:#a855f7">[ukryta]</span>':'')+'</span>';
+    return '<span style="color:'+(a.is_hidden?'#a855f7':'#55ffff')+'">'+a.ability.name+(a.is_hidden?' <span style="font-size:13px;color:#a855f7">['+(currentLang==='en'?'hidden':'ukryta')+']</span>':'')+'</span>';
   }).join(', ');
   var height=(p.height/10).toFixed(1),weight=(p.weight/10).toFixed(1);
-  function getGen(id){for(var g=1;g<=9;g++){var r=GEN_RANGES[g];if(id>=r[0]&&id<=r[1])return 'Generacja '+['I','II','III','IV','V','VI','VII','VIII','IX'][g-1];}return '?';}
-  if(!cobHTML)cobHTML='<div class="info-row"><span class="info-icon">\u2705</span><div class="info-text">Ten Pok\u00e9mon nie wymaga specjalnych warunk\u00f3w Cobblemon.<br><span style="color:#666;font-size:16px;">Standardowa ewolucja przez poziom lub kamie\u0144.</span></div></div>';
+  function getGen(id){for(var g=1;g<=9;g++){var r=GEN_RANGES[g];if(id>=r[0]&&id<=r[1])return (currentLang==='en'?'Generation ':'Generacja ')+['I','II','III','IV','V','VI','VII','VIII','IX'][g-1];}return '?';}
+  if(!cobHTML)cobHTML='<div class="info-row"><span class="info-icon">\u2705</span><div class="info-text">'+(currentLang==='en'?'This Pok\u00e9mon has no special Cobblemon requirements.':'Ten Pok\u00e9mon nie wymaga specjalnych warunk\u00f3w Cobblemon.')+'</div></div>';
   var artworkUrl = (p.sprites&&p.sprites.other&&p.sprites.other['official-artwork']?p.sprites.other['official-artwork'].front_default:null) || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png';
   var isFav = isFavorite(p.id);
 
+  // Build biome section
+  var biomeHTML = buildBiomeSection(s.habitat, p.types);
+
   document.getElementById('main-area').innerHTML =
-    '<div class="page-title"><span>#'+String(p.id).padStart(3,'0')+' '+p.name.toUpperCase()+' <button class="fav-star'+(isFav?' active':'')+'" id="fav-star-btn" onclick="toggleFavorite('+p.id+',\''+p.name+'\')" title="Dodaj do ulubionych">\u2b50</button></span></div>'
+    '<div class="page-title"><span>#'+String(p.id).padStart(3,'0')+' '+p.name.toUpperCase()+' <button class="fav-star'+(isFav?' active':'')+'" id="fav-star-btn" onclick="toggleFavorite('+p.id+',\''+p.name+'\')" title="'+(currentLang==='en'?'Add to favorites':'Dodaj do ulubionych')+'">\u2b50</button></span></div>'
     +'<div class="detail-grid"><div>'
     +'<div class="mc-panel pokemon-portrait"><img src="'+artworkUrl+'" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png\'" alt="'+p.name+'" style="width:160px;height:160px"/><div class="pokemon-name-big">'+p.name+'</div><div class="pokemon-number">#'+String(p.id).padStart(3,'0')+' \u00b7 '+getGen(p.id)+'</div><div class="types" style="margin-top:10px">'+typesHTML+'</div><hr class="section-sep" style="margin:10px 0"><div style="font-size:16px;color:#888;font-style:italic;max-width:200px;margin:0 auto;text-align:center">'+flavor+'</div></div>'
-    +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83d\udccb Dane podstawowe</h2><div class="info-entry"><span class="info-label">Wzrost:</span><span class="info-value">'+height+' m</span></div><div class="info-entry"><span class="info-label">Waga:</span><span class="info-value">'+weight+' kg</span></div><div class="info-entry"><span class="info-label">Typy:</span><span class="info-value">'+p.types.map(function(t){return TYPE_NAMES_PL[t.type.name]||t.type.name;}).join(', ')+'</span></div><div class="info-entry"><span class="info-label">Zdolno\u015bci:</span><span class="info-value" style="font-size:16px">'+abilitiesHTML+'</span></div><div class="info-entry"><span class="info-label">Habitat:</span><span class="info-value">'+(s.habitat?s.habitat.name:'\u2014')+'</span></div><div class="info-entry"><span class="info-label">Wsp. \u0142apania:</span><span class="info-value">'+s.capture_rate+'/255</span></div><div class="info-entry"><span class="info-label">Bazowe Do\u015bw.:</span><span class="info-value">'+(p.base_experience||'?')+'</span></div></div></div>'
+    +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83d\udccb '+t('sec.basicData')+'</h2><div class="info-entry"><span class="info-label">'+t('det.height')+':</span><span class="info-value">'+height+' m</span></div><div class="info-entry"><span class="info-label">'+t('det.weight')+':</span><span class="info-value">'+weight+' kg</span></div><div class="info-entry"><span class="info-label">'+t('det.types')+':</span><span class="info-value">'+p.types.map(function(tp){return typeName(tp.type.name);}).join(', ')+'</span></div><div class="info-entry"><span class="info-label">'+t('det.abilities')+':</span><span class="info-value" style="font-size:16px">'+abilitiesHTML+'</span></div><div class="info-entry"><span class="info-label">'+t('det.habitat')+':</span><span class="info-value">'+(s.habitat?s.habitat.name:'\u2014')+'</span></div><div class="info-entry"><span class="info-label">'+t('det.catch')+':</span><span class="info-value">'+s.capture_rate+'/255</span></div><div class="info-entry"><span class="info-label">'+t('det.baseExp')+':</span><span class="info-value">'+(p.base_experience||'?')+'</span></div></div>'
+    +biomeHTML
+    +'</div>'
     +'<div>'
-    +'<div class="mc-panel"><h2>\ud83d\udcca Statystyki bazowe</h2>'+statsHTML+'<div style="font-size:15px;color:#666;margin-top:6px;">Suma: <span style="color:#fff">'+p.stats.reduce(function(a,s){return a+s.base_stat;},0)+'</span></div></div>'
+    +'<div class="mc-panel"><h2>\ud83d\udcca '+t('sec.baseStats')+'</h2>'+statsHTML+'<div style="font-size:15px;color:#666;margin-top:6px;">'+t('gen.sum')+': <span style="color:#fff">'+p.stats.reduce(function(a,st){return a+st.base_stat;},0)+'</span></div></div>'
     +buildIVSection(p.stats)
-    +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83e\uddec \u0141a\u0144cuch ewolucji</h2><div class="evo-chain" id="evo-chain-container">'+evoHTML+'</div></div></div></div>'
-    +'<div class="cobblemon-section" style="margin-top:16px"><h2><span class="cob-icon">\u2694</span> Polecane dla Cobblemon</h2>'+cobHTML+'</div>'
-    +buildCompetitiveSection(p.stats, p.types.map(function(t){return t.type.name;}), p.moves)
+    +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83e\uddec '+t('sec.evo')+'</h2><div class="evo-chain" id="evo-chain-container">'+evoHTML+'</div></div></div></div>'
+    +'<div class="cobblemon-section" style="margin-top:16px"><h2><span class="cob-icon">\u2694</span> '+t('sec.cobblemon')+'</h2>'+cobHTML+'</div>'
+    +buildCompetitiveSection(p.stats, p.types.map(function(tp){return tp.type.name;}), p.moves)
     +buildMovesSection(p.moves)
     +buildCalculatorSection(p.stats)
-    +'<div class="ad-container" style="margin-top:16px"><span class="ad-label">REKLAMA</span><span>Miejsce na Twoj\u0105 reklam\u0119 \u2014 skontaktuj si\u0119 z nami!</span></div>'
-    +'<div class="donate-section"><h2>\ud83d\udc9a Wesprzyj rozw\u00f3j projektu</h2><p>Cobblemon Mastery Guide to darmowy projekt. Je\u015bli pomaga Ci w grze, rozwa\u017c wsparcie!</p><button class="donate-btn" onclick="alert(\'Dzi\u0119kujemy za ch\u0119\u0107 wsparcia! Link do donacji wkr\u00f3tce.\')">\u2615 Postaw kawk\u0119</button></div>'
+    +'<div class="ad-container" style="margin-top:16px"><span class="ad-label">'+t('gen.adLabel')+'</span><span>'+t('gen.ad')+'</span></div>'
+    +'<div class="donate-section"><h2>\ud83d\udc9a '+t('gen.donate')+'</h2><p>'+t('gen.donateDesc')+'</p><button class="donate-btn" onclick="alert(\''+(currentLang==='en'?'Thank you!':'Dzi\u0119kujemy!')+'\')">\u2615 '+t('gen.coffee')+'</button></div>'
     +'<div style="height:40px"></div>';
 
   document.querySelectorAll('.iv-input').forEach(function(inp){updateIVBar(inp);});
@@ -1479,31 +1891,41 @@ function showPage(page) {
       '<div class="page-title"><span>\ud83c\udfe0 Cobblemon Mastery Guide</span></div>'
       + renderFavoritesSection()
       + '<div class="welcome-grid">'
-      + '<div class="welcome-card"><h3>\u2694 Czym jest Cobblemon?</h3><p>Cobblemon to mod do Minecrafta integruj\u0105cy creatury inspirowane Pok\u00e9monami. \u0141ap, trenuj i ewoluuj swoje stworzenia w \u015bwiecie Minecrafta!</p></div>'
-      + '<div class="welcome-card"><h3>\ud83d\udd0d Jak u\u017cywa\u0107 bazy?</h3><ul><li>Wyszukaj Pok\u00e9mona w pasku po lewej</li><li>Filtruj wed\u0142ug generacji (I\u2013IX)</li><li>Ikona \u2665 = ewolucja przez przyja\u017a\u0144</li><li>Ikona \u21c4 = ewolucja przez wymian\u0119</li><li>\u2b50 = dodaj do ulubionych</li></ul></div>'
-      + '<div class="welcome-card"><h3>\ud83d\udc9b Przyja\u017a\u0144 (/checkfriendship)</h3><p>W Cobblemonie ewolucje przez przyja\u017a\u0144 sprawdzasz komend\u0105:</p><div class="cmd-block">/checkfriendship @s</div><p style="margin-top:8px;font-size:16px;color:#888">Potrzebujesz min. 160/255.</p></div>'
-      + '<div class="welcome-card"><h3>\ud83d\udd17 Link Cable (Wymiana)</h3><p>Zast\u0119puje wymian\u0119 Pok\u00e9mon\u00f3w z oryginalnych gier. Aktywuj w r\u0119ce, b\u0119d\u0105c blisko innego gracza.</p><p style="margin-top:6px;font-size:16px;color:#888">Crafting: 4\u00d7 Iron Ingot + 1\u00d7 Copper Ingot + 4\u00d7 String</p></div>'
-      + '<div class="welcome-card"><h3>\ud83c\udf4e Apricorny</h3><p>Zbieraj Apricorny z drzew i craftuj unikalne Pokeballsy z r\u00f3\u017cnymi efektami!</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'apricorns\')">\u2192 Przegl\u0105daj Apricorny</button></p></div>'
-      + '<div class="welcome-card"><h3>\ud83d\udce6 Kluczowe Przedmioty</h3><p>Link Cable, kamienie ewolucji, held items \u2014 wszystkie wa\u017cne przedmioty zebra\u0142i\u015bmy w jednym miejscu.</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'items\')">\u2192 Przegl\u0105daj przedmioty</button></p></div>'
+      + '<div class="welcome-card"><h3>\u2694 '+t('welcome.what')+'</h3><p>'+t('welcome.whatDesc')+'</p></div>'
+      + '<div class="welcome-card"><h3>\ud83d\udd0d '+t('welcome.howUse')+'</h3><ul><li>'+(currentLang==='en'?'Search for a Pok\u00e9mon in the sidebar':'Wyszukaj Pok\u00e9mona w pasku po lewej')+'</li><li>'+(currentLang==='en'?'Filter by generation (I\u2013IX)':'Filtruj wed\u0142ug generacji (I\u2013IX)')+'</li><li>\u2665 = '+(currentLang==='en'?'friendship evolution':'ewolucja przez przyja\u017a\u0144')+'</li><li>\u21c4 = '+(currentLang==='en'?'trade evolution':'ewolucja przez wymian\u0119')+'</li><li>\u2b50 = '+(currentLang==='en'?'add to favorites':'dodaj do ulubionych')+'</li></ul></div>'
+      + '<div class="welcome-card"><h3>\ud83d\udc9b '+t('welcome.friend')+'</h3><p>'+(currentLang==='en'?'In Cobblemon, check friendship evolution with:':'W Cobblemonie ewolucje przez przyja\u017a\u0144 sprawdzasz komend\u0105:')+'</p><div class="cmd-block">/checkfriendship @s</div><p style="margin-top:8px;font-size:16px;color:#888">'+(currentLang==='en'?'You need min. 160/255.':'Potrzebujesz min. 160/255.')+'</p></div>'
+      + '<div class="welcome-card"><h3>\ud83d\udd17 '+t('welcome.link')+'</h3><p>'+(currentLang==='en'?'Replaces the Pok\u00e9mon trade from the original games. Activate in hand near another player.':'Zast\u0119puje wymian\u0119 Pok\u00e9mon\u00f3w z oryginalnych gier. Aktywuj w r\u0119ce, b\u0119d\u0105c blisko innego gracza.')+'</p></div>'
+      + '<div class="welcome-card"><h3>\ud83c\udf4e '+t('nav.apricorns')+'</h3><p>'+(currentLang==='en'?'Collect Apricorns from trees and craft unique Pok\u00e9balls!':'Zbieraj Apricorny z drzew i craftuj unikalne Pokeballsy!')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'apricorns\')">\u2192 '+t('nav.apricorns')+'</button></p></div>'
+      + '<div class="welcome-card"><h3>\ud83d\udce6 '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wa\u017cne przedmioty w jednym miejscu.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'items\')">\u2192 '+t('nav.items')+'</button></p></div>'
+      + '<div class="welcome-card"><h3>\u2694 '+t('nav.team')+'</h3><p>'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sk\u0142ad dru\u017cyny PvP i pokrycie typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'team-analyzer\')">\u2192 '+t('nav.team')+'</button></p></div>'
       + '</div>'
-      + '<div class="donate-section" style="margin-top:24px"><h2>\ud83d\udc9a Wesprzyj rozw\u00f3j projektu</h2><p>Cobblemon Mastery Guide to darmowy projekt spo\u0142eczno\u015bciowy. Je\u015bli pomaga Ci w grze, rozwa\u017c wsparcie!</p><button class="donate-btn" onclick="alert(\'Dzi\u0119kujemy za ch\u0119\u0107 wsparcia! Link do donacji wkr\u00f3tce.\')">\u2615 Postaw kawk\u0119</button></div>';
+      + '<div class="donate-section" style="margin-top:24px"><h2>\ud83d\udc9a '+t('gen.donate')+'</h2><p>'+t('gen.donateDesc')+'</p><button class="donate-btn" onclick="alert(\''+(currentLang==='en'?'Thank you! Donation link coming soon.':'Dzi\u0119kujemy za ch\u0119\u0107 wsparcia! Link do donacji wkr\u00f3tce.')+'\')">\u2615 '+t('gen.coffee')+'</button></div>';
   }
 
   if (page === 'detail-loading') {
-    main.innerHTML = '<div class="empty-state"><span class="big-icon">\u2699</span>\u0141adowanie danych Pok\u00e9mona...</div>';
+    main.innerHTML = '<div class="empty-state"><span class="big-icon">\u2699</span>'+(currentLang==='en'?'Loading Pok\u00e9mon data...':'\u0141adowanie danych Pok\u00e9mona...')+'</div>';
   }
 
   if (page === 'items') {
     main.innerHTML =
-      '<div class="page-title"><span>\ud83d\udce6 Kluczowe Przedmioty Cobblemon</span></div>'
+      '<div class="page-title"><span>\ud83d\udce6 '+t('sec.items')+'</span></div>'
       + '<div class="items-grid">' + renderItems() + '</div>';
   }
 
   if (page === 'apricorns') {
     main.innerHTML =
-      '<div class="page-title"><span>\ud83c\udf4e Apricorny i Pok\u00e9balle</span></div>'
-      + '<div class="mc-panel" style="margin-bottom:16px"><h2>\u2139\ufe0f JAK ZBIERA\u0106 APRICORNY?</h2><p style="font-size:18px;color:#aaa;line-height:1.6">Drzewa Apricorn\u00f3w rosn\u0105 naturalnie w r\u00f3\u017cnych biomach. Zbieraj owoce i craftuj Pok\u00e9balle w specjalnym Cobblemon Crafting Bench. Ka\u017cdy kolor Apricornu daje inny typ Pok\u00e9balla z unikalnym efektem po\u0142owu.</p></div>'
+      '<div class="page-title"><span>\ud83c\udf4e '+t('sec.apricorns')+'</span></div>'
+      + '<div class="mc-panel" style="margin-bottom:16px"><h2>\u2139\ufe0f '+t('apricorn.how')+'</h2><p style="font-size:18px;color:#aaa;line-height:1.6">'+t('apricorn.howDesc')+'</p></div>'
       + '<div class="apricorn-grid">' + renderApricorns() + '</div>';
+  }
+
+  if (page === 'team-analyzer') {
+    loadTeam();
+    main.innerHTML =
+      '<div class="page-title"><span>\u2694 '+t('sec.team')+'</span></div>'
+      + '<div class="team-section"><h2>\ud83d\udee1 '+t('sec.team')+'</h2>'
+      + '<div id="team-analyzer-content"></div></div>';
+    renderTeamPage();
   }
 }
 
@@ -1511,36 +1933,38 @@ function showPage(page) {
    ITEMS DATA & RENDER
    ================================================================ */
 var ITEMS_DATA = [
-  { icon:'\ud83d\udd17', name:'Link Cable',        slug:'linking-cord',   desc:'Zast\u0119puje wymian\u0119 Pok\u00e9mon\u00f3w. Aktywuj w r\u0119ce blisko gracza.', tag:'Ewolucja' },
-  { icon:'\ud83d\udd06', name:'Thunder Stone',     slug:'thunder-stone',  desc:'Ewoluuje: Pikachu\u2192Raichu, Eevee\u2192Jolteon, Magneton\u2192Magnezone', tag:'Kamie\u0144' },
-  { icon:'\ud83d\udd25', name:'Fire Stone',        slug:'fire-stone',     desc:'Ewoluuje: Vulpix\u2192Ninetales, Growlithe\u2192Arcanine, Eevee\u2192Flareon', tag:'Kamie\u0144' },
-  { icon:'\ud83c\udf0a', name:'Water Stone',       slug:'water-stone',    desc:'Ewoluuje: Poliwhirl\u2192Poliwrath, Shellder\u2192Cloyster, Eevee\u2192Vaporeon', tag:'Kamie\u0144' },
-  { icon:'\ud83c\udf43', name:'Leaf Stone',        slug:'leaf-stone',     desc:'Ewoluuje: Exeggcute\u2192Exeggutor, Weepinbell\u2192Victreebel, Gloom\u2192Vileplume', tag:'Kamie\u0144' },
-  { icon:'\ud83c\udf19', name:'Moon Stone',        slug:'moon-stone',     desc:'Ewoluuje: Nidorina\u2192Nidoqueen, Nidorino\u2192Nidoking, Clefairy\u2192Clefable', tag:'Kamie\u0144' },
-  { icon:'\u2600\ufe0f', name:'Sun Stone',         slug:'sun-stone',      desc:'Ewoluuje: Gloom\u2192Bellossom, Sunkern\u2192Sunflora, Cottonee\u2192Whimsicott', tag:'Kamie\u0144' },
-  { icon:'\ud83c\udf11', name:'Dusk Stone',        slug:'dusk-stone',     desc:'Ewoluuje: Murkrow\u2192Honchkrow, Misdreavus\u2192Mismagius, Lampent\u2192Chandelure', tag:'Kamie\u0144' },
-  { icon:'\u2728', name:'Shiny Stone',       slug:'shiny-stone',    desc:'Ewoluuje: Togetic\u2192Togekiss, Roselia\u2192Roserade, Minccino\u2192Cinccino', tag:'Kamie\u0144' },
-  { icon:'\ud83e\uddf2', name:'Ice Stone',         slug:'ice-stone',      desc:'Ewoluuje: Alolan Sandshrew\u2192Sandslash, Alolan Vulpix\u2192Ninetales', tag:'Kamie\u0144' },
-  { icon:'\ud83e\udea8', name:'Metal Coat',        slug:'metal-coat',     desc:'Trzymany przez Onix\u2192Steelix lub Scyther\u2192Scizor (Link Cable)', tag:'Held Item' },
-  { icon:'\ud83d\udc09', name:'Dragon Scale',      slug:'dragon-scale',   desc:'Trzymany przez Seadra\u2192Kingdra (Link Cable)', tag:'Held Item' },
-  { icon:'\ud83d\udc51', name:"King's Rock",       slug:'kings-rock',     desc:'Slowpoke\u2192Slowking lub Poliwhirl\u2192Politoed (Link Cable)', tag:'Held Item' },
-  { icon:'\ud83d\udcbe', name:'Up-Grade',          slug:'up-grade',       desc:'Porygon\u2192Porygon2 (Link Cable)', tag:'Held Item' },
-  { icon:'\ud83d\udcbf', name:'Dubious Disc',      slug:'dubious-disc',   desc:'Porygon2\u2192Porygon-Z (Link Cable)', tag:'Held Item' },
-  { icon:'\ud83e\uddb7', name:'Deep Sea Tooth',    slug:'deep-sea-tooth', desc:'Clamperl\u2192Huntail (Link Cable)', tag:'Held Item' },
-  { icon:'\ud83e\ude29', name:'Deep Sea Scale',    slug:'deep-sea-scale', desc:'Clamperl\u2192Gorebyss (Link Cable)', tag:'Held Item' },
-  { icon:'\ud83c\udf38', name:'Sachet',            slug:'sachet',         desc:'Spritzee\u2192Aromatisse (Link Cable)', tag:'Held Item' },
-  { icon:'\ud83c\udf6c', name:'Whipped Dream',     slug:'whipped-dream',  desc:'Swirlix\u2192Slurpuff (Link Cable)', tag:'Held Item' },
-  { icon:'\u2696\ufe0f', name:'Prism Scale',       slug:'prism-scale',    desc:'Feebas\u2192Milotic (Link Cable)', tag:'Held Item' },
-  { icon:'\ud83c\udfe5', name:'Potion / Max Potion',slug:'potion',        desc:'Leczy P\u017b pok\u00e9mona. Crafting z Melon + Sugar', tag:'Leczenie' },
-  { icon:'\ud83d\udc8a', name:'Revive',            slug:'revive',         desc:'Przywraca omdla\u0142ego pok\u00e9mona do 50% P\u017b', tag:'Leczenie' },
-  { icon:'\ud83c\udf80', name:'Soothe Bell',       slug:'soothe-bell',    desc:'Przyspiesza zdobywanie Friendship. Trzymany przez pok\u00e9mona.', tag:'Przyja\u017a\u0144' },
-  { icon:'\ud83c\udf4f', name:'Friendship Ribbon', slug:'soothe-bell',    desc:'Pokazuje poziom przyja\u017ani. U\u017cyj /checkfriendship @s', tag:'Przyja\u017a\u0144' },
+  { name:'Link Cable',        slug:'linking-cord',   desc:{pl:'Zast\u0119puje wymian\u0119 Pok\u00e9mon\u00f3w. Aktywuj w r\u0119ce blisko gracza.',en:'Replaces Pok\u00e9mon trade. Activate in hand near a player.'}, tag:{pl:'Ewolucja',en:'Evolution'} },
+  { name:'Thunder Stone',     slug:'thunder-stone',  desc:{pl:'Ewoluuje: Pikachu\u2192Raichu, Eevee\u2192Jolteon',en:'Evolves: Pikachu\u2192Raichu, Eevee\u2192Jolteon'}, tag:{pl:'Kamie\u0144',en:'Stone'} },
+  { name:'Fire Stone',        slug:'fire-stone',     desc:{pl:'Ewoluuje: Vulpix\u2192Ninetales, Growlithe\u2192Arcanine, Eevee\u2192Flareon',en:'Evolves: Vulpix\u2192Ninetales, Growlithe\u2192Arcanine, Eevee\u2192Flareon'}, tag:{pl:'Kamie\u0144',en:'Stone'} },
+  { name:'Water Stone',       slug:'water-stone',    desc:{pl:'Ewoluuje: Poliwhirl\u2192Poliwrath, Shellder\u2192Cloyster, Eevee\u2192Vaporeon',en:'Evolves: Poliwhirl\u2192Poliwrath, Shellder\u2192Cloyster, Eevee\u2192Vaporeon'}, tag:{pl:'Kamie\u0144',en:'Stone'} },
+  { name:'Leaf Stone',        slug:'leaf-stone',     desc:{pl:'Ewoluuje: Exeggcute\u2192Exeggutor, Weepinbell\u2192Victreebel',en:'Evolves: Exeggcute\u2192Exeggutor, Weepinbell\u2192Victreebel'}, tag:{pl:'Kamie\u0144',en:'Stone'} },
+  { name:'Moon Stone',        slug:'moon-stone',     desc:{pl:'Ewoluuje: Nidorina\u2192Nidoqueen, Clefairy\u2192Clefable',en:'Evolves: Nidorina\u2192Nidoqueen, Clefairy\u2192Clefable'}, tag:{pl:'Kamie\u0144',en:'Stone'} },
+  { name:'Sun Stone',         slug:'sun-stone',      desc:{pl:'Ewoluuje: Gloom\u2192Bellossom, Sunkern\u2192Sunflora',en:'Evolves: Gloom\u2192Bellossom, Sunkern\u2192Sunflora'}, tag:{pl:'Kamie\u0144',en:'Stone'} },
+  { name:'Dusk Stone',        slug:'dusk-stone',     desc:{pl:'Ewoluuje: Murkrow\u2192Honchkrow, Misdreavus\u2192Mismagius',en:'Evolves: Murkrow\u2192Honchkrow, Misdreavus\u2192Mismagius'}, tag:{pl:'Kamie\u0144',en:'Stone'} },
+  { name:'Shiny Stone',       slug:'shiny-stone',    desc:{pl:'Ewoluuje: Togetic\u2192Togekiss, Roselia\u2192Roserade',en:'Evolves: Togetic\u2192Togekiss, Roselia\u2192Roserade'}, tag:{pl:'Kamie\u0144',en:'Stone'} },
+  { name:'Ice Stone',         slug:'ice-stone',      desc:{pl:'Ewoluuje: Alolan Sandshrew\u2192Sandslash, Alolan Vulpix\u2192Ninetales',en:'Evolves: Alolan Sandshrew\u2192Sandslash, Alolan Vulpix\u2192Ninetales'}, tag:{pl:'Kamie\u0144',en:'Stone'} },
+  { name:'Metal Coat',        slug:'metal-coat',     desc:{pl:'Trzymany przez Onix\u2192Steelix lub Scyther\u2192Scizor (Link Cable)',en:'Held by Onix\u2192Steelix or Scyther\u2192Scizor (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Dragon Scale',      slug:'dragon-scale',   desc:{pl:'Trzymany przez Seadra\u2192Kingdra (Link Cable)',en:'Held by Seadra\u2192Kingdra (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:"King's Rock",       slug:'kings-rock',     desc:{pl:'Slowpoke\u2192Slowking lub Poliwhirl\u2192Politoed (Link Cable)',en:'Slowpoke\u2192Slowking or Poliwhirl\u2192Politoed (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Up-Grade',          slug:'up-grade',       desc:{pl:'Porygon\u2192Porygon2 (Link Cable)',en:'Porygon\u2192Porygon2 (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Dubious Disc',      slug:'dubious-disc',   desc:{pl:'Porygon2\u2192Porygon-Z (Link Cable)',en:'Porygon2\u2192Porygon-Z (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Deep Sea Tooth',    slug:'deep-sea-tooth', desc:{pl:'Clamperl\u2192Huntail (Link Cable)',en:'Clamperl\u2192Huntail (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Deep Sea Scale',    slug:'deep-sea-scale', desc:{pl:'Clamperl\u2192Gorebyss (Link Cable)',en:'Clamperl\u2192Gorebyss (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Sachet',            slug:'sachet',         desc:{pl:'Spritzee\u2192Aromatisse (Link Cable)',en:'Spritzee\u2192Aromatisse (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Whipped Dream',     slug:'whipped-dream',  desc:{pl:'Swirlix\u2192Slurpuff (Link Cable)',en:'Swirlix\u2192Slurpuff (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Prism Scale',       slug:'prism-scale',    desc:{pl:'Feebas\u2192Milotic (Link Cable)',en:'Feebas\u2192Milotic (Link Cable)'}, tag:{pl:'Held Item',en:'Held Item'} },
+  { name:'Potion / Max Potion',slug:'potion',        desc:{pl:'Leczy P\u017b pok\u00e9mona.',en:'Heals Pok\u00e9mon HP.'}, tag:{pl:'Leczenie',en:'Healing'} },
+  { name:'Revive',            slug:'revive',         desc:{pl:'Przywraca omdla\u0142ego pok\u00e9mona do 50% P\u017b',en:'Revives fainted Pok\u00e9mon to 50% HP'}, tag:{pl:'Leczenie',en:'Healing'} },
+  { name:'Soothe Bell',       slug:'soothe-bell',    desc:{pl:'Przyspiesza zdobywanie Friendship.',en:'Speeds up Friendship gain.'}, tag:{pl:'Przyja\u017a\u0144',en:'Friendship'} },
+  { name:'Leftovers',         slug:'leftovers',      desc:{pl:'Regeneruje 1/16 P\u017b co tur\u0119.',en:'Restores 1/16 HP per turn.'}, tag:{pl:'Held Item',en:'Held Item'} },
 ];
 
 function renderItems() {
   return ITEMS_DATA.map(function(item) {
-    var imgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+item.slug+'.png" onerror="this.style.display=\'none\'" />';
-    return '<div class="item-card"><span class="item-icon">'+item.icon+'</span><div><div class="item-name">'+imgTag+' '+item.name+'</div><div class="item-desc">'+item.desc+'</div><span class="item-tag">'+item.tag+'</span></div></div>';
+    var imgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+item.slug+'.png" onerror="this.parentNode.innerHTML=\'<span style=color:#555;font-size:28px>\u25A1</span>\'" />';
+    var desc = typeof item.desc==='object'?item.desc[currentLang]||item.desc.pl:item.desc;
+    var tag = typeof item.tag==='object'?item.tag[currentLang]||item.tag.pl:item.tag;
+    return '<div class="item-card"><div class="item-icon-only">'+imgTag+'</div><div><div class="item-name">'+item.name+'</div><div class="item-desc">'+desc+'</div><span class="item-tag">'+tag+'</span></div></div>';
   }).join('');
 }
 
@@ -1548,19 +1972,21 @@ function renderItems() {
    APRICORNS DATA & RENDER
    ================================================================ */
 var APRICORNS_DATA = [
-  { icon:'\u2b1b', color:'Czarny', ball:'Heavy Ball', ballSlug:'heavy-ball', effect:'\u0141atwiej \u0142apa\u0107 ci\u0119\u017ckie Pok\u00e9mony (\u2265 451.5 kg)' },
-  { icon:'\ud83d\udfe6', color:'Niebieski', ball:'Lure Ball', ballSlug:'lure-ball', effect:'3\u00d7 skuteczno\u015b\u0107 przy \u0142apaniu w wodzie' },
-  { icon:'\ud83d\udfe2', color:'Zielony', ball:'Friend Ball', ballSlug:'friend-ball', effect:'Z\u0142owiony Pok\u00e9mon startuje z 200 Friendship' },
-  { icon:'\ud83e\ude77', color:'R\u00f3\u017cowy', ball:'Love Ball', ballSlug:'love-ball', effect:'8\u00d7 skuteczno\u015b\u0107 na t\u0119 sam\u0105 sp., odmient\u0105 p\u0142e\u0107' },
-  { icon:'\ud83d\udd34', color:'Czerwony', ball:'Level Ball', ballSlug:'level-ball', effect:'Wy\u017cszy mno\u017cnik gdy Tw\u00f3j Pok\u00e9mon ma wy\u017cszy level' },
-  { icon:'\u2b1c', color:'Bia\u0142y', ball:'Fast Ball', ballSlug:'fast-ball', effect:'4\u00d7 skuteczno\u015b\u0107 na Pok\u00e9mony, kt\u00f3re uciekaj\u0105' },
-  { icon:'\ud83d\udfe1', color:'\u017b\u00f3\u0142ty', ball:'Moon Ball', ballSlug:'moon-ball', effect:'4\u00d7 skuteczno\u015b\u0107 na ewoluuj\u0105ce Moon Stonem' },
+  { hex:'#222', color:{pl:'Czarny',en:'Black'}, ball:'Heavy Ball', ballSlug:'heavy-ball', effect:{pl:'\u0141atwiej \u0142apa\u0107 ci\u0119\u017ckie Pok\u00e9mony (\u2265 451.5 kg)',en:'Easier to catch heavy Pok\u00e9mon (\u2265451.5 kg)'} },
+  { hex:'#3366cc', color:{pl:'Niebieski',en:'Blue'}, ball:'Lure Ball', ballSlug:'lure-ball', effect:{pl:'3\u00d7 skuteczno\u015b\u0107 przy \u0142apaniu w wodzie',en:'3\u00d7 catch rate when fishing'} },
+  { hex:'#33aa33', color:{pl:'Zielony',en:'Green'}, ball:'Friend Ball', ballSlug:'friend-ball', effect:{pl:'Z\u0142owiony Pok\u00e9mon startuje z 200 Friendship',en:'Caught Pok\u00e9mon starts with 200 Friendship'} },
+  { hex:'#dd66aa', color:{pl:'R\u00f3\u017cowy',en:'Pink'}, ball:'Love Ball', ballSlug:'love-ball', effect:{pl:'8\u00d7 skuteczno\u015b\u0107 na t\u0119 sam\u0105 sp., odmient\u0105 p\u0142e\u0107',en:'8\u00d7 rate on same species, different gender'} },
+  { hex:'#cc3333', color:{pl:'Czerwony',en:'Red'}, ball:'Level Ball', ballSlug:'level-ball', effect:{pl:'Wy\u017cszy mno\u017cnik gdy Tw\u00f3j Pok\u00e9mon ma wy\u017cszy level',en:'Higher multiplier when your Pok\u00e9mon has higher level'} },
+  { hex:'#ddd', color:{pl:'Bia\u0142y',en:'White'}, ball:'Fast Ball', ballSlug:'fast-ball', effect:{pl:'4\u00d7 skuteczno\u015b\u0107 na Pok\u00e9mony, kt\u00f3re uciekaj\u0105',en:'4\u00d7 rate on Pok\u00e9mon that flee'} },
+  { hex:'#ddcc33', color:{pl:'\u017b\u00f3\u0142ty',en:'Yellow'}, ball:'Moon Ball', ballSlug:'moon-ball', effect:{pl:'4\u00d7 skuteczno\u015b\u0107 na ewoluuj\u0105ce Moon Stonem',en:'4\u00d7 rate on Moon Stone evolutions'} },
 ];
 
 function renderApricorns() {
   return APRICORNS_DATA.map(function(a) {
-    var ballImg = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+a.ballSlug+'.png" onerror="this.style.display=\'none\'" style="vertical-align:middle" />';
-    return '<div class="apricorn-card"><div class="apricorn-icon">'+a.icon+'</div><div class="apricorn-name">'+a.color+' Apricorn</div><div class="apricorn-arrow">\u25bc</div><div class="apricorn-ball">'+ballImg+' '+a.ball+'</div><div class="apricorn-effect">'+a.effect+'</div></div>';
+    var ballImg = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+a.ballSlug+'.png" onerror="this.parentNode.innerHTML=\'\u25cf\'" style="vertical-align:middle" />';
+    var colorName = typeof a.color==='object'?a.color[currentLang]||a.color.pl:a.color;
+    var effect = typeof a.effect==='object'?a.effect[currentLang]||a.effect.pl:a.effect;
+    return '<div class="apricorn-card"><div class="apricorn-fruit" style="background:'+a.hex+'"></div><div class="apricorn-name">'+colorName+' Apricorn</div><div class="apricorn-arrow">\u25bc</div><div class="apricorn-ball">'+ballImg+' '+a.ball+'</div><div class="apricorn-effect">'+effect+'</div></div>';
   }).join('');
 }
 
