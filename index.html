@@ -1,9 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cobblemon Mastery Guide</title>
+  <meta name="description" content="Najlepsza polska baza buildów competitive Cobblemon. Poradnik IV, EV, Nature, Moveset dla wszystkich Pokémonów w Minecraft." />
+  <meta name="keywords" content="Cobblemon, Pokemon, Minecraft, buildy, poradnik, competitive, IV, EV, Nature, moveset, Pokémon" />
+  <meta property="og:title" content="Cobblemon Mastery Guide" />
+  <meta property="og:description" content="Najlepsza polska baza buildów competitive Cobblemon." />
+  <meta property="og:type" content="website" />
+  <meta name="robots" content="index, follow" />
   <link rel="icon" type="image/png" href="favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
@@ -31,8 +37,6 @@
       font-size: 18px;
       min-height: 100vh;
     }
-
-    /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--stone); }
     ::-webkit-scrollbar-thumb { background: var(--slot-dark); border: 1px solid #000; }
@@ -73,7 +77,7 @@
       color: var(--aqua);
     }
 
-    /* ── MC BUTTON STYLE ── */
+    /* ── MC BUTTON ── */
     .mc-btn {
       font-family: 'VT323', monospace;
       font-size: 20px;
@@ -155,105 +159,55 @@
       font-size: 14px;
       margin-bottom: 4px;
     }
-    .tabs {
-      display: flex;
-      gap: 0;
-      border-bottom: 3px solid #000;
-    }
+    .tabs { display: flex; gap: 0; border-bottom: 3px solid #000; }
     .tab-btn {
-      flex: 1;
-      background: var(--stone2);
-      color: var(--gray);
-      border: none;
-      border-right: 2px solid #000;
-      padding: 8px 4px;
-      font-family: 'VT323', monospace;
-      font-size: 16px;
-      cursor: pointer;
-      text-align: center;
+      flex: 1; background: var(--stone2); color: var(--gray); border: none;
+      border-right: 2px solid #000; padding: 8px 4px;
+      font-family: 'VT323', monospace; font-size: 16px; cursor: pointer; text-align: center;
     }
     .tab-btn:last-child { border-right: none; }
     .tab-btn.active { background: #555; color: var(--green); }
     .tab-btn:hover:not(.active) { background: #444; color: var(--white); }
     .gen-filters {
-      padding: 10px 12px;
-      background: #252525;
-      border-bottom: 3px solid #000;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
+      padding: 10px 12px; background: #252525; border-bottom: 3px solid #000;
+      display: flex; flex-wrap: wrap; gap: 5px;
     }
     .gen-filter-btn {
-      font-family: 'VT323', monospace;
-      font-size: 16px;
-      background: var(--stone2);
-      color: var(--gray);
-      border: 2px solid #000;
-      padding: 2px 8px;
-      cursor: pointer;
+      font-family: 'VT323', monospace; font-size: 16px;
+      background: var(--stone2); color: var(--gray); border: 2px solid #000;
+      padding: 2px 8px; cursor: pointer;
     }
     .gen-filter-btn.active { background: #2a5a2a; color: var(--green); border-color: #44aa44; }
     .gen-filter-btn:hover:not(.active) { background: #444; color: var(--white); }
 
-    .pokemon-list {
-      overflow-y: auto;
-      flex: 1;
-    }
+    .pokemon-list { overflow-y: auto; flex: 1; }
     .pokemon-entry {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 12px;
-      border-bottom: 1px solid #2a2a2a;
-      cursor: pointer;
-      transition: background 0.1s;
-      user-select: none;
+      display: flex; align-items: center; gap: 10px; padding: 6px 12px;
+      border-bottom: 1px solid #2a2a2a; cursor: pointer;
+      transition: background 0.1s; user-select: none;
     }
     .pokemon-entry:hover { background: #3a3a3a; }
     .pokemon-entry.selected { background: #2a4a2a; border-left: 3px solid var(--green); }
-    .pokemon-entry img {
-      width: 36px;
-      height: 36px;
-      image-rendering: pixelated;
-    }
-    .pokemon-entry .entry-name {
-      font-size: 20px;
-      color: var(--white);
-      text-transform: capitalize;
-    }
-    .pokemon-entry .entry-id {
-      margin-left: auto;
-      font-size: 14px;
-      color: var(--gray);
-    }
+    .pokemon-entry img { width: 36px; height: 36px; image-rendering: pixelated; }
+    .pokemon-entry .entry-name { font-size: 20px; color: var(--white); text-transform: capitalize; }
+    .pokemon-entry .entry-id { margin-left: auto; font-size: 14px; color: var(--gray); }
     .entry-badges { display: flex; gap: 4px; }
     .badge-friendship { font-size: 12px; background: #664400; color: var(--gold); padding: 1px 5px; border: 1px solid #aa6600; }
     .badge-trade      { font-size: 12px; background: #004488; color: var(--aqua); padding: 1px 5px; border: 1px solid #0066cc; }
 
     /* ── MAIN CONTENT ── */
     .page-title {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 11px;
-      color: var(--green);
-      text-shadow: 1px 1px #000;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-family: 'Press Start 2P', monospace; font-size: 11px;
+      color: var(--green); text-shadow: 1px 1px #000; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
     }
     .page-title::after {
-      content: '';
-      flex: 1;
-      height: 2px;
+      content: ''; flex: 1; height: 2px;
       background: linear-gradient(to right, #33aa33 0%, transparent 100%);
     }
 
     /* ── POKEMON DETAIL ── */
-    .detail-grid {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 16px;
-    }
+    .detail-grid { display: grid; grid-template-columns: 280px 1fr; gap: 16px; }
     .mc-panel {
       background: var(--stone2);
       border: 3px solid;
@@ -264,44 +218,26 @@
       padding: 14px;
     }
     .mc-panel h2 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      color: var(--gold);
-      margin-bottom: 10px;
-      padding-bottom: 6px;
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--gold); margin-bottom: 10px; padding-bottom: 6px;
       border-bottom: 2px solid #000;
     }
-    .pokemon-portrait {
-      text-align: center;
-      padding: 16px;
-    }
+    .pokemon-portrait { text-align: center; padding: 16px; }
     .pokemon-portrait img {
-      width: 128px;
-      height: 128px;
-      image-rendering: pixelated;
+      width: 128px; height: 128px; image-rendering: pixelated;
       filter: drop-shadow(0 0 8px rgba(85,255,85,0.3));
     }
     .pokemon-name-big {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 13px;
-      color: var(--white);
-      text-transform: capitalize;
-      margin-top: 8px;
+      font-family: 'Press Start 2P', monospace; font-size: 13px;
+      color: var(--white); text-transform: capitalize; margin-top: 8px;
     }
-    .pokemon-number {
-      color: var(--gray);
-      font-size: 20px;
-    }
+    .pokemon-number { color: var(--gray); font-size: 20px; }
     .types { display: flex; gap: 6px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
     .type-badge {
-      font-family: 'VT323', monospace;
-      font-size: 16px;
-      padding: 2px 12px;
-      border: 2px solid #000;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-family: 'VT323', monospace; font-size: 16px;
+      padding: 2px 12px; border: 2px solid #000;
+      text-transform: uppercase; letter-spacing: 1px;
     }
-    /* type colours */
     .type-normal   { background:#a8a878; color:#fff; }
     .type-fire     { background:#f08030; color:#fff; }
     .type-water    { background:#6890f0; color:#fff; }
@@ -324,158 +260,70 @@
     .stat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
     .stat-name { width: 90px; font-size: 16px; color: var(--gray); }
     .stat-val  { width: 36px; text-align: right; font-size: 18px; color: var(--white); }
-    .stat-bar-bg {
-      flex: 1;
-      height: 10px;
-      background: #1a1a1a;
-      border: 1px solid #000;
-    }
+    .stat-bar-bg { flex: 1; height: 10px; background: #1a1a1a; border: 1px solid #000; }
     .stat-bar { height: 100%; }
 
     /* ── IV SECTION ── */
     .iv-section {
-      background: #0d1a2a;
-      border: 3px solid #1a4a6a;
-      padding: 14px;
-      margin-top: 12px;
+      background: #0d1a2a; border: 3px solid #1a4a6a; padding: 14px; margin-top: 12px;
     }
     .iv-section h2 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      color: var(--aqua);
-      margin-bottom: 10px;
-      padding-bottom: 6px;
-      border-bottom: 2px solid #1a4a6a;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--aqua); margin-bottom: 10px; padding-bottom: 6px;
+      border-bottom: 2px solid #1a4a6a; display: flex; align-items: center; gap: 8px;
     }
-    .iv-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-    .iv-name {
-      width: 72px;
-      font-size: 16px;
-      color: var(--gray);
-    }
+    .iv-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .iv-name { width: 72px; font-size: 16px; color: var(--gray); }
     .iv-input {
-      width: 48px;
-      font-family: 'VT323', monospace;
-      font-size: 20px;
-      background: #000;
-      color: var(--white);
-      border: 2px solid #1a4a6a;
-      text-align: center;
-      padding: 1px 4px;
-      outline: none;
+      width: 48px; font-family: 'VT323', monospace; font-size: 20px;
+      background: #000; color: var(--white); border: 2px solid #1a4a6a;
+      text-align: center; padding: 1px 4px; outline: none;
     }
     .iv-input:focus { border-color: var(--aqua); }
-    .iv-bar-wrap {
-      flex: 1;
-      height: 12px;
-      background: #0a0a0a;
-      border: 1px solid #111;
-      position: relative;
-    }
+    .iv-bar-wrap { flex: 1; height: 12px; background: #0a0a0a; border: 1px solid #111; position: relative; }
     .iv-bar { height: 100%; transition: width 0.2s, background 0.2s; }
-    .iv-label {
-      width: 72px;
-      font-size: 15px;
-      text-align: right;
-    }
-    .iv-priority {
-      width: 20px;
-      text-align: center;
-      font-size: 18px;
-      cursor: help;
-    }
+    .iv-label { width: 72px; font-size: 15px; text-align: right; }
+    .iv-priority { width: 20px; text-align: center; font-size: 18px; cursor: help; }
     .iv-legend {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px solid #1a4a6a;
-      font-size: 15px;
+      display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px;
+      padding-top: 8px; border-top: 1px solid #1a4a6a; font-size: 15px;
     }
     .iv-legend-item { display: flex; align-items: center; gap: 5px; }
     .iv-legend-dot { width: 12px; height: 12px; border: 1px solid #000; }
     .iv-role-badge {
-      display: inline-block;
-      background: #0a2a0a;
-      color: var(--green);
-      border: 1px solid #2a6a2a;
-      padding: 2px 10px;
-      font-size: 16px;
-      margin-bottom: 6px;
+      display: inline-block; background: #0a2a0a; color: var(--green);
+      border: 1px solid #2a6a2a; padding: 2px 10px; font-size: 16px; margin-bottom: 6px;
     }
     .iv-summary {
-      background: #000;
-      border: 2px solid #1a4a6a;
-      padding: 8px 12px;
-      margin-bottom: 10px;
-      font-size: 17px;
-      line-height: 1.8;
+      background: #000; border: 2px solid #1a4a6a; padding: 8px 12px;
+      margin-bottom: 10px; font-size: 17px; line-height: 1.8;
     }
-    .iv-target {
-      width: 64px;
-      font-size: 15px;
-      text-align: center;
-      font-weight: bold;
-    }
+    .iv-target { width: 64px; font-size: 15px; text-align: center; font-weight: bold; }
     .iv-row-priority { background: #05151f; }
 
     /* ── MOVES SECTION ── */
     .moves-section {
-      background: #1a1a2a;
-      border: 3px solid #3a3a7a;
-      padding: 14px;
-      margin-top: 12px;
+      background: #1a1a2a; border: 3px solid #3a3a7a; padding: 14px; margin-top: 12px;
     }
     .moves-section h2 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      color: var(--aqua);
-      margin-bottom: 10px;
-      padding-bottom: 6px;
-      border-bottom: 2px solid #3a3a7a;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--aqua); margin-bottom: 10px; padding-bottom: 6px;
+      border-bottom: 2px solid #3a3a7a; display: flex; align-items: center; gap: 8px;
     }
-    .moves-tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 10px;
-      border-bottom: 2px solid #2a2a4a;
-    }
+    .moves-tabs { display: flex; gap: 0; margin-bottom: 10px; border-bottom: 2px solid #2a2a4a; }
     .moves-tab {
-      font-family: 'VT323', monospace;
-      font-size: 18px;
-      background: #111;
-      color: #888;
-      border: none;
-      padding: 4px 16px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
+      font-family: 'VT323', monospace; font-size: 18px;
+      background: #111; color: #888; border: none; padding: 4px 16px;
+      cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px;
     }
     .moves-tab.active { color: var(--aqua); border-bottom-color: var(--aqua); background: #0a0a1a; }
     .moves-tab:hover:not(.active) { color: #ccc; background: #1a1a2a; }
     .moves-panel { display: none; }
     .moves-panel.active { display: block; }
-    .move-table { width: 100%; border-collapse: collapse; font-size: 17px; }
+    .move-table { width: 100%; border-collapse: collapse; font-size: 17px; max-width: 100%; }
     .move-table th {
-      text-align: left;
-      color: #666;
-      font-size: 14px;
-      padding: 3px 8px;
-      border-bottom: 1px solid #2a2a4a;
-      font-family: 'VT323', monospace;
-      font-weight: normal;
+      text-align: left; color: #666; font-size: 14px; padding: 3px 8px;
+      border-bottom: 1px solid #2a2a4a; font-family: 'VT323', monospace; font-weight: normal;
     }
     .move-table td { padding: 3px 8px; border-bottom: 1px solid #111; }
     .move-table tr:hover td { background: #0a0a2a; }
@@ -484,146 +332,60 @@
     .move-cat-status   { color: #aaaaaa; }
     .move-name { color: var(--white); text-transform: capitalize; }
     .move-lv {
-      background: #002a00;
-      color: var(--green);
-      border: 1px solid #004400;
-      padding: 0 6px;
-      font-size: 15px;
-      display: inline-block;
-      min-width: 36px;
-      text-align: center;
+      background: #002a00; color: var(--green); border: 1px solid #004400;
+      padding: 0 6px; font-size: 15px; display: inline-block; min-width: 36px; text-align: center;
     }
     .move-tm {
-      background: #00002a;
-      color: var(--aqua);
-      border: 1px solid #000066;
-      padding: 0 6px;
-      font-size: 15px;
-      display: inline-block;
-      min-width: 36px;
-      text-align: center;
+      background: #00002a; color: var(--aqua); border: 1px solid #000066;
+      padding: 0 6px; font-size: 15px; display: inline-block; min-width: 36px; text-align: center;
     }
 
     /* ── COMPETITIVE BUILD SECTION ── */
     .comp-section {
-      background: #12101e;
-      border: 3px solid #5a3a9a;
-      padding: 14px;
-      margin-top: 12px;
+      background: #12101e; border: 3px solid #5a3a9a; padding: 14px; margin-top: 12px;
     }
     .comp-section h2 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      color: #c084fc;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: #c084fc; margin-bottom: 12px; padding-bottom: 6px;
       border-bottom: 2px solid #5a3a9a;
     }
-    .comp-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .comp-box {
-      background: #0a0818;
-      border: 2px solid #3a2a6a;
-      padding: 10px;
-    }
+    .comp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .comp-box { background: #0a0818; border: 2px solid #3a2a6a; padding: 10px; }
     .comp-box-title {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-      color: #c084fc;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      color: #c084fc; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
     }
-    .ev-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 5px;
-    }
-    .ev-amount {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 9px;
-      min-width: 36px;
-      color: #f0f0f0;
-    }
-    .ev-bar-bg {
-      flex: 1;
-      height: 8px;
-      background: #111;
-      border: 1px solid #222;
-    }
+    .ev-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .ev-amount { font-family: 'Press Start 2P', monospace; font-size: 9px; min-width: 36px; color: #f0f0f0; }
+    .ev-bar-bg { flex: 1; height: 8px; background: #111; border: 1px solid #222; }
     .ev-bar { height: 100%; }
-    .ev-stat-name {
-      width: 56px;
-      font-size: 15px;
-      text-align: right;
-    }
+    .ev-stat-name { width: 56px; font-size: 15px; text-align: right; }
     .nature-badge {
-      display: block;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 11px;
-      color: #f0f0f0;
-      margin-bottom: 6px;
+      display: block; font-family: 'Press Start 2P', monospace;
+      font-size: 11px; color: #f0f0f0; margin-bottom: 6px;
     }
-    .nature-detail {
-      font-size: 16px;
-      line-height: 1.7;
-    }
+    .nature-detail { font-size: 16px; line-height: 1.7; }
     .nature-up   { color: #55ff55; }
     .nature-down { color: #ff5555; }
     .item-big-name {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 9px;
-      color: var(--gold);
-      margin-bottom: 6px;
+      font-family: 'Press Start 2P', monospace; font-size: 9px;
+      color: var(--gold); margin-bottom: 6px;
     }
     .item-big-desc { font-size: 16px; color: #aaa; line-height: 1.5; }
-    .best4-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .best4-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .move-card {
-      background: #0a0818;
-      border: 2px solid #3a2a6a;
-      padding: 8px 10px;
-      position: relative;
+      background: #0a0818; border: 2px solid #3a2a6a; padding: 8px 10px; position: relative;
     }
-    .move-card-num {
-      position: absolute;
-      top: 6px;
-      right: 8px;
-      font-size: 13px;
-      color: #554488;
-    }
+    .move-card-num { position: absolute; top: 6px; right: 8px; font-size: 13px; color: #554488; }
     .move-card-name {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-      color: #f0f0f0;
-      margin-bottom: 5px;
-      text-transform: capitalize;
+      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      color: #f0f0f0; margin-bottom: 5px; text-transform: capitalize;
     }
-    .move-card-meta {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .move-power {
-      background: #1a1a0a;
-      color: var(--gold);
-      border: 1px solid #3a3a0a;
-      padding: 1px 6px;
-      font-size: 15px;
-    }
+    .move-card-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .move-power { background: #1a1a0a; color: var(--gold); border: 1px solid #3a3a0a; padding: 1px 6px; font-size: 15px; }
     .move-cat-p { background:#2a1200; color:#f08030; border:1px solid #5a2a00; padding:1px 6px; font-size:14px; }
     .move-cat-s { background:#00001a; color:#6890f0; border:1px solid #00004a; padding:1px 6px; font-size:14px; }
-    .move-cat-z { background:#1a1a1a; color:#aaa;    border:1px solid #333;    padding:1px 6px; font-size:14px; }
+    .move-cat-z { background:#1a1a1a; color:#aaa; border:1px solid #333; padding:1px 6px; font-size:14px; }
     .move-stab  { background:#0a2a0a; color:#55ff55; border:1px solid #2a5a2a; padding:1px 6px; font-size:14px; }
     .move-coverage { background:#1a0a2a; color:#c084fc; border:1px solid #5a2a8a; padding:1px 6px; font-size:14px; }
     .move-stars { font-size:15px; color: var(--gold); margin-top:3px; }
@@ -631,71 +393,37 @@
 
     /* ── COBBLEMON SECTION ── */
     .cobblemon-section {
-      background: #1a2a1a;
-      border: 3px solid #2a5a2a;
-      padding: 14px;
-      margin-top: 16px;
+      background: #1a2a1a; border: 3px solid #2a5a2a; padding: 14px; margin-top: 16px;
     }
     .cobblemon-section h2 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      color: var(--green);
-      margin-bottom: 10px;
-      padding-bottom: 6px;
-      border-bottom: 2px solid #2a5a2a;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--green); margin-bottom: 10px; padding-bottom: 6px;
+      border-bottom: 2px solid #2a5a2a; display: flex; align-items: center; gap: 8px;
     }
     .cob-icon { font-size: 20px; }
     .info-row {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-      margin-bottom: 8px;
-      padding: 8px;
-      background: #0f1f0f;
-      border: 1px solid #2a5a2a;
+      display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px;
+      padding: 8px; background: #0f1f0f; border: 1px solid #2a5a2a;
     }
     .info-row .info-icon { font-size: 22px; min-width: 28px; }
     .info-row .info-text { font-size: 18px; color: var(--white); line-height: 1.4; }
     .info-row .info-text em { color: var(--gold); font-style: normal; }
     .info-row .info-text code {
-      background: #000;
-      color: var(--aqua);
-      padding: 1px 6px;
-      font-family: 'VT323', monospace;
-      font-size: 18px;
-      border: 1px solid #333;
+      background: #000; color: var(--aqua); padding: 1px 6px;
+      font-family: 'VT323', monospace; font-size: 18px; border: 1px solid #333;
     }
     .cmd-block {
-      background: #000;
-      border: 2px solid #333;
-      padding: 8px 12px;
-      margin-top: 8px;
-      color: var(--aqua);
-      font-size: 20px;
+      background: #000; border: 2px solid #333; padding: 8px 12px; margin-top: 8px;
+      color: var(--aqua); font-size: 20px;
     }
     .cmd-block::before { content: '> '; color: var(--green); }
 
     /* ── EVOLUTIONS ── */
-    .evo-chain {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 8px 0;
-    }
+    .evo-chain { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 8px 0; }
     .evo-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      padding: 6px;
-      border: 2px solid #444;
-      background: #222;
-      transition: border-color 0.1s;
-      min-width: 70px;
+      display: flex; flex-direction: column; align-items: center; cursor: pointer;
+      padding: 6px; border: 2px solid #444; background: #222;
+      transition: border-color 0.1s; min-width: 70px;
     }
     .evo-item:hover { border-color: var(--green); }
     .evo-item img { width: 56px; height: 56px; image-rendering: pixelated; }
@@ -704,190 +432,266 @@
     .evo-trigger { font-size: 13px; color: var(--gray); text-align: center; max-width: 70px; }
 
     /* ── ITEMS PAGE ── */
-    .items-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 12px;
-    }
+    .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
     .item-card {
       background: var(--stone2);
       border: 3px solid;
-      border-top-color: var(--slot-light);
-      border-left-color: var(--slot-light);
-      border-right-color: #333;
-      border-bottom-color: #333;
-      padding: 12px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
+      border-top-color: var(--slot-light); border-left-color: var(--slot-light);
+      border-right-color: #333; border-bottom-color: #333;
+      padding: 12px; display: flex; gap: 12px; align-items: flex-start;
     }
     .item-icon { font-size: 32px; min-width: 40px; text-align: center; }
     .item-name {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-      color: var(--gold);
-      margin-bottom: 6px;
+      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      color: var(--gold); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
     }
     .item-desc { font-size: 16px; color: var(--gray); line-height: 1.4; }
     .item-tag {
-      display: inline-block;
-      background: #2a4a0a;
-      color: var(--green);
-      border: 1px solid #4a8a1a;
-      font-size: 12px;
-      padding: 1px 6px;
-      margin-top: 4px;
+      display: inline-block; background: #2a4a0a; color: var(--green);
+      border: 1px solid #4a8a1a; font-size: 12px; padding: 1px 6px; margin-top: 4px;
+    }
+    .item-icon-img {
+      width: 32px; height: 32px; image-rendering: pixelated; vertical-align: middle;
     }
 
     /* ── APRICORNS PAGE ── */
-    .apricorn-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-      margin-top: 16px;
-    }
+    .apricorn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 16px; }
     .apricorn-card {
       background: var(--stone2);
       border: 3px solid;
-      border-top-color: var(--slot-light);
-      border-left-color: var(--slot-light);
-      border-right-color: #333;
-      border-bottom-color: #333;
-      padding: 12px;
-      text-align: center;
+      border-top-color: var(--slot-light); border-left-color: var(--slot-light);
+      border-right-color: #333; border-bottom-color: #333;
+      padding: 12px; text-align: center;
     }
     .apricorn-icon { font-size: 40px; margin-bottom: 6px; }
     .apricorn-name {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-      color: var(--white);
-      margin-bottom: 8px;
+      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      color: var(--white); margin-bottom: 8px;
     }
     .apricorn-arrow { color: var(--gold); font-size: 22px; margin: 4px 0; }
     .apricorn-ball {
-      font-size: 22px;
-      color: var(--aqua);
-      border: 2px solid #2a4a6a;
-      background: #0a1a2a;
-      padding: 4px 10px;
-      display: inline-block;
+      font-size: 22px; color: var(--aqua);
+      border: 2px solid #2a4a6a; background: #0a1a2a;
+      padding: 4px 10px; display: inline-flex; align-items: center; gap: 6px;
     }
     .apricorn-effect { font-size: 14px; color: var(--gray); margin-top: 6px; }
 
     /* ── WELCOME PAGE ── */
-    .welcome-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
+    .welcome-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
     .welcome-card {
       background: var(--stone2);
       border: 3px solid;
-      border-top-color: var(--slot-light);
-      border-left-color: var(--slot-light);
-      border-right-color: #333;
-      border-bottom-color: #333;
+      border-top-color: var(--slot-light); border-left-color: var(--slot-light);
+      border-right-color: #333; border-bottom-color: #333;
       padding: 16px;
     }
     .welcome-card h3 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 9px;
-      color: var(--green);
-      margin-bottom: 10px;
-      padding-bottom: 6px;
+      font-family: 'Press Start 2P', monospace; font-size: 9px;
+      color: var(--green); margin-bottom: 10px; padding-bottom: 6px;
       border-bottom: 2px solid #000;
     }
-    .welcome-card p, .welcome-card li {
-      font-size: 18px;
-      color: var(--gray);
-      line-height: 1.6;
-    }
+    .welcome-card p, .welcome-card li { font-size: 18px; color: var(--gray); line-height: 1.6; }
     .welcome-card ul { padding-left: 20px; }
     .welcome-card li { color: var(--white); }
     .welcome-card li::marker { color: var(--green); }
 
     /* ── STATUS / SPINNER ── */
     #status-bar {
-      padding: 8px 16px;
-      background: #111;
-      border-top: 2px solid #000;
-      font-size: 16px;
-      color: var(--gray);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
-      height: 36px;
+      padding: 8px 16px; background: #111; border-top: 2px solid #000;
+      font-size: 16px; color: var(--gray); display: flex; align-items: center; gap: 8px;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; height: 36px;
     }
-    .spinner {
-      width: 14px; height: 14px;
-      border: 3px solid #333;
-      border-top-color: var(--green);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: none;
-    }
+    .spinner { width: 14px; height: 14px; border: 3px solid #333; border-top-color: var(--green);
+      border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
     .spinner.active { display: inline-block; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── EMPTY STATE ── */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--gray);
-      font-size: 22px;
-    }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--gray); font-size: 22px; }
     .empty-state .big-icon { font-size: 64px; display: block; margin-bottom: 12px; }
-
-    /* ── SECTION DIVIDER ── */
-    .section-sep {
-      border: none;
-      border-top: 3px solid #333;
-      margin: 16px 0;
-    }
-
-    /* ── INFO COLUMNS ── */
+    .section-sep { border: none; border-top: 3px solid #333; margin: 16px 0; }
     .info-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .info-entry { margin-bottom: 6px; display: flex; gap: 8px; }
     .info-label { color: var(--gray); font-size: 16px; min-width: 120px; }
     .info-value { color: var(--white); font-size: 18px; text-transform: capitalize; }
-
-    /* count tag */
     #pokemon-count {
-      font-size: 14px;
-      color: var(--gray);
-      padding: 4px 12px;
-      border-bottom: 2px solid #1a1a1a;
-      background: #222;
+      font-size: 14px; color: var(--gray); padding: 4px 12px;
+      border-bottom: 2px solid #1a1a1a; background: #222;
+    }
+
+    /* ── HAMBURGER ── */
+    .hamburger-btn {
+      display: none; background: none; border: none;
+      color: var(--white); font-size: 28px; cursor: pointer;
+      padding: 4px 8px; font-family: 'VT323', monospace;
+    }
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); z-index: 90;
+    }
+    .sidebar-overlay.active { display: block; }
+
+    /* ── AD CONTAINER ── */
+    .ad-container {
+      background: var(--stone2); border: 2px dashed #555;
+      padding: 12px; text-align: center; color: var(--gray); font-size: 14px;
+      min-height: 60px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .ad-label {
+      background: #444; color: #888; padding: 2px 8px; font-size: 11px;
+      border: 1px solid #555; font-family: 'Press Start 2P', monospace;
+    }
+
+    /* ── DONATE SECTION ── */
+    .donate-section {
+      background: linear-gradient(180deg, #1a2a0a 0%, #0a1a0a 100%);
+      border: 3px solid #2a5a2a; padding: 20px; text-align: center; margin-top: 20px;
+    }
+    .donate-section h2 {
+      font-family: 'Press Start 2P', monospace; font-size: 11px;
+      color: var(--green); margin-bottom: 12px;
+    }
+    .donate-section p { color: var(--gray); font-size: 18px; margin-bottom: 12px; line-height: 1.5; }
+    .donate-btn {
+      font-family: 'Press Start 2P', monospace; font-size: 12px;
+      background: linear-gradient(180deg, #4a2, #283); color: #fff;
+      border: 3px solid; border-top-color: #6c4; border-left-color: #6c4;
+      border-right-color: #142; border-bottom-color: #142;
+      padding: 10px 24px; cursor: pointer; text-shadow: 1px 1px #000; transition: filter 0.15s;
+    }
+    .donate-btn:hover { filter: brightness(1.2); }
+
+    /* ── BUILD TABS ── */
+    .build-tabs { display: flex; gap: 0; margin-bottom: 12px; border-bottom: 2px solid #3a2a6a; }
+    .build-tab {
+      font-family: 'VT323', monospace; font-size: 18px;
+      background: #0a0818; color: #888; border: none; padding: 6px 16px;
+      cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s;
+    }
+    .build-tab.active { color: #c084fc; border-bottom-color: #c084fc; background: #12101e; }
+    .build-tab:hover:not(.active) { color: #ccc; background: #15132a; }
+    .build-panel { display: none; }
+    .build-panel.active { display: block; }
+
+    /* ── FAVORITE STAR ── */
+    .fav-star {
+      background: none; border: none; font-size: 24px; cursor: pointer;
+      padding: 2px 6px; filter: grayscale(1) opacity(0.5); transition: all 0.15s;
+    }
+    .fav-star:hover { filter: grayscale(0) opacity(0.8); }
+    .fav-star.active { filter: grayscale(0) opacity(1); }
+    .fav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 10px; }
+    .fav-card {
+      background: var(--stone2);
+      border: 3px solid; border-top-color: var(--slot-light); border-left-color: var(--slot-light);
+      border-right-color: #333; border-bottom-color: #333;
+      padding: 10px; text-align: center; cursor: pointer; transition: border-color 0.15s;
+    }
+    .fav-card:hover { border-color: var(--green); }
+    .fav-card img { width: 56px; height: 56px; image-rendering: pixelated; }
+    .fav-card span { display: block; font-size: 16px; color: var(--white); text-transform: capitalize; margin-top: 4px; }
+
+    /* ── CALCULATOR ── */
+    .calc-section {
+      background: #1a1a0a; border: 3px solid #5a5a1a; padding: 14px; margin-top: 16px;
+    }
+    .calc-section h2 {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--gold); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #5a5a1a;
+    }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .calc-box { background: #111; border: 2px solid #333; padding: 10px; }
+    .calc-box label {
+      display: block; font-size: 14px; color: var(--gray); margin-bottom: 4px;
+      font-family: 'VT323', monospace;
+    }
+    .calc-select, .calc-field {
+      font-family: 'VT323', monospace; font-size: 18px;
+      background: #000; color: var(--white); border: 2px solid #333;
+      padding: 4px 8px; width: 100%; outline: none;
+    }
+    .calc-select:focus, .calc-field:focus { border-color: var(--gold); }
+    .calc-verdict {
+      background: #000; border: 3px solid #333; padding: 16px; text-align: center;
+      font-size: 22px; line-height: 1.8; margin-top: 10px;
+    }
+    .calc-verdict .verdict-emoji { font-size: 36px; display: block; margin-bottom: 8px; }
+
+    /* ── COPY LINK BTN ── */
+    .copy-link-btn {
+      font-family: 'VT323', monospace; font-size: 16px;
+      background: #1a1a2a; color: var(--aqua); border: 2px solid #3a3a7a;
+      padding: 4px 12px; cursor: pointer; transition: all 0.15s;
+    }
+    .copy-link-btn:hover { background: #2a2a4a; }
+
+    /* ── MOVE TYPE ICON ── */
+    .move-type-icon {
+      width: 20px; height: 20px; vertical-align: middle; margin-right: 2px;
+      image-rendering: pixelated; border-radius: 50%;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hamburger-btn { display: block; }
+      header { flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
+      .header-title { font-size: 11px; }
+      .header-subtitle { font-size: 14px; }
+      .header-right { display: none; width: 100%; flex-direction: column; gap: 6px; }
+      .header-right.mobile-open { display: flex; }
+      .app-layout { flex-direction: column; height: auto; min-height: calc(100vh - 80px); }
+      aside {
+        position: fixed; left: -280px; top: 0; bottom: 0;
+        width: 280px; min-width: 280px; z-index: 95; transition: left 0.25s ease;
+      }
+      aside.mobile-open { left: 0; }
+      .main-area { padding: 12px; padding-bottom: 50px; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .comp-grid { grid-template-columns: 1fr; }
+      .best4-grid { grid-template-columns: 1fr; }
+      .info-cols { grid-template-columns: 1fr; }
+      .calc-grid { grid-template-columns: 1fr; }
+      .welcome-grid { grid-template-columns: 1fr; }
+      .move-table { display: block; max-width: 100%; overflow-x: auto; }
+      .items-grid { grid-template-columns: 1fr; }
+      .apricorn-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .mc-badge { font-size: 12px; padding: 2px 6px; }
+      .build-tabs { flex-wrap: wrap; }
+      .build-tab { font-size: 15px; padding: 4px 10px; }
+      .ad-container { min-height: 50px; font-size: 12px; }
     }
   </style>
 </head>
 <body>
 
 <header>
+  <button class="hamburger-btn" onclick="toggleHamburger()" title="Menu">&#9776;</button>
   <div>
-    <div class="header-title">⚔ Cobblemon Mastery Guide</div>
-    <div class="header-subtitle">Serwerowa Baza Cobblemon · Minecraft Mod</div>
+    <div class="header-title">&#9876; Cobblemon Mastery Guide</div>
+    <div class="header-subtitle">Serwerowa Baza Cobblemon &middot; Minecraft Mod</div>
   </div>
-  <div class="header-right">
-    <span class="mc-badge">🌿 Generacje 1–9</span>
-    <span class="mc-badge">⚒ PokeAPI</span>
-    <button class="mc-btn" onclick="showPage('items')">📦 Przedmioty</button>
-    <button class="mc-btn" onclick="showPage('apricorns')">🍎 Apricorny</button>
-    <button class="mc-btn" onclick="showPage('welcome')">🏠 Start</button>
+  <div class="header-right" id="header-right">
+    <span class="mc-badge">&#127807; Generacje 1&ndash;9</span>
+    <span class="mc-badge">&#9874; PokeAPI</span>
+    <button class="mc-btn" onclick="showPage('items')">&#128230; Przedmioty</button>
+    <button class="mc-btn" onclick="showPage('apricorns')">&#127822; Apricorny</button>
+    <button class="mc-btn" onclick="showPage('welcome')">&#127968; Start</button>
   </div>
 </header>
 
+<!-- AD TOP -->
+<div class="ad-container" id="ad-top">
+  <span class="ad-label">REKLAMA</span>
+  <span>Miejsce na Twoj&#261; reklam&#281; &mdash; skontaktuj si&#281; z nami!</span>
+</div>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleHamburger()"></div>
+
 <div class="app-layout">
   <!-- SIDEBAR -->
-  <aside>
+  <aside id="sidebar">
     <div class="sidebar-search">
-      <label>🔍 SZUKAJ POKÉMONA</label>
+      <label>&#128269; SZUKAJ POK&Eacute;MONA</label>
       <input class="mc-input" id="search-input" type="text" placeholder="np. Pikachu..." autocomplete="off" />
     </div>
     <div class="gen-filters" id="gen-filters">
@@ -902,51 +706,46 @@
       <button class="gen-filter-btn" data-gen="8">Gen VIII</button>
       <button class="gen-filter-btn" data-gen="9">Gen IX</button>
     </div>
-    <div id="pokemon-count">Ładowanie...</div>
+    <div id="pokemon-count">Ladowanie...</div>
     <div class="pokemon-list" id="pokemon-list"></div>
   </aside>
 
   <!-- MAIN -->
-  <main class="main-area" id="main-area">
-    <!-- content injected by JS -->
-  </main>
+  <main class="main-area" id="main-area"></main>
 </div>
 
 <div id="status-bar">
   <div class="spinner" id="spinner"></div>
-  <span id="status-text">Ładowanie listy Pokémonów...</span>
+  <span id="status-text">Ladowanie listy Pok&eacute;mon&oacute;w...</span>
 </div>
 
 <script>
-/* ════════════════════════════════════════
-   COBBLEMON-SPECIFIC DATA
-   ════════════════════════════════════════ */
-
+/* ================================================================
+   DATA
+   ================================================================ */
 const FRIENDSHIP_EVOS = new Set([
   'pichu','cleffa','igglybuff','togepi','chansey','golbat',
   'eevee','azurill','budew','buneary','riolu','happiny',
   'munchlax','chingling','woobat','swadloon'
 ]);
-
 const FRIENDSHIP_DETAIL = {
-  'pichu':    'Pichu → Pikachu (wysoka przyjaźń)',
-  'cleffa':   'Cleffa → Clefairy (wysoka przyjaźń)',
-  'igglybuff':'Igglybuff → Jigglypuff (wysoka przyjaźń)',
-  'togepi':   'Togepi → Togetic (wysoka przyjaźń)',
-  'chansey':  'Chansey → Blissey (wysoka przyjaźń)',
-  'golbat':   'Golbat → Crobat (wysoka przyjaźń)',
-  'eevee':    'Eevee → Espeon (dzień + przyjaźń) / Umbreon (noc + przyjaźń)',
-  'azurill':  'Azurill → Marill (wysoka przyjaźń)',
-  'budew':    'Budew → Roselia (wysoka przyjaźń, dzień)',
-  'buneary':  'Buneary → Lopunny (wysoka przyjaźń)',
-  'riolu':    'Riolu → Lucario (wysoka przyjaźń, dzień)',
-  'happiny':  'Happiny → Chansey (niesiony Okrągły Kamień + przyjaźń)',
-  'munchlax': 'Munchlax → Snorlax (wysoka przyjaźń)',
-  'chingling':'Chingling → Chimecho (wysoka przyjaźń, noc)',
-  'woobat':   'Woobat → Swoobat (wysoka przyjaźń)',
-  'swadloon': 'Swadloon → Leavanny (wysoka przyjaźń)',
+  'pichu':'Pichu \u2192 Pikachu (wysoka przyja\u017a\u0144)',
+  'cleffa':'Cleffa \u2192 Clefairy (wysoka przyja\u017a\u0144)',
+  'igglybuff':'Igglybuff \u2192 Jigglypuff (wysoka przyja\u017a\u0144)',
+  'togepi':'Togepi \u2192 Togetic (wysoka przyja\u017a\u0144)',
+  'chansey':'Chansey \u2192 Blissey (wysoka przyja\u017a\u0144)',
+  'golbat':'Golbat \u2192 Crobat (wysoka przyja\u017a\u0144)',
+  'eevee':'Eevee \u2192 Espeon (dzie\u0144 + przyja\u017a\u0144) / Umbreon (noc + przyja\u017a\u0144)',
+  'azurill':'Azurill \u2192 Marill (wysoka przyja\u017a\u0144)',
+  'budew':'Budew \u2192 Roselia (wysoka przyja\u017a\u0144, dzie\u0144)',
+  'buneary':'Buneary \u2192 Lopunny (wysoka przyja\u017a\u0144)',
+  'riolu':'Riolu \u2192 Lucario (wysoka przyja\u017a\u0144, dzie\u0144)',
+  'happiny':'Happiny \u2192 Chansey (niesiony Okr\u0105g\u0142y Kamie\u0144 + przyja\u017a\u0144)',
+  'munchlax':'Munchlax \u2192 Snorlax (wysoka przyja\u017a\u0144)',
+  'chingling':'Chingling \u2192 Chimecho (wysoka przyja\u017a\u0144, noc)',
+  'woobat':'Woobat \u2192 Swoobat (wysoka przyja\u017a\u0144)',
+  'swadloon':'Swadloon \u2192 Leavanny (wysoka przyja\u017a\u0144)',
 };
-
 const LINK_CABLE_EVOS = {
   'kadabra':   { result:'Alakazam', item:null },
   'machoke':   { result:'Machamp', item:null },
@@ -970,35 +769,24 @@ const LINK_CABLE_EVOS = {
   'swirlix':   { result:'Slurpuff', item:'Whipped Dream' },
   'feebas':    { result:'Milotic', item:'Prism Scale' },
 };
-
-// Generation ID ranges
 const GEN_RANGES = [
-  null,            // 0 = all
-  [1,   151],
-  [152, 251],
-  [252, 386],
-  [387, 493],
-  [494, 649],
-  [650, 721],
-  [722, 809],
-  [810, 905],
-  [906, 1025],
+  null,[1,151],[152,251],[252,386],[387,493],[494,649],[650,721],[722,809],[810,905],[906,1025],
 ];
-
 const STAT_COLORS = {
-  hp:              '#ff5555',
-  attack:          '#f08030',
-  defense:         '#f8d030',
-  'special-attack':'#6890f0',
-  'special-defense':'#78c850',
-  speed:           '#f85888',
+  hp:'#ff5555', attack:'#f08030', defense:'#f8d030',
+  'special-attack':'#6890f0','special-defense':'#78c850', speed:'#f85888',
 };
 const STAT_NAMES = {
-  hp:'HP', attack:'ATK', defense:'DEF',
-  'special-attack':'SpATK','special-defense':'SpDEF', speed:'SPE'
+  hp:'P\u017b', attack:'Atak', defense:'Obrona',
+  'special-attack':'Sp.Atak','special-defense':'Sp.Obr', speed:'Szybk.'
+};
+const TYPE_NAMES_PL = {
+  normal:'Normalny',fire:'Ogie\u0144',water:'Woda',electric:'Elektryczny',grass:'Trawa',
+  ice:'L\u00f3d',fighting:'Walka',poison:'Truc.',ground:'Ziemia',flying:'Lataj\u0105cy',
+  psychic:'Psycho',bug:'Robak',rock:'Ska\u0142a',ghost:'Duch',dragon:'Smok',
+  dark:'Mrok',steel:'Stal',fairy:'Bajkowy'
 };
 
-// MOVE_DATA: [power, type, category]  category: P=physical S=special Z=status
 const MOVE_DATA = {
   'hyper-voice':[90,'normal','S'],'boomburst':[140,'normal','S'],'body-slam':[85,'normal','P'],
   'double-edge':[120,'normal','P'],'facade':[70,'normal','P'],'return':[102,'normal','P'],
@@ -1037,7 +825,7 @@ const MOVE_DATA = {
   'power-whip':[120,'grass','P'],'wood-hammer':[120,'grass','P'],'leaf-storm':[130,'grass','S'],
   'solar-beam':[120,'grass','S'],'seed-bomb':[80,'grass','P'],'leech-seed':[0,'grass','Z'],
   'synthesis':[0,'grass','Z'],'grassy-glide':[70,'grass','P'],'spore':[0,'grass','Z'],
-  'petal-dance':[120,'grass','S'],'giga-drain':[75,'grass','S'],
+  'petal-dance':[120,'grass','S'],
   'ice-beam':[90,'ice','S'],'blizzard':[110,'ice','S'],'ice-punch':[75,'ice','P'],
   'ice-shard':[40,'ice','P'],'icicle-crash':[85,'ice','P'],'freeze-dry':[70,'ice','S'],
   'glacial-lance':[120,'ice','P'],'aurora-veil':[0,'ice','Z'],'triple-axel':[20,'ice','P'],
@@ -1056,7 +844,7 @@ const MOVE_DATA = {
   'gyro-ball':[100,'steel','P'],'meteor-mash':[90,'steel','P'],'iron-defense':[0,'steel','Z'],
   'bullet-punch':[40,'steel','P'],'sunsteel-strike':[100,'steel','P'],'steel-beam':[140,'steel','S'],
   'stone-edge':[100,'rock','P'],'rock-slide':[75,'rock','P'],'power-gem':[80,'rock','S'],
-  'stealth-rock':[0,'rock','Z'],'meteor-beam':[120,'rock','S'],'head-smash':[150,'rock','P'],
+  'meteor-beam':[120,'rock','S'],'head-smash':[150,'rock','P'],
   'sludge-bomb':[90,'poison','S'],'gunk-shot':[120,'poison','P'],'poison-jab':[80,'poison','P'],
   'sludge-wave':[95,'poison','S'],'toxic':[0,'poison','Z'],'shell-side-arm':[90,'poison','S'],
   'bug-buzz':[90,'bug','S'],'leech-life':[80,'bug','P'],'x-scissor':[80,'bug','P'],
@@ -1066,10 +854,10 @@ const MOVE_DATA = {
   'roost':[0,'flying','Z'],'tailwind':[0,'flying','Z'],'defog':[0,'flying','Z'],'dual-wingbeat':[40,'flying','P'],
 };
 
-/* ════════════════════════════════════════
+/* ================================================================
    STATE
-   ════════════════════════════════════════ */
-let allPokemon = [];       // [{id, name}]
+   ================================================================ */
+let allPokemon = [];
 let filteredList = [];
 let selectedGen = 0;
 let searchQuery = '';
@@ -1078,51 +866,103 @@ let selectedId = null;
 let detailCache = {};
 let listOffset = 0;
 const PAGE_SIZE = 80;
+const FAVORITES_KEY = 'cob_favorites';
+let currentBuildIndex = 0;
+let lastBuildData = null;
 
-/* ════════════════════════════════════════
-   INIT
-   ════════════════════════════════════════ */
-async function init() {
-  setStatus('Pobieranie listy Pokémonów z PokeAPI...', true);
-
-  // Try cache
-  const cached = localStorage.getItem('cob_pokemon_list');
-  if (cached) {
-    allPokemon = JSON.parse(cached);
-    setStatus(`Załadowano ${allPokemon.length} Pokémonów z cache.`, false);
-  } else {
-    try {
-      const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10000');
-      const data = await res.json();
-      allPokemon = data.results.map((p, i) => {
-        const parts = p.url.split('/').filter(Boolean);
-        const id = parseInt(parts[parts.length - 1]);
-        return { id, name: p.name };
-      }).filter(p => p.id <= 1025);
-      localStorage.setItem('cob_pokemon_list', JSON.stringify(allPokemon));
-      setStatus(`Załadowano ${allPokemon.length} Pokémonów.`, false);
-    } catch (e) {
-      setStatus('Błąd połączenia z PokeAPI!', false);
-    }
+/* ================================================================
+   FAVORITES
+   ================================================================ */
+function getFavorites() {
+  try { return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []; }
+  catch(e) { return []; }
+}
+function isFavorite(id) { return getFavorites().some(f => f.id === id); }
+function toggleFavorite(id, name) {
+  let favs = getFavorites();
+  const idx = favs.findIndex(f => f.id === id);
+  if (idx >= 0) favs.splice(idx, 1);
+  else favs.push({ id, name });
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+  const star = document.getElementById('fav-star-btn');
+  if (star) star.classList.toggle('active', isFavorite(id));
+}
+function renderFavoritesSection() {
+  const favs = getFavorites();
+  if (!favs.length) {
+    return '<div class="welcome-card"><h3>\u2b50 Twoje Ulubione Buildy</h3><p>Kliknij gwiazdk\u0119 \u2b50 obok nazwy Pok\u00e9mona, aby doda\u0107 go do ulubionych.</p></div>';
   }
-
-  applyFilters();
-  showPage('welcome');
+  const cards = favs.map(f =>
+    '<div class="fav-card" onclick="loadDetail('+f.id+',\''+f.name+'\')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+f.id+'.png" alt="'+f.name+'"/><span>'+f.name+'</span></div>'
+  ).join('');
+  return '<div class="welcome-card" style="grid-column:1/-1"><h3>\u2b50 Twoje Ulubione Buildy</h3><div class="fav-grid">'+cards+'</div></div>';
 }
 
-/* ════════════════════════════════════════
+/* ================================================================
+   HAMBURGER
+   ================================================================ */
+function toggleHamburger() {
+  document.getElementById('sidebar').classList.toggle('mobile-open');
+  document.getElementById('sidebar-overlay').classList.toggle('active');
+}
+
+/* ================================================================
+   COPY BUILD LINK
+   ================================================================ */
+function copyBuildLink() {
+  const url = window.location.origin + window.location.pathname + (selectedId ? '#pokemon-'+selectedId : '');
+  navigator.clipboard.writeText(url).then(function(){
+    var btn = document.getElementById('copy-link-btn');
+    if(btn){btn.textContent='\u2705 Skopiowano!';setTimeout(function(){btn.textContent='\ud83d\udd17 Kopiuj Link do Buildu';},2000);}
+  }).catch(function(){
+    var ta = document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  });
+}
+
+/* ================================================================
+   INIT
+   ================================================================ */
+async function init() {
+  setStatus('Pobieranie listy Pok\u00e9mon\u00f3w z PokeAPI...', true);
+  var cached = localStorage.getItem('cob_pokemon_list');
+  if (cached) {
+    allPokemon = JSON.parse(cached);
+    setStatus('Za\u0142adowano '+allPokemon.length+' Pok\u00e9mon\u00f3w z cache.', false);
+  } else {
+    try {
+      var res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10000');
+      var data = await res.json();
+      allPokemon = data.results.map(function(p){
+        var parts = p.url.split('/').filter(Boolean);
+        var id = parseInt(parts[parts.length - 1]);
+        return { id: id, name: p.name };
+      }).filter(function(p){ return p.id <= 1025; });
+      localStorage.setItem('cob_pokemon_list', JSON.stringify(allPokemon));
+      setStatus('Za\u0142adowano '+allPokemon.length+' Pok\u00e9mon\u00f3w.', false);
+    } catch (e) {
+      setStatus('B\u0142\u0105d po\u0142\u0105czenia z PokeAPI!', false);
+    }
+  }
+  applyFilters();
+  showPage('welcome');
+  // Check hash for deep link
+  if (window.location.hash.startsWith('#pokemon-')) {
+    var hid = parseInt(window.location.hash.replace('#pokemon-',''));
+    if (hid) { var found = allPokemon.find(function(p){return p.id===hid;}); if(found) loadDetail(found.id, found.name); }
+  }
+}
+
+/* ================================================================
    FILTERS
-   ════════════════════════════════════════ */
+   ================================================================ */
 function applyFilters() {
-  const q = searchQuery.trim().toLowerCase();
-  filteredList = allPokemon.filter(p => {
+  var q = searchQuery.trim().toLowerCase();
+  filteredList = allPokemon.filter(function(p) {
     if (selectedGen > 0) {
-      const [lo, hi] = GEN_RANGES[selectedGen];
-      if (p.id < lo || p.id > hi) return false;
+      var range = GEN_RANGES[selectedGen];
+      if (p.id < range[0] || p.id > range[1]) return false;
     }
-    if (q) {
-      return p.name.includes(q) || String(p.id).includes(q);
-    }
+    if (q) return p.name.includes(q) || String(p.id).includes(q);
     return true;
   });
   listOffset = 0;
@@ -1130,732 +970,496 @@ function applyFilters() {
 }
 
 function renderList() {
-  const container = document.getElementById('pokemon-list');
-  document.getElementById('pokemon-count').textContent =
-    `${filteredList.length} Pokémonów`;
-
-  if (filteredList.length === 0) {
-    container.innerHTML = '<div class="empty-state"><span class="big-icon">🔍</span>Brak wyników</div>';
+  var container = document.getElementById('pokemon-list');
+  document.getElementById('pokemon-count').textContent = filteredList.length + ' Pok\u00e9mon\u00f3w';
+  if (!filteredList.length) {
+    container.innerHTML = '<div class="empty-state"><span class="big-icon">\ud83d\udd0d</span>Brak wynik\u00f3w</div>';
     return;
   }
-
-  const chunk = filteredList.slice(0, listOffset + PAGE_SIZE);
+  var chunk = filteredList.slice(0, listOffset + PAGE_SIZE);
   container.innerHTML = '';
-  chunk.forEach(p => {
-    const div = document.createElement('div');
+  chunk.forEach(function(p) {
+    var div = document.createElement('div');
     div.className = 'pokemon-entry' + (p.id === selectedId ? ' selected' : '');
     div.dataset.id = p.id;
-
-    const hasFriendship = FRIENDSHIP_EVOS.has(p.name);
-    const hasTrade = p.name in LINK_CABLE_EVOS;
-
-    div.innerHTML = `
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png"
-           onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\'/>'"/>
-      <span class="entry-name">${p.name}</span>
-      <span class="entry-id">#${String(p.id).padStart(3,'0')}</span>
-      <div class="entry-badges">
-        ${hasFriendship ? '<span class="badge-friendship" title="Ewolucja przez przyjaźń">♥</span>' : ''}
-        ${hasTrade ? '<span class="badge-trade" title="Ewolucja przez wymianę (Link Cable)">⇄</span>' : ''}
-      </div>`;
-    div.addEventListener('click', () => loadDetail(p.id, p.name));
+    var hasFriendship = FRIENDSHIP_EVOS.has(p.name);
+    var hasTrade = p.name in LINK_CABLE_EVOS;
+    div.innerHTML = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\'/>\'" />'
+      + '<span class="entry-name">'+p.name+'</span>'
+      + '<span class="entry-id">#'+String(p.id).padStart(3,'0')+'</span>'
+      + '<div class="entry-badges">'
+      + (hasFriendship ? '<span class="badge-friendship" title="Ewolucja przez przyja\u017a\u0144">\u2665</span>' : '')
+      + (hasTrade ? '<span class="badge-trade" title="Ewolucja przez wymian\u0119 (Link Cable)">\u21c4</span>' : '')
+      + '</div>';
+    div.addEventListener('click', function(){ loadDetail(p.id, p.name); });
     container.appendChild(div);
   });
-
-  // infinite scroll sentinel
   if (chunk.length < filteredList.length) {
-    const sentinel = document.createElement('div');
+    var sentinel = document.createElement('div');
     sentinel.style.cssText = 'height:4px';
     sentinel.id = 'list-sentinel';
     container.appendChild(sentinel);
-
-    const obs = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        obs.disconnect();
-        listOffset += PAGE_SIZE;
-        renderList();
-      }
+    var obs = new IntersectionObserver(function(entries){
+      if (entries[0].isIntersecting) { obs.disconnect(); listOffset += PAGE_SIZE; renderList(); }
     });
     obs.observe(sentinel);
   }
 }
 
-/* ════════════════════════════════════════
+/* ================================================================
    DETAIL
-   ════════════════════════════════════════ */
+   ================================================================ */
 async function loadDetail(id, name) {
   selectedId = id;
-  // highlight in list
-  document.querySelectorAll('.pokemon-entry').forEach(el => {
+  document.querySelectorAll('.pokemon-entry').forEach(function(el){
     el.classList.toggle('selected', parseInt(el.dataset.id) === id);
   });
-
+  // close mobile menu
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('sidebar-overlay').classList.remove('active');
   showPage('detail-loading');
-  setStatus(`Pobieranie danych: ${name}...`, true);
-
+  setStatus('Pobieranie danych: '+name+'...', true);
   try {
-    let data = detailCache[id];
+    var data = detailCache[id];
     if (!data) {
-      const [pRes, sRes] = await Promise.all([
-        fetch(`https://pokeapi.co/api/v2/pokemon/${id}`),
-        fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`)
+      var results = await Promise.all([
+        fetch('https://pokeapi.co/api/v2/pokemon/'+id),
+        fetch('https://pokeapi.co/api/v2/pokemon-species/'+id)
       ]);
-      const p = await pRes.json();
-      const s = await sRes.json();
-      data = { p, s };
+      var p = await results[0].json();
+      var s = await results[1].json();
+      data = { p:p, s:s };
       detailCache[id] = data;
     }
-
-    const evoChainUrl = data.s.evolution_chain?.url;
-    let evoChain = null;
-    if (evoChainUrl) {
-      const evoRes = await fetch(evoChainUrl);
-      evoChain = await evoRes.json();
-    }
-
+    var evoChainUrl = data.s.evolution_chain ? data.s.evolution_chain.url : null;
+    var evoChain = null;
+    if (evoChainUrl) { var evoRes = await fetch(evoChainUrl); evoChain = await evoRes.json(); }
     renderDetail(data.p, data.s, evoChain, name);
-    setStatus(`#${String(id).padStart(3,'0')} ${name}`, false);
+    setStatus('#'+String(id).padStart(3,'0')+' '+name, false);
+    window.location.hash = 'pokemon-'+id;
   } catch(e) {
-    setStatus('Błąd podczas pobierania danych.', false);
-    document.getElementById('main-area').innerHTML =
-      `<div class="empty-state"><span class="big-icon">⚠</span>Błąd połączenia z PokeAPI.<br>Sprawdź internet.</div>`;
+    setStatus('B\u0142\u0105d podczas pobierania danych.', false);
+    document.getElementById('main-area').innerHTML = '<div class="empty-state"><span class="big-icon">\u26a0</span>B\u0142\u0105d po\u0142\u0105czenia z PokeAPI.</div>';
   }
 }
 
+/* ================================================================
+   TYPE ICON HELPER
+   ================================================================ */
+function typeIconHTML(typeName, size) {
+  size = size || 20;
+  // Use colored circle badges as type icons
+  var colors = {
+    normal:'#a8a878',fire:'#f08030',water:'#6890f0',electric:'#f8d030',grass:'#78c850',
+    ice:'#98d8d8',fighting:'#c03028',poison:'#a040a0',ground:'#e0c068',flying:'#a890f0',
+    psychic:'#f85888',bug:'#a8b820',rock:'#b8a038',ghost:'#705898',dragon:'#7038f8',
+    dark:'#705848',steel:'#b8b8d0',fairy:'#ee99ac'
+  };
+  var c = colors[typeName] || '#888';
+  var label = (TYPE_NAMES_PL[typeName] || typeName).substring(0,3).toUpperCase();
+  return '<span style="display:inline-block;width:'+size+'px;height:'+size+'px;border-radius:50%;background:'+c+';text-align:center;line-height:'+size+'px;font-size:'+(size*0.5)+'px;color:#fff;font-family:VT323,monospace;vertical-align:middle;margin-right:2px;border:1px solid rgba(0,0,0,0.3)" title="'+(TYPE_NAMES_PL[typeName]||typeName)+'">'+label+'</span>';
+}
+
+/* ================================================================
+   RENDER DETAIL
+   ================================================================ */
 function renderDetail(p, s, evoChain, name) {
-  const isFriendship = FRIENDSHIP_EVOS.has(p.name);
-  const isTradeEvo   = p.name in LINK_CABLE_EVOS;
-
-  // flavor text (Polish not available, take English)
-  const flavor = s.flavor_text_entries?.find(f => f.language.name === 'en')?.flavor_text
-    ?.replace(/\f/g,' ') || '';
-
-  // ── IV SECTION BUILDER ──
-  function getIVColor(iv) {
-    if (iv >= 28) return '#55ff55';
-    if (iv >= 20) return '#f8d030';
-    if (iv >= 10) return '#f08030';
-    return '#ff5555';
+  var isFriendship = FRIENDSHIP_EVOS.has(p.name);
+  var isTradeEvo = p.name in LINK_CABLE_EVOS;
+  var flavor = '';
+  if (s.flavor_text_entries) {
+    var fe = s.flavor_text_entries.find(function(f){return f.language.name==='en';});
+    if (fe) flavor = fe.flavor_text.replace(/\f/g,' ');
   }
+
+  // ── IV helpers ──
+  function getIVColor(iv) { return iv>=28?'#55ff55':iv>=20?'#f8d030':iv>=10?'#f08030':'#ff5555'; }
   function getIVLabel(iv) {
-    if (iv >= 28) return '<span style="color:#55ff55">Doskonałe</span>';
-    if (iv >= 20) return '<span style="color:#f8d030">Dobre</span>';
-    if (iv >= 10) return '<span style="color:#f08030">Słabe</span>';
-    return '<span style="color:#ff5555">Złe</span>';
+    if(iv>=28) return '<span style="color:#55ff55">Doskona\u0142e</span>';
+    if(iv>=20) return '<span style="color:#f8d030">Dobre</span>';
+    if(iv>=10) return '<span style="color:#f08030">S\u0142abe</span>';
+    return '<span style="color:#ff5555">Z\u0142e</span>';
   }
 
   function buildIVSection(stats) {
-    const statMap = {};
-    stats.forEach(s => { statMap[s.stat.name] = s.base_stat; });
-    const atk   = statMap['attack']         || 0;
-    const spatk = statMap['special-attack'] || 0;
-    const def   = statMap['defense']        || 0;
-    const spdef = statMap['special-defense']|| 0;
-    const spe   = statMap['speed']          || 0;
-    const hp    = statMap['hp']             || 0;
-
-    const isPhysical = atk >= spatk + 15;
-    const isSpecial  = spatk >= atk + 15;
-    const isMixed    = !isPhysical && !isSpecial;
-    const isTank     = (def + spdef) / 2 >= 90 && spe < 80;
-    const isSpeedy   = spe >= 80;
-    const isTrickRoom= spe <= 50;
-
-    let role = '⚖ Zbalansowany';
-    if (isPhysical && isSpeedy) role = '⚔ Fizyczny Atakujący';
-    else if (isPhysical && isTank) role = '🛡 Fizyczny Tank';
-    else if (isPhysical) role = '⚔ Fizyczny';
-    else if (isSpecial && isSpeedy) role = '✨ Specjalny Atakujący';
-    else if (isSpecial && isTank) role = '🔮 Specjalny Tank';
-    else if (isSpecial) role = '✨ Specjalny';
-    else if (isTank) role = '🛡 Tank';
-    else if (isSpeedy) role = '💨 Szybkościowy';
-    else if (isMixed) role = '⚔✨ Mieszany Atakujący';
-
-    // TARGET IV per stat: '31' | '0' | 'dowolne'
-    const targets = {};
-    // HP — always 31
-    targets['hp'] = { val: '31', color: '#55ff55', prio: true, note: 'Zawsze przydatne' };
-    // Speed
-    if (isTrickRoom) {
-      targets['speed'] = { val: '0', color: '#aaa', prio: false, note: 'Trick Room — chcesz być wolniejszy!' };
-    } else if (isSpeedy) {
-      targets['speed'] = { val: '31', color: '#55ff55', prio: true, note: 'Kluczowe — wyprzedzaj przeciwników' };
-    } else {
-      targets['speed'] = { val: '≥20', color: '#f8d030', prio: false, note: 'Pomocne, nie krytyczne' };
-    }
-    // ATK
-    if (isPhysical || isMixed) {
-      targets['attack'] = { val: '31', color: '#55ff55', prio: true, note: 'Główne źródło obrażeń' };
-    } else {
-      targets['attack'] = { val: '0', color: '#888', prio: false, note: 'Nie używasz ataków fizycznych' };
-    }
-    // SpATK
-    if (isSpecial || isMixed) {
-      targets['special-attack'] = { val: '31', color: '#55ff55', prio: true, note: 'Główne źródło obrażeń' };
-    } else {
-      targets['special-attack'] = { val: '0', color: '#888', prio: false, note: 'Nie używasz ataków specjalnych' };
-    }
-    // DEF
-    if (isTank || def >= 100) {
-      targets['defense'] = { val: '31', color: '#55ff55', prio: true, note: 'Wysoka obrona — warto maksować' };
-    } else {
-      targets['defense'] = { val: '≥20', color: '#f8d030', prio: false, note: 'Przydatne, nie priorytet' };
-    }
-    // SpDEF
-    if (isTank || spdef >= 100) {
-      targets['special-defense'] = { val: '31', color: '#55ff55', prio: true, note: 'Wysoka spec.obrona — warto maksować' };
-    } else {
-      targets['special-defense'] = { val: '≥20', color: '#f8d030', prio: false, note: 'Przydatne, nie priorytet' };
-    }
-
-    // Build summary text
-    const mustBe31 = ['hp','attack','defense','special-attack','special-defense','speed']
-      .filter(sn => targets[sn].val === '31')
-      .map(sn => `<span style="color:${STAT_COLORS[sn] || '#fff'}">${STAT_NAMES[sn]}</span>`);
-    const mustBe0  = ['attack','special-attack','speed']
-      .filter(sn => targets[sn].val === '0')
-      .map(sn => `<span style="color:#888">${STAT_NAMES[sn]}</span>`);
-    let summaryLine = `Celuj w <b style="color:#55ff55">31</b>: ${mustBe31.join(', ')}`;
-    if (mustBe0.length) summaryLine += `<br>Zostaw na <b style="color:#888">0</b> (nieużywane): ${mustBe0.join(', ')}`;
-
-    const ORDER = ['hp','attack','defense','special-attack','special-defense','speed'];
-    const rows = ORDER.map(sn => {
-      const label = STAT_NAMES[sn] || sn;
-      const color = STAT_COLORS[sn] || '#888';
-      const t = targets[sn];
-      const rowClass = t.prio ? 'iv-row iv-row-priority' : 'iv-row';
-      const prioIcon = t.prio ? '⭐' : '▪';
-      const defaultVal = t.val === '0' ? 0 : 31;
-      return `<div class="${rowClass}" id="iv-row-${sn}">
-        <span class="iv-priority" title="${t.note}">${prioIcon}</span>
-        <span class="iv-name" style="color:${color}">${label}</span>
-        <input class="iv-input" type="number" min="0" max="31" value="${defaultVal}"
-               data-stat="${sn}" oninput="updateIVBar(this)" />
-        <div class="iv-bar-wrap">
-          <div class="iv-bar" id="ivbar-${sn}" style="width:${Math.round(defaultVal/31*100)}%;background:${getIVColor(defaultVal)}"></div>
-        </div>
-        <div class="iv-target" style="color:${t.color}" title="${t.note}">CEL: ${t.val}</div>
-        <div class="iv-label" id="ivlabel-${sn}">${getIVLabel(defaultVal)}</div>
-      </div>`;
+    var statMap = {}; stats.forEach(function(s){statMap[s.stat.name]=s.base_stat;});
+    var atk=statMap['attack']||0, spatk=statMap['special-attack']||0, def=statMap['defense']||0, spdef=statMap['special-defense']||0, spe=statMap['speed']||0, hp=statMap['hp']||0;
+    var isPhysical=atk>=spatk+15,isSpecial=spatk>=atk+15,isMixed=!isPhysical&&!isSpecial,isTank=(def+spdef)/2>=90&&spe<80,isSpeedy=spe>=80,isTrickRoom=spe<=50;
+    var role='\u2696 Zbalansowany';
+    if(isPhysical&&isSpeedy)role='\u2694 Fizyczny Atakuj\u0105cy';else if(isPhysical&&isTank)role='\ud83d\udee1 Fizyczny Tank';else if(isPhysical)role='\u2694 Fizyczny';else if(isSpecial&&isSpeedy)role='\u2728 Specjalny Atakuj\u0105cy';else if(isSpecial&&isTank)role='\ud83d\udd2e Specjalny Tank';else if(isSpecial)role='\u2728 Specjalny';else if(isTank)role='\ud83d\udee1 Tank';else if(isSpeedy)role='\ud83d\udca8 Szybko\u015bciowy';else if(isMixed)role='\u2694\u2728 Mieszany';
+    var targets={};
+    targets['hp']={val:'31',color:'#55ff55',prio:true,note:'Zawsze przydatne'};
+    if(isTrickRoom)targets['speed']={val:'0',color:'#aaa',prio:false,note:'Trick Room'};else if(isSpeedy)targets['speed']={val:'31',color:'#55ff55',prio:true,note:'Kluczowe'};else targets['speed']={val:'\u226520',color:'#f8d030',prio:false,note:'Pomocne'};
+    if(isPhysical||isMixed)targets['attack']={val:'31',color:'#55ff55',prio:true,note:'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'};else targets['attack']={val:'0',color:'#888',prio:false,note:'Nie u\u017cywasz'};
+    if(isSpecial||isMixed)targets['special-attack']={val:'31',color:'#55ff55',prio:true,note:'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'};else targets['special-attack']={val:'0',color:'#888',prio:false,note:'Nie u\u017cywasz'};
+    if(isTank||def>=100)targets['defense']={val:'31',color:'#55ff55',prio:true,note:'Warto maksowa\u0107'};else targets['defense']={val:'\u226520',color:'#f8d030',prio:false,note:'Przydatne'};
+    if(isTank||spdef>=100)targets['special-defense']={val:'31',color:'#55ff55',prio:true,note:'Warto maksowa\u0107'};else targets['special-defense']={val:'\u226520',color:'#f8d030',prio:false,note:'Przydatne'};
+    var mustBe31=['hp','attack','defense','special-attack','special-defense','speed'].filter(function(sn){return targets[sn].val==='31';}).map(function(sn){return '<span style="color:'+(STAT_COLORS[sn]||'#fff')+'">'+STAT_NAMES[sn]+'</span>';});
+    var mustBe0=['attack','special-attack','speed'].filter(function(sn){return targets[sn].val==='0';}).map(function(sn){return '<span style="color:#888">'+STAT_NAMES[sn]+'</span>';});
+    var summaryLine='Celuj w <b style="color:#55ff55">31</b>: '+mustBe31.join(', ');
+    if(mustBe0.length)summaryLine+='<br>Zostaw na <b style="color:#888">0</b>: '+mustBe0.join(', ');
+    var ORDER=['hp','attack','defense','special-attack','special-defense','speed'];
+    var rows=ORDER.map(function(sn){
+      var label=STAT_NAMES[sn]||sn;var color=STAT_COLORS[sn]||'#888';var t=targets[sn];
+      var rowClass=t.prio?'iv-row iv-row-priority':'iv-row';var prioIcon=t.prio?'\u2b50':'\u25aa';
+      var defaultVal=t.val==='0'?0:31;
+      return '<div class="'+rowClass+'" id="iv-row-'+sn+'">'
+        +'<span class="iv-priority" title="'+t.note+'">'+prioIcon+'</span>'
+        +'<span class="iv-name" style="color:'+color+'">'+label+'</span>'
+        +'<input class="iv-input" type="number" min="0" max="31" value="'+defaultVal+'" data-stat="'+sn+'" oninput="updateIVBar(this)" />'
+        +'<div class="iv-bar-wrap"><div class="iv-bar" id="ivbar-'+sn+'" style="width:'+Math.round(defaultVal/31*100)+'%;background:'+getIVColor(defaultVal)+'"></div></div>'
+        +'<div class="iv-target" style="color:'+t.color+'" title="'+t.note+'">CEL: '+t.val+'</div>'
+        +'<div class="iv-label" id="ivlabel-'+sn+'">'+getIVLabel(defaultVal)+'</div></div>';
     }).join('');
-
-    return `<div class="iv-section">
-      <h2>🎲 Individual Values (IV) &nbsp;<span style="font-size:11px;color:#aaa;font-family:VT323,monospace">skala 0–31</span></h2>
-      <div class="iv-role-badge">Rola: ${role}</div>
-      <div class="iv-summary">${summaryLine}</div>
-      <div style="font-size:14px;color:#666;margin-bottom:6px">⭐ priorytet (CEL: wartość docelowa) &nbsp;|&nbsp; ▪ mniej ważne &nbsp;|&nbsp; Zmień liczby żeby sprawdzić jakość swoich IV</div>
-      ${rows}
-      <div class="iv-legend">
-        <div class="iv-legend-item"><div class="iv-legend-dot" style="background:#55ff55"></div>28–31 Doskonałe</div>
-        <div class="iv-legend-item"><div class="iv-legend-dot" style="background:#f8d030"></div>20–27 Dobre</div>
-        <div class="iv-legend-item"><div class="iv-legend-dot" style="background:#f08030"></div>10–19 Słabe</div>
-        <div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ff5555"></div>0–9 Złe</div>
-      </div>
-    </div>`;
+    return '<div class="iv-section"><h2>\ud83c\udfb2 Individual Values (IV) <span style="font-size:11px;color:#aaa;font-family:VT323,monospace">skala 0\u201331</span></h2>'
+      +'<div class="iv-role-badge">Rola: '+role+'</div>'
+      +'<div class="iv-summary">'+summaryLine+'</div>'
+      +'<div style="font-size:14px;color:#666;margin-bottom:6px">\u2b50 priorytet | \u25aa mniej wa\u017cne | Zmie\u0144 liczby \u017ceby sprawdzi\u0107</div>'
+      +rows
+      +'<div class="iv-legend">'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#55ff55"></div>28\u201331 Doskona\u0142e</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#f8d030"></div>20\u201327 Dobre</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#f08030"></div>10\u201319 S\u0142abe</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ff5555"></div>0\u20139 Z\u0142e</div>'
+      +'</div></div>';
   }
 
-  // ─────────────────────────────────────────────
-  // ROLE HELPERS (shared by IV, EV, Item, Moveset)
-  // ─────────────────────────────────────────────
+  // ── ROLE DETECTION ──
   function detectRole(statMap) {
-    const atk   = statMap['attack']         || 0;
-    const spatk = statMap['special-attack'] || 0;
-    const def   = statMap['defense']        || 0;
-    const spdef = statMap['special-defense']|| 0;
-    const spe   = statMap['speed']          || 0;
-    const hp    = statMap['hp']             || 0;
-    const isPhys  = atk   >= spatk + 15;
-    const isSpec  = spatk >= atk   + 15;
-    const isMixed = !isPhys && !isSpec;
-    const isTank  = (def + spdef) / 2 >= 90 && spe < 80;
-    const isFast  = spe >= 80;
-    const isTR    = spe <= 50;  // trick-room candidate
-    let label = '⚖ Zbalansowany';
-    if (isPhys  && isFast)  label = '⚔ Fizyczny Atakujący';
-    else if (isPhys  && isTank)  label = '🛡 Fizyczny Tank';
-    else if (isPhys)              label = '⚔ Fizyczny (wolny)';
-    else if (isSpec  && isFast)  label = '✨ Specjalny Atakujący';
-    else if (isSpec  && isTank)  label = '🔮 Specjalny Tank';
-    else if (isSpec)              label = '✨ Specjalny (wolny)';
-    else if (isTank)              label = '🛡 Tank';
-    else if (isFast)              label = '💨 Szybki Mieszany';
-    else                          label = '⚔✨ Mieszany';
-    return { atk, spatk, def, spdef, spe, hp, isPhys, isSpec, isMixed, isTank, isFast, isTR, label };
+    var atk=statMap['attack']||0,spatk=statMap['special-attack']||0,def=statMap['defense']||0,spdef=statMap['special-defense']||0,spe=statMap['speed']||0,hp=statMap['hp']||0;
+    var isPhys=atk>=spatk+15,isSpec=spatk>=atk+15,isMixed=!isPhys&&!isSpec,isTank=(def+spdef)/2>=90&&spe<80,isFast=spe>=80,isTR=spe<=50;
+    var label='\u2696 Zbalansowany';
+    if(isPhys&&isFast)label='\u2694 Fizyczny Atakuj\u0105cy';else if(isPhys&&isTank)label='\ud83d\udee1 Fizyczny Tank';else if(isPhys)label='\u2694 Fizyczny (wolny)';else if(isSpec&&isFast)label='\u2728 Specjalny Atakuj\u0105cy';else if(isSpec&&isTank)label='\ud83d\udd2e Specjalny Tank';else if(isSpec)label='\u2728 Specjalny (wolny)';else if(isTank)label='\ud83d\udee1 Tank';else if(isFast)label='\ud83d\udca8 Szybki Mieszany';else label='\u2694\u2728 Mieszany';
+    return {atk:atk,spatk:spatk,def:def,spdef:spdef,spe:spe,hp:hp,isPhys:isPhys,isSpec:isSpec,isMixed:isMixed,isTank:isTank,isFast:isFast,isTR:isTR,label:label};
   }
 
-  // ─── EV SPREAD ───
-  function buildEVSection(statMap) {
-    const r = detectRole(statMap);
-    let spread = [];
-    let note = '';
-
-    if (r.isPhys && r.isFast && !r.isTank) {
-      spread = [['attack',252],['speed',252],['hp',4]];
-      note = 'Maksuj obrażenia i wyprzedź przeciwników.';
-    } else if (r.isPhys && r.isTank) {
-      const defStat = r.def >= r.spdef ? 'defense' : 'special-defense';
-      spread = [['hp',252],['attack',128],[defStat,128]];
-      note = 'Bulky Attacker — przeżyj i bij.';
-    } else if (r.isPhys && r.isTR) {
-      spread = [['attack',252],['hp',252],['speed',4]];
-      note = 'Trick Room — bądź wolny, bij mocno.';
-    } else if (r.isPhys) {
-      spread = [['attack',252],['hp',128],['speed',128]];
-      note = 'Fizyczny bez pełnej szybkości — balans.';
-    } else if (r.isSpec && r.isFast && !r.isTank) {
-      spread = [['special-attack',252],['speed',252],['hp',4]];
-      note = 'Maksuj obrażenia specjalne i szybkość.';
-    } else if (r.isSpec && r.isTank) {
-      spread = [['hp',252],['special-defense',252],['special-attack',4]];
-      note = 'Specjalny Tank — wytrzymałość na pierwszym miejscu.';
-    } else if (r.isSpec && r.isTR) {
-      spread = [['special-attack',252],['hp',252],['speed',4]];
-      note = 'Trick Room — powolny niszczycie spe.';
-    } else if (r.isSpec) {
-      spread = [['special-attack',252],['hp',128],['speed',128]];
-      note = 'Specjalny bez pełnej szybkości — balans.';
-    } else if (r.isTank) {
-      spread = [['hp',252],['defense',128],['special-defense',128]];
-      note = 'Pełny Tank — wytrzymałość jest priorytetem.';
+  // ── BUILD GENERATOR ──
+  function generateBuild(statMap, pokemonTypes, moves, buildType) {
+    var r = detectRole(statMap);
+    var spread,note,nName,nUp,nDown,nWhy,item,itemIcon,itemDesc;
+    // Three build types: 'physical','special','defensive'
+    if (buildType === 'physical') {
+      if(r.isFast) spread=[['attack',252],['speed',252],['hp',4]]; else spread=[['attack',252],['hp',252],['defense',4]];
+      note='Maksuj fizyczne obra\u017cenia.';
+      if(r.isFast){nName='Jolly';nUp='+Szybk.';nDown='-Sp.Atak';nWhy='Szybszy bez straty Ataku';}
+      else{nName='Adamant';nUp='+Atak';nDown='-Sp.Atak';nWhy='Maks Atak';}
+      if(r.spe>=100){item='Choice Band';itemIcon='\ud83e\udde4';itemDesc='Atak \u00d71.5 \u2014 tylko jeden atak';}
+      else{item='Life Orb';itemIcon='\ud83d\udd2e';itemDesc='+30% obra\u017ce\u0144, -10% P\u017b za atak';}
+    } else if (buildType === 'special') {
+      if(r.isFast) spread=[['special-attack',252],['speed',252],['hp',4]]; else spread=[['special-attack',252],['hp',252],['special-defense',4]];
+      note='Maksuj specjalne obra\u017cenia.';
+      if(r.isFast){nName='Timid';nUp='+Szybk.';nDown='-Atak';nWhy='Szybszy bez straty Sp.Atak';}
+      else{nName='Modest';nUp='+Sp.Atak';nDown='-Atak';nWhy='Maks Sp.Atak';}
+      if(r.spe>=100){item='Choice Specs';itemIcon='\ud83d\udc53';itemDesc='Sp.Atak \u00d71.5 \u2014 tylko jeden atak';}
+      else{item='Life Orb';itemIcon='\ud83d\udd2e';itemDesc='+30% obra\u017ce\u0144, -10% P\u017b za atak';}
     } else {
-      spread = [['attack',128],['special-attack',128],['speed',252]];
-      note = 'Mieszany Atakujący — szybkość + obie ofensywy.';
+      // defensive
+      var defMore = r.def >= r.spdef;
+      if(defMore) spread=[['hp',252],['defense',252],['special-defense',4]]; else spread=[['hp',252],['special-defense',252],['defense',4]];
+      note='Maksymalna wytrzyma\u0142o\u015b\u0107.';
+      if(defMore){nName='Impish';nUp='+Obrona';nDown='-Sp.Atak';nWhy='Fizyczna wytrzyma\u0142o\u015b\u0107';}
+      else{nName='Calm';nUp='+Sp.Obr';nDown='-Atak';nWhy='Specjalna wytrzyma\u0142o\u015b\u0107';}
+      item='Leftovers';itemIcon='\ud83c\udf5d';itemDesc='Regeneruje 1/16 P\u017b co tur\u0119';
     }
-    const total = spread.reduce((s,[, v]) => s + v, 0);
-    const evRows = spread.map(([sn, val]) => {
-      const color = STAT_COLORS[sn] || '#888';
-      const pct   = Math.round(val / 252 * 100);
-      return `<div class="ev-row">
-        <span class="ev-amount">${val}</span>
-        <span class="ev-stat-name" style="color:${color}">${STAT_NAMES[sn]||sn}</span>
-        <div class="ev-bar-bg"><div class="ev-bar" style="width:${pct}%;background:${color}"></div></div>
-      </div>`;
+    var total = spread.reduce(function(s,e){return s+e[1];},0);
+    var evRows = spread.map(function(e){
+      var sn=e[0],val=e[1],color=STAT_COLORS[sn]||'#888',pct=Math.round(val/252*100);
+      return '<div class="ev-row"><span class="ev-amount">'+val+'</span><span class="ev-stat-name" style="color:'+color+'">'+(STAT_NAMES[sn]||sn)+'</span><div class="ev-bar-bg"><div class="ev-bar" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
     }).join('');
-    return `<div class="comp-box">
-      <div class="comp-box-title">📊 EVs <span style="font-size:10px;color:#888;font-family:VT323,monospace">(max 510)</span></div>
-      ${evRows}
-      <div class="ev-total">Suma: ${total}/510</div>
-      <div style="font-size:14px;color:#666;margin-top:5px">${note}</div>
-    </div>`;
+
+    var evHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udcca Rozk\u0142ad EV <span style="font-size:10px;color:#888;font-family:VT323,monospace">(max 510)</span></div>'+evRows+'<div class="ev-total">Suma: '+total+'/510</div><div style="font-size:14px;color:#666;margin-top:5px">'+note+'</div></div>';
+    var natureHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udc8e Natura</div><div class="nature-badge">'+nName+'</div><div class="nature-detail"><span class="nature-up">\u25b2 '+nUp+'</span> | <span class="nature-down">\u25bc '+nDown+'</span></div><div style="font-size:14px;color:#666;margin-top:6px">'+nWhy+'</div></div>';
+
+    // Item with PokeAPI icon
+    var itemSlug = item.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
+    var itemImgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+itemSlug+'.png" onerror="this.style.display=\'none\'" />';
+    var itemHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udce6 Przedmiot</div><div style="font-size:28px;text-align:center;margin:4px 0">'+itemIcon+'</div><div class="item-big-name">'+itemImgTag+' '+item+'</div><div class="item-big-desc">'+itemDesc+'</div></div>';
+
+    // Best 4 Moveset for this build type
+    var movesHTML = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
+
+    return '<div class="comp-grid">'+evHTML+natureHTML+itemHTML+'</div>'
+      +'<div class="comp-box-title" style="margin-bottom:8px">\u2694 Najlepsze 4 Ataki</div>'
+      +'<div style="font-size:14px;color:#666;margin-bottom:8px">Automatycznie dobrane na podstawie typ\u00f3w i statystyk.</div>'
+      +'<div class="best4-grid">'+movesHTML+'</div>';
   }
 
-  // ─── NATURE ───
-  function buildNatureBox(statMap) {
-    const r = detectRole(statMap);
-    let name, up, down, why;
-    if (r.isPhys && r.isFast)        { name='Jolly';   up='+SPE'; down='-SpATK'; why='Szybszy bez straty ATK'; }
-    else if (r.isPhys && r.isTR)     { name='Brave';   up='+ATK'; down='-SPE';   why='Trick Room — wolniejszy+mocniejszy'; }
-    else if (r.isPhys)               { name='Adamant'; up='+ATK'; down='-SpATK'; why='Maks ATK bez potrzeby SPE'; }
-    else if (r.isSpec && r.isFast)   { name='Timid';   up='+SPE'; down='-ATK';   why='Szybszy bez straty SpATK'; }
-    else if (r.isSpec && r.isTR)     { name='Quiet';   up='+SpATK'; down='-SPE'; why='Trick Room — wolniejszy+mocniejszy'; }
-    else if (r.isSpec && r.isTank)   { name='Calm';    up='+SpDEF'; down='-ATK'; why='Tanking specjalnych ataków'; }
-    else if (r.isSpec)               { name='Modest';  up='+SpATK'; down='-ATK'; why='Maks SpATK bez potrzeby SPE'; }
-    else if (r.isTank && r.def >= r.spdef) { name='Impish'; up='+DEF'; down='-SpATK'; why='Fizyczna wytrzymałość'; }
-    else if (r.isTank)               { name='Calm';    up='+SpDEF'; down='-ATK';  why='Specjalna wytrzymałość'; }
-    else                             { name='Jolly';   up='+SPE'; down='-SpATK'; why='Szybkość u mieszanych'; }
-    return `<div class="comp-box">
-      <div class="comp-box-title">💎 Natura</div>
-      <div class="nature-badge">${name}</div>
-      <div class="nature-detail">
-        <span class="nature-up">▲ ${up}</span>
-        &nbsp;|&nbsp;
-        <span class="nature-down">▼ ${down}</span>
-      </div>
-      <div style="font-size:14px;color:#666;margin-top:6px">${why}</div>
-    </div>`;
-  }
-
-  // ─── HELD ITEM ───
-  const HELD_ITEMS = {
-    'Choice Band':   { cat:'P', fast:true,  desc:'ATK ×1.5 — tylko jeden atak' },
-    'Choice Specs':  { cat:'S', fast:true,  desc:'SpATK ×1.5 — tylko jeden atak' },
-    'Choice Scarf':  { cat:'X', fast:false, desc:'SPE ×1.5 — tylko jeden atak' },
-    'Life Orb':      { cat:'O', fast:true,  desc:'+30% obrażeń, -10% HP za atak' },
-    'Leftovers':     { cat:'T', fast:false, desc:'Regeneruje 1/16 HP co turę' },
-    'Assault Vest':  { cat:'A', fast:false, desc:'+50% SpDEF, nie można używać statuşów' },
-    'Rocky Helmet':  { cat:'R', fast:false, desc:'Kontaktowe ataki zadają 1/6 HP atakującemu' },
-  };
-  function buildItemBox(statMap) {
-    const r = detectRole(statMap);
-    let item, icon;
-    if (r.isTank && r.isSpec)             { item = 'Leftovers'; icon = '🍝'; }
-    else if (r.isTank && r.isPhys)        { item = 'Rocky Helmet'; icon = '⚪'; }
-    else if (r.isTank)                    { item = 'Leftovers'; icon = '🍝'; }
-    else if (r.isPhys && r.isFast && r.spe >= 100) { item = 'Choice Band'; icon = '🧤'; }
-    else if (r.isSpec && r.isFast && r.spe >= 100) { item = 'Choice Specs'; icon = '👓'; }
-    else if (r.isPhys && r.isFast)        { item = 'Life Orb'; icon = '🔮'; }
-    else if (r.isSpec && r.isFast)        { item = 'Life Orb'; icon = '🔮'; }
-    else if (r.isMixed)                   { item = 'Life Orb'; icon = '🔮'; }
-    else                                  { item = 'Leftovers'; icon = '🍝'; }
-    const d = HELD_ITEMS[item];
-    return `<div class="comp-box">
-      <div class="comp-box-title">📦 Held Item</div>
-      <div style="font-size:28px;text-align:center;margin:4px 0">${icon}</div>
-      <div class="item-big-name">${item}</div>
-      <div class="item-big-desc">${d.desc}</div>
-    </div>`;
-  }
-
-  // ─── BEST 4 MOVESET ───
-  function buildBest4(moves, pokemonTypes, statMap) {
-    const r = detectRole(statMap);
-    const typeSet = new Set(pokemonTypes);
-
-    // Collect all learnable moves with their data
-    const pool = [];
-    moves.forEach(m => {
-      const vgd = m.version_group_details
-        .slice()
-        .sort((a, b) => b.version_group.url.localeCompare(a.version_group.url, undefined,{numeric:true}))[0];
-      if (!vgd) return;
-      const method = vgd.move_learn_method.name;
-      if (!['level-up','machine','egg'].includes(method)) return;
-      const nm = m.move.name;
-      const md = MOVE_DATA[nm];
-      const lv = vgd.level_learned_at;
-      const power = md ? md[0] : 0;
-      const mtype = md ? md[1] : 'normal';
-      const cat   = md ? md[2] : (power > 0 ? (r.isPhys ? 'P' : 'S') : 'Z');
-
-      let score = 0;
-      if (cat === 'Z') {
-        // Setup moves score: 60 for offensive setup, 40 for defensive, 20 for utility
-        const offSetup = ['swords-dance','dragon-dance','nasty-plot','quiver-dance','tail-glow',
-          'shell-smash','belly-drum','work-up','geomancy','calm-mind','bulk-up','coil'];
-        const defSetup = ['recover','roost','soft-boiled','slack-off','milk-drink','synthesis',
-          'moonlight','morning-sun','wish','rest','shore-up'];
-        if (offSetup.includes(nm)) score = 80;
-        else if (defSetup.includes(nm)) score = r.isTank ? 70 : 30;
-        else score = 15; // utility: stealth-rock, toxic, etc.
+  // ── BEST 4 FOR BUILD TYPE ──
+  function buildBest4ForType(moves, pokemonTypes, statMap, buildType) {
+    var r = detectRole(statMap);
+    var typeSet = new Set(pokemonTypes);
+    var pool = [];
+    moves.forEach(function(m){
+      var vgd = m.version_group_details.slice().sort(function(a,b){return b.version_group.url.localeCompare(a.version_group.url,undefined,{numeric:true});})[0];
+      if(!vgd) return;
+      var method = vgd.move_learn_method.name;
+      if(!['level-up','machine','egg'].includes(method)) return;
+      var nm = m.move.name, md = MOVE_DATA[nm], lv = vgd.level_learned_at;
+      var power = md?md[0]:0, mtype = md?md[1]:'normal', cat = md?md[2]:(power>0?(r.isPhys?'P':'S'):'Z');
+      var score = 0;
+      if(cat==='Z'){
+        var offSetup=['swords-dance','dragon-dance','nasty-plot','quiver-dance','tail-glow','shell-smash','belly-drum','work-up','geomancy','calm-mind','bulk-up','coil'];
+        var defSetup=['recover','roost','soft-boiled','slack-off','milk-drink','synthesis','moonlight','morning-sun','wish','rest','shore-up'];
+        if(buildType==='defensive'){
+          if(defSetup.includes(nm))score=90;else if(['stealth-rock','toxic','will-o-wisp','thunder-wave','spikes'].includes(nm))score=70;else if(offSetup.includes(nm))score=30;else score=20;
+        } else {
+          if(offSetup.includes(nm))score=80;else if(defSetup.includes(nm))score=15;else score=10;
+        }
       } else {
         score = power;
-        const catMatch = (r.isPhys && !r.isSpec && cat === 'P') ||
-                         (r.isSpec && !r.isPhys && cat === 'S') ||
-                         r.isMixed;
-        if (catMatch) score *= 1.4;
-        if (typeSet.has(mtype)) score *= 1.5; // STAB
-        // priority moves bonus
-        const prioMoves = ['extreme-speed','quick-attack','aqua-jet','ice-shard','mach-punch',
-          'bullet-punch','sucker-punch','shadow-sneak','vacuum-wave','first-impression'];
-        if (prioMoves.includes(nm)) score += 25;
+        if(buildType==='physical'&&cat==='P')score*=1.5;else if(buildType==='special'&&cat==='S')score*=1.5;else if(buildType==='defensive')score*=0.8;
+        if(buildType==='physical'&&cat==='S')score*=0.3;
+        if(buildType==='special'&&cat==='P')score*=0.3;
+        if(typeSet.has(mtype))score*=1.5;
+        var prioMoves=['extreme-speed','quick-attack','aqua-jet','ice-shard','mach-punch','bullet-punch','sucker-punch','shadow-sneak','vacuum-wave','first-impression'];
+        if(prioMoves.includes(nm))score+=25;
       }
-      pool.push({ nm, power, mtype, cat, score, lv, method });
+      pool.push({nm:nm,power:power,mtype:mtype,cat:cat,score:score,lv:lv,method:method});
     });
-
-    // Deduplicate by name
-    const seen = new Set();
-    const unique = pool.filter(m => { if (seen.has(m.nm)) return false; seen.add(m.nm); return true; });
-    unique.sort((a, b) => b.score - a.score);
-
-    // Pick top 4 with diversity: max 2 of same type, mix cats
-    const chosen = [];
-    const typeCounts = {};
-    let offensiveCount = 0;
-    const maxPerType = 2;
-    for (const m of unique) {
-      if (chosen.length >= 4) break;
-      const tc = typeCounts[m.mtype] || 0;
-      if (tc >= maxPerType) continue;
-      // Make sure at least 1 setup/utility if role is tank, at least 2 offensive if attacker
-      typeCounts[m.mtype] = tc + 1;
-      chosen.push(m);
-      if (m.cat !== 'Z') offensiveCount++;
+    var seen = new Set();
+    var unique = pool.filter(function(m){if(seen.has(m.nm))return false;seen.add(m.nm);return true;});
+    unique.sort(function(a,b){return b.score-a.score;});
+    var chosen=[],typeCounts={};
+    for(var i=0;i<unique.length&&chosen.length<4;i++){
+      var m=unique[i],tc=typeCounts[m.mtype]||0;
+      if(tc>=2)continue;
+      typeCounts[m.mtype]=(tc||0)+1;chosen.push(m);
     }
-    // If we have fewer than 4, fill from sorted list regardless
-    for (const m of unique) {
-      if (chosen.length >= 4) break;
-      if (!chosen.includes(m)) chosen.push(m);
-    }
-
-    if (!chosen.length) return '<div style="color:#666">Brak danych o atakach.</div>';
-
-    const stars = score => {
-      if (score >= 180) return '⭐⭐⭐⭐';
-      if (score >= 120) return '⭐⭐⭐';
-      if (score >= 60)  return '⭐⭐';
-      return '⭐';
-    };
-
-    const catLabel = cat => cat === 'P' ? `<span class="move-cat-p">Fiz.</span>` :
-                            cat === 'S' ? `<span class="move-cat-s">Spec.</span>` :
-                            `<span class="move-cat-z">Status</span>`;
-    const stabLabel = (mtype, isStab) => isStab
-      ? `<span class="move-stab">STAB</span>`
-      : `<span class="move-coverage">${mtype}</span>`;
-
-    return chosen.map((m, i) => {
-      const isStab = typeSet.has(m.mtype);
-      const pwrStr = m.power > 0 ? `<span class="move-power">PWR: ${m.power}</span>` : `<span class="move-power" style="color:#666">Status</span>`;
-      return `<div class="move-card">
-        <span class="move-card-num">${i + 1}</span>
-        <div class="move-card-name">${m.nm.replace(/-/g,' ')}</div>
-        <div class="move-card-meta">
-          ${catLabel(m.cat)}
-          ${stabLabel(m.mtype, isStab)}
-          ${pwrStr}
-        </div>
-        <div class="move-stars">${stars(m.score)}</div>
-      </div>`;
+    for(var i=0;i<unique.length&&chosen.length<4;i++){if(!chosen.includes(unique[i]))chosen.push(unique[i]);}
+    if(!chosen.length)return '<div style="color:#666">Brak danych o atakach.</div>';
+    var stars=function(sc){return sc>=180?'\u2b50\u2b50\u2b50\u2b50':sc>=120?'\u2b50\u2b50\u2b50':sc>=60?'\u2b50\u2b50':'\u2b50';};
+    var catLabel=function(cat){return cat==='P'?'<span class="move-cat-p">Fiz.</span>':cat==='S'?'<span class="move-cat-s">Spec.</span>':'<span class="move-cat-z">Status</span>';};
+    return chosen.map(function(m,i){
+      var isStab=typeSet.has(m.mtype);
+      var stabL=isStab?'<span class="move-stab">STAB</span>':'<span class="move-coverage">'+(TYPE_NAMES_PL[m.mtype]||m.mtype)+'</span>';
+      var pwrStr=m.power>0?'<span class="move-power">MOC: '+m.power+'</span>':'<span class="move-power" style="color:#666">Status</span>';
+      return '<div class="move-card"><span class="move-card-num">'+(i+1)+'</span><div class="move-card-name">'+typeIconHTML(m.mtype,18)+' '+m.nm.replace(/-/g,' ')+'</div><div class="move-card-meta">'+catLabel(m.cat)+stabL+pwrStr+'</div><div class="move-stars">'+stars(m.score)+'</div></div>';
     }).join('');
   }
 
-  // ─── FULL COMPETITIVE SECTION (wraps all above) ───
+  // ── COMPETITIVE SECTION WITH 3 BUILDS ──
   function buildCompetitiveSection(stats, pokemonTypes, moves) {
-    const statMap = {};
-    stats.forEach(s => { statMap[s.stat.name] = s.base_stat; });
-    const r = detectRole(statMap);
-    const best4HTML = buildBest4(moves, pokemonTypes, statMap);
-    return `<div class="comp-section">
-      <h2>🏆 Competitive Build &mdash; ${r.label}</h2>
-      <div class="comp-grid">
-        ${buildEVSection(statMap)}
-        ${buildNatureBox(statMap)}
-        ${buildItemBox(statMap)}
-      </div>
-      <div class="comp-box-title" style="margin-bottom:8px">⚔ Best 4 Moveset</div>
-      <div style="font-size:14px;color:#666;margin-bottom:8px">Automatycznie dobrane 4 ataki na podstawie typów i statystyk. Weryfikuj z Cobblemon wiki.</div>
-      <div class="best4-grid">${best4HTML}</div>
-    </div>`;
+    var statMap = {}; stats.forEach(function(s){statMap[s.stat.name]=s.base_stat;});
+    var r = detectRole(statMap);
+    // Store for calculator
+    lastBuildData = {statMap:statMap, pokemonTypes:pokemonTypes, r:r};
+    var builds = [
+      {key:'physical', label:'Fizyczny Atakuj\u0105cy', icon:'\u2694'},
+      {key:'special', label:'Specjalny Atakuj\u0105cy', icon:'\u2728'},
+      {key:'defensive', label:'Defensywny', icon:'\ud83d\udee1'}
+    ];
+    var tabsHTML = builds.map(function(b,i){
+      return '<button class="build-tab'+(i===0?' active':'')+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">'+(i+1)+'. '+b.icon+' '+b.label+'</button>';
+    }).join('');
+    var panelsHTML = builds.map(function(b,i){
+      return '<div class="build-panel'+(i===0?' active':'')+'" id="build-panel-'+i+'">'+generateBuild(statMap,pokemonTypes,moves,b.key)+'</div>';
+    }).join('');
+    return '<div class="comp-section"><h2>\ud83c\udfc6 Competitive Build \u2014 '+r.label+'  <button class="copy-link-btn" id="copy-link-btn" onclick="copyBuildLink()" style="float:right;margin-top:-4px">\ud83d\udd17 Kopiuj Link do Buildu</button></h2>'
+      +'<div class="build-tabs">'+tabsHTML+'</div>'
+      +panelsHTML
+      +'</div>';
   }
 
-  // ─── FULL MOVELIST (tabs) ───
+  // ── FULL MOVELIST with type icons ──
   function buildMovesSection(moves) {
-    const lvlMoves = [], tmMoves = [], eggMoves = [];
-    moves.forEach(m => {
-      const vgd = m.version_group_details
-        .slice()
-        .sort((a, b) => b.version_group.url.localeCompare(a.version_group.url, undefined, {numeric:true}))[0];
-      if (!vgd) return;
-      const method = vgd.move_learn_method.name;
-      const lv = vgd.level_learned_at;
-      const nm = m.move.name;
-      if (method === 'level-up')    lvlMoves.push({ name: nm, lv });
-      else if (method === 'machine') tmMoves.push({ name: nm });
-      else if (method === 'egg')    eggMoves.push({ name: nm });
+    var lvlMoves=[],tmMoves=[],eggMoves=[];
+    moves.forEach(function(m){
+      var vgd=m.version_group_details.slice().sort(function(a,b){return b.version_group.url.localeCompare(a.version_group.url,undefined,{numeric:true});})[0];
+      if(!vgd)return;
+      var method=vgd.move_learn_method.name,lv=vgd.level_learned_at,nm=m.move.name;
+      if(method==='level-up')lvlMoves.push({name:nm,lv:lv});
+      else if(method==='machine')tmMoves.push({name:nm});
+      else if(method==='egg')eggMoves.push({name:nm});
     });
-    lvlMoves.sort((a, b) => a.lv - b.lv);
-    tmMoves.sort((a, b) => a.name.localeCompare(b.name));
-    eggMoves.sort((a, b) => a.name.localeCompare(b.name));
+    lvlMoves.sort(function(a,b){return a.lv-b.lv;});tmMoves.sort(function(a,b){return a.name.localeCompare(b.name);});eggMoves.sort(function(a,b){return a.name.localeCompare(b.name);});
+    var lvlHTML=lvlMoves.length?'<table class="move-table"><tr><th>Poz.</th><th>Atak</th><th>Typ</th><th>MOC</th></tr>'+lvlMoves.map(function(m){var md=MOVE_DATA[m.name];var mt=md?md[1]:'normal';return '<tr><td><span class="move-lv">'+(m.lv||'\u2014')+'</span></td><td class="move-name">'+typeIconHTML(mt,16)+' '+m.name.replace(/-/g,' ')+'</td><td><span class="type-badge type-'+mt+'" style="font-size:12px;padding:1px 6px">'+(TYPE_NAMES_PL[mt]||mt)+'</span></td><td style="color:#f8d030;font-size:17px">'+(md?md[0]||'\u2014':'\u2014')+'</td></tr>';}).join('')+'</table>':'<div style="color:#666">Brak.</div>';
+    var tmHTML=tmMoves.length?'<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px">'+tmMoves.map(function(m){var md=MOVE_DATA[m.name];var mt=md?md[1]:'normal';return '<span class="move-tm">'+typeIconHTML(mt,14)+' '+m.name.replace(/-/g,' ')+'</span>';}).join('')+'</div>':'<div style="color:#666">Brak.</div>';
+    var eggHTML=eggMoves.length?'<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px">'+eggMoves.map(function(m){var md=MOVE_DATA[m.name];var mt=md?md[1]:'normal';return '<span style="background:#1a0a1a;color:#c084fc;border:1px solid #7c3aed;padding:1px 8px;font-size:15px">'+typeIconHTML(mt,14)+' '+m.name.replace(/-/g,' ')+'</span>';}).join('')+'</div>':'<div style="color:#666">Brak.</div>';
+    return '<div class="moves-section"><h2>\ud83d\udcdc Pe\u0142na lista atak\u00f3w</h2><div class="moves-tabs"><button class="moves-tab active" onclick="switchMovesTab(this,\'mv-lvl\')">\ud83d\udcc8 Przez poziom ('+lvlMoves.length+')</button><button class="moves-tab" onclick="switchMovesTab(this,\'mv-tm\')">\ud83d\udcbf TM/TR ('+tmMoves.length+')</button>'+(eggMoves.length?'<button class="moves-tab" onclick="switchMovesTab(this,\'mv-egg\')">\ud83e\udd5a Egg Moves ('+eggMoves.length+')</button>':'')+'</div><div class="moves-panel active" id="mv-lvl">'+lvlHTML+'</div><div class="moves-panel" id="mv-tm">'+tmHTML+'</div>'+(eggMoves.length?'<div class="moves-panel" id="mv-egg">'+eggHTML+'</div>':'')+'</div>';
+  }
 
-    const lvlHTML = lvlMoves.length
-      ? `<table class="move-table"><tr><th>Lv</th><th>Atak</th><th>Typ</th><th>PWR</th></tr>
-          ${lvlMoves.map(m => {
-            const md = MOVE_DATA[m.name];
-            return `<tr><td><span class="move-lv">${m.lv||'—'}</span></td>
-              <td class="move-name">${m.name.replace(/-/g,' ')}</td>
-              <td><span class="type-badge type-${md?md[1]:'normal'}" style="font-size:12px;padding:1px 6px">${md?md[1]:'?'}</span></td>
-              <td style="color:#f8d030;font-size:17px">${md?md[0]||'—':'—'}</td>
-            </tr>`;
-          }).join('')}
-        </table>`
-      : '<div style="color:#666">Brak.</div>';
-
-    const tmHTML = tmMoves.length
-      ? `<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px">${tmMoves.map(m => `<span class="move-tm">${m.name.replace(/-/g,' ')}</span>`).join('')}</div>`
-      : '<div style="color:#666">Brak.</div>';
-
-    const eggHTML = eggMoves.length
-      ? `<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px">${eggMoves.map(m => `<span style="background:#1a0a1a;color:#c084fc;border:1px solid #7c3aed;padding:1px 8px;font-size:15px">${m.name.replace(/-/g,' ')}</span>`).join('')}</div>`
-      : '<div style="color:#666">Brak.</div>';
-
-    return `<div class="moves-section">
-      <h2>📜 Pełna lista ataków</h2>
-      <div class="moves-tabs">
-        <button class="moves-tab active" onclick="switchMovesTab(this,'mv-lvl')">📈 Przez poziom (${lvlMoves.length})</button>
-        <button class="moves-tab" onclick="switchMovesTab(this,'mv-tm')">💿 TM/TR (${tmMoves.length})</button>
-        ${eggMoves.length ? `<button class="moves-tab" onclick="switchMovesTab(this,'mv-egg')">🥚 Egg Moves (${eggMoves.length})</button>` : ''}
-      </div>
-      <div class="moves-panel active" id="mv-lvl">${lvlHTML}</div>
-      <div class="moves-panel" id="mv-tm">${tmHTML}</div>
-      ${eggMoves.length ? `<div class="moves-panel" id="mv-egg">${eggHTML}</div>` : ''}
-    </div>`;
+  // ── CALCULATOR SECTION ──
+  function buildCalculatorSection(stats) {
+    var statMap={}; stats.forEach(function(s){statMap[s.stat.name]=s.base_stat;});
+    var ORDER=['hp','attack','defense','special-attack','special-defense','speed'];
+    var ivRows = ORDER.map(function(sn){
+      return '<div class="calc-box"><label>'+(STAT_NAMES[sn]||sn)+' IV (0-31)</label><input class="calc-field" type="number" min="0" max="31" value="31" id="calc-iv-'+sn+'" /></div>';
+    }).join('');
+    var natures = ['Hardy','Lonely','Brave','Adamant','Naughty','Bold','Docile','Relaxed','Impish','Lax','Timid','Hasty','Serious','Jolly','Naive','Modest','Mild','Quiet','Bashful','Rash','Calm','Gentle','Sassy','Careful','Quirky'];
+    var natureOpts = natures.map(function(n){return '<option value="'+n+'">'+n+'</option>';}).join('');
+    var abilities = p.abilities.map(function(a){return a.ability.name;});
+    var abilityOpts = abilities.map(function(a){return '<option value="'+a+'">'+a+(p.abilities.find(function(ab){return ab.ability.name===a;}).is_hidden?' [ukryta]':'')+'</option>';}).join('');
+    return '<div class="calc-section"><h2>\ud83e\uddee Oce\u0144 mojego Pok\u00e9mona</h2>'
+      +'<div style="font-size:16px;color:#888;margin-bottom:10px">Wpisz swoje IV, wybierz Natur\u0119 i Zdolno\u015b\u0107, aby por\u00f3wna\u0107 z optymalnym buildem.</div>'
+      +'<div class="calc-grid">'+ivRows+'</div>'
+      +'<div class="calc-grid"><div class="calc-box"><label>Natura</label><select class="calc-select" id="calc-nature">'+natureOpts+'</select></div>'
+      +'<div class="calc-box"><label>Zdolno\u015b\u0107 (Ability)</label><select class="calc-select" id="calc-ability">'+abilityOpts+'</select></div></div>'
+      +'<div class="calc-grid"><div class="calc-box"><label>Por\u00f3wnaj z buildem:</label><select class="calc-select" id="calc-build-type"><option value="physical">Fizyczny Atakuj\u0105cy</option><option value="special">Specjalny Atakuj\u0105cy</option><option value="defensive">Defensywny</option></select></div>'
+      +'<div class="calc-box" style="display:flex;align-items:flex-end"><button class="mc-btn" onclick="evaluatePokemon()" style="width:100%">\ud83d\udcca Oce\u0144!</button></div></div>'
+      +'<div class="calc-verdict" id="calc-verdict"><span class="verdict-emoji">\u2753</span>Wpisz dane i kliknij "Oce\u0144!"</div></div>';
   }
 
   // Build stats HTML
-  const statsHTML = p.stats.map(st => {
-    const sname = STAT_NAMES[st.stat.name] || st.stat.name;
-    const val = st.base_stat;
-    const pct = Math.min(100, Math.round(val / 255 * 100));
-    const color = STAT_COLORS[st.stat.name] || '#888';
-    return `<div class="stat-row">
-      <span class="stat-name">${sname}</span>
-      <span class="stat-val">${val}</span>
-      <div class="stat-bar-bg"><div class="stat-bar" style="width:${pct}%;background:${color}"></div></div>
-    </div>`;
+  var statsHTML = p.stats.map(function(st){
+    var sname=STAT_NAMES[st.stat.name]||st.stat.name,val=st.base_stat,pct=Math.min(100,Math.round(val/255*100)),color=STAT_COLORS[st.stat.name]||'#888';
+    return '<div class="stat-row"><span class="stat-name">'+sname+'</span><span class="stat-val">'+val+'</span><div class="stat-bar-bg"><div class="stat-bar" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
   }).join('');
 
-  // Types
-  const typesHTML = p.types.map(t =>
-    `<span class="type-badge type-${t.type.name}">${t.type.name}</span>`
-  ).join('');
-
-  // Evo chain
-  const evoHTML = evoChain ? renderEvoChain(evoChain.chain) : '<span style="color:#666">Brak danych ewolucji</span>';
+  var typesHTML = p.types.map(function(t){return '<span class="type-badge type-'+t.type.name+'">'+(TYPE_NAMES_PL[t.type.name]||t.type.name)+'</span>';}).join('');
+  var evoHTML = evoChain ? renderEvoChain(evoChain.chain) : '<span style="color:#666">Brak danych ewolucji</span>';
 
   // Cobblemon section
-  let cobHTML = '';
-
+  var cobHTML = '';
   if (isFriendship) {
-    const detail = FRIENDSHIP_DETAIL[p.name] || 'Wymaga wysokiej przyjaźni.';
-    cobHTML += `<div class="info-row">
-      <span class="info-icon">💛</span>
-      <div class="info-text">
-        <em>Ewolucja przez Przyjaźń</em><br>
-        ${detail}<br>
-        Sprawdź poziom przyjaźni komendą:
-        <div class="cmd-block">/checkfriendship @s</div>
-        <div style="font-size:15px;color:#888;margin-top:4px;">Potrzebujesz ≥ 160 friendship do ewolucji (max 255).</div>
-      </div>
-    </div>`;
+    var detail = FRIENDSHIP_DETAIL[p.name] || 'Wymaga wysokiej przyja\u017ani.';
+    cobHTML += '<div class="info-row"><span class="info-icon">\ud83d\udc9b</span><div class="info-text"><em>Ewolucja przez Przyja\u017a\u0144</em><br>'+detail+'<br>Sprawd\u017a poziom przyja\u017ani komend\u0105:<div class="cmd-block">/checkfriendship @s</div><div style="font-size:15px;color:#888;margin-top:4px;">Potrzebujesz \u2265 160 friendship do ewolucji (max 255).</div></div></div>';
   }
-
   if (isTradeEvo) {
-    const t = LINK_CABLE_EVOS[p.name];
-    cobHTML += `<div class="info-row">
-      <span class="info-icon">🔗</span>
-      <div class="info-text">
-        <em>Ewolucja przez Link Cable</em> → <em>${t.result}</em><br>
-        ${t.item ? `Trzymany przedmiot: <code>${t.item}</code><br>` : 'Brak wymaganego przedmiotu.<br>'}
-        Użyj <code>Link Cable</code> i aktywuj go w ręce, gdy jesteś w pobliżu innego gracza.
-      </div>
-    </div>`;
+    var t = LINK_CABLE_EVOS[p.name];
+    cobHTML += '<div class="info-row"><span class="info-icon">\ud83d\udd17</span><div class="info-text"><em>Ewolucja przez Link Cable</em> \u2192 <em>'+t.result+'</em><br>'+(t.item?'Trzymany przedmiot: <code>'+t.item+'</code><br>':'Brak wymaganego przedmiotu.<br>')+'U\u017cyj <code>Link Cable</code> i aktywuj go w r\u0119ce.</div></div>';
   }
 
-  // Abilities
-  const abilitiesHTML = p.abilities.map(a =>
-    `<span style="color:${a.is_hidden ? '#a855f7' : '#55ffff'}">${a.ability.name}${a.is_hidden ? ' <span style="font-size:13px;color:#a855f7">[ukryta]</span>' : ''}</span>`
-  ).join(', ');
+  var abilitiesHTML = p.abilities.map(function(a){
+    return '<span style="color:'+(a.is_hidden?'#a855f7':'#55ffff')+'">'+a.ability.name+(a.is_hidden?' <span style="font-size:13px;color:#a855f7">[ukryta]</span>':'')+'</span>';
+  }).join(', ');
+  var height=(p.height/10).toFixed(1),weight=(p.weight/10).toFixed(1);
+  function getGen(id){for(var g=1;g<=9;g++){var r=GEN_RANGES[g];if(id>=r[0]&&id<=r[1])return 'Generacja '+['I','II','III','IV','V','VI','VII','VIII','IX'][g-1];}return '?';}
+  if(!cobHTML)cobHTML='<div class="info-row"><span class="info-icon">\u2705</span><div class="info-text">Ten Pok\u00e9mon nie wymaga specjalnych warunk\u00f3w Cobblemon.<br><span style="color:#666;font-size:16px;">Standardowa ewolucja przez poziom lub kamie\u0144.</span></div></div>';
+  var artworkUrl = (p.sprites&&p.sprites.other&&p.sprites.other['official-artwork']?p.sprites.other['official-artwork'].front_default:null) || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png';
+  var isFav = isFavorite(p.id);
 
-  // Height/weight
-  const height = (p.height / 10).toFixed(1);
-  const weight = (p.weight / 10).toFixed(1);
+  document.getElementById('main-area').innerHTML =
+    '<div class="page-title"><span>#'+String(p.id).padStart(3,'0')+' '+p.name.toUpperCase()+' <button class="fav-star'+(isFav?' active':'')+'" id="fav-star-btn" onclick="toggleFavorite('+p.id+',\''+p.name+'\')" title="Dodaj do ulubionych">\u2b50</button></span></div>'
+    +'<div class="detail-grid"><div>'
+    +'<div class="mc-panel pokemon-portrait"><img src="'+artworkUrl+'" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png\'" alt="'+p.name+'" style="width:160px;height:160px"/><div class="pokemon-name-big">'+p.name+'</div><div class="pokemon-number">#'+String(p.id).padStart(3,'0')+' \u00b7 '+getGen(p.id)+'</div><div class="types" style="margin-top:10px">'+typesHTML+'</div><hr class="section-sep" style="margin:10px 0"><div style="font-size:16px;color:#888;font-style:italic;max-width:200px;margin:0 auto;text-align:center">'+flavor+'</div></div>'
+    +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83d\udccb Dane podstawowe</h2><div class="info-entry"><span class="info-label">Wzrost:</span><span class="info-value">'+height+' m</span></div><div class="info-entry"><span class="info-label">Waga:</span><span class="info-value">'+weight+' kg</span></div><div class="info-entry"><span class="info-label">Typy:</span><span class="info-value">'+p.types.map(function(t){return TYPE_NAMES_PL[t.type.name]||t.type.name;}).join(', ')+'</span></div><div class="info-entry"><span class="info-label">Zdolno\u015bci:</span><span class="info-value" style="font-size:16px">'+abilitiesHTML+'</span></div><div class="info-entry"><span class="info-label">Habitat:</span><span class="info-value">'+(s.habitat?s.habitat.name:'\u2014')+'</span></div><div class="info-entry"><span class="info-label">Wsp. \u0142apania:</span><span class="info-value">'+s.capture_rate+'/255</span></div><div class="info-entry"><span class="info-label">Bazowe Do\u015bw.:</span><span class="info-value">'+(p.base_experience||'?')+'</span></div></div></div>'
+    +'<div>'
+    +'<div class="mc-panel"><h2>\ud83d\udcca Statystyki bazowe</h2>'+statsHTML+'<div style="font-size:15px;color:#666;margin-top:6px;">Suma: <span style="color:#fff">'+p.stats.reduce(function(a,s){return a+s.base_stat;},0)+'</span></div></div>'
+    +buildIVSection(p.stats)
+    +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83e\uddec \u0141a\u0144cuch ewolucji</h2><div class="evo-chain" id="evo-chain-container">'+evoHTML+'</div></div></div></div>'
+    +'<div class="cobblemon-section" style="margin-top:16px"><h2><span class="cob-icon">\u2694</span> Polecane dla Cobblemon</h2>'+cobHTML+'</div>'
+    +buildCompetitiveSection(p.stats, p.types.map(function(t){return t.type.name;}), p.moves)
+    +buildMovesSection(p.moves)
+    +buildCalculatorSection(p.stats)
+    +'<div class="ad-container" style="margin-top:16px"><span class="ad-label">REKLAMA</span><span>Miejsce na Twoj\u0105 reklam\u0119 \u2014 skontaktuj si\u0119 z nami!</span></div>'
+    +'<div class="donate-section"><h2>\ud83d\udc9a Wesprzyj rozw\u00f3j projektu</h2><p>Cobblemon Mastery Guide to darmowy projekt. Je\u015bli pomaga Ci w grze, rozwa\u017c wsparcie!</p><button class="donate-btn" onclick="alert(\'Dzi\u0119kujemy za ch\u0119\u0107 wsparcia! Link do donacji wkr\u00f3tce.\')">\u2615 Postaw kawk\u0119</button></div>'
+    +'<div style="height:40px"></div>';
 
-  // gen calc
-  function getGen(id) {
-    for (let g = 1; g <= 9; g++) {
-      const [lo, hi] = GEN_RANGES[g];
-      if (id >= lo && id <= hi) return `Generacja ${['I','II','III','IV','V','VI','VII','VIII','IX'][g-1]}`;
-    }
-    return '?';
-  }
-
-  if (!cobHTML) {
-    cobHTML = `<div class="info-row">
-      <span class="info-icon">✅</span>
-      <div class="info-text">Ten Pokémon nie wymaga specjalnych warunków Cobblemon.<br>
-        <span style="color:#666;font-size:16px;">Standardowa ewolucja przez poziom lub kamień.</span>
-      </div>
-    </div>`;
-  }
-
-  // Official artwork
-  const artworkUrl = p.sprites?.other?.['official-artwork']?.front_default ||
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png`;
-
-  document.getElementById('main-area').innerHTML = `
-    <div class="page-title">
-      <span>#${String(p.id).padStart(3,'0')} ${p.name.toUpperCase()}</span>
-    </div>
-
-    <div class="detail-grid">
-      <!-- LEFT COLUMN -->
-      <div>
-        <div class="mc-panel pokemon-portrait">
-          <img src="${artworkUrl}"
-               onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'"
-               alt="${p.name}" style="width:160px;height:160px"/>
-          <div class="pokemon-name-big">${p.name}</div>
-          <div class="pokemon-number">#${String(p.id).padStart(3,'0')} · ${getGen(p.id)}</div>
-          <div class="types" style="margin-top:10px">${typesHTML}</div>
-          <hr class="section-sep" style="margin:10px 0">
-          <div style="font-size:16px;color:#888;font-style:italic;max-width:200px;margin:0 auto;text-align:center">${flavor}</div>
-        </div>
-
-        <div class="mc-panel" style="margin-top:12px">
-          <h2>📋 Dane podstawowe</h2>
-          <div class="info-entry"><span class="info-label">Wzrost:</span><span class="info-value">${height} m</span></div>
-          <div class="info-entry"><span class="info-label">Waga:</span><span class="info-value">${weight} kg</span></div>
-          <div class="info-entry"><span class="info-label">Typy:</span><span class="info-value">${p.types.map(t=>t.type.name).join(', ')}</span></div>
-          <div class="info-entry"><span class="info-label">Zdolności:</span><span class="info-value" style="font-size:16px">${abilitiesHTML}</span></div>
-          <div class="info-entry"><span class="info-label">Habitat:</span><span class="info-value">${s.habitat?.name || '—'}</span></div>
-          <div class="info-entry"><span class="info-label">Capture Rate:</span><span class="info-value">${s.capture_rate}/255</span></div>
-          <div class="info-entry"><span class="info-label">Base Exp:</span><span class="info-value">${p.base_experience || '?'}</span></div>
-        </div>
-      </div>
-
-      <!-- RIGHT COLUMN -->
-      <div>
-        <div class="mc-panel">
-          <h2>📊 Statystyki bazowe</h2>
-          ${statsHTML}
-          <div style="font-size:15px;color:#666;margin-top:6px;">
-            Suma: <span style="color:#fff">${p.stats.reduce((a,s)=>a+s.base_stat,0)}</span>
-          </div>
-        </div>
-
-        ${buildIVSection(p.stats)}
-
-        <div class="mc-panel" style="margin-top:12px">
-          <h2>🧬 Łańcuch ewolucji</h2>
-          <div class="evo-chain" id="evo-chain-container">${evoHTML}</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- COBBLEMON SECTION -->
-    <div class="cobblemon-section" style="margin-top:16px">
-      <h2><span class="cob-icon">⚔</span> Polecane dla Cobblemon</h2>
-      ${cobHTML}
-    </div>
-
-    <!-- COMPETITIVE BUILD -->
-    ${buildCompetitiveSection(p.stats, p.types.map(t=>t.type.name), p.moves)}
-
-    <!-- FULL MOVELIST -->
-    ${buildMovesSection(p.moves)}
-
-    <div style="height:40px"></div>
-  `;
-
-  // IV bar live update
-  document.querySelectorAll('.iv-input').forEach(inp => updateIVBar(inp));
-
-  // Make evo items clickable
-  document.querySelectorAll('.evo-item[data-evo-name]').forEach(el => {
-    el.addEventListener('click', () => {
-      const n = el.dataset.evoName;
-      const found = allPokemon.find(p => p.name === n);
-      if (found) loadDetail(found.id, found.name);
+  document.querySelectorAll('.iv-input').forEach(function(inp){updateIVBar(inp);});
+  document.querySelectorAll('.evo-item[data-evo-name]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var n=el.dataset.evoName;var found=allPokemon.find(function(p){return p.name===n;});
+      if(found)loadDetail(found.id,found.name);
     });
   });
 }
 
+/* ================================================================
+   EVALUATE POKEMON (Calculator)
+   ================================================================ */
+function evaluatePokemon() {
+  if (!lastBuildData) return;
+  var buildType = document.getElementById('calc-build-type').value;
+  var ORDER = ['hp','attack','defense','special-attack','special-defense','speed'];
+  var ivs = {};
+  ORDER.forEach(function(sn) {
+    var el = document.getElementById('calc-iv-'+sn);
+    ivs[sn] = el ? parseInt(el.value)||0 : 31;
+  });
+  var nature = document.getElementById('calc-nature').value;
+
+  // Define ideal IVs per build type
+  var idealIVs = {};
+  if (buildType === 'physical') {
+    idealIVs = {hp:31, attack:31, defense:20, 'special-attack':0, 'special-defense':20, speed:31};
+  } else if (buildType === 'special') {
+    idealIVs = {hp:31, attack:0, defense:20, 'special-attack':31, 'special-defense':20, speed:31};
+  } else {
+    idealIVs = {hp:31, attack:0, defense:31, 'special-attack':0, 'special-defense':31, speed:20};
+  }
+
+  // Define ideal natures
+  var idealNatures = {
+    physical: ['Adamant','Jolly'],
+    special: ['Modest','Timid'],
+    defensive: ['Bold','Calm','Impish','Careful']
+  };
+
+  // Define key stats per build
+  var keyStats = {
+    physical: ['attack','speed'],
+    special: ['special-attack','speed'],
+    defensive: ['hp','defense','special-defense']
+  };
+
+  // Score calculation
+  var totalScore = 0, maxScore = 0;
+  var keys = keyStats[buildType] || [];
+  ORDER.forEach(function(sn) {
+    var weight = keys.includes(sn) ? 3 : 1;
+    var ideal = idealIVs[sn];
+    var actual = Math.min(31, Math.max(0, ivs[sn]));
+    var diff;
+    if (ideal === 0) {
+      diff = 31 - actual; // lower is better
+    } else {
+      diff = actual; // higher is better, just use the value relative to ideal
+      if (ideal < 31) diff = Math.min(actual, ideal); // cap at ideal
+    }
+    var statScore;
+    if (ideal === 0) {
+      statScore = actual <= 5 ? 1 : actual <= 15 ? 0.6 : 0.2;
+    } else {
+      statScore = actual >= ideal ? 1 : actual / ideal;
+    }
+    totalScore += statScore * weight;
+    maxScore += weight;
+  });
+
+  // Nature bonus
+  var isIdealNature = idealNatures[buildType] && idealNatures[buildType].includes(nature);
+  if (isIdealNature) totalScore += 2;
+  maxScore += 2;
+
+  var pct = totalScore / maxScore;
+  var verdict, emoji, color;
+  if (pct >= 0.9) { verdict = 'Idealny!'; emoji = '\ud83d\udfe2'; color = '#55ff55'; }
+  else if (pct >= 0.7) { verdict = 'Dobry'; emoji = '\ud83d\udfe1'; color = '#f8d030'; }
+  else if (pct >= 0.5) { verdict = '\u015aredni'; emoji = '\ud83d\udfe0'; color = '#f08030'; }
+  else { verdict = 'Szukaj dalej'; emoji = '\ud83d\udd34'; color = '#ff5555'; }
+
+  var natureStatus = isIdealNature ? '<span style="color:#55ff55">\u2705 Idealna natura!</span>' : '<span style="color:#f08030">\u26a0 Nieoptymalna natura (zalecane: '+idealNatures[buildType].join(' / ')+')</span>';
+  var pctStr = Math.round(pct * 100);
+
+  document.getElementById('calc-verdict').innerHTML =
+    '<span class="verdict-emoji">'+emoji+'</span>'
+    +'<div style="font-size:28px;color:'+color+';font-family:\'Press Start 2P\',monospace">'+verdict+'</div>'
+    +'<div style="font-size:18px;color:#aaa;margin-top:8px">Zgodno\u015b\u0107 z buildem: <span style="color:'+color+'">'+pctStr+'%</span></div>'
+    +'<div style="font-size:16px;margin-top:6px">'+natureStatus+'</div>';
+}
+
+/* ================================================================
+   EVO CHAIN
+   ================================================================ */
 function renderEvoChain(chain) {
-  let html = '';
-  function walk(node, first = true) {
-    const name = node.species.name;
-    const id = node.species.url.split('/').filter(Boolean).pop();
-    html += `<div class="evo-item" data-evo-name="${name}">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" alt="${name}"/>
-      <span>${name}</span>
-    </div>`;
+  var html = '';
+  function walk(node) {
+    var name = node.species.name;
+    var id = node.species.url.split('/').filter(Boolean).pop();
+    html += '<div class="evo-item" data-evo-name="'+name+'"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+id+'.png" alt="'+name+'"/><span>'+name+'</span></div>';
     if (node.evolves_to && node.evolves_to.length > 0) {
-      node.evolves_to.forEach(next => {
-        const det = next.evolution_details?.[0];
-        let trigger = '';
+      node.evolves_to.forEach(function(next) {
+        var det = next.evolution_details && next.evolution_details[0];
+        var trigger = '';
         if (det) {
-          if (det.min_level)        trigger = `Lv.${det.min_level}`;
-          else if (det.item)        trigger = det.item.name;
-          else if (det.trigger?.name === 'trade') trigger = 'trade';
-          else if (det.trigger?.name === 'use-item') trigger = det.item?.name || 'item';
-          else if (det.min_happiness) trigger = `♥ przyjaźń`;
+          if (det.min_level) trigger = 'Poz.'+det.min_level;
+          else if (det.item) trigger = det.item.name;
+          else if (det.trigger && det.trigger.name === 'trade') trigger = 'wymiana';
+          else if (det.trigger && det.trigger.name === 'use-item') trigger = (det.item?det.item.name:'przedmiot');
+          else if (det.min_happiness) trigger = '\u2665 przyja\u017a\u0144';
         }
-        html += `<div style="display:flex;flex-direction:column;align-items:center">
-          <span class="evo-arrow">→</span>
-          <span class="evo-trigger">${trigger}</span>
-        </div>`;
-        walk(next, false);
+        html += '<div style="display:flex;flex-direction:column;align-items:center"><span class="evo-arrow">\u2192</span><span class="evo-trigger">'+trigger+'</span></div>';
+        walk(next);
       });
     }
   }
@@ -1863,211 +1467,165 @@ function renderEvoChain(chain) {
   return html;
 }
 
-/* ════════════════════════════════════════
+/* ================================================================
    PAGES
-   ════════════════════════════════════════ */
+   ================================================================ */
 function showPage(page) {
   currentPage = page;
-  const main = document.getElementById('main-area');
+  var main = document.getElementById('main-area');
 
   if (page === 'welcome') {
-    main.innerHTML = `
-      <div class="page-title"><span>🏠 Cobblemon Mastery Guide</span></div>
-      <div class="welcome-grid">
-        <div class="welcome-card">
-          <h3>⚔ Czym jest Cobblemon?</h3>
-          <p>Cobblemon to mod do Minecrafta integrujący creatury inspirowane Pokémonami. Łap, trenuj i ewoluuj swoje stworzenia w świecie Minecrafta!</p>
-        </div>
-        <div class="welcome-card">
-          <h3>🔍 Jak używać bazy?</h3>
-          <ul>
-            <li>Wyszukaj Pokémona w pasku po lewej</li>
-            <li>Filtruj według generacji (I–IX)</li>
-            <li>Ikona ♥ = ewolucja przez przyjaźń</li>
-            <li>Ikona ⇄ = ewolucja przez wymianę</li>
-          </ul>
-        </div>
-        <div class="welcome-card">
-          <h3>💛 Przyjaźń (/checkfriendship)</h3>
-          <p>W Cobblemonie ewolucje przez przyjaźń sprawdzasz komendą:</p>
-          <div class="cmd-block">/checkfriendship @s</div>
-          <p style="margin-top:8px;font-size:16px;color:#888">Potrzebujesz min. 160/255.</p>
-        </div>
-        <div class="welcome-card">
-          <h3>🔗 Link Cable (Wymiana)</h3>
-          <p>Zastępuje wymianę Pokémonów z oryginalnych gier. Aktywuj w ręce, będąc blisko innego gracza.</p>
-          <p style="margin-top:6px;font-size:16px;color:#888">Crafting: 4× Iron Ingot + 1× Copper Ingot + 4× String</p>
-        </div>
-        <div class="welcome-card">
-          <h3>🍎 Apricorny</h3>
-          <p>Zbieraj Apricorny z drzew i craftuj unikalne Pokeballsy z różnymi efektami!</p>
-          <p style="margin-top:6px"><button class="mc-btn" onclick="showPage('apricorns')">→ Przeglądaj Apricorny</button></p>
-        </div>
-        <div class="welcome-card">
-          <h3>📦 Kluczowe Przedmioty</h3>
-          <p>Link Cable, kamienie ewolucji, held items — wszystkie ważne przedmioty zebraliśmy w jednym miejscu.</p>
-          <p style="margin-top:6px"><button class="mc-btn" onclick="showPage('items')">→ Przeglądaj przedmioty</button></p>
-        </div>
-      </div>`;
+    main.innerHTML =
+      '<div class="page-title"><span>\ud83c\udfe0 Cobblemon Mastery Guide</span></div>'
+      + renderFavoritesSection()
+      + '<div class="welcome-grid">'
+      + '<div class="welcome-card"><h3>\u2694 Czym jest Cobblemon?</h3><p>Cobblemon to mod do Minecrafta integruj\u0105cy creatury inspirowane Pok\u00e9monami. \u0141ap, trenuj i ewoluuj swoje stworzenia w \u015bwiecie Minecrafta!</p></div>'
+      + '<div class="welcome-card"><h3>\ud83d\udd0d Jak u\u017cywa\u0107 bazy?</h3><ul><li>Wyszukaj Pok\u00e9mona w pasku po lewej</li><li>Filtruj wed\u0142ug generacji (I\u2013IX)</li><li>Ikona \u2665 = ewolucja przez przyja\u017a\u0144</li><li>Ikona \u21c4 = ewolucja przez wymian\u0119</li><li>\u2b50 = dodaj do ulubionych</li></ul></div>'
+      + '<div class="welcome-card"><h3>\ud83d\udc9b Przyja\u017a\u0144 (/checkfriendship)</h3><p>W Cobblemonie ewolucje przez przyja\u017a\u0144 sprawdzasz komend\u0105:</p><div class="cmd-block">/checkfriendship @s</div><p style="margin-top:8px;font-size:16px;color:#888">Potrzebujesz min. 160/255.</p></div>'
+      + '<div class="welcome-card"><h3>\ud83d\udd17 Link Cable (Wymiana)</h3><p>Zast\u0119puje wymian\u0119 Pok\u00e9mon\u00f3w z oryginalnych gier. Aktywuj w r\u0119ce, b\u0119d\u0105c blisko innego gracza.</p><p style="margin-top:6px;font-size:16px;color:#888">Crafting: 4\u00d7 Iron Ingot + 1\u00d7 Copper Ingot + 4\u00d7 String</p></div>'
+      + '<div class="welcome-card"><h3>\ud83c\udf4e Apricorny</h3><p>Zbieraj Apricorny z drzew i craftuj unikalne Pokeballsy z r\u00f3\u017cnymi efektami!</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'apricorns\')">\u2192 Przegl\u0105daj Apricorny</button></p></div>'
+      + '<div class="welcome-card"><h3>\ud83d\udce6 Kluczowe Przedmioty</h3><p>Link Cable, kamienie ewolucji, held items \u2014 wszystkie wa\u017cne przedmioty zebra\u0142i\u015bmy w jednym miejscu.</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'items\')">\u2192 Przegl\u0105daj przedmioty</button></p></div>'
+      + '</div>'
+      + '<div class="donate-section" style="margin-top:24px"><h2>\ud83d\udc9a Wesprzyj rozw\u00f3j projektu</h2><p>Cobblemon Mastery Guide to darmowy projekt spo\u0142eczno\u015bciowy. Je\u015bli pomaga Ci w grze, rozwa\u017c wsparcie!</p><button class="donate-btn" onclick="alert(\'Dzi\u0119kujemy za ch\u0119\u0107 wsparcia! Link do donacji wkr\u00f3tce.\')">\u2615 Postaw kawk\u0119</button></div>';
   }
 
   if (page === 'detail-loading') {
-    main.innerHTML = `<div class="empty-state"><span class="big-icon">⚙</span>Ładowanie danych Pokémona...</div>`;
+    main.innerHTML = '<div class="empty-state"><span class="big-icon">\u2699</span>\u0141adowanie danych Pok\u00e9mona...</div>';
   }
 
   if (page === 'items') {
-    main.innerHTML = `
-      <div class="page-title"><span>📦 Kluczowe Przedmioty Cobblemon</span></div>
-      <div class="items-grid">
-        ${renderItems()}
-      </div>`;
+    main.innerHTML =
+      '<div class="page-title"><span>\ud83d\udce6 Kluczowe Przedmioty Cobblemon</span></div>'
+      + '<div class="items-grid">' + renderItems() + '</div>';
   }
 
   if (page === 'apricorns') {
-    main.innerHTML = `
-      <div class="page-title"><span>🍎 Apricorny i Pokéballe</span></div>
-      <div class="mc-panel" style="margin-bottom:16px">
-        <h2>ℹ️ JAK ZBIERAĆ APRICORNY?</h2>
-        <p style="font-size:18px;color:#aaa;line-height:1.6">
-          Drzewa Apricornów rosną naturalnie w różnych biomach. Zbieraj owoce i craftuj Pokéballe w stole krawieckimi lub specjalnym Cobblemon Crafting Bench.
-          Każdy kolor Apricornu daje inny typ Pokéballa z unikalnym efektem połowu.
-        </p>
-      </div>
-      <div class="apricorn-grid">
-        ${renderApricorns()}
-      </div>`;
+    main.innerHTML =
+      '<div class="page-title"><span>\ud83c\udf4e Apricorny i Pok\u00e9balle</span></div>'
+      + '<div class="mc-panel" style="margin-bottom:16px"><h2>\u2139\ufe0f JAK ZBIERA\u0106 APRICORNY?</h2><p style="font-size:18px;color:#aaa;line-height:1.6">Drzewa Apricorn\u00f3w rosn\u0105 naturalnie w r\u00f3\u017cnych biomach. Zbieraj owoce i craftuj Pok\u00e9balle w specjalnym Cobblemon Crafting Bench. Ka\u017cdy kolor Apricornu daje inny typ Pok\u00e9balla z unikalnym efektem po\u0142owu.</p></div>'
+      + '<div class="apricorn-grid">' + renderApricorns() + '</div>';
   }
 }
 
-const ITEMS_DATA = [
-  { icon:'🔗', name:'Link Cable',        desc:'Zastępuje wymianę Pokémonów. Aktywuj w ręce blisko gracza. Crafting: 4× Iron Ingot + Copper Ingot + 4× String', tag:'Ewolucja' },
-  { icon:'🔆', name:'Thunder Stone',     desc:'Ewoluuje: Pikachu→Raichu, Eevee→Jolteon, Magneton→Magnezone, Nosepass→Probopass', tag:'Kamień' },
-  { icon:'🔥', name:'Fire Stone',        desc:'Ewoluuje: Vulpix→Ninetales, Growlithe→Arcanine, Eevee→Flareon, Pansear→Simisear', tag:'Kamień' },
-  { icon:'🌊', name:'Water Stone',       desc:'Ewoluuje: Poliwhirl→Poliwrath, Shellder→Cloyster, Staryu→Starmie, Eevee→Vaporeon', tag:'Kamień' },
-  { icon:'🍃', name:'Leaf Stone',        desc:'Ewoluuje: Exeggcute→Exeggutor, Weepinbell→Victreebel, Gloom→Vileplume, Pansage→Simisage', tag:'Kamień' },
-  { icon:'🌙', name:'Moon Stone',        desc:'Ewoluuje: Nidorina→Nidoqueen, Nidorino→Nidoking, Clefairy→Clefable, Jigglypuff→Wigglytuff', tag:'Kamień' },
-  { icon:'☀️', name:'Sun Stone',         desc:'Ewoluuje: Gloom→Bellossom, Sunkern→Sunflora, Cottonee→Whimsicott, Petilil→Lilligant', tag:'Kamień' },
-  { icon:'🌑', name:'Dusk Stone',        desc:'Ewoluuje: Murkrow→Honchkrow, Misdreavus→Mismagius, Lampent→Chandelure, Doublade→Aegislash', tag:'Kamień' },
-  { icon:'✨', name:'Shiny Stone',       desc:'Ewoluuje: Togetic→Togekiss, Roselia→Roserade, Minccino→Cinccino, Floette→Florges', tag:'Kamień' },
-  { icon:'🧊', name:'Ice Stone',         desc:'Ewoluuje: Alolan Sandshrew→Sandslash, Alolan Vulpix→Ninetales, Eevee→Glaceon', tag:'Kamień' },
-  { icon:'🪨', name:'Metal Coat',        desc:'Trzymany przez Onix→Steelix lub Scyther→Scizor podczas wymiany przez Link Cable', tag:'Held Item' },
-  { icon:'🐉', name:'Dragon Scale',      desc:'Trzymany przez Seadra→Kingdra podczas wymiany przez Link Cable', tag:'Held Item' },
-  { icon:'👑', name:"King's Rock",       desc:'Trzymany przez Slowpoke→Slowking lub Poliwhirl→Politoed podczas wymiany', tag:'Held Item' },
-  { icon:'💾', name:'Up-Grade',          desc:'Trzymany przez Porygon→Porygon2 podczas wymiany przez Link Cable', tag:'Held Item' },
-  { icon:'💿', name:'Dubious Disc',      desc:'Trzymany przez Porygon2→Porygon-Z podczas wymiany przez Link Cable', tag:'Held Item' },
-  { icon:'🦷', name:'Deep Sea Tooth',    desc:'Trzymany przez Clamperl→Huntail podczas wymiany. Też zwiększa Sp.Atk Clamperla.', tag:'Held Item' },
-  { icon:'🪩', name:'Deep Sea Scale',    desc:'Trzymany przez Clamperl→Gorebyss podczas wymiany. Też zwiększa Sp.Def Clamperla.', tag:'Held Item' },
-  { icon:'🌸', name:'Sachet',            desc:'Trzymany przez Spritzee→Aromatisse podczas wymiany przez Link Cable', tag:'Held Item' },
-  { icon:'🍬', name:'Whipped Dream',     desc:'Trzymany przez Swirlix→Slurpuff podczas wymiany przez Link Cable', tag:'Held Item' },
-  { icon:'⚖️', name:'Prism Scale',       desc:'Trzymany przez Feebas→Milotic podczas wymiany przez Link Cable', tag:'Held Item' },
-  { icon:'🏥', name:'Potion / Max Potion',desc:'Leczy HP pokémona. Crafting z Melon + Sugar lub Glowstone Dust (variuje wg wersji)', tag:'Leczenie' },
-  { icon:'💊', name:'Revive',            desc:'Przywraca omdlałego pokémona do 50% HP. Bazowy crafting - do sprawdzenia w wiki', tag:'Leczenie' },
-  { icon:'🎀', name:'Soothe Bell',       desc:'Przyspieszacze zdobywanie Friendship. Trzymany przez pokémona.', tag:'Friendship' },
-  { icon:'🍏', name:'Friendship Ribbon', desc:'Pokazuje poziom przyjaźni. Użyj /checkfriendship @s w Cobblemonie.', tag:'Friendship' },
+/* ================================================================
+   ITEMS DATA & RENDER
+   ================================================================ */
+var ITEMS_DATA = [
+  { icon:'\ud83d\udd17', name:'Link Cable',        slug:'linking-cord',   desc:'Zast\u0119puje wymian\u0119 Pok\u00e9mon\u00f3w. Aktywuj w r\u0119ce blisko gracza.', tag:'Ewolucja' },
+  { icon:'\ud83d\udd06', name:'Thunder Stone',     slug:'thunder-stone',  desc:'Ewoluuje: Pikachu\u2192Raichu, Eevee\u2192Jolteon, Magneton\u2192Magnezone', tag:'Kamie\u0144' },
+  { icon:'\ud83d\udd25', name:'Fire Stone',        slug:'fire-stone',     desc:'Ewoluuje: Vulpix\u2192Ninetales, Growlithe\u2192Arcanine, Eevee\u2192Flareon', tag:'Kamie\u0144' },
+  { icon:'\ud83c\udf0a', name:'Water Stone',       slug:'water-stone',    desc:'Ewoluuje: Poliwhirl\u2192Poliwrath, Shellder\u2192Cloyster, Eevee\u2192Vaporeon', tag:'Kamie\u0144' },
+  { icon:'\ud83c\udf43', name:'Leaf Stone',        slug:'leaf-stone',     desc:'Ewoluuje: Exeggcute\u2192Exeggutor, Weepinbell\u2192Victreebel, Gloom\u2192Vileplume', tag:'Kamie\u0144' },
+  { icon:'\ud83c\udf19', name:'Moon Stone',        slug:'moon-stone',     desc:'Ewoluuje: Nidorina\u2192Nidoqueen, Nidorino\u2192Nidoking, Clefairy\u2192Clefable', tag:'Kamie\u0144' },
+  { icon:'\u2600\ufe0f', name:'Sun Stone',         slug:'sun-stone',      desc:'Ewoluuje: Gloom\u2192Bellossom, Sunkern\u2192Sunflora, Cottonee\u2192Whimsicott', tag:'Kamie\u0144' },
+  { icon:'\ud83c\udf11', name:'Dusk Stone',        slug:'dusk-stone',     desc:'Ewoluuje: Murkrow\u2192Honchkrow, Misdreavus\u2192Mismagius, Lampent\u2192Chandelure', tag:'Kamie\u0144' },
+  { icon:'\u2728', name:'Shiny Stone',       slug:'shiny-stone',    desc:'Ewoluuje: Togetic\u2192Togekiss, Roselia\u2192Roserade, Minccino\u2192Cinccino', tag:'Kamie\u0144' },
+  { icon:'\ud83e\uddf2', name:'Ice Stone',         slug:'ice-stone',      desc:'Ewoluuje: Alolan Sandshrew\u2192Sandslash, Alolan Vulpix\u2192Ninetales', tag:'Kamie\u0144' },
+  { icon:'\ud83e\udea8', name:'Metal Coat',        slug:'metal-coat',     desc:'Trzymany przez Onix\u2192Steelix lub Scyther\u2192Scizor (Link Cable)', tag:'Held Item' },
+  { icon:'\ud83d\udc09', name:'Dragon Scale',      slug:'dragon-scale',   desc:'Trzymany przez Seadra\u2192Kingdra (Link Cable)', tag:'Held Item' },
+  { icon:'\ud83d\udc51', name:"King's Rock",       slug:'kings-rock',     desc:'Slowpoke\u2192Slowking lub Poliwhirl\u2192Politoed (Link Cable)', tag:'Held Item' },
+  { icon:'\ud83d\udcbe', name:'Up-Grade',          slug:'up-grade',       desc:'Porygon\u2192Porygon2 (Link Cable)', tag:'Held Item' },
+  { icon:'\ud83d\udcbf', name:'Dubious Disc',      slug:'dubious-disc',   desc:'Porygon2\u2192Porygon-Z (Link Cable)', tag:'Held Item' },
+  { icon:'\ud83e\uddb7', name:'Deep Sea Tooth',    slug:'deep-sea-tooth', desc:'Clamperl\u2192Huntail (Link Cable)', tag:'Held Item' },
+  { icon:'\ud83e\ude29', name:'Deep Sea Scale',    slug:'deep-sea-scale', desc:'Clamperl\u2192Gorebyss (Link Cable)', tag:'Held Item' },
+  { icon:'\ud83c\udf38', name:'Sachet',            slug:'sachet',         desc:'Spritzee\u2192Aromatisse (Link Cable)', tag:'Held Item' },
+  { icon:'\ud83c\udf6c', name:'Whipped Dream',     slug:'whipped-dream',  desc:'Swirlix\u2192Slurpuff (Link Cable)', tag:'Held Item' },
+  { icon:'\u2696\ufe0f', name:'Prism Scale',       slug:'prism-scale',    desc:'Feebas\u2192Milotic (Link Cable)', tag:'Held Item' },
+  { icon:'\ud83c\udfe5', name:'Potion / Max Potion',slug:'potion',        desc:'Leczy P\u017b pok\u00e9mona. Crafting z Melon + Sugar', tag:'Leczenie' },
+  { icon:'\ud83d\udc8a', name:'Revive',            slug:'revive',         desc:'Przywraca omdla\u0142ego pok\u00e9mona do 50% P\u017b', tag:'Leczenie' },
+  { icon:'\ud83c\udf80', name:'Soothe Bell',       slug:'soothe-bell',    desc:'Przyspiesza zdobywanie Friendship. Trzymany przez pok\u00e9mona.', tag:'Przyja\u017a\u0144' },
+  { icon:'\ud83c\udf4f', name:'Friendship Ribbon', slug:'soothe-bell',    desc:'Pokazuje poziom przyja\u017ani. U\u017cyj /checkfriendship @s', tag:'Przyja\u017a\u0144' },
 ];
 
 function renderItems() {
-  return ITEMS_DATA.map(item => `
-    <div class="item-card">
-      <span class="item-icon">${item.icon}</span>
-      <div>
-        <div class="item-name">${item.name}</div>
-        <div class="item-desc">${item.desc}</div>
-        <span class="item-tag">${item.tag}</span>
-      </div>
-    </div>
-  `).join('');
+  return ITEMS_DATA.map(function(item) {
+    var imgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+item.slug+'.png" onerror="this.style.display=\'none\'" />';
+    return '<div class="item-card"><span class="item-icon">'+item.icon+'</span><div><div class="item-name">'+imgTag+' '+item.name+'</div><div class="item-desc">'+item.desc+'</div><span class="item-tag">'+item.tag+'</span></div></div>';
+  }).join('');
 }
 
-const APRICORNS_DATA = [
-  { icon:'⬛', color:'Czarny', ball:'Heavy Ball',  effect:'Łatwiej łapać ciężkie Pokémony (≥ 451.5 kg)' },
-  { icon:'🔵', color:'Niebieski', ball:'Lure Ball', effect:'3× skuteczność przy łapaniu w wodzie lub wędkarsko' },
-  { icon:'🟢', color:'Zielony', ball:'Friend Ball', effect:'Złowiony Pokémon startuje z 200 Friendship' },
-  { icon:'🩷', color:'Różowy', ball:'Love Ball',   effect:'8× skuteczność na Pokémony tej samej sp., odmiennej płci' },
-  { icon:'🔴', color:'Czerwony', ball:'Level Ball', effect:'Wyższy mnożnik gdy Twój Pokémon ma wyższy level' },
-  { icon:'⬜', color:'Biały', ball:'Fast Ball',    effect:'4× skuteczność na Pokémony, które uciekają' },
-  { icon:'🟡', color:'Żółty', ball:'Moon Ball',   effect:'4× skuteczność na Pokémony ewoluujące Moon Stonem' },
+/* ================================================================
+   APRICORNS DATA & RENDER
+   ================================================================ */
+var APRICORNS_DATA = [
+  { icon:'\u2b1b', color:'Czarny', ball:'Heavy Ball', ballSlug:'heavy-ball', effect:'\u0141atwiej \u0142apa\u0107 ci\u0119\u017ckie Pok\u00e9mony (\u2265 451.5 kg)' },
+  { icon:'\ud83d\udfe6', color:'Niebieski', ball:'Lure Ball', ballSlug:'lure-ball', effect:'3\u00d7 skuteczno\u015b\u0107 przy \u0142apaniu w wodzie' },
+  { icon:'\ud83d\udfe2', color:'Zielony', ball:'Friend Ball', ballSlug:'friend-ball', effect:'Z\u0142owiony Pok\u00e9mon startuje z 200 Friendship' },
+  { icon:'\ud83e\ude77', color:'R\u00f3\u017cowy', ball:'Love Ball', ballSlug:'love-ball', effect:'8\u00d7 skuteczno\u015b\u0107 na t\u0119 sam\u0105 sp., odmient\u0105 p\u0142e\u0107' },
+  { icon:'\ud83d\udd34', color:'Czerwony', ball:'Level Ball', ballSlug:'level-ball', effect:'Wy\u017cszy mno\u017cnik gdy Tw\u00f3j Pok\u00e9mon ma wy\u017cszy level' },
+  { icon:'\u2b1c', color:'Bia\u0142y', ball:'Fast Ball', ballSlug:'fast-ball', effect:'4\u00d7 skuteczno\u015b\u0107 na Pok\u00e9mony, kt\u00f3re uciekaj\u0105' },
+  { icon:'\ud83d\udfe1', color:'\u017b\u00f3\u0142ty', ball:'Moon Ball', ballSlug:'moon-ball', effect:'4\u00d7 skuteczno\u015b\u0107 na ewoluuj\u0105ce Moon Stonem' },
 ];
 
 function renderApricorns() {
-  return APRICORNS_DATA.map(a => `
-    <div class="apricorn-card">
-      <div class="apricorn-icon">${a.icon}</div>
-      <div class="apricorn-name">${a.color} Apricorn</div>
-      <div class="apricorn-arrow">▼</div>
-      <div class="apricorn-ball">${a.ball}</div>
-      <div class="apricorn-effect">${a.effect}</div>
-    </div>
-  `).join('');
+  return APRICORNS_DATA.map(function(a) {
+    var ballImg = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+a.ballSlug+'.png" onerror="this.style.display=\'none\'" style="vertical-align:middle" />';
+    return '<div class="apricorn-card"><div class="apricorn-icon">'+a.icon+'</div><div class="apricorn-name">'+a.color+' Apricorn</div><div class="apricorn-arrow">\u25bc</div><div class="apricorn-ball">'+ballImg+' '+a.ball+'</div><div class="apricorn-effect">'+a.effect+'</div></div>';
+  }).join('');
 }
 
-/* ════════════════════════════════════════
-   STATUS BAR
-   ════════════════════════════════════════ */
+/* ================================================================
+   UTILITIES
+   ================================================================ */
 function setStatus(text, loading) {
   document.getElementById('status-text').textContent = text;
   document.getElementById('spinner').classList.toggle('active', loading);
 }
 
-/* ════════════════════════════════════════
-   EVENT LISTENERS
-   ════════════════════════════════════════ */
-document.getElementById('search-input').addEventListener('input', e => {
-  searchQuery = e.target.value;
-  applyFilters();
-});
+function switchMovesTab(btn, panelId) {
+  var section = btn.closest('.moves-section');
+  section.querySelectorAll('.moves-tab').forEach(function(b){b.classList.remove('active');});
+  section.querySelectorAll('.moves-panel').forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active');
+  var panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
+}
 
-document.getElementById('gen-filters').addEventListener('click', e => {
-  const btn = e.target.closest('.gen-filter-btn');
+function switchBuildTab(btn, panelId) {
+  var section = btn.closest('.comp-section');
+  section.querySelectorAll('.build-tab').forEach(function(b){b.classList.remove('active');});
+  section.querySelectorAll('.build-panel').forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active');
+  var panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
+}
+
+function updateIVBar(input) {
+  var val = parseInt(input.value);
+  if (isNaN(val)) val = 0;
+  if (val < 0) val = 0; if (val > 31) val = 31;
+  input.value = val;
+  var sn = input.dataset.stat;
+  var pct = Math.round(val / 31 * 100);
+  var bar = document.getElementById('ivbar-' + sn);
+  var lbl = document.getElementById('ivlabel-' + sn);
+  if (!bar || !lbl) return;
+  var color = val>=28?'#55ff55':val>=20?'#f8d030':val>=10?'#f08030':'#ff5555';
+  bar.style.width = pct + '%'; bar.style.background = color;
+  if(val>=28) lbl.innerHTML='<span style="color:#55ff55">Doskona\u0142e</span>';
+  else if(val>=20) lbl.innerHTML='<span style="color:#f8d030">Dobre</span>';
+  else if(val>=10) lbl.innerHTML='<span style="color:#f08030">S\u0142abe</span>';
+  else lbl.innerHTML='<span style="color:#ff5555">Z\u0142e</span>';
+}
+
+/* ================================================================
+   EVENT LISTENERS
+   ================================================================ */
+document.getElementById('search-input').addEventListener('input', function(e) {
+  searchQuery = e.target.value; applyFilters();
+});
+document.getElementById('gen-filters').addEventListener('click', function(e) {
+  var btn = e.target.closest('.gen-filter-btn');
   if (!btn) return;
-  document.querySelectorAll('.gen-filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.gen-filter-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   selectedGen = parseInt(btn.dataset.gen);
   applyFilters();
 });
 
-/* ════════════════════════════════════════
-   MOVES TABS (global)
-   ════════════════════════════════════════ */
-function switchMovesTab(btn, panelId) {
-  const section = btn.closest('.moves-section');
-  section.querySelectorAll('.moves-tab').forEach(b => b.classList.remove('active'));
-  section.querySelectorAll('.moves-panel').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  const panel = document.getElementById(panelId);
-  if (panel) panel.classList.add('active');
-}
-
-/* ════════════════════════════════════════
-   IV BAR UPDATE (global)
-   ════════════════════════════════════════ */
-function updateIVBar(input) {
-  let val = parseInt(input.value);
-  if (isNaN(val)) val = 0;
-  if (val < 0)  val = 0;
-  if (val > 31) val = 31;
-  input.value = val;
-  const sn = input.dataset.stat;
-  const pct = Math.round(val / 31 * 100);
-  const bar = document.getElementById('ivbar-' + sn);
-  const lbl = document.getElementById('ivlabel-' + sn);
-  if (!bar || !lbl) return;
-  let color;
-  if (val >= 28) color = '#55ff55';
-  else if (val >= 20) color = '#f8d030';
-  else if (val >= 10) color = '#f08030';
-  else color = '#ff5555';
-  bar.style.width = pct + '%';
-  bar.style.background = color;
-  if (val >= 28) lbl.innerHTML = '<span style="color:#55ff55">Doskonałe</span>';
-  else if (val >= 20) lbl.innerHTML = '<span style="color:#f8d030">Dobre</span>';
-  else if (val >= 10) lbl.innerHTML = '<span style="color:#f08030">Słabe</span>';
-  else lbl.innerHTML = '<span style="color:#ff5555">Złe</span>';
-}
-
-/* ════════════════════════════════════════
+/* ================================================================
    START
-   ════════════════════════════════════════ */
+   ================================================================ */
 init();
 </script>
 </body>
