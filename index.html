@@ -1048,6 +1048,29 @@ const STAT_NAMES = {
   hp:'HP', attack:'ATK', defense:'DEF',
   'special-attack':'SpATK','special-defense':'SpDEF', speed:'SPE'
 };
+var NATURE_NAMES_PL = {
+  'Hardy':'Twarda','Lonely':'Samotna','Brave':'Odważna','Adamant':'Zdecydowana','Naughty':'Psotna',
+  'Bold':'Zuchwała','Docile':'Uległa','Relaxed':'Spokojna','Impish':'Przekorna','Lax':'Lekkomyślna',
+  'Timid':'Nieśmiała','Hasty':'Pospiesszna','Serious':'Poważna','Jolly':'Wesoła','Naive':'Naiwna',
+  'Modest':'Skromna','Mild':'Łagodna','Quiet':'Cicha','Bashful':'Wstydliwa','Rash':'Porywcza',
+  'Calm':'Spokojna','Gentle':'Delikatna','Sassy':'Zuchwała','Careful':'Ostrożna','Quirky':'Dziwaczna'
+};
+function natureName(enName) {
+  if (currentLang === 'pl' && NATURE_NAMES_PL[enName]) return NATURE_NAMES_PL[enName];
+  return enName;
+}
+var ITEM_NAMES_PL = {
+  'Choice Band':'Wstęga Wyboru','Choice Specs':'Okulary Wyboru','Choice Scarf':'Szalik Wyboru',
+  'Life Orb':'Sfera Życia','Leftovers':'Resztki','Focus Sash':'Szarfa Skupienia',
+  'Assault Vest':'Kamizelka Szturmowa','Rocky Helmet':'Skalny Hełm','Eviolite':'Eviolit',
+  'Ability Shield':'Tarcza Umiejętności','Sitrus Berry':'Jagoda Sitrus','Lum Berry':'Jagoda Lum',
+  'Metal Coat':'Metalowa Powłoka','Dragon Scale':'Smocza Łuska',"King's Rock":'Skała Króla',
+  'Soothe Bell':'Dzwonek Łagodności'
+};
+function itemName(enName) {
+  if (currentLang === 'pl' && ITEM_NAMES_PL[enName]) return ITEM_NAMES_PL[enName];
+  return enName;
+}
 const TYPE_NAMES_PL = {
   normal:'Normalny',fire:'Ogie\u0144',water:'Woda',electric:'Elektryczny',grass:'Trawa',
   ice:'L\u00f3d',fighting:'Walka',poison:'Truc.',ground:'Ziemia',flying:'Lataj\u0105cy',
@@ -1804,12 +1827,13 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     }).join('');
 
     var evHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udcca '+t('build.ev')+' <span style="font-size:10px;color:#888;font-family:VT323,monospace">(max 510)</span></div>'+evRows+'<div class="ev-total">'+t('gen.sum')+': '+total+'/510</div><div style="font-size:14px;color:#666;margin-top:5px">'+note+'</div></div>';
-    var natureHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udc8e '+t('build.nature')+'</div><div class="nature-badge">'+nName+'</div><div class="nature-detail"><span class="nature-up">\u25b2 '+nUp+'</span> | <span class="nature-down">\u25bc '+nDown+'</span></div><div style="font-size:14px;color:#666;margin-top:6px">'+nWhy+'</div></div>';
+    var natureHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udc8e '+t('build.nature')+'</div><div class="nature-badge">'+natureName(nName)+'</div><div style="font-size:12px;color:#555;margin-bottom:4px">('+nName+')</div><div class="nature-detail"><span class="nature-up">\u25b2 '+nUp+'</span> | <span class="nature-down">\u25bc '+nDown+'</span></div><div style="font-size:14px;color:#666;margin-top:6px">'+nWhy+'</div></div>';
 
     // Item with PokeAPI icon only (no emoji)
     var itemSlug = item.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
     var itemImgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+itemSlug+'.png" onerror="this.parentNode.innerHTML=\'<span style=color:#555;font-size:28px>\u25a1</span>\'" style="width:32px;height:32px" />';
-    var itemHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udce6 '+t('build.item')+'</div><div style="text-align:center;margin:4px 0">'+itemImgTag+'</div><div class="item-big-name">'+item+'</div><div class="item-big-desc">'+itemDesc+'</div></div>';
+    var itemDisplayName = itemName(item);
+    var itemHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udce6 '+t('build.item')+'</div><div style="text-align:center;margin:4px 0">'+itemImgTag+'</div><div class="item-big-name">'+itemDisplayName+'</div>'+(itemDisplayName!==item?'<div style="font-size:12px;color:#555;margin-bottom:4px">('+item+')</div>':'')+'<div class="item-big-desc">'+itemDesc+'</div></div>';
 
     // Ability box
     var picked = pickAbility(pokemonAbilities, abilityDetails, buildType);
@@ -1923,21 +1947,32 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   }
 
   // ── CALCULATOR SECTION ──
-  function buildCalculatorSection(stats) {
+  function buildCalculatorSection(stats, abilityDetailsArr) {
     var statMap={}; stats.forEach(function(s){statMap[s.stat.name]=s.base_stat;});
     var ORDER=['hp','attack','defense','special-attack','special-defense','speed'];
     var ivRows = ORDER.map(function(sn){
       return '<div class="calc-box"><label>'+(STAT_NAMES[sn]||sn)+' IV (0-31)</label><input class="calc-field" type="number" min="0" max="31" value="31" id="calc-iv-'+sn+'" /></div>';
     }).join('');
     var natures = ['Hardy','Lonely','Brave','Adamant','Naughty','Bold','Docile','Relaxed','Impish','Lax','Timid','Hasty','Serious','Jolly','Naive','Modest','Mild','Quiet','Bashful','Rash','Calm','Gentle','Sassy','Careful','Quirky'];
-    var natureOpts = natures.map(function(n){return '<option value="'+n+'">'+n+'</option>';}).join('');
+    var natureOpts = natures.map(function(n){return '<option value="'+n+'">'+natureName(n)+(natureName(n)!==n?' ('+n+')':'')+'</option>';}).join('');
     var abilities = p.abilities.map(function(a){return a.ability.name;});
-    var abilityOpts = abilities.map(function(a){return '<option value="'+a+'">'+a+(p.abilities.find(function(ab){return ab.ability.name===a;}).is_hidden?' ['+(currentLang==='en'?'hidden':'ukryta')+']':'')+'</option>';}).join('');
+    var adArr = abilityDetailsArr || [];
+    var abilityOpts = abilities.map(function(a, idx){
+      var detail = adArr[idx];
+      var localName = a;
+      if (detail) {
+        var ne; if(currentLang==='pl') ne=(detail.names||[]).find(function(n){return n.language.name==='pl';});
+        if(!ne) ne=(detail.names||[]).find(function(n){return n.language.name==='en';});
+        if(ne) localName=ne.name;
+      }
+      var isH = p.abilities.find(function(ab){return ab.ability.name===a;}).is_hidden;
+      return '<option value="'+a+'">'+localName+(isH?' ['+(currentLang==='en'?'hidden':'ukryta')+']':'')+'</option>';
+    }).join('');
     return '<div class="calc-section"><h2>\ud83e\uddee '+t('sec.calc')+'</h2>'
       +'<div style="font-size:16px;color:#888;margin-bottom:10px">'+(currentLang==='en'?'Enter your IVs, choose Nature and Ability to compare with the optimal build.':'Wpisz swoje IV, wybierz Natur\u0119 i Zdolno\u015b\u0107, aby por\u00f3wna\u0107 z optymalnym buildem.')+'</div>'
       +'<div class="calc-grid">'+ivRows+'</div>'
       +'<div class="calc-grid"><div class="calc-box"><label>'+t('build.nature')+'</label><select class="calc-select" id="calc-nature">'+natureOpts+'</select></div>'
-      +'<div class="calc-box"><label>'+t('det.abilities')+' (Ability)</label><select class="calc-select" id="calc-ability">'+abilityOpts+'</select></div></div>'
+      +'<div class="calc-box"><label>'+t('build.ability')+'</label><select class="calc-select" id="calc-ability">'+abilityOpts+'</select></div></div>'
       +'<div class="calc-grid"><div class="calc-box"><label>'+(currentLang==='en'?'Compare with build:':'Por\u00f3wnaj z buildem:')+'</label><select class="calc-select" id="calc-build-type"><option value="physical">'+t('build.phys')+'</option><option value="special">'+t('build.spec')+'</option><option value="defensive">'+t('build.def')+'</option></select></div>'
       +'<div class="calc-box" style="display:flex;align-items:flex-end"><button class="mc-btn" onclick="evaluatePokemon()" style="width:100%">\ud83d\udcca '+t('gen.evaluate')+'</button></div></div>'
       +'<div class="calc-verdict" id="calc-verdict"><span class="verdict-emoji">\u2753</span>'+(currentLang==='en'?'Enter data and click "Rate!"':'Wpisz dane i kliknij "Oce\u0144!"')+'</div></div>';
@@ -1989,7 +2024,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     +'<div class="cobblemon-section" style="margin-top:16px"><h2><span class="cob-icon">\u2694</span> '+t('sec.cobblemon')+'</h2>'+cobHTML+'</div>'
     +buildCompetitiveSection(p.stats, p.types.map(function(tp){return tp.type.name;}), p.moves, p.abilities, abilityDetails || [])
     +buildMovesSection(p.moves)
-    +buildCalculatorSection(p.stats)
+    +buildCalculatorSection(p.stats, abilityDetails)
     +'<div style="height:40px"></div>';
 
   document.querySelectorAll('.iv-input').forEach(function(inp){updateIVBar(inp);});
@@ -2070,18 +2105,22 @@ function evaluatePokemon() {
 
   var pct = totalScore / maxScore;
   var verdict, emoji, color;
-  if (pct >= 0.9) { verdict = 'Idealny!'; emoji = '\ud83d\udfe2'; color = '#55ff55'; }
-  else if (pct >= 0.7) { verdict = 'Dobry'; emoji = '\ud83d\udfe1'; color = '#f8d030'; }
-  else if (pct >= 0.5) { verdict = '\u015aredni'; emoji = '\ud83d\udfe0'; color = '#f08030'; }
-  else { verdict = 'Szukaj dalej'; emoji = '\ud83d\udd34'; color = '#ff5555'; }
+  if (pct >= 0.9) { verdict = currentLang==='en'?'Perfect!':'Idealny!'; emoji = '\ud83d\udfe2'; color = '#55ff55'; }
+  else if (pct >= 0.7) { verdict = currentLang==='en'?'Good':'Dobry'; emoji = '\ud83d\udfe1'; color = '#f8d030'; }
+  else if (pct >= 0.5) { verdict = currentLang==='en'?'Average':'\u015aredni'; emoji = '\ud83d\udfe0'; color = '#f08030'; }
+  else { verdict = currentLang==='en'?'Keep looking':'Szukaj dalej'; emoji = '\ud83d\udd34'; color = '#ff5555'; }
 
-  var natureStatus = isIdealNature ? '<span style="color:#55ff55">\u2705 Idealna natura!</span>' : '<span style="color:#f08030">\u26a0 Nieoptymalna natura (zalecane: '+idealNatures[buildType].join(' / ')+')</span>';
+  var idealList = idealNatures[buildType].map(function(n){ return natureName(n); }).join(' / ');
+  var natureStatus = isIdealNature
+    ? '<span style="color:#55ff55">\u2705 '+(currentLang==='en'?'Ideal nature!':'Idealna natura!')+'</span>'
+    : '<span style="color:#f08030">\u26a0 '+(currentLang==='en'?'Non-optimal nature (recommended: ':'Nieoptymalna natura (zalecane: ')+idealList+')</span>';
   var pctStr = Math.round(pct * 100);
+  var matchLabel = currentLang==='en'?'Build match:':'Zgodno\u015b\u0107 z buildem:';
 
   document.getElementById('calc-verdict').innerHTML =
     '<span class="verdict-emoji">'+emoji+'</span>'
     +'<div style="font-size:28px;color:'+color+';font-family:\'Press Start 2P\',monospace">'+verdict+'</div>'
-    +'<div style="font-size:18px;color:#aaa;margin-top:8px">Zgodno\u015b\u0107 z buildem: <span style="color:'+color+'">'+pctStr+'%</span></div>'
+    +'<div style="font-size:18px;color:#aaa;margin-top:8px">'+matchLabel+' <span style="color:'+color+'">'+pctStr+'%</span></div>'
     +'<div style="font-size:16px;margin-top:6px">'+natureStatus+'</div>';
 }
 
