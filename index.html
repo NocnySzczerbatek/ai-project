@@ -553,22 +553,23 @@
       border: 1px solid #555; font-family: 'Press Start 2P', monospace;
     }
 
-    /* ── DONATE SECTION ── */
+    /* ── DONATE SECTION (top bar) ── */
     .donate-section {
-      background: linear-gradient(180deg, #1a2a0a 0%, #0a1a0a 100%);
-      border: 3px solid #2a5a2a; padding: 20px; text-align: center; margin-top: 20px;
+      background: #1a1a1a; padding: 14px 24px; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      flex-wrap: wrap; min-height: 60px;
     }
     .donate-section h2 {
-      font-family: 'Press Start 2P', monospace; font-size: 11px;
-      color: var(--green); margin-bottom: 12px;
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: var(--green); margin: 0;
     }
-    .donate-section p { color: var(--gray); font-size: 18px; margin-bottom: 12px; line-height: 1.5; }
+    .donate-section p { color: var(--gray); font-size: 16px; margin: 0; line-height: 1.4; }
     .donate-btn {
-      font-family: 'Press Start 2P', monospace; font-size: 12px;
+      font-family: 'Press Start 2P', monospace; font-size: 11px;
       background: linear-gradient(180deg, #4a2, #283); color: #fff;
       border: 3px solid; border-top-color: #6c4; border-left-color: #6c4;
       border-right-color: #142; border-bottom-color: #142;
-      padding: 10px 24px; cursor: pointer; text-shadow: 1px 1px #000; transition: filter 0.15s;
+      padding: 8px 20px; cursor: pointer; text-shadow: 1px 1px #000; transition: filter 0.15s;
     }
     .donate-btn:hover { filter: brightness(1.2); }
 
@@ -813,10 +814,11 @@
   </div>
 </header>
 
-<!-- AD TOP -->
-<div id="ad-top" style="background:#1a1a1a;min-height:90px;display:flex;justify-content:center;align-items:center;">
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9885277201663964" data-ad-slot="7486015725" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+<!-- SUPPORT BANNER (top bar) -->
+<div id="ad-top" class="donate-section">
+  <h2>💚 <span id="donate-title">Wesprzyj rozwój projektu</span></h2>
+  <p id="donate-desc">Cobblemon Mastery Guide to darmowy projekt. Jeśli pomaga Ci w grze, rozważ wsparcie!</p>
+  <button class="donate-btn" id="donate-btn" onclick="window.open('https://buycoffee.to/','_blank')">☕ <span id="donate-btn-text">Postaw kawkę</span></button>
 </div>
 
 <!-- SIDEBAR OVERLAY (mobile) -->
@@ -1192,6 +1194,10 @@ function setLang(lang){
   var ba=document.getElementById('btn-apricorns');if(ba)ba.innerHTML='\ud83c\udf4e '+t('nav.apricorns');
   var bs=document.getElementById('btn-start');if(bs)bs.innerHTML='\ud83c\udfe0 '+t('nav.start');
   var bt=document.getElementById('btn-team');if(bt)bt.innerHTML='\u2694 '+t('nav.team');
+  // Update donate bar
+  var dt=document.getElementById('donate-title');if(dt)dt.textContent=t('gen.donate');
+  var dd=document.getElementById('donate-desc');if(dd)dd.textContent=t('gen.donateDesc');
+  var db=document.getElementById('donate-btn-text');if(db)db.textContent=t('gen.coffee');
   // Re-render current page
   if(currentPage==='welcome')showPage('welcome');
   else if(currentPage==='items')showPage('items');
@@ -1767,8 +1773,6 @@ function renderDetail(p, s, evoChain, name) {
     +buildCompetitiveSection(p.stats, p.types.map(function(tp){return tp.type.name;}), p.moves)
     +buildMovesSection(p.moves)
     +buildCalculatorSection(p.stats)
-    +'<div class="ad-container" style="margin-top:16px"><span class="ad-label">'+t('gen.adLabel')+'</span><span>'+t('gen.ad')+'</span></div>'
-    +'<div class="donate-section"><h2>\ud83d\udc9a '+t('gen.donate')+'</h2><p>'+t('gen.donateDesc')+'</p><button class="donate-btn" onclick="alert(\''+(currentLang==='en'?'Thank you!':'Dzi\u0119kujemy!')+'\')">\u2615 '+t('gen.coffee')+'</button></div>'
     +'<div style="height:40px"></div>';
 
   document.querySelectorAll('.iv-input').forEach(function(inp){updateIVBar(inp);});
@@ -1912,8 +1916,7 @@ function showPage(page) {
       + '<div class="welcome-card"><h3>\ud83c\udf4e '+t('nav.apricorns')+'</h3><p>'+(currentLang==='en'?'Collect Apricorns from trees and craft unique Pok\u00e9balls!':'Zbieraj Apricorny z drzew i craftuj unikalne Pokeballsy!')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'apricorns\')">\u2192 '+t('nav.apricorns')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\ud83d\udce6 '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wa\u017cne przedmioty w jednym miejscu.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'items\')">\u2192 '+t('nav.items')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2694 '+t('nav.team')+'</h3><p>'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sk\u0142ad dru\u017cyny PvP i pokrycie typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'team-analyzer\')">\u2192 '+t('nav.team')+'</button></p></div>'
-      + '</div>'
-      + '<div class="donate-section" style="margin-top:24px"><h2>\ud83d\udc9a '+t('gen.donate')+'</h2><p>'+t('gen.donateDesc')+'</p><button class="donate-btn" onclick="alert(\''+(currentLang==='en'?'Thank you! Donation link coming soon.':'Dzi\u0119kujemy za ch\u0119\u0107 wsparcia! Link do donacji wkr\u00f3tce.')+'\')">\u2615 '+t('gen.coffee')+'</button></div>';
+      + '</div>';
   }
 
   if (page === 'detail-loading') {
