@@ -754,8 +754,21 @@
     }
     .build-tab.active { color: #c084fc; border-bottom-color: #c084fc; background: #12101e; }
     .build-tab:hover:not(.active) { color: #ccc; background: #15132a; }
+    .build-tab .best-choice-star { color: #ffaa00; margin-right: 2px; font-size: 16px; }
     .build-panel { display: none; }
     .build-panel.active { display: block; }
+    .best-choice-badge {
+      display: inline-block; font-family: 'Press Start 2P', monospace; font-size: 7px;
+      background: linear-gradient(90deg, #3a2a00 0%, #1a1400 100%);
+      color: #ffaa00; border: 1px solid #ffaa00; padding: 2px 8px;
+      margin-left: 8px; vertical-align: middle; letter-spacing: 0.5px;
+      text-shadow: 0 0 6px rgba(255,170,0,0.4);
+      animation: bestChoicePulse 2s ease-in-out infinite;
+    }
+    @keyframes bestChoicePulse {
+      0%, 100% { box-shadow: 0 0 4px rgba(255,170,0,0.3); }
+      50% { box-shadow: 0 0 12px rgba(255,170,0,0.6); }
+    }
 
     /* ── FAVORITE STAR ── */
     .fav-star {
@@ -1239,6 +1252,7 @@
       .mc-badge { font-size: 12px; padding: 2px 6px; }
       .build-tabs { flex-wrap: wrap; }
       .build-tab { font-size: 14px; padding: 4px 8px; }
+      .best-choice-badge { font-size: 6px; padding: 1px 5px; }
       .item-layout { flex-direction: column; }
       .item-main { padding: 8px; }
       .item-main .item-big-name { font-size: 8px; }
@@ -1551,6 +1565,7 @@ const TR = {
   'build.mixed':     {pl:'Mieszany',en:'Mixed'},
   'build.support':   {pl:'Wsparcie',en:'Support'},
   'build.niche':     {pl:'Niszowy',en:'Niche'},
+  'build.bestChoice': {pl:'NAJLEPSZY WYB\u00d3R',en:'BEST CHOICE'},
   'build.mainItem':  {pl:'G\u0142\u00f3wny',en:'Primary'},
   'build.altItems':  {pl:'Alternatywy',en:'Alternatives'},
   'gen.loading':     {pl:'\u0141adowanie...',en:'Loading...'},
@@ -2438,6 +2453,53 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     return builds;
   }
 
+  // ── SORT BUILDS BY BASE STATS PRIORITY ──
+  function sortBuildsByStats(builds, statMap) {
+    var atk  = statMap['attack'] || 0;
+    var spatk = statMap['special-attack'] || 0;
+    var def  = statMap['defense'] || 0;
+    var spdef = statMap['special-defense'] || 0;
+    var spe  = statMap['speed'] || 0;
+    var hp   = statMap['hp'] || 0;
+    var totalOff = atk + spatk;
+    var totalDef = def + spdef + hp;
+    var scored = builds.map(function(b) {
+      var score = 0;
+      switch (b.key) {
+        case 'physical':
+          score = atk * 3 + spe;
+          if (atk > spatk) score += (atk - spatk) * 2;
+          break;
+        case 'special':
+          score = spatk * 3 + spe;
+          if (spatk > atk) score += (spatk - atk) * 2;
+          break;
+        case 'defensive':
+          score = def * 2 + spdef * 2 + hp * 1.5;
+          if (totalDef > totalOff * 1.2) score += 80;
+          break;
+        case 'mixed':
+          score = atk * 1.5 + spatk * 1.5 + spe;
+          var diff = Math.abs(atk - spatk);
+          if (diff < 20) score += 60;
+          else score -= diff;
+          break;
+        case 'support':
+          score = hp * 2 + def + spdef + 30;
+          if (totalDef > totalOff * 1.3) score += 60;
+          break;
+        case 'niche':
+          score = spe * 1.5 + Math.max(atk, spatk);
+          if (spe <= 50) score += 30;
+          if (spe >= 100) score += 20;
+          break;
+      }
+      return { build: b, score: score };
+    });
+    scored.sort(function(a, b) { return b.score - a.score; });
+    return scored.map(function(s) { return s.build; });
+  }
+
   // ── COMPETITIVE SECTION WITH UP TO 6 BUILDS ──
   function buildCompetitiveSection(stats, pokemonTypes, moves, pokemonAbilities, abilityDetails) {
     var statMap = {}; stats.forEach(function(s){statMap[s.stat.name]=s.base_stat;});
@@ -2452,9 +2514,12 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       {key:'niche',     label:t('build.niche'),   icon:'\ud83c\udfaf'}
     ];
     var eligible = getEligibleBuilds(statMap);
-    var builds = allBuilds.filter(function(b){ return eligible.indexOf(b.key) !== -1; });
+    var filteredBuilds = allBuilds.filter(function(b){ return eligible.indexOf(b.key) !== -1; });
+    var builds = sortBuildsByStats(filteredBuilds, statMap);
     var tabsHTML = builds.map(function(b,i){
-      return '<button class="build-tab'+(i===0?' active':'')+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">'+(i+1)+'. '+b.icon+' '+b.label+'</button>';
+      var bestStar = i===0 ? '<span class="best-choice-star">\u2b50</span>' : '';
+      var bestBadge = i===0 ? ' <span class="best-choice-badge">'+t('build.bestChoice')+'</span>' : '';
+      return '<button class="build-tab'+(i===0?' active':'')+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">'+bestStar+(i+1)+'. '+b.icon+' '+b.label+bestBadge+'</button>';
     }).join('');
     var panelsHTML = builds.map(function(b,i){
       return '<div class="build-panel'+(i===0?' active':'')+'" id="build-panel-'+i+'">'+generateBuild(statMap,pokemonTypes,moves,b.key,pokemonAbilities,abilityDetails)+'</div>';
