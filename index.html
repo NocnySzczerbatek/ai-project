@@ -12,7 +12,6 @@
   <meta name="robots" content="index, follow" />
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAR3SURBVFhH7VdNSGNXFD4vqZlR8xLzkhlf3ktmgv2BMuiuCLYLKUFxMZROp0w7yLTQRcGl1KpgS8GFuGlBt4KUFtoM/dkJxS6ycOFu0Hamlhn/Bxx/GjFRC2reV87zXRNvfvybdtUPDi/vvnvP991zzz33huh/nA9VRPQqETUTUZvz5Hdu/9dwiYjeI6IfiegpEaGIcfsPRHTH6f/c8AER/SkTai4XDLcbIZcL7kIxM0R0T3Z0VgSI6Cfh1KMouF1ZiW80DY90HZuGgb9NE1umice6jkQwiDuVlahWlHwhHDH2c2ZEiOh34ehuVRX+0HXg2rVDi0YPLRLJ/XbaH1y9ig+rqvJF/EZEpkxQDn4iesSDKxQFX2tajpQJT2E7hoFvNQ01LpcQwZPxyUSl8LMg/+XKFeD69QKCk2zHNJE2DPwaCiGQE8HLeSI4g+0B9szPQS5sNRzGlmEgoWlQcsvxrkyYjwoiesIdb1VWHoa9iONjVmZZ9kwTc7qOXcPAx9XVQsBjh6co3hah56wu6dxJOCZYNwzsc1uJHHkWDuNpOIyHtbX2tnVEvCUTC9znDjcvXy49+2gUGdPEJ6qKCBFcRIgSoUtVsW2aBSI4D57oOrYNAx/lovC9TMzgyrV8tPbFBESjSEcieM3jsR25vV68cuMGXI7jRo8HGREhZwxHaV7X8Zdh4L6mCQFLROSRBbxERFme0TPDAGKx3J4XFovhU1W1nbS1tVnLy8tgLC0toaWlxW7vVVVLHsuz5zxY1nWxLbNE9KIs4A12cElR0O/z4cuamqIWUBT4/H5sbGzY5AJra2vw+nwIKorF/b7Ksy98PnyuqvhMVfPzoEkWEHc+nGgNDQ3HyAXq6+sL+paxN2UBr/OH2tpaDA8PY2hoqKhpmgav12vPOB+rq6t2eygUKhjT399vW1dXl1VRUSEEFETAzgF2UA49PT22g3g8jvn5ebuNn/F43OL2vr4+eQi2t7exv7+PyclJSzk8qDgH6mQBnJWcnZiYmLBkJwKZTAaNjY1Hoayrqzv63dTUhJ2dnWP99/b2MDc3h62tLQwODtoiiWixVDFKcIfOzs6SAhhM0t3djVgsBg4pP3t7e7G7uyt3RTqdxuzsLDY3N9Hc3CwEfCcTC3CF4nW00ul0WRGMg4MDpFIpZLNZ+dMRVlZW7HwZHx+33G63iNZNmViAw8K1mhOmtNdTgsO/sLBgh1/kiHOzekEmzsdt7qgoipVMJi8kgncGJ+DAwIAgZ7slExYDXywRDAatqampc4ngfGDy0dHR/NDzWXMqqEQ0zYM0TbPGxsbOLEJkvStX+aaIyCsTlUPYGWQ76OjoyC4uLp6YmIxkMmnxWZEX9gdEpMsEpwHfDe0jmo0rXXt7ezaRSGRnZmasVCplZTIZa3193ZqenrZGRkas1tZWUWyE8dF76rtgKdwlood5TjlJEQgE7NLt9/vzCYXxJfR92dFFwFv0HWdGXMm4nOYT8vuCU2Q408tutYuCLy8vOwcYn6L85Pfn+nfsP8E/5+M/g2IKie4AAAAASUVORK5CYII=">
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9885277201663964"
      crossorigin="anonymous"></script>
   <style>
@@ -313,45 +312,6 @@
     }
     .iv-target { width: 64px; font-size: 15px; text-align: center; font-weight: bold; }
     .iv-row-priority { background: #05151f; }
-
-    /* ── IV OCR BUTTON ── */
-    .iv-ocr-wrap {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;
-    }
-    .iv-ocr-btn {
-      font-family: 'VT323', monospace; font-size: 18px;
-      background: linear-gradient(180deg, #1a3a5a 0%, #0d2240 100%);
-      color: var(--aqua); border: 2px solid #1a5a8a;
-      padding: 6px 16px; cursor: pointer;
-      display: flex; align-items: center; gap: 8px;
-      transition: filter 0.15s, border-color 0.15s;
-    }
-    .iv-ocr-btn:hover { filter: brightness(1.2); border-color: var(--aqua); }
-    .iv-ocr-btn:active { filter: brightness(0.9); }
-    .iv-ocr-status {
-      font-family: 'VT323', monospace; font-size: 16px; color: var(--gold);
-      display: none; align-items: center; gap: 6px;
-    }
-    .iv-ocr-status.visible { display: flex; }
-    .iv-ocr-spinner {
-      width: 16px; height: 16px; border: 2px solid #555;
-      border-top-color: var(--gold); border-radius: 50%;
-      animation: ocrSpin 0.8s linear infinite;
-    }
-    @keyframes ocrSpin { to { transform: rotate(360deg); } }
-    .iv-ocr-preview {
-      display: none; margin-top: 8px; background: #000;
-      border: 2px solid #1a5a8a; padding: 6px; max-width: 100%;
-    }
-    .iv-ocr-preview.visible { display: block; }
-    .iv-ocr-preview-label {
-      font-family: 'VT323', monospace; font-size: 14px;
-      color: #888; margin-bottom: 4px;
-    }
-    .iv-ocr-preview canvas {
-      max-width: 100%; height: auto; image-rendering: pixelated;
-      border: 1px solid #333;
-    }
 
     /* ── IV HYBRID SLIDER ── */
     .iv-hybrid {
@@ -2190,8 +2150,6 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       +'<div class="iv-role-badge">Rola: '+role+'</div>'
       +'<div class="iv-summary">'+summaryLine+'</div>'
       +'<div style="font-size:14px;color:#666;margin-bottom:6px">\u2b50 priorytet | \u25aa mniej wa\u017cne | Zmie\u0144 liczby \u017ceby sprawdzi\u0107</div>'
-      +'<div class="iv-ocr-wrap"><button class="iv-ocr-btn" onclick="document.getElementById(\'iv-ocr-file\').click()">\ud83d\udcf7 Wgraj Screena statystyk (Auto-uzupe\u0142nianie)</button><input type="file" id="iv-ocr-file" accept="image/*" style="display:none" onchange="ocrScanIVImage(this)" /><div class="iv-ocr-status" id="iv-ocr-status"><div class="iv-ocr-spinner"></div><span id="iv-ocr-msg">Skanowanie...</span></div></div>'
-      +'<div class="iv-ocr-preview" id="iv-ocr-preview"><div class="iv-ocr-preview-label">\ud83d\udd0d Podgl\u0105d — obraz widziany przez skaner:</div><canvas id="iv-ocr-canvas"></canvas></div>'
       +rows
       +'<div class="iv-legend">'
       +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#55ff55"></div>28\u201331 Doskona\u0142e</div>'
@@ -3636,153 +3594,6 @@ function switchBuildTab(btn, panelId) {
   btn.classList.add('active');
   var panel = document.getElementById(panelId);
   if (panel) panel.classList.add('active');
-}
-
-function ocrFixCommonErrors(str) {
-  return str
-    .replace(/[Oo]/g, '0')
-    .replace(/[Ii|lL!]/g, '1')
-    .replace(/[Ss]/g, '5')
-    .replace(/[Bb]/g, '8')
-    .replace(/[Zz]/g, '2')
-    .replace(/[Gg]/g, '9')
-    .replace(/[Tt]/g, '7')
-    .replace(/[Qq]/g, '9');
-}
-
-function ocrExtractIVValue(rawMatch) {
-  if (!rawMatch) return -1;
-  var cleaned = rawMatch.replace(/[^0-9OoIilL!SsBbZzGgTtQq]/g, '');
-  var asDigits = ocrFixCommonErrors(cleaned);
-  var val = parseInt(asDigits);
-  if (isNaN(val) || val < 0 || val > 31) return -1;
-  return val;
-}
-
-function ocrPreprocessImage(img) {
-  var canvas = document.createElement('canvas');
-  var w = img.naturalWidth || img.width;
-  var h = img.naturalHeight || img.height;
-  var scale = Math.max(1, Math.min(2, 1600 / w));
-  canvas.width = Math.round(w * scale);
-  canvas.height = Math.round(h * scale);
-  var ctx = canvas.getContext('2d');
-  ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  var d = imageData.data;
-  for (var i = 0; i < d.length; i += 4) {
-    var gray = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
-    var bw = gray > 140 ? 255 : 0;
-    d[i] = bw; d[i+1] = bw; d[i+2] = bw;
-  }
-  ctx.putImageData(imageData, 0, 0);
-  return canvas;
-}
-
-function ocrShowPreview(processedCanvas) {
-  var previewWrap = document.getElementById('iv-ocr-preview');
-  var previewCanvas = document.getElementById('iv-ocr-canvas');
-  if (!previewWrap || !previewCanvas) return;
-  previewCanvas.width = processedCanvas.width;
-  previewCanvas.height = processedCanvas.height;
-  var ctx = previewCanvas.getContext('2d');
-  ctx.drawImage(processedCanvas, 0, 0);
-  previewWrap.classList.add('visible');
-}
-
-async function ocrScanIVImage(fileInput) {
-  var file = fileInput.files && fileInput.files[0];
-  if (!file) return;
-  var statusEl = document.getElementById('iv-ocr-status');
-  var msgEl = document.getElementById('iv-ocr-msg');
-  var previewWrap = document.getElementById('iv-ocr-preview');
-  statusEl.classList.add('visible');
-  if (previewWrap) previewWrap.classList.remove('visible');
-  msgEl.textContent = 'Przygotowywanie obrazu...';
-  msgEl.style.color = 'var(--gold)';
-  try {
-    var img = new Image();
-    var loadPromise = new Promise(function(resolve, reject) {
-      img.onload = resolve;
-      img.onerror = function() { reject(new Error('Nie mo\u017cna wczyta\u0107 obrazu')); };
-    });
-    img.src = URL.createObjectURL(file);
-    await loadPromise;
-
-    msgEl.textContent = 'Przetwarzanie obrazu (kontrast + B&W)...';
-    var processedCanvas = ocrPreprocessImage(img);
-    URL.revokeObjectURL(img.src);
-    ocrShowPreview(processedCanvas);
-
-    msgEl.textContent = 'Skanowanie obrazu przez AI... to mo\u017ce chwil\u0119 potrwa\u0107';
-    var result = await Tesseract.recognize(processedCanvas, 'eng', {
-      logger: function(m) {
-        if (m.status === 'recognizing text' && m.progress) {
-          msgEl.textContent = 'Rozpoznawanie tekstu... ' + Math.round(m.progress * 100) + '%';
-        }
-      }
-    });
-    var rawText = result.data.text;
-    var lines = rawText.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
-
-    var patterns = [
-      { stat: 'hp',               keys: [/\bHP\b/i, /\bHit\s*P/i] },
-      { stat: 'attack',           keys: [/\bAtk\b/i, /\bAttack\b/i] },
-      { stat: 'defense',          keys: [/\bDef\b/i, /\bDefense\b/i] },
-      { stat: 'special-attack',   keys: [/\bSp\.?\s*Atk\b/i, /\bSpAtk\b/i, /\bSpecial\s*A/i, /\bSp\.?\s*Attack/i] },
-      { stat: 'special-defense',  keys: [/\bSp\.?\s*Def\b/i, /\bSpDef\b/i, /\bSpecial\s*D/i, /\bSp\.?\s*Defense/i] },
-      { stat: 'speed',            keys: [/\bSpe(?:ed)?\b/i, /\bSpd\b/i] }
-    ];
-
-    var found = 0;
-    patterns.forEach(function(p) {
-      for (var li = 0; li < lines.length; li++) {
-        var line = lines[li];
-        var matched = p.keys.some(function(k){ return k.test(line); });
-        if (!matched) continue;
-        var numbers = line.match(/[0-9OoIilL!SsBbZzGgTtQq]{1,3}/g);
-        if (!numbers) continue;
-        for (var ni = numbers.length - 1; ni >= 0; ni--) {
-          var val = ocrExtractIVValue(numbers[ni]);
-          if (val >= 0 && val <= 31) {
-            var hybrid = document.querySelector('.iv-hybrid[data-stat="' + p.stat + '"]');
-            if (hybrid) {
-              var rangeEl = hybrid.querySelector('input[type="range"]');
-              var numEl = hybrid.querySelector('input[type="number"]');
-              if (rangeEl && numEl) {
-                rangeEl.value = val;
-                numEl.value = val;
-                applyIVSliderStyle(rangeEl, val);
-                updateIVBar(numEl);
-                found++;
-              }
-            }
-            break;
-          }
-        }
-      }
-    });
-
-    if (found === 0) {
-      msgEl.textContent = 'Skaner nie by\u0142 pewny wynik\u00f3w \u2013 sprawdzi IV r\u0119cznie na suwakach.';
-      msgEl.style.color = 'var(--red)';
-    } else if (found < 6) {
-      msgEl.textContent = 'Odczytano ' + found + '/6 stat\u00f3w. Pozosta\u0142e popraw r\u0119cznie na suwakach.';
-      msgEl.style.color = '#f8d030';
-    } else {
-      msgEl.textContent = 'Wszystkie 6 stat\u00f3w odczytane pomy\u015blnie! \u2705';
-      msgEl.style.color = 'var(--green)';
-    }
-  } catch(err) {
-    msgEl.textContent = 'Skaner nie by\u0142 pewny wynik\u00f3w \u2013 sprawdzi IV r\u0119cznie na suwakach.';
-    msgEl.style.color = 'var(--red)';
-  }
-  fileInput.value = '';
-  setTimeout(function(){
-    statusEl.classList.remove('visible');
-    if (previewWrap) previewWrap.classList.remove('visible');
-  }, 12000);
 }
 
 function getIVSliderColor(val) {
