@@ -106,31 +106,29 @@
     .mc-btn {
       font-family: 'VT323', monospace;
       font-size: 20px;
-      background: var(--slot);
+      background: rgba(70, 70, 90, 0.7);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
       color: #fff;
-      border: 3px solid;
-      border-top-color: var(--slot-light);
-      border-left-color: var(--slot-light);
-      border-right-color: #333;
-      border-bottom-color: #333;
-      padding: 4px 14px;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 6px 16px;
       cursor: pointer;
-      text-shadow: 1px 1px #000;
-      transition: filter 0.1s;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+      transition: all 0.15s;
       user-select: none;
+      font-weight: 700;
     }
-    .mc-btn:hover { filter: brightness(1.15); }
+    .mc-btn:hover { filter: brightness(1.2); box-shadow: 0 0 12px rgba(255,255,255,0.1); }
     .mc-btn:active {
-      border-top-color: #333;
-      border-left-color: #333;
-      border-right-color: var(--slot-light);
-      border-bottom-color: var(--slot-light);
+      filter: brightness(0.9);
+      transform: scale(0.97);
     }
     .mc-btn.active {
-      background: #666;
-      border-top-color: #333;
-      border-left-color: #333;
+      background: rgba(85,200,85,0.2);
+      border-color: rgba(85,255,85,0.4);
       color: var(--green);
+      box-shadow: 0 0 10px rgba(85,255,85,0.15);
     }
 
     /* ── MC INPUT ── */
@@ -475,7 +473,7 @@
     }
     .comp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
     .comp-grid-full { margin-bottom: 14px; }
-    .comp-box { background: #0a0818; border: 2px solid #3a2a6a; padding: 10px; }
+    .comp-box { background: rgba(10,8,24,0.8); border: 2px solid rgba(130,90,220,0.45); padding: 12px; border-radius: 10px; backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(130,90,220,0.12); }
     .comp-box-title {
       font-family: 'Press Start 2P', monospace; font-size: 8px;
       color: #c084fc; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
@@ -496,11 +494,12 @@
       font-family: 'Press Start 2P', monospace; font-size: 9px;
       color: var(--gold); margin-bottom: 6px;
     }
-    .item-big-desc { font-size: 16px; color: #aaa; line-height: 1.5; }
+    .item-big-desc { font-size: 16px; color: #ddd; line-height: 1.5; font-weight: 700; }
     .item-layout { display: flex; gap: 12px; }
     .item-main {
-      flex: 1; background: #0d0a1a; border: 1px solid #5a3a9a;
-      border-radius: 4px; padding: 10px; text-align: center; min-width: 0;
+      flex: 1; background: rgba(13,10,26,0.85); border: 2px solid rgba(160,80,255,0.4);
+      border-radius: 10px; padding: 12px; text-align: center; min-width: 0;
+      backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(160,80,255,0.12);
     }
     .item-main-label {
       font-family: 'Press Start 2P', monospace; font-size: 7px;
@@ -509,27 +508,28 @@
     .item-alt-section { flex: 1; display: flex; flex-direction: column; min-width: 0; }
     .item-alt-label {
       font-family: 'Press Start 2P', monospace; font-size: 7px;
-      color: #888; margin-bottom: 8px; text-transform: uppercase;
+      color: #ccc; margin-bottom: 8px; text-transform: uppercase;
     }
     .item-alt-grid { display: flex; flex-direction: column; gap: 6px; }
     .item-alt-card {
       display: flex; align-items: center; gap: 8px;
-      background: #080614; border: 1px solid #2a1a4a;
-      padding: 6px 8px; border-radius: 3px; transition: border-color 0.15s;
+      background: rgba(8,6,20,0.8); border: 1px solid rgba(120,60,200,0.3);
+      padding: 8px 10px; border-radius: 8px; transition: all 0.15s;
+      backdrop-filter: blur(4px);
     }
-    .item-alt-card:hover { border-color: #5a3a9a; }
+    .item-alt-card:hover { border-color: rgba(160,80,255,0.5); box-shadow: 0 0 8px rgba(160,80,255,0.15); }
     .item-alt-info { min-width: 0; }
     .item-alt-name {
       font-family: 'VT323', monospace; font-size: 16px;
       color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .item-alt-desc { font-size: 13px; color: #777; line-height: 1.3; }
-    .ability-box { background: #0a0818; border: 2px solid #6a3aaa; padding: 10px; }
+    .item-alt-desc { font-size: 14px; color: #ccc; line-height: 1.3; font-weight: 700; }
+    .ability-box { background: rgba(10,8,24,0.8); border: 2px solid rgba(140,70,200,0.45); padding: 12px; border-radius: 10px; backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(140,70,200,0.12); }
     .ability-name {
       font-family: 'Press Start 2P', monospace; font-size: 9px;
       color: #c084fc; margin-bottom: 6px; text-transform: capitalize;
     }
-    .ability-desc { font-size: 15px; color: #aaa; line-height: 1.5; }
+    .ability-desc { font-size: 15px; color: #ddd; line-height: 1.5; font-weight: 700; }
     .ability-hidden-tag {
       font-size: 12px; color: #a855f7; margin-left: 4px;
     }
@@ -554,7 +554,7 @@
     .move-stab  { background:#0a2a0a; color:#55ff55; border:1px solid #2a5a2a; padding:1px 6px; font-size:14px; }
     .move-coverage { background:#1a0a2a; color:#c084fc; border:1px solid #5a2a8a; padding:1px 6px; font-size:14px; }
     .move-stars { font-size:15px; color: var(--gold); margin-top:3px; }
-    .ev-total { font-size:15px; color:#666; margin-top:6px; }
+    .ev-total { font-size:16px; color:#ddd; margin-top:6px; font-weight:700; }
 
     /* ── COBBLEMON SECTION ── */
     .cobblemon-section {
@@ -618,18 +618,24 @@
     /* ── ITEMS PAGE ── */
     .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
     .item-card {
-      background: var(--stone2);
-      border: 3px solid;
-      border-top-color: var(--slot-light); border-left-color: var(--slot-light);
-      border-right-color: #333; border-bottom-color: #333;
-      padding: 12px; display: flex; gap: 12px; align-items: flex-start;
+      background: rgba(58,58,58,0.6);
+      border: 2px solid rgba(220,180,60,0.35);
+      border-radius: 10px;
+      padding: 14px; display: flex; gap: 12px; align-items: flex-start;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 8px rgba(220,180,60,0.1);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .item-card:hover {
+      border-color: rgba(220,180,60,0.55);
+      box-shadow: 0 0 14px rgba(220,180,60,0.2);
     }
     .item-icon { font-size: 32px; min-width: 40px; text-align: center; }
     .item-name {
       font-family: 'Press Start 2P', monospace; font-size: 8px;
       color: var(--gold); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
     }
-    .item-desc { font-size: 16px; color: var(--gray); line-height: 1.4; }
+    .item-desc { font-size: 16px; color: #ddd; line-height: 1.4; font-weight: 700; }
     .item-tag {
       display: inline-block; background: #2a4a0a; color: var(--green);
       border: 1px solid #4a8a1a; font-size: 12px; padding: 1px 6px; margin-top: 4px;
@@ -641,11 +647,17 @@
     /* ── APRICORNS PAGE ── */
     .apricorn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 16px; }
     .apricorn-card {
-      background: var(--stone2);
-      border: 3px solid;
-      border-top-color: var(--slot-light); border-left-color: var(--slot-light);
-      border-right-color: #333; border-bottom-color: #333;
-      padding: 12px; text-align: center;
+      background: rgba(40,60,40,0.6);
+      border: 2px solid rgba(80,200,80,0.3);
+      border-radius: 10px;
+      padding: 14px; text-align: center;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 8px rgba(80,200,80,0.1);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .apricorn-card:hover {
+      border-color: rgba(80,200,80,0.5);
+      box-shadow: 0 0 14px rgba(80,200,80,0.2);
     }
     .apricorn-icon { font-size: 40px; margin-bottom: 6px; }
     .apricorn-name {
@@ -658,23 +670,29 @@
       border: 2px solid #2a4a6a; background: #0a1a2a;
       padding: 4px 10px; display: inline-flex; align-items: center; gap: 6px;
     }
-    .apricorn-effect { font-size: 14px; color: var(--gray); margin-top: 6px; }
+    .apricorn-effect { font-size: 15px; color: #ddd; margin-top: 6px; font-weight: 700; }
 
     /* ── WELCOME PAGE ── */
     .welcome-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
     .welcome-card {
-      background: var(--stone2);
-      border: 3px solid;
-      border-top-color: var(--slot-light); border-left-color: var(--slot-light);
-      border-right-color: #333; border-bottom-color: #333;
-      padding: 16px;
+      background: rgba(45,45,55,0.65);
+      border: 2px solid rgba(85,255,85,0.25);
+      border-radius: 12px;
+      padding: 18px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 8px rgba(85,255,85,0.08);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .welcome-card:hover {
+      border-color: rgba(85,255,85,0.4);
+      box-shadow: 0 0 14px rgba(85,255,85,0.15);
     }
     .welcome-card h3 {
       font-family: 'Press Start 2P', monospace; font-size: 9px;
       color: var(--green); margin-bottom: 10px; padding-bottom: 6px;
       border-bottom: 2px solid #000;
     }
-    .welcome-card p, .welcome-card li { font-size: 18px; color: var(--gray); line-height: 1.6; }
+    .welcome-card p, .welcome-card li { font-size: 18px; color: #ddd; line-height: 1.6; font-weight: 700; }
     .welcome-card ul { padding-left: 20px; }
     .welcome-card li { color: var(--white); }
     .welcome-card li::marker { color: var(--green); }
@@ -816,11 +834,13 @@
 
     /* ── COPY LINK BTN ── */
     .copy-link-btn {
-      font-family: 'VT323', monospace; font-size: 16px;
-      background: #1a1a2a; color: var(--aqua); border: 2px solid #3a3a7a;
-      padding: 4px 12px; cursor: pointer; transition: all 0.15s;
+      font-family: 'VT323', monospace; font-size: 18px; font-weight: 700;
+      background: rgba(26,26,60,0.8); color: var(--aqua); border: 2px solid rgba(80,130,255,0.35);
+      padding: 8px 16px; cursor: pointer; transition: all 0.15s;
+      border-radius: 8px; text-align: center; position: relative; z-index: 10;
+      backdrop-filter: blur(6px); box-shadow: 0 0 8px rgba(80,130,255,0.12);
     }
-    .copy-link-btn:hover { background: #2a2a4a; }
+    .copy-link-btn:hover { background: rgba(42,42,80,0.9); box-shadow: 0 0 14px rgba(80,130,255,0.25); }
 
     /* ── MOVE TYPE ICON ── */
     .move-type-icon {
@@ -830,12 +850,13 @@
 
     /* ── LANGUAGE TOGGLE ── */
     .lang-toggle {
-      display: flex; gap: 0; border: 2px solid var(--slot-dark); margin-left: 8px;
+      display: flex; gap: 0; border: 2px solid var(--slot-dark);
+      margin-left: auto; flex-shrink: 0; border-radius: 6px; overflow: hidden;
     }
     .lang-btn {
-      font-family: 'VT323', monospace; font-size: 16px;
+      font-family: 'VT323', monospace; font-size: 18px; font-weight: 700;
       background: var(--stone2); color: var(--gray); border: none;
-      padding: 4px 10px; cursor: pointer; transition: all 0.15s;
+      padding: 6px 12px; cursor: pointer; transition: all 0.15s;
     }
     .lang-btn.active { background: #2a5a2a; color: var(--green); }
     .lang-btn:hover:not(.active) { background: #444; color: var(--white); }
@@ -1231,6 +1252,7 @@
       header { flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
       .header-title { font-size: 11px; }
       .header-subtitle { font-size: 14px; }
+      .lang-toggle { margin-left: 0; order: 2; }
       .header-right { display: none; width: 100%; flex-direction: column; gap: 6px; }
       .header-right.mobile-open { display: flex; }
       .app-layout { flex-direction: column; height: auto; min-height: calc(100vh - 80px); }
@@ -1250,6 +1272,12 @@
       .items-grid { grid-template-columns: 1fr; }
       .apricorn-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
       .mc-badge { font-size: 12px; padding: 2px 6px; }
+      .copy-link-btn {
+        width: 100% !important; display: block !important;
+        margin-top: 10px !important; float: none !important;
+        font-size: 18px; padding: 10px 14px;
+        text-align: center; box-sizing: border-box;
+      }
       .build-tabs { flex-wrap: wrap; }
       .build-tab { font-size: 14px; padding: 4px 8px; }
       .best-choice-badge { font-size: 6px; padding: 1px 5px; }
@@ -1434,57 +1462,58 @@
     /* ── RANKING SECTION ── */
     .ranking-section {
       background: rgba(20, 15, 35, 0.75);
-      backdrop-filter: blur(12px) saturate(150%);
-      -webkit-backdrop-filter: blur(12px) saturate(150%);
-      border: 3px solid rgba(90, 58, 154, 0.5);
-      padding: 20px;
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
+      border: 3px solid;
+      padding: 22px;
       margin-bottom: 20px;
-      border-radius: 12px;
+      border-radius: 14px;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
     .ranking-section h2 {
       font-family: 'Press Start 2P', monospace;
       font-size: 13px;
       margin-bottom: 14px;
       padding-bottom: 8px;
-      border-bottom: 2px solid rgba(90,58,154,0.4);
+      border-bottom: 2px solid rgba(255,255,255,0.12);
     }
     .ranking-type-header {
       display: flex; align-items: center; gap: 12px;
-      margin-bottom: 16px; padding: 10px 14px;
-      background: rgba(0,0,0,0.3);
+      margin-bottom: 16px; padding: 12px 16px;
       border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(8px);
     }
     .ranking-type-header h3 {
       font-family: 'Press Start 2P', monospace;
       font-size: 14px;
       color: var(--white);
       margin: 0;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
     .ranking-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 14px;
+      gap: 16px;
       margin-bottom: 24px;
     }
     .ranking-card {
-      background: rgba(15, 12, 25, 0.8);
-      border: 2px solid rgba(80, 60, 130, 0.4);
-      border-radius: 12px;
-      padding: 14px;
+      background: rgba(15, 12, 25, 0.85);
+      border: 2px solid;
+      border-radius: 14px;
+      padding: 16px;
       transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
       cursor: pointer;
       position: relative;
     }
     .ranking-card:hover {
-      border-color: rgba(192, 132, 252, 0.6);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      transform: translateY(-3px);
+      filter: brightness(1.1);
     }
     .ranking-card-rank {
       position: absolute; top: 8px; right: 10px;
       font-family: 'Press Start 2P', monospace;
-      font-size: 10px; color: rgba(255,170,0,0.7);
+      font-size: 11px; color: rgba(255,200,0,0.85);
+      text-shadow: 0 0 6px rgba(255,170,0,0.4);
     }
     .ranking-card-header {
       display: flex; align-items: center; gap: 12px;
@@ -1493,11 +1522,11 @@
     .ranking-card-header img {
       width: 80px; height: 80px;
       image-rendering: auto;
-      filter: drop-shadow(0 0 8px rgba(85,255,85,0.2));
+      filter: drop-shadow(0 0 10px rgba(85,255,85,0.25));
     }
     .ranking-card-name {
       font-family: 'Press Start 2P', monospace;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 900;
       color: var(--white);
       text-transform: capitalize;
@@ -1510,51 +1539,65 @@
       font-size: 11px !important; padding: 2px 8px !important;
     }
     .ranking-counters {
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 10px;
-      margin-top: 8px;
+      border-top: 1px solid;
+      padding-top: 12px;
+      margin-top: 10px;
     }
     .ranking-counters-title {
-      font-size: 13px; color: var(--red);
-      font-weight: 900; margin-bottom: 6px;
-      display: flex; align-items: center; gap: 4px;
+      font-size: 15px; color: #ff6b6b;
+      font-weight: 900; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
+      text-shadow: 0 0 8px rgba(255,85,85,0.3);
     }
     .ranking-counter-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 4px 6px; margin-bottom: 4px;
-      background: rgba(40,10,10,0.4);
-      border-radius: 6px;
-      border: 1px solid rgba(255,85,85,0.15);
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; margin-bottom: 8px;
+      background: rgba(50,15,15,0.5);
+      border-radius: 8px;
+      border: 1px solid rgba(255,100,100,0.25);
+      backdrop-filter: blur(6px);
     }
     .ranking-counter-item img {
-      width: 28px; height: 28px;
+      width: 36px; height: 36px;
       image-rendering: pixelated;
+      filter: drop-shadow(0 0 4px rgba(255,255,255,0.15));
     }
     .ranking-counter-name {
-      font-size: 15px; font-weight: 900;
-      color: var(--white); text-transform: capitalize;
+      font-size: 18px; font-weight: 900;
+      color: #fff; text-transform: capitalize;
       flex: 1;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
     .ranking-counter-reason {
-      font-size: 12px; color: var(--gray);
+      font-size: 14px; color: #fff;
+      font-weight: 700;
       font-style: italic;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      background: rgba(255,100,100,0.15);
+      padding: 2px 8px;
+      border-radius: 4px;
     }
     .ranking-build-btn {
       font-family: 'VT323', monospace;
-      font-size: 18px;
-      background: linear-gradient(135deg, rgba(42,90,42,0.7), rgba(26,74,26,0.7));
-      color: var(--green);
-      border: 1px solid rgba(85,255,85,0.3);
-      border-radius: 6px;
-      padding: 6px 12px;
+      font-size: 20px;
+      font-weight: 900;
+      background: linear-gradient(135deg, rgba(42,120,42,0.8), rgba(26,90,26,0.8));
+      color: #55ff55;
+      border: 2px solid rgba(85,255,85,0.4);
+      border-radius: 8px;
+      padding: 8px 14px;
       cursor: pointer;
       transition: all 0.15s;
       width: 100%;
-      margin-top: 8px;
+      margin-top: 10px;
+      backdrop-filter: blur(6px);
+      text-shadow: 0 0 8px rgba(85,255,85,0.3);
+      box-shadow: 0 0 8px rgba(85,255,85,0.15);
     }
     .ranking-build-btn:hover {
-      background: linear-gradient(135deg, rgba(55,120,55,0.8), rgba(35,90,35,0.8));
-      border-color: rgba(85,255,85,0.5);
+      background: linear-gradient(135deg, rgba(55,150,55,0.9), rgba(35,110,35,0.9));
+      border-color: rgba(85,255,85,0.6);
+      box-shadow: 0 0 14px rgba(85,255,85,0.3);
     }
     .ranking-nav-btns {
       display: flex; flex-wrap: wrap; gap: 6px;
@@ -1579,11 +1622,15 @@
       transform: scale(1.1);
     }
     @media (max-width: 768px) {
-      .ranking-grid { grid-template-columns: 1fr; }
-      .ranking-card-header img { width: 56px; height: 56px; }
-      .ranking-card-name { font-size: 10px; }
+      .ranking-grid { grid-template-columns: 1fr; gap: 12px; }
+      .ranking-card-header img { width: 60px; height: 60px; }
+      .ranking-card-name { font-size: 11px; }
+      .ranking-card { padding: 14px; }
       .ranking-nav-btns { gap: 4px; }
       .ranking-nav-btn { padding: 6px 10px; font-size: 14px; }
+      .ranking-counter-item { padding: 8px 10px; margin-bottom: 10px; }
+      .ranking-counter-name { font-size: 16px; }
+      .ranking-counter-reason { font-size: 13px; }
     }
   </style>
 </head>
@@ -1595,20 +1642,20 @@
     <a href="index.html" onclick="showPage('welcome');return false;" class="header-title" style="text-decoration:none;color:inherit;cursor:pointer">&#9876; Cobblemon Mastery Guide</a>
     <div class="header-subtitle">Serwerowa Baza Cobblemon &middot; Minecraft Mod</div>
   </div>
+  <div class="lang-toggle" id="lang-toggle">
+    <button class="lang-btn active" data-lang="pl" onclick="setLang('pl')">PL</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+  </div>
   <div class="header-right" id="header-right">
-    <div class="lang-toggle">
-      <button class="lang-btn active" data-lang="pl" onclick="setLang('pl')">PL</button>
-      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-    </div>
     <span class="mc-badge" id="badge-gen">&#127807; Generacje 1&ndash;9</span>
     <span class="mc-badge">&#9874; PokeAPI</span>
-    <a href="arena.html" class="mc-btn" id="btn-battle" style="background:#5a2a2a;border-top-color:#8a5a5a;border-left-color:#8a5a5a;text-decoration:none">&#9876; Arena Walki</a>
-    <button class="mc-btn" onclick="showPage('team-analyzer')" id="btn-team">&#9876; Zespół PvP</button>
-    <button class="mc-btn" onclick="showPage('ranking')" id="btn-ranking" style="background:#2a2a5a;border-top-color:#5a5a8a;border-left-color:#5a5a8a">&#127942; Ranking Typów</button>
-    <button class="mc-btn" onclick="showPage('type-chart')" id="btn-typechart">&#9878; Tabela Typów</button>
-    <button class="mc-btn" onclick="showPage('items')" id="btn-items">&#128230; Przedmioty</button>
-    <button class="mc-btn" onclick="showPage('apricorns')" id="btn-apricorns">&#127822; Apricorny</button>
-    <button class="mc-btn" onclick="showPage('welcome')" id="btn-start">&#127968; Start</button>
+    <a href="arena.html" class="mc-btn" id="btn-battle" style="background:rgba(140,40,40,0.75);border-color:rgba(255,80,80,0.3);box-shadow:0 0 10px rgba(255,60,60,0.15);text-decoration:none">&#9876; Arena Walki</a>
+    <button class="mc-btn" onclick="showPage('team-analyzer')" id="btn-team" style="background:rgba(40,100,110,0.75);border-color:rgba(80,200,220,0.3);box-shadow:0 0 10px rgba(80,200,220,0.15)">&#9876; Zespół PvP</button>
+    <button class="mc-btn" onclick="showPage('ranking')" id="btn-ranking" style="background:rgba(70,40,120,0.75);border-color:rgba(160,100,255,0.3);box-shadow:0 0 10px rgba(160,100,255,0.15)">&#127942; Ranking Typów</button>
+    <button class="mc-btn" onclick="showPage('type-chart')" id="btn-typechart" style="background:rgba(40,50,110,0.75);border-color:rgba(100,120,255,0.3);box-shadow:0 0 10px rgba(100,120,255,0.15)">&#9878; Tabela Typów</button>
+    <button class="mc-btn" onclick="showPage('items')" id="btn-items" style="background:rgba(100,80,30,0.75);border-color:rgba(220,180,60,0.3);box-shadow:0 0 10px rgba(220,180,60,0.15)">&#128230; Przedmioty</button>
+    <button class="mc-btn" onclick="showPage('apricorns')" id="btn-apricorns" style="background:rgba(40,100,40,0.75);border-color:rgba(80,220,80,0.3);box-shadow:0 0 10px rgba(80,220,80,0.15)">&#127822; Apricorny</button>
+    <button class="mc-btn" onclick="showPage('welcome')" id="btn-start" style="background:rgba(30,80,50,0.75);border-color:rgba(60,200,100,0.3);box-shadow:0 0 10px rgba(60,200,100,0.15)">&#127968; Start</button>
   </div>
 </header>
 
@@ -2266,26 +2313,93 @@ const TYPE_RANKING = {
   steel:    [[212,'scizor',['bug','steel']],[376,'metagross',['steel','psychic']],[462,'magnezone',['electric','steel']],[530,'excadrill',['ground','steel']],[598,'ferrothorn',['grass','steel']],[823,'corviknight',['flying','steel']]],
   fairy:    [[36,'clefable',['fairy']],[282,'gardevoir',['psychic','fairy']],[468,'togekiss',['fairy','flying']],[700,'sylveon',['fairy']],[778,'mimikyu',['ghost','fairy']],[858,'hatterene',['psychic','fairy']]]
 };
-const COUNTER_PICKS = {
-  normal:   [{id:68,name:'machamp',r:{pl:'Walka SE + wysoki Atak',en:'Fighting SE + high Atk'}},{id:448,name:'lucario',r:{pl:'Walka/Stal odporny',en:'Fight/Steel resistant'}},{id:534,name:'conkeldurr',r:{pl:'Wysoka Obrona + Walka',en:'High Defense + Fighting'}}],
-  fire:     [{id:130,name:'gyarados',r:{pl:'Wodny + wysoki Atak',en:'Water + high Atk'}},{id:260,name:'swampert',r:{pl:'Woda/Ziemia podw\u00f3jne SE',en:'Water/Ground double SE'}},{id:248,name:'tyranitar',r:{pl:'Skalny + wysoka Obrona',en:'Rock + high Defense'}}],
-  water:    [{id:462,name:'magnezone',r:{pl:'Elektryczny + stalowa Obr',en:'Electric + Steel bulk'}},{id:812,name:'rillaboom',r:{pl:'Trawiasty STAB + priorytet',en:'Grass STAB + priority'}},{id:3,name:'venusaur',r:{pl:'Trawa/Trucizna odporny',en:'Grass/Poison resistant'}}],
-  electric: [{id:445,name:'garchomp',r:{pl:'Ziemny immunitet',en:'Ground immunity'}},{id:530,name:'excadrill',r:{pl:'Ziemia/Stal odporny',en:'Ground/Steel resistant'}},{id:260,name:'swampert',r:{pl:'Ziemny + Wodny',en:'Ground + Water'}}],
-  grass:    [{id:637,name:'volcarona',r:{pl:'Ognisty + Robak SE',en:'Fire + Bug SE'}},{id:663,name:'talonflame',r:{pl:'Ogie\u0144/Lot priorytet',en:'Fire/Flying priority'}},{id:461,name:'weavile',r:{pl:'Lodowy + szybki',en:'Ice + fast'}}],
-  ice:      [{id:257,name:'blaziken',r:{pl:'Ogie\u0144/Walka SE',en:'Fire/Fight SE'}},{id:392,name:'infernape',r:{pl:'Ogie\u0144/Walka szybki',en:'Fire/Fight fast'}},{id:376,name:'metagross',r:{pl:'Stalowy odporny',en:'Steel resistant'}}],
-  fighting: [{id:468,name:'togekiss',r:{pl:'Bajkowy/Lataj\u0105cy SE',en:'Fairy/Flying SE'}},{id:65,name:'alakazam',r:{pl:'Psycho + szybki',en:'Psychic + fast'}},{id:282,name:'gardevoir',r:{pl:'Psycho/Bajkowy',en:'Psychic/Fairy'}}],
-  poison:   [{id:445,name:'garchomp',r:{pl:'Ziemny SE',en:'Ground SE'}},{id:65,name:'alakazam',r:{pl:'Psycho SE szybki',en:'Psychic SE fast'}},{id:530,name:'excadrill',r:{pl:'Ziemia/Stal',en:'Ground/Steel'}}],
-  ground:   [{id:130,name:'gyarados',r:{pl:'Lotny immunitet + Wodny',en:'Flying immune + Water'}},{id:598,name:'ferrothorn',r:{pl:'Trawiasty/Stalowy',en:'Grass/Steel'}},{id:461,name:'weavile',r:{pl:'Lodowy szybki',en:'Ice fast'}}],
-  flying:   [{id:462,name:'magnezone',r:{pl:'Elektryczny + Stal',en:'Electric + Steel'}},{id:461,name:'weavile',r:{pl:'Lodowy szybki',en:'Ice fast'}},{id:248,name:'tyranitar',r:{pl:'Skalny SE',en:'Rock SE'}}],
-  psychic:  [{id:212,name:'scizor',r:{pl:'Robak/Stal + priorytet',en:'Bug/Steel + priority'}},{id:94,name:'gengar',r:{pl:'Duch SE szybki',en:'Ghost SE fast'}},{id:248,name:'tyranitar',r:{pl:'Mroczny + wysoka Obr',en:'Dark + high Def'}}],
-  bug:      [{id:6,name:'charizard',r:{pl:'Ogie\u0144/Lot SE',en:'Fire/Flying SE'}},{id:663,name:'talonflame',r:{pl:'Ogie\u0144/Lot priorytet',en:'Fire/Flying priority'}},{id:248,name:'tyranitar',r:{pl:'Skalny SE',en:'Rock SE'}}],
-  rock:     [{id:260,name:'swampert',r:{pl:'Woda/Ziemia SE',en:'Water/Ground SE'}},{id:598,name:'ferrothorn',r:{pl:'Trawa/Stal SE',en:'Grass/Steel SE'}},{id:448,name:'lucario',r:{pl:'Walka/Stal SE',en:'Fight/Steel SE'}}],
-  ghost:    [{id:94,name:'gengar',r:{pl:'Duch SE szybki',en:'Ghost SE fast'}},{id:248,name:'tyranitar',r:{pl:'Mroczny SE + tank',en:'Dark SE + tank'}},{id:461,name:'weavile',r:{pl:'Mroczny + szybki',en:'Dark + fast'}}],
-  dragon:   [{id:461,name:'weavile',r:{pl:'Lodowy + szybki',en:'Ice + fast'}},{id:468,name:'togekiss',r:{pl:'Bajkowy immunitet',en:'Fairy immunity'}},{id:282,name:'gardevoir',r:{pl:'Bajkowy SE',en:'Fairy SE'}}],
-  dark:     [{id:448,name:'lucario',r:{pl:'Walka/Stal SE',en:'Fight/Steel SE'}},{id:212,name:'scizor',r:{pl:'Robak SE + priorytet',en:'Bug SE + priority'}},{id:282,name:'gardevoir',r:{pl:'Bajkowy SE',en:'Fairy SE'}}],
-  steel:    [{id:257,name:'blaziken',r:{pl:'Ogie\u0144/Walka SE',en:'Fire/Fight SE'}},{id:445,name:'garchomp',r:{pl:'Ziemny SE',en:'Ground SE'}},{id:392,name:'infernape',r:{pl:'Ogie\u0144/Walka szybki',en:'Fire/Fight fast'}}],
-  fairy:    [{id:94,name:'gengar',r:{pl:'Trucizna SE + szybki',en:'Poison SE + fast'}},{id:376,name:'metagross',r:{pl:'Stal SE + wysoki Atak',en:'Steel SE + high Atk'}},{id:530,name:'excadrill',r:{pl:'Stal SE + Ziemia',en:'Steel SE + Ground'}}]
+
+/* ── Type hex colors for dynamic UI ── */
+const TYPE_HEX = {
+  normal:'#a8a878',fire:'#f08030',water:'#6890f0',electric:'#f8d030',
+  grass:'#78c850',ice:'#98d8d8',fighting:'#c03028',poison:'#a040a0',
+  ground:'#e0c068',flying:'#a890f0',psychic:'#f85888',bug:'#a8b820',
+  rock:'#b8a038',ghost:'#705898',dragon:'#7038f8',dark:'#705848',
+  steel:'#b8b8d0',fairy:'#ee99ac'
 };
+
+/* ── Counter Pool — diverse competitive Pokemon for dynamic counter matching ── */
+const COUNTER_POOL = [
+  {id:6,  name:'charizard',  types:['fire','flying'],    atk:['fire','flying']},
+  {id:34, name:'nidoking',   types:['poison','ground'],  atk:['poison','ground','ice']},
+  {id:59, name:'arcanine',   types:['fire'],             atk:['fire']},
+  {id:65, name:'alakazam',   types:['psychic'],          atk:['psychic']},
+  {id:68, name:'machamp',    types:['fighting'],         atk:['fighting']},
+  {id:94, name:'gengar',     types:['ghost','poison'],   atk:['ghost','poison']},
+  {id:130,name:'gyarados',   types:['water','flying'],   atk:['water']},
+  {id:131,name:'lapras',     types:['water','ice'],      atk:['water','ice']},
+  {id:149,name:'dragonite',  types:['dragon','flying'],  atk:['dragon']},
+  {id:212,name:'scizor',     types:['bug','steel'],      atk:['bug','steel']},
+  {id:248,name:'tyranitar',  types:['rock','dark'],      atk:['rock','dark']},
+  {id:257,name:'blaziken',   types:['fire','fighting'],  atk:['fire','fighting']},
+  {id:260,name:'swampert',   types:['water','ground'],   atk:['water','ground']},
+  {id:282,name:'gardevoir',  types:['psychic','fairy'],  atk:['psychic','fairy']},
+  {id:376,name:'metagross',  types:['steel','psychic'],  atk:['steel']},
+  {id:392,name:'infernape',  types:['fire','fighting'],  atk:['fire','fighting']},
+  {id:445,name:'garchomp',   types:['dragon','ground'],  atk:['ground','dragon']},
+  {id:448,name:'lucario',    types:['fighting','steel'], atk:['fighting','steel']},
+  {id:461,name:'weavile',    types:['dark','ice'],       atk:['dark','ice']},
+  {id:462,name:'magnezone',  types:['electric','steel'], atk:['electric','steel']},
+  {id:468,name:'togekiss',   types:['fairy','flying'],   atk:['fairy']},
+  {id:530,name:'excadrill',  types:['ground','steel'],   atk:['ground','steel']},
+  {id:534,name:'conkeldurr', types:['fighting'],         atk:['fighting']},
+  {id:598,name:'ferrothorn', types:['grass','steel'],    atk:['grass']},
+  {id:609,name:'chandelure', types:['ghost','fire'],     atk:['ghost','fire']},
+  {id:637,name:'volcarona',  types:['bug','fire'],       atk:['bug','fire']},
+  {id:663,name:'talonflame', types:['fire','flying'],    atk:['fire','flying']},
+  {id:681,name:'aegislash',  types:['steel','ghost'],    atk:['steel','ghost']},
+  {id:778,name:'mimikyu',    types:['ghost','fairy'],    atk:['ghost','fairy']},
+  {id:812,name:'rillaboom',  types:['grass'],            atk:['grass']},
+  {id:887,name:'dragapult',  types:['dragon','ghost'],   atk:['dragon','ghost']},
+  {id:892,name:'urshifu',    types:['fighting','dark'],  atk:['fighting','dark']}
+];
+
+/* ── Dynamic counter function — computes 3 unique counters per Pokemon based on dual-type weaknesses ── */
+function getCountersForPokemon(pokemonId, pokemonTypes) {
+  var weakMap = {};
+  pokemonTypes.forEach(function(tp) {
+    var eff = TYPE_EFF[tp];
+    if (!eff) return;
+    eff.weak.forEach(function(w) { weakMap[w] = (weakMap[w] || 0) + 1; });
+    eff.resist.forEach(function(r) { weakMap[r] = (weakMap[r] || 0) - 1; });
+    eff.immune.forEach(function(i) { weakMap[i] = -99; });
+  });
+  var weakTypes = [];
+  for (var k in weakMap) { if (weakMap[k] > 0) weakTypes.push({ type: k, mult: weakMap[k] }); }
+  weakTypes.sort(function(a, b) { return b.mult - a.mult; });
+  var scored = [];
+  COUNTER_POOL.forEach(function(c) {
+    if (c.id === pokemonId) return;
+    var sc = 0, seTypes = [];
+    c.atk.forEach(function(at) {
+      weakTypes.forEach(function(w) {
+        if (at === w.type) { sc += w.mult * 3; if (seTypes.indexOf(at) < 0) seTypes.push(at); }
+      });
+    });
+    pokemonTypes.forEach(function(pt) {
+      c.types.forEach(function(ct) {
+        var e = TYPE_EFF[ct];
+        if (e && e.immune.indexOf(pt) >= 0) sc += 4;
+        else if (e && e.resist.indexOf(pt) >= 0) sc += 1;
+      });
+    });
+    if (sc > 0) {
+      var r = seTypes.length > 0
+        ? seTypes.map(function(st) { return typeName(st); }).join('/') + ' SE'
+        : (currentLang === 'en' ? 'resists STAB' : 'odporny na STAB');
+      scored.push({ id: c.id, name: c.name, score: sc, reason: r });
+    }
+  });
+  scored.sort(function(a, b) { return b.score - a.score; });
+  return scored.slice(0, 3);
+}
+
+/* removed — replaced by COUNTER_POOL + getCountersForPokemon() above */
 
 /* ================================================================
    FAVORITES
@@ -2889,7 +3003,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var panelsHTML = builds.map(function(b,i){
       return '<div class="build-panel'+(i===0?' active':'')+'" id="build-panel-'+i+'">'+generateBuild(statMap,pokemonTypes,moves,b.key,pokemonAbilities,abilityDetails)+'</div>';
     }).join('');
-    return '<div class="comp-section"><h2>\ud83c\udfc6 '+t('sec.comp')+' \u2014 '+r.label+'  <button class="copy-link-btn" id="copy-link-btn" onclick="copyBuildLink()" style="float:right;margin-top:-4px">\ud83d\udd17 '+t('build.copyLink')+'</button></h2>'
+    return '<div class="comp-section"><h2>\ud83c\udfc6 '+t('sec.comp')+' \u2014 '+r.label+'</h2><button class="copy-link-btn" id="copy-link-btn" onclick="copyBuildLink()">\ud83d\udd17 '+t('build.copyLink')+'</button>'
       +'<div class="build-tabs">'+tabsHTML+'</div>'
       +panelsHTML
       +'</div>';
@@ -3920,8 +4034,9 @@ function renderBattleSetupPage() {
    ================================================================ */
 /* ── RANKING RENDERER ── */
 function renderRankingPage() {
+  var typeClr = TYPE_HEX[rankingSelectedType] || '#888';
   var html = '<div class="page-title"><span>'+t('sec.ranking')+'</span></div>';
-  html += '<div style="text-align:center;font-size:16px;color:#888;margin-bottom:16px">'+t('ranking.desc')+'</div>';
+  html += '<div style="text-align:center;font-size:18px;color:#ccc;margin-bottom:16px;font-weight:700">'+t('ranking.desc')+'</div>';
   html += '<div class="ranking-nav-btns">';
   ALL_TYPES.forEach(function(tp) {
     var cls = tp === rankingSelectedType ? 'ranking-nav-btn type-badge type-'+tp+' active-rank' : 'ranking-nav-btn type-badge type-'+tp;
@@ -3929,31 +4044,32 @@ function renderRankingPage() {
   });
   html += '</div>';
   var pokes = TYPE_RANKING[rankingSelectedType] || [];
-  var counters = COUNTER_PICKS[rankingSelectedType] || [];
-  html += '<div class="ranking-section">';
-  html += '<div class="ranking-type-header"><span class="type-badge type-'+rankingSelectedType+'" style="font-size:18px!important;padding:6px 18px!important">' + typeName(rankingSelectedType) + '</span>';
+  html += '<div class="ranking-section" style="border-color:'+typeClr+';box-shadow:0 0 20px '+typeClr+'44,0 0 40px '+typeClr+'22">';
+  html += '<div class="ranking-type-header" style="border:1px solid '+typeClr+'55;background:'+typeClr+'18"><span class="type-badge type-'+rankingSelectedType+'" style="font-size:18px!important;padding:6px 18px!important">' + typeName(rankingSelectedType) + '</span>';
   html += '<h3>Top 6 ' + typeName(rankingSelectedType) + '</h3></div>';
   html += '<div class="ranking-grid">';
   pokes.forEach(function(p, idx) {
     var artUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + p[0] + '.png';
     var spriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + p[0] + '.png';
     var typeBadges = p[2].map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
+    /* Dynamic per-Pokemon counters based on individual type weaknesses */
+    var counters = getCountersForPokemon(p[0], p[2]);
     var counterHTML = '';
     counters.forEach(function(c) {
       var cSprite = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + c.id + '.png';
-      var reason = c.r[currentLang] || c.r.en;
       counterHTML += '<div class="ranking-counter-item">' +
         '<img src="'+cSprite+'" loading="lazy" alt="'+c.name+'"/>' +
         '<span class="ranking-counter-name">' + c.name + '</span>' +
-        '<span class="ranking-counter-reason">' + reason + '</span></div>';
+        '<span class="ranking-counter-reason">' + c.reason + '</span></div>';
     });
-    html += '<div class="ranking-card">' +
+    var cardClr = TYPE_HEX[p[2][0]] || typeClr;
+    html += '<div class="ranking-card" style="border-color:'+cardClr+'66;box-shadow:0 0 12px '+cardClr+'33">' +
       '<span class="ranking-card-rank">#' + (idx+1) + '</span>' +
       '<div class="ranking-card-header">' +
       '<img src="'+artUrl+'" loading="lazy" onerror="this.src=\''+spriteUrl+'\'" alt="'+p[1]+'"/>' +
       '<div><div class="ranking-card-name">' + p[1] + '</div>' +
       '<div class="ranking-card-types">' + typeBadges + '</div></div></div>' +
-      '<div class="ranking-counters">' +
+      '<div class="ranking-counters" style="border-top-color:'+cardClr+'33">' +
       '<div class="ranking-counters-title">\u2694 ' + t('ranking.counters') + '</div>' +
       counterHTML + '</div>' +
       '<button class="ranking-build-btn" onclick="loadBuildFromRanking('+p[0]+',\''+p[1]+'\')">' +
@@ -3992,8 +4108,8 @@ function showPage(page) {
       + '<div class="welcome-card"><h3>\ud83d\udce6 '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wa\u017cne przedmioty w jednym miejscu.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'items\')">\u2192 '+t('nav.items')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2694 '+t('nav.team')+'</h3><p>'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sk\u0142ad dru\u017cyny PvP i pokrycie typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'team-analyzer\')">\u2192 '+t('nav.team')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2696 '+t('nav.typechart')+'</h3><p>'+(currentLang==='en'?'Check your Pok\u00e9mon\'s weaknesses, resistances and immunities with dual-type support.':'Sprawd\u017a s\u0142abo\u015bci, odporno\u015bci i immunitety swojego Pok\u00e9mona z obs\u0142ug\u0105 podw\u00f3jnych typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'type-chart\')">\u2192 '+t('nav.typechart')+'</button></p></div>'
-      + '<div class="welcome-card" style="border-top-color:#5a5a8a;border-left-color:#5a5a8a"><h3 style="color:#c084fc">\ud83c\udfc6 '+t('nav.ranking')+'</h3><p>'+(currentLang==='en'?'Explore the Top 6 Pok\u00e9mon of each type with counter-strategies and build recommendations.':'Przegl\u0105daj Top 6 Pok\u00e9mon\u00f3w ka\u017cdego typu z kontrstrategiami i rekomendacjami build\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'ranking\')" style="background:#2a2a5a;border-top-color:#5a5a8a;border-left-color:#5a5a8a">\u2192 '+t('nav.ranking')+'</button></p></div>'
-      + '<div class="welcome-card" style="border-top-color:#8a5a5a;border-left-color:#8a5a5a"><h3 style="color:var(--red)">\u2694 '+t('nav.battle')+'</h3><p>'+t('battle.welcomeDesc')+'</p><p style="margin-top:6px"><a class="mc-btn" href="arena.html" style="background:#5a2a2a;border-top-color:#8a5a5a;border-left-color:#8a5a5a;text-decoration:none">\u2192 '+t('nav.battle')+'</a></p></div>'
+      + '<div class="welcome-card" style="border-color:rgba(160,100,255,0.35);box-shadow:0 0 10px rgba(160,100,255,0.12)"><h3 style="color:#c084fc">\ud83c\udfc6 '+t('nav.ranking')+'</h3><p>'+(currentLang==='en'?'Explore the Top 6 Pok\u00e9mon of each type with counter-strategies and build recommendations.':'Przegl\u0105daj Top 6 Pok\u00e9mon\u00f3w ka\u017cdego typu z kontrstrategiami i rekomendacjami build\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'ranking\')" style="background:rgba(70,40,120,0.75);border-color:rgba(160,100,255,0.3)">\u2192 '+t('nav.ranking')+'</button></p></div>'
+      + '<div class="welcome-card" style="border-color:rgba(255,80,80,0.3);box-shadow:0 0 10px rgba(255,80,80,0.12)"><h3 style="color:var(--red)">\u2694 '+t('nav.battle')+'</h3><p>'+t('battle.welcomeDesc')+'</p><p style="margin-top:6px"><a class="mc-btn" href="arena.html" style="background:rgba(140,40,40,0.75);border-color:rgba(255,80,80,0.3);text-decoration:none">\u2192 '+t('nav.battle')+'</a></p></div>'
       + '</div>';
   }
 
