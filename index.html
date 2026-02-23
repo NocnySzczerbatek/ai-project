@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Cobblemon Mastery Guide</title>
   <meta name="description" content="Najlepsza polska baza buildów competitive Cobblemon. Poradnik IV, EV, Nature, Moveset dla wszystkich Pokémonów w Minecraft." />
   <meta name="keywords" content="Cobblemon, Pokemon, Minecraft, buildy, poradnik, competitive, IV, EV, Nature, moveset, Pokémon" />
@@ -1273,6 +1273,318 @@
       .battle-stat-preview { grid-template-columns: repeat(2, 1fr); }
       .battle-start-btn { font-size: 11px; padding: 10px 20px; }
     }
+
+    /* ═══════════════════════════════════════════════════════════
+       UI OVERHAUL v2 — Glassmorphism · Readability · Glow
+       ═══════════════════════════════════════════════════════════ */
+
+    /* Readability: base 16px, key names 24px */
+    body { font-size: 16px; }
+    .pokemon-name-big { font-size: 24px !important; }
+    .page-title span { font-size: 16px; }
+    .mc-panel h2, .iv-section h2, .comp-section h2, .moves-section h2,
+    .cobblemon-section h2, .calc-section h2, .team-section h2, .biome-section h2 {
+      font-size: 13px !important;
+    }
+    .entry-name { font-size: 22px !important; }
+    .stat-val { font-size: 20px !important; }
+
+    /* Font-weight 900 for key data */
+    .type-badge, .iv-name, .iv-target, .stat-val, .stat-name,
+    .ev-amount, .nature-badge, .item-big-name, .move-card-name,
+    .pokemon-name-big, .entry-name, .defense-entry,
+    .battle-pokemon-name, .comp-box-title, .iv-label {
+      font-weight: 900 !important;
+    }
+
+    /* Glassmorphism panels */
+    .mc-panel {
+      background: rgba(58, 58, 58, 0.65) !important;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border: 1px solid rgba(255,255,255,0.08) !important;
+      border-top-color: rgba(200,200,200,0.15) !important;
+      border-left-color: rgba(200,200,200,0.15) !important;
+      border-right-color: rgba(0,0,0,0.3) !important;
+      border-bottom-color: rgba(0,0,0,0.3) !important;
+      padding: 17px !important;
+      border-radius: 10px;
+    }
+    .iv-section {
+      background: rgba(13, 26, 42, 0.7) !important;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border-color: rgba(26,74,106,0.6) !important;
+      padding: 17px !important;
+      border-radius: 10px;
+    }
+    .comp-section {
+      background: rgba(18, 16, 30, 0.7) !important;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border-color: rgba(90,58,154,0.5) !important;
+      padding: 17px !important;
+      border-radius: 10px;
+    }
+    .moves-section {
+      background: rgba(26, 26, 42, 0.7) !important;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border-color: rgba(58,58,122,0.5) !important;
+      padding: 17px !important;
+      border-radius: 10px;
+    }
+    .cobblemon-section {
+      background: rgba(26, 42, 26, 0.7) !important;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border-color: rgba(42,90,42,0.5) !important;
+      padding: 17px !important;
+      border-radius: 10px;
+    }
+    .calc-section {
+      background: rgba(26, 26, 10, 0.7) !important;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border-color: rgba(90,90,26,0.5) !important;
+      padding: 17px !important;
+      border-radius: 10px;
+    }
+    .team-section {
+      background: rgba(26, 10, 42, 0.7) !important;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border-color: rgba(90,42,138,0.5) !important;
+      padding: 17px !important;
+      border-radius: 10px;
+    }
+    .biome-section {
+      background: rgba(10, 26, 10, 0.7) !important;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border-color: rgba(26,90,26,0.5) !important;
+      padding: 17px !important;
+      border-radius: 10px;
+    }
+    .welcome-card {
+      background: rgba(58, 58, 58, 0.55) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 10px;
+    }
+    .item-card {
+      background: rgba(58, 58, 58, 0.55) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 10px;
+    }
+    .apricorn-card {
+      background: rgba(58, 58, 58, 0.55) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 10px;
+    }
+
+    /* Type Badges — pill-shaped with neon glow */
+    .type-badge {
+      border-radius: 20px !important;
+      padding: 3px 14px !important;
+      font-weight: 900 !important;
+      font-size: 15px !important;
+      letter-spacing: 1.2px !important;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.18) !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+    .type-normal   { box-shadow: 0 0 10px rgba(168,168,120,0.5), 0 0 20px rgba(168,168,120,0.2); }
+    .type-fire     { box-shadow: 0 0 10px rgba(240,128,48,0.6), 0 0 20px rgba(240,128,48,0.25); }
+    .type-water    { box-shadow: 0 0 10px rgba(104,144,240,0.6), 0 0 20px rgba(104,144,240,0.25); }
+    .type-electric { box-shadow: 0 0 10px rgba(248,208,48,0.6), 0 0 20px rgba(248,208,48,0.25); }
+    .type-grass    { box-shadow: 0 0 10px rgba(120,200,80,0.6), 0 0 20px rgba(120,200,80,0.25); }
+    .type-ice      { box-shadow: 0 0 10px rgba(152,216,216,0.6), 0 0 20px rgba(152,216,216,0.25); }
+    .type-fighting { box-shadow: 0 0 10px rgba(192,48,40,0.6), 0 0 20px rgba(192,48,40,0.25); }
+    .type-poison   { box-shadow: 0 0 10px rgba(160,64,160,0.6), 0 0 20px rgba(160,64,160,0.25); }
+    .type-ground   { box-shadow: 0 0 10px rgba(224,192,104,0.5), 0 0 20px rgba(224,192,104,0.2); }
+    .type-flying   { box-shadow: 0 0 10px rgba(168,144,240,0.6), 0 0 20px rgba(168,144,240,0.25); }
+    .type-psychic  { box-shadow: 0 0 10px rgba(248,88,136,0.6), 0 0 20px rgba(248,88,136,0.25); }
+    .type-bug      { box-shadow: 0 0 10px rgba(168,184,32,0.5), 0 0 20px rgba(168,184,32,0.2); }
+    .type-rock     { box-shadow: 0 0 10px rgba(184,160,56,0.5), 0 0 20px rgba(184,160,56,0.2); }
+    .type-ghost    { box-shadow: 0 0 10px rgba(112,88,152,0.7), 0 0 20px rgba(112,88,152,0.3); }
+    .type-dragon   { box-shadow: 0 0 10px rgba(112,56,248,0.7), 0 0 20px rgba(112,56,248,0.3); }
+    .type-dark     { box-shadow: 0 0 10px rgba(112,88,72,0.6), 0 0 20px rgba(112,88,72,0.25); }
+    .type-steel    { box-shadow: 0 0 10px rgba(184,184,208,0.5), 0 0 20px rgba(184,184,208,0.2); }
+    .type-fairy    { box-shadow: 0 0 10px rgba(238,153,172,0.6), 0 0 20px rgba(238,153,172,0.25); }
+
+    /* Mobile: 44px min touch targets */
+    @media (max-width: 768px) {
+      .mc-btn, .gen-filter-btn, .tab-btn, .build-tab, .moves-tab,
+      .wc-type-btn, .lang-btn, .battle-move-btn, .battle-random-btn,
+      .battle-start-btn, .donate-btn, .ranking-nav-btn {
+        min-height: 44px !important;
+        display: inline-flex !important; align-items: center; justify-content: center;
+      }
+      .iv-hybrid input[type="range"], .calc-iv-hybrid input[type="range"] {
+        min-height: 44px !important;
+      }
+      .mc-input, .calc-field, .calc-select {
+        min-height: 44px !important;
+      }
+    }
+
+    /* ── RANKING SECTION ── */
+    .ranking-section {
+      background: rgba(20, 15, 35, 0.75);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border: 3px solid rgba(90, 58, 154, 0.5);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+    }
+    .ranking-section h2 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 13px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(90,58,154,0.4);
+    }
+    .ranking-type-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 16px; padding: 10px 14px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .ranking-type-header h3 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 14px;
+      color: var(--white);
+      margin: 0;
+    }
+    .ranking-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .ranking-card {
+      background: rgba(15, 12, 25, 0.8);
+      border: 2px solid rgba(80, 60, 130, 0.4);
+      border-radius: 12px;
+      padding: 14px;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .ranking-card:hover {
+      border-color: rgba(192, 132, 252, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+    .ranking-card-rank {
+      position: absolute; top: 8px; right: 10px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px; color: rgba(255,170,0,0.7);
+    }
+    .ranking-card-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 10px;
+    }
+    .ranking-card-header img {
+      width: 80px; height: 80px;
+      image-rendering: auto;
+      filter: drop-shadow(0 0 8px rgba(85,255,85,0.2));
+    }
+    .ranking-card-name {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--white);
+      text-transform: capitalize;
+      margin-bottom: 4px;
+    }
+    .ranking-card-types {
+      display: flex; gap: 4px; flex-wrap: wrap;
+    }
+    .ranking-card-types .type-badge {
+      font-size: 11px !important; padding: 2px 8px !important;
+    }
+    .ranking-counters {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 10px;
+      margin-top: 8px;
+    }
+    .ranking-counters-title {
+      font-size: 13px; color: var(--red);
+      font-weight: 900; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .ranking-counter-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 4px 6px; margin-bottom: 4px;
+      background: rgba(40,10,10,0.4);
+      border-radius: 6px;
+      border: 1px solid rgba(255,85,85,0.15);
+    }
+    .ranking-counter-item img {
+      width: 28px; height: 28px;
+      image-rendering: pixelated;
+    }
+    .ranking-counter-name {
+      font-size: 15px; font-weight: 900;
+      color: var(--white); text-transform: capitalize;
+      flex: 1;
+    }
+    .ranking-counter-reason {
+      font-size: 12px; color: var(--gray);
+      font-style: italic;
+    }
+    .ranking-build-btn {
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      background: linear-gradient(135deg, rgba(42,90,42,0.7), rgba(26,74,26,0.7));
+      color: var(--green);
+      border: 1px solid rgba(85,255,85,0.3);
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .ranking-build-btn:hover {
+      background: linear-gradient(135deg, rgba(55,120,55,0.8), rgba(35,90,35,0.8));
+      border-color: rgba(85,255,85,0.5);
+    }
+    .ranking-nav-btns {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-bottom: 20px; justify-content: center;
+    }
+    .ranking-nav-btn {
+      border-radius: 16px;
+      padding: 6px 14px;
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 2px solid transparent;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .ranking-nav-btn:hover { transform: scale(1.08); }
+    .ranking-nav-btn.active-rank {
+      border-color: var(--white);
+      box-shadow: 0 0 14px rgba(255,255,255,0.35);
+      transform: scale(1.1);
+    }
+    @media (max-width: 768px) {
+      .ranking-grid { grid-template-columns: 1fr; }
+      .ranking-card-header img { width: 56px; height: 56px; }
+      .ranking-card-name { font-size: 10px; }
+      .ranking-nav-btns { gap: 4px; }
+      .ranking-nav-btn { padding: 6px 10px; font-size: 14px; }
+    }
   </style>
 </head>
 <body>
@@ -1292,6 +1604,7 @@
     <span class="mc-badge">&#9874; PokeAPI</span>
     <a href="arena.html" class="mc-btn" id="btn-battle" style="background:#5a2a2a;border-top-color:#8a5a5a;border-left-color:#8a5a5a;text-decoration:none">&#9876; Arena Walki</a>
     <button class="mc-btn" onclick="showPage('team-analyzer')" id="btn-team">&#9876; Zespół PvP</button>
+    <button class="mc-btn" onclick="showPage('ranking')" id="btn-ranking" style="background:#2a2a5a;border-top-color:#5a5a8a;border-left-color:#5a5a8a">&#127942; Ranking Typów</button>
     <button class="mc-btn" onclick="showPage('type-chart')" id="btn-typechart">&#9878; Tabela Typów</button>
     <button class="mc-btn" onclick="showPage('items')" id="btn-items">&#128230; Przedmioty</button>
     <button class="mc-btn" onclick="showPage('apricorns')" id="btn-apricorns">&#127822; Apricorny</button>
@@ -1634,6 +1947,11 @@ const TR = {
   'battle.phys':      {pl:'Fiz',en:'Phys'},
   'battle.spec':      {pl:'Spec',en:'Spec'},
   'battle.welcomeDesc':{pl:'Symuluj walk\u0119 Pok\u00e9mon\u00f3w z pe\u0142n\u0105 mechanik\u0105 obra\u017ce\u0144, IV, Natur i typ\u00f3w!',en:'Simulate Pok\u00e9mon battles with full damage mechanics, IVs, Natures and types!'},
+  'nav.ranking':      {pl:'Ranking Typ\u00f3w',en:'Type Ranking'},
+  'sec.ranking':      {pl:'\ud83c\udfc6 Ranking Typ\u00f3w \u2014 Top 6 Cobblemon',en:'\ud83c\udfc6 Type Ranking \u2014 Top 6 Cobblemon'},
+  'ranking.counters':  {pl:'Najlepsze Kontry',en:'Best Counters'},
+  'ranking.buildBtn':  {pl:'Build & Counter-Strategy',en:'Build & Counter-Strategy'},
+  'ranking.desc':      {pl:'Najlepsze Pok\u00e9mony ka\u017cdego typu z kontrstrategi\u0105. Kliknij aby za\u0142adowa\u0107 build.',en:'Best Pok\u00e9mon of each type with counter-strategy. Click to load build.'},
 };
 function t(key){var e=TR[key];if(!e)return key;return e[currentLang]||e['pl']||key;}
 
@@ -1825,6 +2143,7 @@ function setLang(lang){
   var bt=document.getElementById('btn-team');if(bt)bt.innerHTML='\u2694 '+t('nav.team');
   var bc=document.getElementById('btn-typechart');if(bc)bc.innerHTML='\u2696 '+t('nav.typechart');
   var bb=document.getElementById('btn-battle');if(bb)bb.innerHTML='\u2694 '+t('nav.battle');
+  var brk=document.getElementById('btn-ranking');if(brk)brk.innerHTML='\ud83c\udfc6 '+t('nav.ranking');
   // Update donate bar
   var dt=document.getElementById('donate-title');if(dt)dt.textContent=t('gen.donate');
   var dd=document.getElementById('donate-desc');if(dd)dd.textContent=t('gen.donateDesc');
@@ -1835,6 +2154,7 @@ function setLang(lang){
   else if(currentPage==='apricorns')showPage('apricorns');
   else if(currentPage==='team-analyzer')showPage('team-analyzer');
   else if(currentPage==='type-chart')showPage('type-chart');
+  else if(currentPage==='ranking')showPage('ranking');
   else if(currentPage==='battle-sim')window.location.href='arena.html';
   else if(selectedId){var f=allPokemon.find(function(p){return p.id===selectedId;});if(f)loadDetail(f.id,f.name);}
 }
@@ -1921,6 +2241,51 @@ const PAGE_SIZE = 80;
 const FAVORITES_KEY = 'cob_favorites';
 let currentBuildIndex = 0;
 let lastBuildData = null;
+let rankingSelectedType = 'fire';
+
+/* ================================================================
+   TYPE RANKING DATA — Top 6 per type + Counter Picks
+   ================================================================ */
+const TYPE_RANKING = {
+  normal:   [[143,'snorlax',['normal']],[242,'blissey',['normal']],[474,'porygon-z',['normal']],[398,'staraptor',['normal','flying']],[428,'lopunny',['normal']],[289,'slaking',['normal']]],
+  fire:     [[6,'charizard',['fire','flying']],[59,'arcanine',['fire']],[257,'blaziken',['fire','fighting']],[392,'infernape',['fire','fighting']],[637,'volcarona',['bug','fire']],[815,'cinderace',['fire']]],
+  water:    [[130,'gyarados',['water','flying']],[260,'swampert',['water','ground']],[350,'milotic',['water']],[658,'greninja',['water','dark']],[748,'toxapex',['water','poison']],[818,'inteleon',['water']]],
+  electric: [[135,'jolteon',['electric']],[243,'raikou',['electric']],[462,'magnezone',['electric','steel']],[466,'electivire',['electric']],[807,'zeraora',['electric']],[894,'regieleki',['electric']]],
+  grass:    [[3,'venusaur',['grass','poison']],[497,'serperior',['grass']],[591,'amoonguss',['grass','poison']],[598,'ferrothorn',['grass','steel']],[812,'rillaboom',['grass']],[724,'decidueye',['grass','ghost']]],
+  ice:      [[131,'lapras',['water','ice']],[461,'weavile',['dark','ice']],[473,'mamoswine',['ice','ground']],[471,'glaceon',['ice']],[646,'kyurem',['dragon','ice']],[713,'avalugg',['ice']]],
+  fighting: [[68,'machamp',['fighting']],[257,'blaziken',['fire','fighting']],[448,'lucario',['fighting','steel']],[534,'conkeldurr',['fighting']],[620,'mienshao',['fighting']],[892,'urshifu',['fighting','dark']]],
+  poison:   [[34,'nidoking',['poison','ground']],[94,'gengar',['ghost','poison']],[452,'drapion',['poison','dark']],[591,'amoonguss',['grass','poison']],[748,'toxapex',['water','poison']],[758,'salazzle',['poison','fire']]],
+  ground:   [[260,'swampert',['water','ground']],[330,'flygon',['ground','dragon']],[445,'garchomp',['dragon','ground']],[450,'hippowdon',['ground']],[530,'excadrill',['ground','steel']],[553,'krookodile',['ground','dark']]],
+  flying:   [[6,'charizard',['fire','flying']],[149,'dragonite',['dragon','flying']],[227,'skarmory',['steel','flying']],[468,'togekiss',['fairy','flying']],[663,'talonflame',['fire','flying']],[823,'corviknight',['flying','steel']]],
+  psychic:  [[65,'alakazam',['psychic']],[196,'espeon',['psychic']],[282,'gardevoir',['psychic','fairy']],[376,'metagross',['steel','psychic']],[579,'reuniclus',['psychic']],[858,'hatterene',['psychic','fairy']]],
+  bug:      [[212,'scizor',['bug','steel']],[214,'heracross',['bug','fighting']],[416,'vespiquen',['bug','flying']],[637,'volcarona',['bug','fire']],[826,'orbeetle',['bug','psychic']],[851,'centiskorch',['fire','bug']]],
+  rock:     [[142,'aerodactyl',['rock','flying']],[248,'tyranitar',['rock','dark']],[464,'rhyperior',['ground','rock']],[526,'gigalith',['rock']],[745,'lycanroc',['rock']],[839,'coalossal',['rock','fire']]],
+  ghost:    [[94,'gengar',['ghost','poison']],[609,'chandelure',['ghost','fire']],[681,'aegislash',['steel','ghost']],[778,'mimikyu',['ghost','fairy']],[855,'polteageist',['ghost']],[887,'dragapult',['dragon','ghost']]],
+  dragon:   [[149,'dragonite',['dragon','flying']],[373,'salamence',['dragon','flying']],[445,'garchomp',['dragon','ground']],[612,'haxorus',['dragon']],[635,'hydreigon',['dark','dragon']],[887,'dragapult',['dragon','ghost']]],
+  dark:     [[248,'tyranitar',['rock','dark']],[359,'absol',['dark']],[461,'weavile',['dark','ice']],[553,'krookodile',['ground','dark']],[635,'hydreigon',['dark','dragon']],[861,'grimmsnarl',['dark','fairy']]],
+  steel:    [[212,'scizor',['bug','steel']],[376,'metagross',['steel','psychic']],[462,'magnezone',['electric','steel']],[530,'excadrill',['ground','steel']],[598,'ferrothorn',['grass','steel']],[823,'corviknight',['flying','steel']]],
+  fairy:    [[36,'clefable',['fairy']],[282,'gardevoir',['psychic','fairy']],[468,'togekiss',['fairy','flying']],[700,'sylveon',['fairy']],[778,'mimikyu',['ghost','fairy']],[858,'hatterene',['psychic','fairy']]]
+};
+const COUNTER_PICKS = {
+  normal:   [{id:68,name:'machamp',r:{pl:'Walka SE + wysoki Atak',en:'Fighting SE + high Atk'}},{id:448,name:'lucario',r:{pl:'Walka/Stal odporny',en:'Fight/Steel resistant'}},{id:534,name:'conkeldurr',r:{pl:'Wysoka Obrona + Walka',en:'High Defense + Fighting'}}],
+  fire:     [{id:130,name:'gyarados',r:{pl:'Wodny + wysoki Atak',en:'Water + high Atk'}},{id:260,name:'swampert',r:{pl:'Woda/Ziemia podw\u00f3jne SE',en:'Water/Ground double SE'}},{id:248,name:'tyranitar',r:{pl:'Skalny + wysoka Obrona',en:'Rock + high Defense'}}],
+  water:    [{id:462,name:'magnezone',r:{pl:'Elektryczny + stalowa Obr',en:'Electric + Steel bulk'}},{id:812,name:'rillaboom',r:{pl:'Trawiasty STAB + priorytet',en:'Grass STAB + priority'}},{id:3,name:'venusaur',r:{pl:'Trawa/Trucizna odporny',en:'Grass/Poison resistant'}}],
+  electric: [{id:445,name:'garchomp',r:{pl:'Ziemny immunitet',en:'Ground immunity'}},{id:530,name:'excadrill',r:{pl:'Ziemia/Stal odporny',en:'Ground/Steel resistant'}},{id:260,name:'swampert',r:{pl:'Ziemny + Wodny',en:'Ground + Water'}}],
+  grass:    [{id:637,name:'volcarona',r:{pl:'Ognisty + Robak SE',en:'Fire + Bug SE'}},{id:663,name:'talonflame',r:{pl:'Ogie\u0144/Lot priorytet',en:'Fire/Flying priority'}},{id:461,name:'weavile',r:{pl:'Lodowy + szybki',en:'Ice + fast'}}],
+  ice:      [{id:257,name:'blaziken',r:{pl:'Ogie\u0144/Walka SE',en:'Fire/Fight SE'}},{id:392,name:'infernape',r:{pl:'Ogie\u0144/Walka szybki',en:'Fire/Fight fast'}},{id:376,name:'metagross',r:{pl:'Stalowy odporny',en:'Steel resistant'}}],
+  fighting: [{id:468,name:'togekiss',r:{pl:'Bajkowy/Lataj\u0105cy SE',en:'Fairy/Flying SE'}},{id:65,name:'alakazam',r:{pl:'Psycho + szybki',en:'Psychic + fast'}},{id:282,name:'gardevoir',r:{pl:'Psycho/Bajkowy',en:'Psychic/Fairy'}}],
+  poison:   [{id:445,name:'garchomp',r:{pl:'Ziemny SE',en:'Ground SE'}},{id:65,name:'alakazam',r:{pl:'Psycho SE szybki',en:'Psychic SE fast'}},{id:530,name:'excadrill',r:{pl:'Ziemia/Stal',en:'Ground/Steel'}}],
+  ground:   [{id:130,name:'gyarados',r:{pl:'Lotny immunitet + Wodny',en:'Flying immune + Water'}},{id:598,name:'ferrothorn',r:{pl:'Trawiasty/Stalowy',en:'Grass/Steel'}},{id:461,name:'weavile',r:{pl:'Lodowy szybki',en:'Ice fast'}}],
+  flying:   [{id:462,name:'magnezone',r:{pl:'Elektryczny + Stal',en:'Electric + Steel'}},{id:461,name:'weavile',r:{pl:'Lodowy szybki',en:'Ice fast'}},{id:248,name:'tyranitar',r:{pl:'Skalny SE',en:'Rock SE'}}],
+  psychic:  [{id:212,name:'scizor',r:{pl:'Robak/Stal + priorytet',en:'Bug/Steel + priority'}},{id:94,name:'gengar',r:{pl:'Duch SE szybki',en:'Ghost SE fast'}},{id:248,name:'tyranitar',r:{pl:'Mroczny + wysoka Obr',en:'Dark + high Def'}}],
+  bug:      [{id:6,name:'charizard',r:{pl:'Ogie\u0144/Lot SE',en:'Fire/Flying SE'}},{id:663,name:'talonflame',r:{pl:'Ogie\u0144/Lot priorytet',en:'Fire/Flying priority'}},{id:248,name:'tyranitar',r:{pl:'Skalny SE',en:'Rock SE'}}],
+  rock:     [{id:260,name:'swampert',r:{pl:'Woda/Ziemia SE',en:'Water/Ground SE'}},{id:598,name:'ferrothorn',r:{pl:'Trawa/Stal SE',en:'Grass/Steel SE'}},{id:448,name:'lucario',r:{pl:'Walka/Stal SE',en:'Fight/Steel SE'}}],
+  ghost:    [{id:94,name:'gengar',r:{pl:'Duch SE szybki',en:'Ghost SE fast'}},{id:248,name:'tyranitar',r:{pl:'Mroczny SE + tank',en:'Dark SE + tank'}},{id:461,name:'weavile',r:{pl:'Mroczny + szybki',en:'Dark + fast'}}],
+  dragon:   [{id:461,name:'weavile',r:{pl:'Lodowy + szybki',en:'Ice + fast'}},{id:468,name:'togekiss',r:{pl:'Bajkowy immunitet',en:'Fairy immunity'}},{id:282,name:'gardevoir',r:{pl:'Bajkowy SE',en:'Fairy SE'}}],
+  dark:     [{id:448,name:'lucario',r:{pl:'Walka/Stal SE',en:'Fight/Steel SE'}},{id:212,name:'scizor',r:{pl:'Robak SE + priorytet',en:'Bug SE + priority'}},{id:282,name:'gardevoir',r:{pl:'Bajkowy SE',en:'Fairy SE'}}],
+  steel:    [{id:257,name:'blaziken',r:{pl:'Ogie\u0144/Walka SE',en:'Fire/Fight SE'}},{id:445,name:'garchomp',r:{pl:'Ziemny SE',en:'Ground SE'}},{id:392,name:'infernape',r:{pl:'Ogie\u0144/Walka szybki',en:'Fire/Fight fast'}}],
+  fairy:    [{id:94,name:'gengar',r:{pl:'Trucizna SE + szybki',en:'Poison SE + fast'}},{id:376,name:'metagross',r:{pl:'Stal SE + wysoki Atak',en:'Steel SE + high Atk'}},{id:530,name:'excadrill',r:{pl:'Stal SE + Ziemia',en:'Steel SE + Ground'}}]
+};
 
 /* ================================================================
    FAVORITES
@@ -3550,6 +3915,66 @@ function renderBattleSetupPage() {
 /* ================================================================
    PAGES
    ================================================================ */
+/* ================================================================
+   PAGES
+   ================================================================ */
+/* ── RANKING RENDERER ── */
+function renderRankingPage() {
+  var html = '<div class="page-title"><span>'+t('sec.ranking')+'</span></div>';
+  html += '<div style="text-align:center;font-size:16px;color:#888;margin-bottom:16px">'+t('ranking.desc')+'</div>';
+  html += '<div class="ranking-nav-btns">';
+  ALL_TYPES.forEach(function(tp) {
+    var cls = tp === rankingSelectedType ? 'ranking-nav-btn type-badge type-'+tp+' active-rank' : 'ranking-nav-btn type-badge type-'+tp;
+    html += '<button class="'+cls+'" onclick="selectRankingType(\''+tp+'\')">' + typeName(tp) + '</button>';
+  });
+  html += '</div>';
+  var pokes = TYPE_RANKING[rankingSelectedType] || [];
+  var counters = COUNTER_PICKS[rankingSelectedType] || [];
+  html += '<div class="ranking-section">';
+  html += '<div class="ranking-type-header"><span class="type-badge type-'+rankingSelectedType+'" style="font-size:18px!important;padding:6px 18px!important">' + typeName(rankingSelectedType) + '</span>';
+  html += '<h3>Top 6 ' + typeName(rankingSelectedType) + '</h3></div>';
+  html += '<div class="ranking-grid">';
+  pokes.forEach(function(p, idx) {
+    var artUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + p[0] + '.png';
+    var spriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + p[0] + '.png';
+    var typeBadges = p[2].map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
+    var counterHTML = '';
+    counters.forEach(function(c) {
+      var cSprite = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + c.id + '.png';
+      var reason = c.r[currentLang] || c.r.en;
+      counterHTML += '<div class="ranking-counter-item">' +
+        '<img src="'+cSprite+'" loading="lazy" alt="'+c.name+'"/>' +
+        '<span class="ranking-counter-name">' + c.name + '</span>' +
+        '<span class="ranking-counter-reason">' + reason + '</span></div>';
+    });
+    html += '<div class="ranking-card">' +
+      '<span class="ranking-card-rank">#' + (idx+1) + '</span>' +
+      '<div class="ranking-card-header">' +
+      '<img src="'+artUrl+'" loading="lazy" onerror="this.src=\''+spriteUrl+'\'" alt="'+p[1]+'"/>' +
+      '<div><div class="ranking-card-name">' + p[1] + '</div>' +
+      '<div class="ranking-card-types">' + typeBadges + '</div></div></div>' +
+      '<div class="ranking-counters">' +
+      '<div class="ranking-counters-title">\u2694 ' + t('ranking.counters') + '</div>' +
+      counterHTML + '</div>' +
+      '<button class="ranking-build-btn" onclick="loadBuildFromRanking('+p[0]+',\''+p[1]+'\')">' +
+      '\ud83d\udccb ' + t('ranking.buildBtn') + '</button></div>';
+  });
+  html += '</div></div>';
+  return html;
+}
+function selectRankingType(tp) {
+  rankingSelectedType = tp;
+  showPage('ranking');
+}
+function loadBuildFromRanking(id, name) {
+  loadDetail(id, name).then(function() {
+    setTimeout(function() {
+      var comp = document.querySelector('.comp-section');
+      if (comp) comp.scrollIntoView({behavior:'smooth',block:'start'});
+    }, 600);
+  });
+}
+
 function showPage(page) {
   currentPage = page;
   var main = document.getElementById('main-area');
@@ -3567,6 +3992,7 @@ function showPage(page) {
       + '<div class="welcome-card"><h3>\ud83d\udce6 '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wa\u017cne przedmioty w jednym miejscu.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'items\')">\u2192 '+t('nav.items')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2694 '+t('nav.team')+'</h3><p>'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sk\u0142ad dru\u017cyny PvP i pokrycie typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'team-analyzer\')">\u2192 '+t('nav.team')+'</button></p></div>'
       + '<div class="welcome-card"><h3>\u2696 '+t('nav.typechart')+'</h3><p>'+(currentLang==='en'?'Check your Pok\u00e9mon\'s weaknesses, resistances and immunities with dual-type support.':'Sprawd\u017a s\u0142abo\u015bci, odporno\u015bci i immunitety swojego Pok\u00e9mona z obs\u0142ug\u0105 podw\u00f3jnych typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'type-chart\')">\u2192 '+t('nav.typechart')+'</button></p></div>'
+      + '<div class="welcome-card" style="border-top-color:#5a5a8a;border-left-color:#5a5a8a"><h3 style="color:#c084fc">\ud83c\udfc6 '+t('nav.ranking')+'</h3><p>'+(currentLang==='en'?'Explore the Top 6 Pok\u00e9mon of each type with counter-strategies and build recommendations.':'Przegl\u0105daj Top 6 Pok\u00e9mon\u00f3w ka\u017cdego typu z kontrstrategiami i rekomendacjami build\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'ranking\')" style="background:#2a2a5a;border-top-color:#5a5a8a;border-left-color:#5a5a8a">\u2192 '+t('nav.ranking')+'</button></p></div>'
       + '<div class="welcome-card" style="border-top-color:#8a5a5a;border-left-color:#8a5a5a"><h3 style="color:var(--red)">\u2694 '+t('nav.battle')+'</h3><p>'+t('battle.welcomeDesc')+'</p><p style="margin-top:6px"><a class="mc-btn" href="arena.html" style="background:#5a2a2a;border-top-color:#8a5a5a;border-left-color:#8a5a5a;text-decoration:none">\u2192 '+t('nav.battle')+'</a></p></div>'
       + '</div>';
   }
@@ -3608,6 +4034,10 @@ function showPage(page) {
   if (page === 'battle-sim') {
     window.location.href = 'arena.html';
     return;
+  }
+
+  if (page === 'ranking') {
+    main.innerHTML = renderRankingPage();
   }
 }
 
