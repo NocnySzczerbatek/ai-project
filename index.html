@@ -313,6 +313,93 @@
     .iv-target { width: 64px; font-size: 15px; text-align: center; font-weight: bold; }
     .iv-row-priority { background: #05151f; }
 
+    /* ── IV HYBRID SLIDER ── */
+    .iv-hybrid {
+      display: flex; align-items: center; gap: 6px; flex: 1;
+    }
+    .iv-hybrid input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      flex: 1; height: 10px; border-radius: 5px;
+      background: #111; border: 1px solid #333;
+      outline: none; cursor: pointer;
+      min-width: 80px;
+    }
+    .iv-hybrid input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--iv-thumb, #55ffff);
+      border: 3px solid #000;
+      box-shadow: 0 0 6px var(--iv-thumb, #55ffff), inset 0 0 2px rgba(255,255,255,0.3);
+      cursor: pointer;
+    }
+    .iv-hybrid input[type="range"]::-moz-range-thumb {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--iv-thumb, #55ffff);
+      border: 3px solid #000;
+      box-shadow: 0 0 6px var(--iv-thumb, #55ffff), inset 0 0 2px rgba(255,255,255,0.3);
+      cursor: pointer;
+    }
+    .iv-hybrid input[type="range"]::-webkit-slider-runnable-track {
+      height: 10px; border-radius: 5px;
+      background: linear-gradient(to right, var(--iv-track, #55ffff) 0%, var(--iv-track, #55ffff) var(--iv-pct, 100%), #111 var(--iv-pct, 100%), #111 100%);
+    }
+    .iv-hybrid input[type="range"]::-moz-range-track {
+      height: 10px; border-radius: 5px; border: none;
+      background: linear-gradient(to right, var(--iv-track, #55ffff) 0%, var(--iv-track, #55ffff) var(--iv-pct, 100%), #111 var(--iv-pct, 100%), #111 100%);
+    }
+    .iv-hybrid input[type="number"] {
+      width: 52px; font-family: 'VT323', monospace; font-size: 20px;
+      background: #000; color: var(--white); border: 2px solid #333;
+      text-align: center; padding: 2px 4px; outline: none;
+    }
+    .iv-hybrid input[type="number"]:focus { border-color: var(--aqua); }
+    /* calc & battle variants */
+    .calc-iv-hybrid {
+      display: flex; align-items: center; gap: 6px; margin-top: 4px;
+    }
+    .calc-iv-hybrid input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      flex: 1; height: 10px; border-radius: 5px;
+      background: #111; border: 1px solid #333;
+      outline: none; cursor: pointer;
+      min-width: 60px;
+    }
+    .calc-iv-hybrid input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--iv-thumb, #55ffff);
+      border: 3px solid #000;
+      box-shadow: 0 0 6px var(--iv-thumb, #55ffff), inset 0 0 2px rgba(255,255,255,0.3);
+      cursor: pointer;
+    }
+    .calc-iv-hybrid input[type="range"]::-moz-range-thumb {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--iv-thumb, #55ffff);
+      border: 3px solid #000;
+      box-shadow: 0 0 6px var(--iv-thumb, #55ffff), inset 0 0 2px rgba(255,255,255,0.3);
+      cursor: pointer;
+    }
+    .calc-iv-hybrid input[type="range"]::-webkit-slider-runnable-track {
+      height: 10px; border-radius: 5px;
+      background: linear-gradient(to right, var(--iv-track, #55ffff) 0%, var(--iv-track, #55ffff) var(--iv-pct, 100%), #111 var(--iv-pct, 100%), #111 100%);
+    }
+    .calc-iv-hybrid input[type="range"]::-moz-range-track {
+      height: 10px; border-radius: 5px; border: none;
+      background: linear-gradient(to right, var(--iv-track, #55ffff) 0%, var(--iv-track, #55ffff) var(--iv-pct, 100%), #111 var(--iv-pct, 100%), #111 100%);
+    }
+    .calc-iv-hybrid input[type="number"] {
+      width: 52px; font-family: 'VT323', monospace; font-size: 18px;
+      background: #000; color: var(--white); border: 2px solid #333;
+      text-align: center; padding: 2px 4px; outline: none;
+    }
+    .calc-iv-hybrid input[type="number"]:focus { border-color: var(--gold); }
+    @media (max-width: 768px) {
+      .iv-hybrid input[type="range"]::-webkit-slider-thumb { width: 32px; height: 32px; }
+      .iv-hybrid input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; }
+      .calc-iv-hybrid input[type="range"]::-webkit-slider-thumb { width: 32px; height: 32px; }
+      .calc-iv-hybrid input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; }
+    }
+
     /* ── MOVES SECTION ── */
     .moves-section {
       background: #1a1a2a; border: 3px solid #3a3a7a; padding: 14px; margin-top: 12px;
@@ -2049,7 +2136,10 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       return '<div class="'+rowClass+'" id="iv-row-'+sn+'">'
         +'<span class="iv-priority" title="'+t.note+'">'+prioIcon+'</span>'
         +'<span class="iv-name" style="color:'+color+'">'+label+'</span>'
-        +'<input class="iv-input" type="number" min="0" max="31" value="'+defaultVal+'" data-stat="'+sn+'" oninput="updateIVBar(this)" />'
+        +'<div class="iv-hybrid" data-stat="'+sn+'">' 
+        +'<input type="range" min="0" max="31" value="'+defaultVal+'" oninput="syncIVHybrid(this,\'range\')" />' 
+        +'<input class="iv-input" type="number" min="0" max="31" value="'+defaultVal+'" data-stat="'+sn+'" oninput="syncIVHybrid(this,\'number\')" />' 
+        +'</div>'
         +'<div class="iv-bar-wrap"><div class="iv-bar" id="ivbar-'+sn+'" style="width:'+Math.round(defaultVal/31*100)+'%;background:'+getIVColor(defaultVal)+'"></div></div>'
         +'<div class="iv-target" style="color:'+t.color+'" title="'+t.note+'">CEL: '+t.val+'</div>'
         +'<div class="iv-label" id="ivlabel-'+sn+'">'+getIVLabel(defaultVal)+'</div></div>';
@@ -2350,7 +2440,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var calcBuildOpts = calcEligible.map(function(key){return '<option value="'+key+'">'+(_bLabels[key]||key)+'</option>';}).join('');
     var ORDER=['hp','attack','defense','special-attack','special-defense','speed'];
     var ivRows = ORDER.map(function(sn){
-      return '<div class="calc-box"><label>'+(STAT_NAMES[sn]||sn)+' IV (0-31)</label><input class="calc-field" type="number" min="0" max="31" value="31" id="calc-iv-'+sn+'" /></div>';
+      return '<div class="calc-box"><label>'+(STAT_NAMES[sn]||sn)+' IV (0-31)</label><div class="calc-iv-hybrid"><input type="range" min="0" max="31" value="31" oninput="syncCalcIVHybrid(this,\'range\',\''+sn+'\')" /><input class="calc-field" type="number" min="0" max="31" value="31" id="calc-iv-'+sn+'" oninput="syncCalcIVHybrid(this,\'number\',\''+sn+'\')" /></div></div>';
     }).join('');
     var natures = ['Hardy','Lonely','Brave','Adamant','Naughty','Bold','Docile','Relaxed','Impish','Lax','Timid','Hasty','Serious','Jolly','Naive','Modest','Mild','Quiet','Bashful','Rash','Calm','Gentle','Sassy','Careful','Quirky'];
     var natureOpts = natures.map(function(n){return '<option value="'+n+'">'+natureName(n)+(natureName(n)!==n?' ('+n+')':'')+'</option>';}).join('');
@@ -2427,6 +2517,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     +'<div style="height:40px"></div>';
 
   document.querySelectorAll('.iv-input').forEach(function(inp){updateIVBar(inp);});
+  initAllIVSliders();
   document.querySelectorAll('.evo-item[data-evo-name]').forEach(function(el){
     el.addEventListener('click', function(){
       var n=el.dataset.evoName;var found=allPokemon.find(function(p){return p.name===n;});
@@ -3310,7 +3401,8 @@ function renderBattleSetupPage() {
   function buildSetupCard(side, label, color) {
     var ivInputs = BATTLE_STAT_ORDER.map(function(sn) {
       return '<div class="battle-iv-box"><label style="color:' + (STAT_COLORS[sn] || '#888') + '">' + (STAT_NAMES[sn] || sn) + '</label>' +
-        '<input type="number" min="0" max="31" value="31" id="biv-' + side + '-' + sn + '" onchange="battleUpdateFromInputs(\'' + side + '\')" /></div>';
+        '<div class="calc-iv-hybrid"><input type="range" min="0" max="31" value="31" oninput="syncBattleIVHybrid(this,\'range\',\'' + side + '\',\'' + sn + '\')" />' +
+        '<input type="number" min="0" max="31" value="31" id="biv-' + side + '-' + sn + '" oninput="syncBattleIVHybrid(this,\'number\',\'' + side + '\',\'' + sn + '\')" /></div></div>';
     }).join('');
     return '<div class="battle-setup-card ' + side + '">' +
       '<h3 style="color:' + color + '">' + label + '</h3>' +
@@ -3500,6 +3592,74 @@ function switchBuildTab(btn, panelId) {
   btn.classList.add('active');
   var panel = document.getElementById(panelId);
   if (panel) panel.classList.add('active');
+}
+
+function getIVSliderColor(val) {
+  if (val >= 31) return '#55ffff';
+  if (val >= 26) return '#88ff88';
+  if (val >= 16) return '#f8d030';
+  return '#ff5555';
+}
+
+function applyIVSliderStyle(rangeEl, val) {
+  var color = getIVSliderColor(val);
+  var pct = Math.round(val / 31 * 100);
+  rangeEl.style.setProperty('--iv-thumb', color);
+  rangeEl.style.setProperty('--iv-track', color);
+  rangeEl.style.setProperty('--iv-pct', pct + '%');
+  var parent = rangeEl.closest('.iv-hybrid, .calc-iv-hybrid');
+  if (parent) {
+    parent.style.setProperty('--iv-thumb', color);
+    parent.style.setProperty('--iv-track', color);
+    parent.style.setProperty('--iv-pct', pct + '%');
+  }
+}
+
+function syncIVHybrid(el, source) {
+  var container = el.closest('.iv-hybrid');
+  if (!container) return;
+  var rangeEl = container.querySelector('input[type="range"]');
+  var numEl = container.querySelector('input[type="number"]');
+  var val = parseInt(el.value);
+  if (isNaN(val)) val = 0;
+  if (val < 0) val = 0; if (val > 31) val = 31;
+  rangeEl.value = val;
+  numEl.value = val;
+  applyIVSliderStyle(rangeEl, val);
+  updateIVBar(numEl);
+}
+
+function syncCalcIVHybrid(el, source, sn) {
+  var container = el.closest('.calc-iv-hybrid');
+  if (!container) return;
+  var rangeEl = container.querySelector('input[type="range"]');
+  var numEl = container.querySelector('input[type="number"]');
+  var val = parseInt(el.value);
+  if (isNaN(val)) val = 0;
+  if (val < 0) val = 0; if (val > 31) val = 31;
+  rangeEl.value = val;
+  numEl.value = val;
+  applyIVSliderStyle(rangeEl, val);
+}
+
+function syncBattleIVHybrid(el, source, side, sn) {
+  var container = el.closest('.calc-iv-hybrid');
+  if (!container) return;
+  var rangeEl = container.querySelector('input[type="range"]');
+  var numEl = container.querySelector('input[type="number"]');
+  var val = parseInt(el.value);
+  if (isNaN(val)) val = 0;
+  if (val < 0) val = 0; if (val > 31) val = 31;
+  rangeEl.value = val;
+  numEl.value = val;
+  applyIVSliderStyle(rangeEl, val);
+  battleUpdateFromInputs(side);
+}
+
+function initAllIVSliders() {
+  document.querySelectorAll('.iv-hybrid input[type="range"], .calc-iv-hybrid input[type="range"]').forEach(function(r) {
+    applyIVSliderStyle(r, parseInt(r.value) || 0);
+  });
 }
 
 function updateIVBar(input) {
