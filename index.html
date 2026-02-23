@@ -11,9 +11,32 @@
   <meta property="og:type" content="website" />
   <meta name="robots" content="index, follow" />
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAR3SURBVFhH7VdNSGNXFD4vqZlR8xLzkhlf3ktmgv2BMuiuCLYLKUFxMZROp0w7yLTQRcGl1KpgS8GFuGlBt4KUFtoM/dkJxS6ycOFu0Hamlhn/Bxx/GjFRC2reV87zXRNvfvybdtUPDi/vvnvP991zzz33huh/nA9VRPQqETUTUZvz5Hdu/9dwiYjeI6IfiegpEaGIcfsPRHTH6f/c8AER/SkTai4XDLcbIZcL7kIxM0R0T3Z0VgSI6Cfh1KMouF1ZiW80DY90HZuGgb9NE1umice6jkQwiDuVlahWlHwhHDH2c2ZEiOh34ehuVRX+0HXg2rVDi0YPLRLJ/XbaH1y9ig+rqvJF/EZEpkxQDn4iesSDKxQFX2tajpQJT2E7hoFvNQ01LpcQwZPxyUSl8LMg/+XKFeD69QKCk2zHNJE2DPwaCiGQE8HLeSI4g+0B9szPQS5sNRzGlmEgoWlQcsvxrkyYjwoiesIdb1VWHoa9iONjVmZZ9kwTc7qOXcPAx9XVQsBjh6co3hah56wu6dxJOCZYNwzsc1uJHHkWDuNpOIyHtbX2tnVEvCUTC9znDjcvXy49+2gUGdPEJ6qKCBFcRIgSoUtVsW2aBSI4D57oOrYNAx/lovC9TMzgyrV8tPbFBESjSEcieM3jsR25vV68cuMGXI7jRo8HGREhZwxHaV7X8Zdh4L6mCQFLROSRBbxERFme0TPDAGKx3J4XFovhU1W1nbS1tVnLy8tgLC0toaWlxW7vVVVLHsuz5zxY1nWxLbNE9KIs4A12cElR0O/z4cuamqIWUBT4/H5sbGzY5AJra2vw+nwIKorF/b7Ksy98PnyuqvhMVfPzoEkWEHc+nGgNDQ3HyAXq6+sL+paxN2UBr/OH2tpaDA8PY2hoqKhpmgav12vPOB+rq6t2eygUKhjT399vW1dXl1VRUSEEFETAzgF2UA49PT22g3g8jvn5ebuNn/F43OL2vr4+eQi2t7exv7+PyclJSzk8qDgH6mQBnJWcnZiYmLBkJwKZTAaNjY1Hoayrqzv63dTUhJ2dnWP99/b2MDc3h62tLQwODtoiiWixVDFKcIfOzs6SAhhM0t3djVgsBg4pP3t7e7G7uyt3RTqdxuzsLDY3N9Hc3CwEfCcTC3CF4nW00ul0WRGMg4MDpFIpZLNZ+dMRVlZW7HwZHx+33G63iNZNmViAw8K1mhOmtNdTgsO/sLBgh1/kiHOzekEmzsdt7qgoipVMJi8kgncGJ+DAwIAgZ7slExYDXywRDAatqampc4ngfGDy0dHR/NDzWXMqqEQ0zYM0TbPGxsbOLEJkvStX+aaIyCsTlUPYGWQ76OjoyC4uLp6YmIxkMmnxWZEX9gdEpMsEpwHfDe0jmo0rXXt7ezaRSGRnZmasVCplZTIZa3193ZqenrZGRkas1tZWUWyE8dF76rtgKdwlood5TjlJEQgE7NLt9/vzCYXxJfR92dFFwFv0HWdGXMm4nOYT8vuCU2Q408tutYuCLy8vOwcYn6L85Pfn+nfsP8E/5+M/g2IKie4AAAAASUVORK5CYII=">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" /></noscript>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9885277201663964"
      crossorigin="anonymous"></script>
+  <script>
+  /* ── Loading timeout fallback ── */
+  (function(){
+    var COB_LOAD_TIMER = setTimeout(function(){
+      var m = document.getElementById('main-area');
+      if(!m || !m.innerHTML.trim() || m.innerHTML.indexOf('Ladowanie')>-1){
+        var d = document.createElement('div');
+        d.id='cob-load-fallback';
+        d.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:#1a1a1a;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:monospace;color:#f0f0f0;text-align:center;padding:24px';
+        d.innerHTML='<div style="font-size:28px;margin-bottom:16px">\u23f3</div>'
+          +'<div style="font-size:20px;margin-bottom:12px;color:#ffaa00">Strona \u0142aduje si\u0119 zbyt d\u0142ugo...</div>'
+          +'<div style="font-size:16px;color:#aaa;margin-bottom:20px">Mo\u017cliwe przyczyny: wolne po\u0142\u0105czenie, blokowanie skrypt\u00f3w lub problem z PokeAPI.</div>'
+          +'<button onclick="location.reload()" style="font-family:monospace;font-size:18px;background:#555;color:#fff;border:2px solid #888;padding:8px 24px;cursor:pointer">\ud83d\udd04 Spr\u00f3buj od\u015bwie\u017cy\u0107</button>'
+          +'<div style="font-size:13px;color:#666;margin-top:16px">Je\u015bli problem si\u0119 powtarza, wyczy\u015b\u0107 dane strony (Ctrl+Shift+Del) i spr\u00f3buj ponownie.</div>';
+        document.body.appendChild(d);
+      }
+    }, 12000);
+    window._cobClearLoadTimer = function(){ clearTimeout(COB_LOAD_TIMER); var f=document.getElementById('cob-load-fallback'); if(f)f.remove(); };
+  })();
+  </script>
   <style>
     :root {
       --bg:        #1a1a1a;
@@ -1891,24 +1914,27 @@ function getFavorites() {
   try { return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []; }
   catch(e) { return []; }
 }
-function isFavorite(id) { return getFavorites().some(f => f.id === id); }
+function isFavorite(id) { return getFavorites().some(function(f){ return f.id === id; }); }
 function toggleFavorite(id, name) {
-  let favs = getFavorites();
-  const idx = favs.findIndex(f => f.id === id);
+  var favs = getFavorites();
+  var idx = -1;
+  for (var i = 0; i < favs.length; i++) { if (favs[i].id === id) { idx = i; break; } }
   if (idx >= 0) favs.splice(idx, 1);
-  else favs.push({ id, name });
+  else favs.push({ id: id, name: name });
   localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
-  const star = document.getElementById('fav-star-btn');
+  var star = document.getElementById('fav-star-btn');
   if (star) star.classList.toggle('active', isFavorite(id));
 }
 function renderFavoritesSection() {
-  const favs = getFavorites();
+  var favs = getFavorites();
   if (!favs.length) {
     return '<div class="welcome-card"><h3>\u2b50 Twoje Ulubione Buildy</h3><p>Kliknij gwiazdk\u0119 \u2b50 obok nazwy Pok\u00e9mona, aby doda\u0107 go do ulubionych.</p></div>';
   }
-  const cards = favs.map(f =>
-    '<div class="fav-card" onclick="loadDetail('+f.id+',\''+f.name+'\')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+f.id+'.png" alt="'+f.name+'"/><span>'+f.name+'</span></div>'
-  ).join('');
+  var cards = favs.map(function(f){
+    return '<div class="fav-card" onclick="loadDetail('+f.id+',\''+f.name+'\')">' +
+      '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+f.id+'.png" alt="'+f.name+'"/>' +
+      '<span>'+f.name+'</span></div>';
+  }).join('');
   return '<div class="welcome-card" style="grid-column:1/-1"><h3>\u2b50 Twoje Ulubione Buildy</h3><div class="fav-grid">'+cards+'</div></div>';
 }
 
@@ -1924,19 +1950,40 @@ function toggleHamburger() {
    COPY BUILD LINK
    ================================================================ */
 function copyBuildLink() {
-  const url = window.location.origin + window.location.pathname + (selectedId ? '#pokemon-'+selectedId : '');
-  navigator.clipboard.writeText(url).then(function(){
+  var url = window.location.origin + window.location.pathname + (selectedId ? '#pokemon-'+selectedId : '');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function(){
+      var btn = document.getElementById('copy-link-btn');
+      if(btn){btn.textContent='\u2705 Skopiowano!';setTimeout(function(){btn.textContent='\ud83d\udd17 Kopiuj Link do Buildu';},2000);}
+    }).catch(function(){
+      cobFallbackCopy(url);
+    });
+  } else {
+    cobFallbackCopy(url);
+  }
+}
+function cobFallbackCopy(url) {
+  try {
+    var ta = document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
     var btn = document.getElementById('copy-link-btn');
     if(btn){btn.textContent='\u2705 Skopiowano!';setTimeout(function(){btn.textContent='\ud83d\udd17 Kopiuj Link do Buildu';},2000);}
-  }).catch(function(){
-    var ta = document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-  });
+  } catch(e) {}
 }
 
 /* ================================================================
    INIT
    ================================================================ */
 async function init() {
+  // ── Cache versioning: clear stale data on version bump ──
+  var COB_VERSION = '2.1';
+  try {
+    var storedVer = localStorage.getItem('cob_version');
+    if (storedVer !== COB_VERSION) {
+      localStorage.removeItem('cob_pokemon_list');
+      localStorage.setItem('cob_version', COB_VERSION);
+    }
+  } catch(e) {}
+
   // Load saved language
   currentLang = localStorage.getItem('cob_lang') || 'pl';
   document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===currentLang);});
@@ -1967,6 +2014,8 @@ async function init() {
   if(currentLang==='en')setLang('en');
   applyFilters();
   showPage('welcome');
+  // Clear loading timeout – page loaded successfully
+  if (window._cobClearLoadTimer) window._cobClearLoadTimer();
   // Check hash for deep link
   if (window.location.hash.startsWith('#pokemon-')) {
     var hid = parseInt(window.location.hash.replace('#pokemon-',''));
