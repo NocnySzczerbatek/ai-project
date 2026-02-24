@@ -593,15 +593,17 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
           else score = 10;
         }
       } else {
+        // ── HARD CATEGORY BLOCK: special builds NEVER pick Physical, and vice versa ──
+        if (buildType === 'physical' && cat === 'S') return;
+        if (buildType === 'special' && cat === 'P') return;
+
         score = power || 50;
 
-        // STRICT CATEGORY FILTER
+        // CATEGORY BONUS
         if (buildType === 'physical') {
           if (cat === 'P') score *= 1.6;
-          else if (cat === 'S') score *= 0.05;
         } else if (buildType === 'special') {
           if (cat === 'S') score *= 1.6;
-          else if (cat === 'P') score *= 0.05;
         } else if (buildType === 'mixed') {
           score *= 1.2;
         } else if (buildType === 'defensive' || buildType === 'support') {
@@ -716,10 +718,14 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
         chosen.push(m);
         stabCount++;
       }
-      // Relax category filter if couldn't find 2 STAB
+      // Relax type-uniqueness if couldn't find 2 STAB (but NEVER relax category)
       if (stabCount < 2) {
         for (var i = 0; i < stabPool.length && stabCount < 2; i++) {
           if (chosen.some(function(c){ return c.nm === stabPool[i].nm; })) continue;
+          // Still enforce category — pool was already filtered by hard block,
+          // but double-check for safety
+          if (buildType === 'physical' && stabPool[i].cat !== 'P') continue;
+          if (buildType === 'special' && stabPool[i].cat !== 'S') continue;
           var tcKey2 = stabPool[i].mtype + '-' + stabPool[i].cat;
           if (typeCatCounts[tcKey2] >= 1) continue;
           typeCatCounts[tcKey2] = (typeCatCounts[tcKey2] || 0) + 1;
