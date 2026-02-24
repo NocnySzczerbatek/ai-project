@@ -132,20 +132,38 @@ function syncIVSlider(rangeEl) {
   if (isNaN(val)) val = 0;
   if (val < 0) val = 0; if (val > 31) val = 31;
   var sn = rangeEl.dataset.stat;
-  applyIVSliderStyle(rangeEl, val);
+
+  // Check if this stat's target is 0 — if so, value 0 = perfect (green)
+  var row = rangeEl.closest('.iv-row');
+  var targetVal = row ? row.getAttribute('data-target-val') : null;
+  var isTargetZero = targetVal === '0';
+
+  if (isTargetZero && val === 0) {
+    // Override: value 0 is perfect for this stat
+    applyIVSliderStyle(rangeEl, 31); // apply perfect styling
+    rangeEl.style.background = 'linear-gradient(to right, #00f2ff 0%, #00f2ff 1%, rgba(0,0,0,0.6) 1%, rgba(0,0,0,0.6) 100%)';
+  } else {
+    applyIVSliderStyle(rangeEl, val);
+  }
+
   /* Aktualizuj wyświetlaną wartość */
   var valSpan = document.getElementById('iv-val-' + sn);
-  if (valSpan) valSpan.textContent = val;
+  if (valSpan) {
+    valSpan.textContent = val;
+    if (isTargetZero && val === 0) valSpan.style.color = '#00f2ff';
+  }
   /* Aktualizuj pasek i etykietę */
   var bar = document.getElementById('ivbar-' + sn);
   var lbl = document.getElementById('ivlabel-' + sn);
   if (bar) {
     var pct = Math.round(val / 31 * 100);
     var color = val>=31?'#00f2ff':val>=20?'#39ff14':val>=10?'#ffaa00':'#ff003c';
+    if (isTargetZero && val === 0) { color = '#00f2ff'; pct = 100; }
     bar.style.width = pct + '%'; bar.style.background = color;
   }
   if (lbl) {
-    if(val>=31) lbl.innerHTML='<span style="color:#00f2ff">Doskona\u0142e</span>';
+    if (isTargetZero && val === 0) lbl.innerHTML='<span style="color:#00f2ff">Doskona\u0142e</span>';
+    else if(val>=31) lbl.innerHTML='<span style="color:#00f2ff">Doskona\u0142e</span>';
     else if(val>=20) lbl.innerHTML='<span style="color:#39ff14">Dobre</span>';
     else if(val>=10) lbl.innerHTML='<span style="color:#ffaa00">\u015arednie</span>';
     else lbl.innerHTML='<span style="color:#ff003c">S\u0142abe</span>';

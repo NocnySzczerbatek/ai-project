@@ -60,7 +60,9 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
 
   // ── IV helpers ──
   function getIVColor(iv) { return iv>=31?'#00f2ff':iv>=20?'#39ff14':iv>=10?'#ffaa00':'#ff003c'; }
-  function getIVLabel(iv) {
+  function getIVLabel(iv, isTargetZero) {
+    // If this stat's target is 0, then value 0 is "perfect" (green)
+    if(isTargetZero && iv === 0) return '<span style="color:#00f2ff">Doskona\u0142e</span>';
     if(iv>=31) return '<span style="color:#00f2ff">Doskona\u0142e</span>';
     if(iv>=20) return '<span style="color:#39ff14">Dobre</span>';
     if(iv>=10) return '<span style="color:#ffaa00">\u015arednie</span>';
@@ -88,9 +90,12 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var rows=ORDER.map(function(sn){
       var label=STAT_NAMES[sn]||sn;var color=STAT_COLORS[sn]||'#888';var t=targets[sn];
       var defaultVal=t.val==='0'?0:31;
-      var tierClass=defaultVal>=28?'iv-perfect':defaultVal>=20?'iv-good':defaultVal>=10?'iv-average':'iv-poor';
+      var isTargetZero = t.val==='0';
+      var tierClass;
+      if (isTargetZero && defaultVal === 0) tierClass = 'iv-perfect';
+      else tierClass=defaultVal>=28?'iv-perfect':defaultVal>=20?'iv-good':defaultVal>=10?'iv-average':'iv-poor';
       var rowClass=t.prio?'iv-row iv-row-priority '+tierClass:'iv-row '+tierClass;var prioIcon=t.prio?'\u2b50':'\u25aa';
-      return '<div class="'+rowClass+'" id="iv-row-'+sn+'">'
+      return '<div class="'+rowClass+'" id="iv-row-'+sn+'" data-target-val="'+t.val+'">'
         +'<div class="iv-stat-header">'
         +'<div class="iv-header-left"><span class="iv-priority" title="'+t.note+'">'+prioIcon+'</span><span class="iv-name" style="color:'+color+'">'+label+'</span></div>'
         +'<span class="iv-val" id="iv-val-'+sn+'">'+defaultVal+'</span>'
@@ -100,7 +105,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
         +'</div>'
         +'<div class="iv-stat-meta">'
         +'<span class="iv-target" style="color:'+t.color+'" title="'+t.note+'">CEL: '+t.val+'</span>'
-        +'<span class="iv-label" id="ivlabel-'+sn+'">'+getIVLabel(defaultVal)+'</span>'
+        +'<span class="iv-label" id="ivlabel-'+sn+'">'+getIVLabel(defaultVal, isTargetZero)+'</span>'
         +'</div></div>';
     }).join('');
     return '<div class="iv-section"><h2>\ud83c\udfb2 Individual Values (IV) <span style="font-size:11px;color:#aaa;font-family:VT323,monospace">skala 0\u201331</span></h2>'
@@ -402,6 +407,15 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var hiddenTag = (picked && picked.isHidden) ? '<span class="ability-hidden-tag">'+t('build.abilityHidden')+'</span>' : '';
     var recTag = (picked && picked.score > 1) ? '<div class="ability-rec-tag">\u2705 '+t('build.abilityRec')+'</div>' : '';
     var abilityHTML='<div class="ability-box"><div class="comp-box-title">\u26a1 '+t('build.ability')+'</div><div class="ability-name">'+abilText.name+hiddenTag+'</div><div class="ability-desc">'+abilText.desc+'</div>'+recTag+'</div>';
+
+    /* ═══ MAGIC GUARD SYNERGY — Life Orb with no recoil ═══ */
+    if (picked && picked.slug === 'magic-guard' && (buildType === 'physical' || buildType === 'special' || buildType === 'mixed')) {
+      item = 'Life Orb';
+      altItems = (buildType === 'physical') ? ['Choice Band','Focus Sash','Lum Berry'] :
+                 (buildType === 'special') ? ['Choice Specs','Focus Sash','Lum Berry'] :
+                 ['Expert Belt','Focus Sash','Lum Berry'];
+    }
+
     var movesResult = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
     var chosenMoves = movesResult.chosen;
 
@@ -466,7 +480,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var allStatusPools = [].concat(defRecovery, hazards, statusMoves, utilityMoves, screenMoves, offSetup);
 
     // ── BANNED 2-TURN / CHARGE MOVES (Smogon competitive standard) ──
-    var bannedMoves = new Set(['fly','bounce','dig','dive','sky-attack','phantom-force','shadow-force','solar-beam','solar-blade','meteor-beam','skull-bash','razor-wind','sky-drop','freeze-shock','ice-burn']);
+    var bannedMoves = new Set(['fly','bounce','dig','dive','sky-attack','phantom-force','shadow-force','solar-beam','solar-blade','meteor-beam','skull-bash','razor-wind','sky-drop','freeze-shock','ice-burn','last-resort','hyper-beam','giga-impact','explosion','self-destruct','struggle','constrict','barrage','egg-bomb','natural-gift','secret-power','hidden-power','frustration','return','snore','round']);
 
     var pool = [];
     moves.forEach(function(m){
