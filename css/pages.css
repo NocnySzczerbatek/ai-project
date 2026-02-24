@@ -25,6 +25,63 @@
   color: var(--green); margin-bottom: 10px; padding-bottom: 6px;
   border-bottom: 2px solid #000;
 }
+
+/* ── ACCENT COLOR SYSTEM — tile border + header match ── */
+.welcome-card.accent-green {
+  border-color: rgba(85,255,85,0.3);
+  box-shadow: 0 0 10px rgba(85,255,85,0.1);
+}
+.welcome-card.accent-green h3 { color: #55ff55; }
+.welcome-card.accent-green:hover { border-color: rgba(85,255,85,0.55); box-shadow: 0 0 18px rgba(85,255,85,0.2); }
+
+.welcome-card.accent-red {
+  border-color: rgba(255,80,80,0.35);
+  box-shadow: 0 0 10px rgba(255,80,80,0.12);
+}
+.welcome-card.accent-red h3 { color: #ff5050; }
+.welcome-card.accent-red:hover { border-color: rgba(255,80,80,0.6); box-shadow: 0 0 18px rgba(255,80,80,0.22); }
+
+.welcome-card.accent-purple {
+  border-color: rgba(160,100,255,0.35);
+  box-shadow: 0 0 10px rgba(160,100,255,0.12);
+}
+.welcome-card.accent-purple h3 { color: #c084fc; }
+.welcome-card.accent-purple:hover { border-color: rgba(160,100,255,0.6); box-shadow: 0 0 18px rgba(160,100,255,0.22); }
+
+.welcome-card.accent-gold {
+  border-color: rgba(220,180,60,0.35);
+  box-shadow: 0 0 10px rgba(220,180,60,0.12);
+}
+.welcome-card.accent-gold h3 { color: #dcb43c; }
+.welcome-card.accent-gold:hover { border-color: rgba(220,180,60,0.6); box-shadow: 0 0 18px rgba(220,180,60,0.22); }
+
+.welcome-card.accent-blue {
+  border-color: rgba(100,120,255,0.35);
+  box-shadow: 0 0 10px rgba(100,120,255,0.12);
+}
+.welcome-card.accent-blue h3 { color: #6478ff; }
+.welcome-card.accent-blue:hover { border-color: rgba(100,120,255,0.6); box-shadow: 0 0 18px rgba(100,120,255,0.22); }
+
+.welcome-card.accent-teal {
+  border-color: rgba(80,200,220,0.35);
+  box-shadow: 0 0 10px rgba(80,200,220,0.12);
+}
+.welcome-card.accent-teal h3 { color: #50c8dc; }
+.welcome-card.accent-teal:hover { border-color: rgba(80,200,220,0.6); box-shadow: 0 0 18px rgba(80,200,220,0.22); }
+
+.welcome-card.accent-cyan {
+  border-color: rgba(80,210,230,0.35);
+  box-shadow: 0 0 10px rgba(80,210,230,0.12);
+}
+.welcome-card.accent-cyan h3 { color: #50d2e6; }
+.welcome-card.accent-cyan:hover { border-color: rgba(80,210,230,0.6); box-shadow: 0 0 18px rgba(80,210,230,0.22); }
+
+.welcome-card.accent-apricorn {
+  border-color: rgba(80,220,80,0.35);
+  box-shadow: 0 0 10px rgba(80,220,80,0.12);
+}
+.welcome-card.accent-apricorn h3 { color: #50dc50; }
+.welcome-card.accent-apricorn:hover { border-color: rgba(80,220,80,0.6); box-shadow: 0 0 18px rgba(80,220,80,0.22); }
 .welcome-card p, .welcome-card li { font-size: 18px; color: #ddd; line-height: 1.6; font-weight: 700; }
 .welcome-card ul { padding-left: 20px; }
 .welcome-card li { color: var(--white); }
