@@ -192,7 +192,14 @@ function syncBattleIVSlider(rangeEl, side, sn) {
 
 function initAllIVSliders() {
   document.querySelectorAll('.iv-slider-row input[type="range"], .calc-slider-row input[type="range"]').forEach(function(r) {
-    applyIVSliderStyle(r, parseInt(r.value) || 0);
+    // For IV section sliders inside .iv-row with data-target-val, use syncIVSlider
+    // which correctly handles target=0 styling
+    var ivRow = r.closest('.iv-row');
+    if (ivRow) {
+      syncIVSlider(r);
+    } else {
+      applyIVSliderStyle(r, parseInt(r.value) || 0);
+    }
   });
 }
 
