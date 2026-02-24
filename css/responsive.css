@@ -1,6 +1,13 @@
 /* ============================================================
    responsive.css — Wszystkie zapytania mediów (skonsolidowane)
+   Mobile-first optymalizacja — native app feel
    ============================================================ */
+
+/* ── Globalne zabezpieczenie przed horizontal scroll ── */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
 
 /* ── Tablet / Mobilne (max-width: 768px) ── */
 @media (max-width: 768px) {
@@ -8,11 +15,39 @@
   .hamburger-btn { display: block; }
   .sidebar-close { display: block; }
   header { flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
-  .header-title { font-size: 11px; }
-  .header-subtitle { font-size: 14px; }
+  .header-title { font-size: 10px; }
+  .header-subtitle { font-size: 13px; }
   .lang-toggle { margin-left: 0; order: 2; }
-  .header-right { display: none; width: 100%; flex-direction: column; gap: 6px; }
-  .header-right.mobile-open { display: flex; }
+
+  /* ── Nawigacja: przewijanie poziome zamiast ukrywania ── */
+  .header-right {
+    display: none; width: 100%;
+  }
+  .header-right.mobile-open {
+    display: flex !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    padding: 8px 0 6px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+  }
+  .header-right.mobile-open::-webkit-scrollbar { display: none; }
+  .header-right.mobile-open .mc-badge { display: none; }
+  .header-right.mobile-open .mc-btn {
+    flex-shrink: 0;
+    min-width: 120px;
+    min-height: 44px;
+    justify-content: center;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px 14px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    scroll-snap-align: start;
+  }
 
   /* Układ */
   .app-layout { flex-direction: column; height: auto; min-height: calc(100vh - 80px); }
@@ -21,20 +56,39 @@
     width: 280px; min-width: 280px; z-index: 1000; transition: left 0.25s ease;
   }
   aside.mobile-open { left: 0; }
-  .main-area { padding: 12px; padding-bottom: 50px; }
+  .main-area { padding: 12px 10px; padding-bottom: 50px; overflow-x: hidden; }
+
+  /* ── Detail page: 2-col → 1-col stack ── */
+  .detail-desktop-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px;
+  }
+  .detail-col-left,
+  .detail-col-right {
+    width: 100% !important;
+    min-width: 0;
+  }
 
   /* Siatki → 1 kolumna */
-  .detail-grid { grid-template-columns: 1fr; }
-  .comp-grid { grid-template-columns: 1fr; }
-  .best4-grid { grid-template-columns: 1fr; }
-  .info-cols { grid-template-columns: 1fr; }
-  .calc-grid { grid-template-columns: 1fr; }
-  .welcome-grid { grid-template-columns: 1fr; }
-  .items-grid { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: 1fr !important; }
+  .comp-grid { grid-template-columns: 1fr !important; }
+  .best4-grid { grid-template-columns: 1fr !important; }
+  .info-cols { grid-template-columns: 1fr !important; }
+  .calc-grid { grid-template-columns: 1fr !important; }
+  .welcome-grid { grid-template-columns: 1fr !important; }
+  .items-grid { grid-template-columns: 1fr !important; }
   .apricorn-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .ranking-grid { grid-template-columns: 1fr !important; gap: 12px; }
+
+  /* ── Welcome cards: pełna szerokość, czytelne odstępy ── */
+  .welcome-card {
+    width: 100%;
+    margin-bottom: 4px;
+  }
 
   /* Tabela ruchów */
-  .move-table { display: block; max-width: 100%; overflow-x: auto; }
+  .move-table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
   /* Odznaki */
   .mc-badge { font-size: 12px; padding: 2px 6px; }
@@ -43,14 +97,46 @@
   .copy-link-btn {
     width: 100% !important; display: block !important;
     margin-top: 10px !important; float: none !important;
-    font-size: 18px; padding: 10px 14px;
+    font-size: 16px; padding: 10px 14px;
     text-align: center; box-sizing: border-box;
   }
 
-  /* Zakładki budów */
-  .build-tabs { flex-wrap: wrap; }
-  .build-tab { font-size: 14px; padding: 4px 8px; }
+  /* ── Zakładki buildów: poziome przewijanie ── */
+  .build-tabs {
+    display: flex;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 0;
+    padding-bottom: 2px;
+  }
+  .build-tabs::-webkit-scrollbar { display: none; }
+  .build-tab {
+    font-size: 13px;
+    padding: 8px 12px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 44px;
+  }
   .best-choice-badge { font-size: 6px; padding: 1px 5px; }
+
+  /* ── Zakładki ruchów: przewijanie ── */
+  .moves-tabs {
+    display: flex;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .moves-tabs::-webkit-scrollbar { display: none; }
+  .moves-tab {
+    flex-shrink: 0;
+    min-height: 44px;
+    padding: 6px 14px;
+    white-space: nowrap;
+  }
 
   /* Przedmioty kompetycyjne */
   .item-layout { flex-direction: column; }
@@ -58,13 +144,17 @@
   .item-main .item-big-name { font-size: 8px; }
   .item-main .item-big-desc { font-size: 14px; }
   .item-alt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .item-alt-card { flex-direction: column; text-align: center; padding: 6px; gap: 4px; }
+  .item-alt-card { flex-direction: column; text-align: center; padding: 8px; gap: 4px; }
   .item-alt-name { font-size: 14px; white-space: normal; }
   .item-alt-desc { font-size: 11px; }
   .item-alt-info { text-align: center; }
 
-  /* Reklamy */
+  /* Reklamy / donate */
   .ad-container { min-height: 50px; font-size: 12px; }
+  .donate-section { padding: 10px 12px; gap: 8px; flex-direction: column; }
+  .donate-section h2 { font-size: 9px; }
+  .donate-section p { font-size: 14px; }
+  .donate-btn { font-size: 10px; padding: 10px 16px; min-height: 44px; }
 
   /* Zespół PvP */
   .team-slots { grid-template-columns: repeat(2, 1fr); }
@@ -84,65 +174,138 @@
   .wc-selector-col { max-width: 100%; }
   .wc-critical h4 { font-size: 10px; }
 
-  /* Suwaki IV — Full-Width RPG mobile */
+  /* ── SUWAKI IV — większy thumb, lepsza dotykowa obsługa ── */
   .iv-slider-row input[type="range"]::-webkit-slider-thumb,
   .calc-slider-row input[type="range"]::-webkit-slider-thumb {
-    width: 10px; height: 28px; margin-top: -8px;
+    width: 18px; height: 34px; margin-top: -11px;
+    border-radius: 6px;
     transition: box-shadow 0.2s ease, background 0.2s ease;
   }
-
   .iv-slider-row input[type="range"]::-moz-range-thumb,
   .calc-slider-row input[type="range"]::-moz-range-thumb {
-    width: 10px; height: 28px;
+    width: 18px; height: 34px;
+    border-radius: 6px;
     transition: box-shadow 0.2s ease, background 0.2s ease;
   }
-
   .iv-slider-row input[type="range"],
   .calc-slider-row input[type="range"] {
     transition: all 0.2s ease;
     min-height: 44px !important;
+    height: 14px;
   }
 
+  /* ── IV wiersz: lepsze odstępy i czytelność na mobile ── */
   .iv-row {
-    margin-bottom: 25px; padding: 10px 12px;
+    margin-bottom: 20px; padding: 10px 12px;
+    max-width: 100%;
   }
-  .iv-name { font-size: 16px; }
-  .iv-val { font-size: 18px; }
-  .iv-stat-header { margin-bottom: 6px; }
-  .iv-stat-meta { margin-top: 6px; }
-  .iv-target { font-size: 14px; }
-  .iv-label { font-size: 14px; }
+  .iv-stat-header {
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+  .iv-header-left { flex: 1; min-width: 0; }
+  .iv-name { font-size: 14px; }
+  .iv-val { font-size: 20px; flex-shrink: 0; }
+  .iv-stat-meta {
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .iv-target { font-size: 13px; }
+  .iv-label { font-size: 13px; }
+  .iv-priority { font-size: 16px; }
+  .iv-summary { font-size: 15px; padding: 8px 10px; }
+  .iv-legend { font-size: 13px; gap: 8px; }
+  .iv-slider-row, .calc-slider-row {
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* ── Paski statystyk bazowych ── */
+  .stat-row { gap: 6px; }
+  .stat-name {
+    width: 60px;
+    font-size: 13px;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .stat-val {
+    width: 34px;
+    font-size: 17px !important;
+    flex-shrink: 0;
+  }
+  .stat-bar-bg {
+    flex: 1;
+    min-width: 60px;
+    height: 10px;
+  }
 
   /* Zapobieganie zoomowi przy obsłudze suwaków */
   .iv-section, .calc-section {
     touch-action: manipulation;
   }
 
+  /* ── Obrazek Pokémona: wycentrowany, skalowalny ── */
+  .pokemon-portrait {
+    text-align: center;
+    padding: 12px 8px;
+  }
+  .pokemon-portrait img {
+    width: 140px !important;
+    height: 140px !important;
+    max-width: 50vw;
+    object-fit: contain;
+  }
+  .pokemon-name-big {
+    font-size: 18px !important;
+    word-break: break-word;
+  }
+  .pokemon-number { font-size: 16px; }
+
+  /* ── Nagłówki sekcji: mniejsze na mobile ── */
+  .mc-panel h2, .iv-section h2, .comp-section h2,
+  .moves-section h2, .cobblemon-section h2, .calc-section h2,
+  .team-section h2, .biome-section h2 {
+    font-size: 10px !important;
+  }
+  .page-title span { font-size: 13px; }
+
   /* Ewolucje */
-  .evo-chain { gap: 8px; padding: 10px 0; }
-  .evo-item { width: 100px; height: 140px; padding: 8px 4px 6px; }
+  .evo-chain {
+    gap: 8px; padding: 10px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+  .evo-chain::-webkit-scrollbar { display: none; }
+  .evo-item { width: 90px; height: 130px; padding: 8px 4px 6px; flex-shrink: 0; }
   .evo-item img { width: 60px; height: 60px; }
   .evo-item span { font-size: 13px; }
-  .evo-arrow { font-size: 22px; line-height: 140px; }
-  .evo-condition { font-size: 11px; max-width: 95px; }
+  .evo-arrow { font-size: 22px; line-height: 130px; flex-shrink: 0; }
+  .evo-condition { font-size: 11px; max-width: 95px; flex-shrink: 0; }
   .evo-condition .evo-cond, .evo-condition .evo-cond-special { font-size: 11px; }
 
   /* Ranking */
-  .ranking-grid { grid-template-columns: 1fr; gap: 12px; }
   .ranking-card-header img { width: 60px; height: 60px; }
   .ranking-card-name { font-size: 11px; }
   .ranking-card { padding: 14px; }
-  .ranking-nav-btns { gap: 4px; }
-  .ranking-nav-btn { padding: 6px 10px; font-size: 14px; }
+  .ranking-nav-btns { gap: 4px; overflow-x: auto; flex-wrap: nowrap; }
+  .ranking-nav-btn { padding: 8px 12px; font-size: 14px; flex-shrink: 0; min-height: 44px; }
   .ranking-counter-item { padding: 8px 10px; margin-bottom: 10px; }
   .ranking-counter-name { font-size: 16px; }
   .ranking-counter-reason { font-size: 13px; }
 
-  /* 44px minimalne cele dotykowe */
+  /* ── 44px minimalne cele dotykowe ── */
   .mc-btn, .gen-filter-btn, .tab-btn, .build-tab, .moves-tab,
   .wc-type-btn, .lang-btn, .battle-move-btn, .battle-random-btn,
-  .battle-start-btn, .donate-btn, .ranking-nav-btn {
+  .battle-start-btn, .donate-btn, .ranking-nav-btn,
+  .sidebar-close, .hamburger-btn {
     min-height: 44px !important;
+    min-width: 44px !important;
     display: inline-flex !important; align-items: center; justify-content: center;
   }
   .iv-slider-row input[type="range"], .calc-slider-row input[type="range"] {
@@ -150,14 +313,59 @@
   }
   .mc-input, .calc-select {
     min-height: 44px !important;
+    font-size: 16px !important; /* zapobiega zoomowi na iOS */
   }
 
-  /* Bezpieczne marginesy — brak poziomego scrolla */
-  .main-area { padding: 12px 10px; overflow-x: hidden; }
+  /* ── Overflow: brak horizontal scroll na żadnej sekcji ── */
+  .main-area,
   .iv-section, .calc-section, .comp-section, .moves-section,
-  .cobblemon-section, .team-section, .biome-section {
-    padding: 12px 10px !important;
+  .cobblemon-section, .team-section, .biome-section,
+  .mc-panel, .build-panel, .welcome-card {
+    max-width: 100%;
+    box-sizing: border-box;
     overflow-x: hidden;
+  }
+  .comp-section, .iv-section, .moves-section,
+  .cobblemon-section, .calc-section {
+    padding: 12px 10px !important;
+  }
+  .comp-box { min-width: 0; }
+
+  /* ── Strategia: pełna szerokość ── */
+  .build-strategy-box {
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 12px;
+  }
+  .build-strategy-text { font-size: 13px; }
+
+  /* ── EV bary: lepsze proporcje ── */
+  .ev-stat-name { width: 48px; font-size: 13px; }
+  .ev-amount { font-size: 8px; }
+
+  /* ── Filtr generacji: scrollowalne ── */
+  .gen-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 8px 12px;
+    gap: 4px;
+  }
+  .gen-filters::-webkit-scrollbar { display: none; }
+  .gen-filter-btn {
+    flex-shrink: 0;
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 14px;
+    padding: 4px 10px;
+  }
+
+  /* ── Sidebar tabs: touch-friendly ── */
+  .tab-btn {
+    min-height: 44px;
+    padding: 8px 6px;
+    font-size: 15px;
   }
 
   /* Touch-action na całej stronie */
@@ -171,10 +379,47 @@
 /* ── Mały telefon (max-width: 480px) ── */
 @media (max-width: 480px) {
   .evo-chain { gap: 6px; padding: 8px 0; }
-  .evo-item { width: 85px; height: 125px; padding: 6px 3px 5px; border-radius: 8px; }
+  .evo-item { width: 78px; height: 120px; padding: 6px 3px 5px; border-radius: 8px; }
   .evo-item img { width: 48px; height: 48px; }
-  .evo-item span { font-size: 12px; }
-  .evo-arrow { font-size: 18px; line-height: 125px; padding: 0; }
-  .evo-condition { font-size: 10px; max-width: 80px; }
+  .evo-item span { font-size: 11px; }
+  .evo-arrow { font-size: 18px; line-height: 120px; padding: 0; }
+  .evo-condition { font-size: 10px; max-width: 75px; }
   .evo-condition .evo-cond, .evo-condition .evo-cond-special { font-size: 10px; }
+
+  /* Jeszcze mniejsze nagłówki */
+  .pokemon-name-big { font-size: 16px !important; }
+  .header-title { font-size: 9px; }
+  .header-subtitle { font-size: 11px; }
+  .page-title span { font-size: 11px; }
+
+  /* Obrazek jeszcze mniejszy */
+  .pokemon-portrait img {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  /* Stat bary: jeszcze kompaktniejsze */
+  .stat-name { width: 48px; font-size: 12px; }
+  .stat-val { width: 30px; font-size: 15px !important; }
+  .stat-bar-bg { min-width: 50px; }
+
+  /* IV: kompaktowe */
+  .iv-name { font-size: 13px; }
+  .iv-val { font-size: 18px; }
+  .iv-target { font-size: 12px; }
+  .iv-label { font-size: 12px; }
+
+  /* Nawigacja mobilna: 1 kolumna na bardzo małych */
+  .header-right.mobile-open .mc-btn {
+    min-width: 110px;
+    font-size: 13px;
+    padding: 10px 10px;
+  }
+
+  .build-tab { font-size: 12px !important; padding: 6px 8px !important; }
+  .best-choice-badge { font-size: 5px !important; }
+
+  /* Welcome cards */
+  .welcome-card h3 { font-size: 8px !important; }
+  .welcome-card p, .welcome-card li { font-size: 15px; }
 }
