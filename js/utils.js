@@ -71,7 +71,7 @@ function applyIVSliderStyle(rangeEl, val) {
   rangeEl.style.setProperty('--iv-thumb', color);
   rangeEl.style.setProperty('--iv-track', color);
   rangeEl.style.setProperty('--iv-pct', pct + '%');
-  var parent = rangeEl.closest('.iv-hybrid, .calc-iv-hybrid');
+  var parent = rangeEl.closest('.iv-slider-row, .calc-slider-row');
   if (parent) {
     parent.style.setProperty('--iv-thumb', color);
     parent.style.setProperty('--iv-track', color);
@@ -79,59 +79,59 @@ function applyIVSliderStyle(rangeEl, val) {
   }
 }
 
-function syncIVHybrid(el, source) {
-  var container = el.closest('.iv-hybrid');
-  if (!container) return;
-  var rangeEl = container.querySelector('input[type="range"]');
-  var numEl = container.querySelector('input[type="number"]');
-  var val = parseInt(el.value);
+function syncIVSlider(rangeEl) {
+  var val = parseInt(rangeEl.value);
   if (isNaN(val)) val = 0;
   if (val < 0) val = 0; if (val > 31) val = 31;
-  rangeEl.value = val;
-  numEl.value = val;
+  var sn = rangeEl.dataset.stat;
   applyIVSliderStyle(rangeEl, val);
-  updateIVBar(numEl);
+  /* Aktualizuj wyświetlaną wartość */
+  var valSpan = document.getElementById('iv-val-' + sn);
+  if (valSpan) valSpan.textContent = val;
+  /* Aktualizuj pasek i etykietę */
+  var bar = document.getElementById('ivbar-' + sn);
+  var lbl = document.getElementById('ivlabel-' + sn);
+  if (bar) {
+    var pct = Math.round(val / 31 * 100);
+    var color = val>=28?'#55ff55':val>=20?'#f8d030':val>=10?'#f08030':'#ff5555';
+    bar.style.width = pct + '%'; bar.style.background = color;
+  }
+  if (lbl) {
+    if(val>=28) lbl.innerHTML='<span style="color:#55ff55">Doskona\u0142e</span>';
+    else if(val>=20) lbl.innerHTML='<span style="color:#f8d030">Dobre</span>';
+    else if(val>=10) lbl.innerHTML='<span style="color:#f08030">S\u0142abe</span>';
+    else lbl.innerHTML='<span style="color:#ff5555">Z\u0142e</span>';
+  }
 }
 
-function syncCalcIVHybrid(el, source, sn) {
-  var container = el.closest('.calc-iv-hybrid');
-  if (!container) return;
-  var rangeEl = container.querySelector('input[type="range"]');
-  var numEl = container.querySelector('input[type="number"]');
-  var val = parseInt(el.value);
+function syncCalcIVSlider(rangeEl, sn) {
+  var val = parseInt(rangeEl.value);
   if (isNaN(val)) val = 0;
   if (val < 0) val = 0; if (val > 31) val = 31;
-  rangeEl.value = val;
-  numEl.value = val;
   applyIVSliderStyle(rangeEl, val);
+  var valSpan = document.getElementById('calc-iv-val-' + sn);
+  if (valSpan) valSpan.textContent = val;
 }
 
-function syncBattleIVHybrid(el, source, side, sn) {
-  var container = el.closest('.calc-iv-hybrid');
-  if (!container) return;
-  var rangeEl = container.querySelector('input[type="range"]');
-  var numEl = container.querySelector('input[type="number"]');
-  var val = parseInt(el.value);
+function syncBattleIVSlider(rangeEl, side, sn) {
+  var val = parseInt(rangeEl.value);
   if (isNaN(val)) val = 0;
   if (val < 0) val = 0; if (val > 31) val = 31;
-  rangeEl.value = val;
-  numEl.value = val;
   applyIVSliderStyle(rangeEl, val);
+  var valSpan = rangeEl.parentNode.querySelector('.iv-val');
+  if (valSpan) valSpan.textContent = val;
   battleUpdateFromInputs(side);
 }
 
 function initAllIVSliders() {
-  document.querySelectorAll('.iv-hybrid input[type="range"], .calc-iv-hybrid input[type="range"]').forEach(function(r) {
+  document.querySelectorAll('.iv-slider-row input[type="range"], .calc-slider-row input[type="range"]').forEach(function(r) {
     applyIVSliderStyle(r, parseInt(r.value) || 0);
   });
 }
 
-function updateIVBar(input) {
-  var val = parseInt(input.value);
-  if (isNaN(val)) val = 0;
+function updateIVBar(sn, val) {
+  if (typeof val === 'undefined') return;
   if (val < 0) val = 0; if (val > 31) val = 31;
-  input.value = val;
-  var sn = input.dataset.stat;
   var pct = Math.round(val / 31 * 100);
   var bar = document.getElementById('ivbar-' + sn);
   var lbl = document.getElementById('ivlabel-' + sn);

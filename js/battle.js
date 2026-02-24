@@ -217,10 +217,15 @@ function battleRenderSetupPreview(side) {
     '<div style="font-size:14px;color:#888;margin-top:4px">HP: ' + pokemon.maxHp + ' | ' +
     t('build.nature') + ': ' + natureName(pokemon.nature) + '</div></div></div>' +
     '<div class="battle-moves-preview"><div class="battle-moves-preview-title">' + t('build.best4') + ':</div>' + movesHTML + '</div>';
-  // Update IV inputs
+  // Aktualizacja suwaków IV
   BATTLE_STAT_ORDER.forEach(function(sn) {
     var inp = document.getElementById('biv-' + side + '-' + sn);
-    if (inp) inp.value = setup.ivs[sn];
+    if (inp) {
+      inp.value = setup.ivs[sn];
+      applyIVSliderStyle(inp, setup.ivs[sn]);
+      var valSpan = inp.parentNode.querySelector('.iv-val');
+      if (valSpan) valSpan.textContent = setup.ivs[sn];
+    }
   });
   var natSel = document.getElementById('bnat-' + side);
   if (natSel) natSel.value = setup.nature;
@@ -469,8 +474,8 @@ function renderBattleSetupPage() {
   function buildSetupCard(side, label, color) {
     var ivInputs = BATTLE_STAT_ORDER.map(function(sn) {
       return '<div class="battle-iv-box"><label style="color:' + (STAT_COLORS[sn] || '#888') + '">' + (STAT_NAMES[sn] || sn) + '</label>' +
-        '<div class="calc-iv-hybrid"><input type="range" min="0" max="31" value="31" oninput="syncBattleIVHybrid(this,\'range\',\'' + side + '\',\'' + sn + '\')" />' +
-        '<input type="number" min="0" max="31" value="31" id="biv-' + side + '-' + sn + '" oninput="syncBattleIVHybrid(this,\'number\',\'' + side + '\',\'' + sn + '\')" /></div></div>';
+        '<div class="iv-slider-row calc-slider-row"><input type="range" min="0" max="31" value="31" id="biv-' + side + '-' + sn + '" oninput="syncBattleIVSlider(this,\'' + side + '\',\'' + sn + '\')" />' +
+        '<span class="iv-val">' + 31 + '</span></div></div>';
     }).join('');
     return '<div class="battle-setup-card ' + side + '">' +
       '<h3 style="color:' + color + '">' + label + '</h3>' +

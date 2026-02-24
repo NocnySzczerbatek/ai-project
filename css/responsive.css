@@ -84,11 +84,29 @@
   .wc-selector-col { max-width: 100%; }
   .wc-critical h4 { font-size: 10px; }
 
-  /* Suwaki IV — większe cele dotykowe */
-  .iv-hybrid input[type="range"]::-webkit-slider-thumb { width: 32px; height: 32px; margin-top: -11px; }
-  .iv-hybrid input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; }
-  .calc-iv-hybrid input[type="range"]::-webkit-slider-thumb { width: 32px; height: 32px; margin-top: -11px; }
-  .calc-iv-hybrid input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; }
+  /* Suwaki IV — większe cele dotykowe na mobile */
+  .iv-slider-row input[type="range"]::-webkit-slider-thumb,
+  .calc-slider-row input[type="range"]::-webkit-slider-thumb {
+    width: 34px; height: 34px; margin-top: -12px;
+  }
+
+  .iv-slider-row input[type="range"]::-moz-range-thumb,
+  .calc-slider-row input[type="range"]::-moz-range-thumb {
+    width: 34px; height: 34px;
+  }
+
+  .iv-row {
+    flex-wrap: wrap; gap: 4px; padding: 6px 4px;
+  }
+  .iv-name { width: 44px; font-size: 14px; }
+  .iv-bar-wrap { min-width: 100%; order: 10; margin-top: 2px; }
+  .iv-target { width: auto; font-size: 13px; }
+  .iv-label { width: auto; font-size: 13px; }
+
+  /* Zapobieganie zoomowi przy obsłudze suwaków */
+  .iv-section, .calc-section {
+    touch-action: manipulation;
+  }
 
   /* Ewolucje */
   .evo-chain { gap: 8px; padding: 10px 0; }
@@ -117,11 +135,26 @@
     min-height: 44px !important;
     display: inline-flex !important; align-items: center; justify-content: center;
   }
-  .iv-hybrid input[type="range"], .calc-iv-hybrid input[type="range"] {
+  .iv-slider-row input[type="range"], .calc-slider-row input[type="range"] {
     min-height: 44px !important;
   }
-  .mc-input, .calc-field, .calc-select {
+  .mc-input, .calc-select {
     min-height: 44px !important;
+  }
+
+  /* Bezpieczne marginesy — brak poziomego scrolla */
+  .main-area { padding: 12px 10px; overflow-x: hidden; }
+  .iv-section, .calc-section, .comp-section, .moves-section,
+  .cobblemon-section, .team-section, .biome-section {
+    padding: 12px 10px !important;
+    overflow-x: hidden;
+  }
+
+  /* Touch-action na całej stronie */
+  body {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
   }
 }
 

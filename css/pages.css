@@ -111,12 +111,13 @@
   display: block; font-size: 14px; color: var(--gray); margin-bottom: 4px;
   font-family: var(--font-main);
 }
-.calc-select, .calc-field {
+.calc-select {
   font-family: var(--font-main); font-size: 18px;
   background: #000; color: var(--white); border: 2px solid #333;
   padding: 4px 8px; width: 100%; outline: none;
 }
-.calc-select:focus, .calc-field:focus { border-color: var(--gold); }
+.calc-select:focus { border-color: var(--gold); }
+.calc-slider-row { margin-top: 4px; }
 .calc-verdict {
   background: #000; border: 3px solid #333; padding: 16px; text-align: center;
   font-size: 22px; line-height: 1.8; margin-top: 10px;

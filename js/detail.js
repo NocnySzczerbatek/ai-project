@@ -92,9 +92,9 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       return '<div class="'+rowClass+'" id="iv-row-'+sn+'">'
         +'<span class="iv-priority" title="'+t.note+'">'+prioIcon+'</span>'
         +'<span class="iv-name" style="color:'+color+'">'+label+'</span>'
-        +'<div class="iv-hybrid" data-stat="'+sn+'">' 
-        +'<input type="range" min="0" max="31" value="'+defaultVal+'" oninput="syncIVHybrid(this,\'range\')" />' 
-        +'<input class="iv-input" type="number" min="0" max="31" value="'+defaultVal+'" data-stat="'+sn+'" oninput="syncIVHybrid(this,\'number\')" />' 
+        +'<div class="iv-slider-row" data-stat="'+sn+'">' 
+        +'<input type="range" min="0" max="31" value="'+defaultVal+'" data-stat="'+sn+'" oninput="syncIVSlider(this)" />' 
+        +'<span class="iv-val" id="iv-val-'+sn+'">'+defaultVal+'</span>'
         +'</div>'
         +'<div class="iv-bar-wrap"><div class="iv-bar" id="ivbar-'+sn+'" style="width:'+Math.round(defaultVal/31*100)+'%;background:'+getIVColor(defaultVal)+'"></div></div>'
         +'<div class="iv-target" style="color:'+t.color+'" title="'+t.note+'">CEL: '+t.val+'</div>'
@@ -103,7 +103,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     return '<div class="iv-section"><h2>\ud83c\udfb2 Individual Values (IV) <span style="font-size:11px;color:#aaa;font-family:VT323,monospace">skala 0\u201331</span></h2>'
       +'<div class="iv-role-badge">Rola: '+role+'</div>'
       +'<div class="iv-summary">'+summaryLine+'</div>'
-      +'<div style="font-size:14px;color:#666;margin-bottom:6px">\u2b50 priorytet | \u25aa mniej wa\u017cne | Zmie\u0144 liczby \u017ceby sprawdzi\u0107</div>'
+      +'<div style="font-size:14px;color:#666;margin-bottom:6px">\u2b50 priorytet | \u25aa mniej wa\u017cne | Przesu\u0144 suwak \u017ceby sprawdzi\u0107</div>'
       +rows
       +'<div class="iv-legend">'
       +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#55ff55"></div>28\u201331 Doskona\u0142e</div>'
@@ -446,7 +446,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var calcBuildOpts = calcEligible.map(function(key){return '<option value="'+key+'">'+(_bLabels[key]||key)+'</option>';}).join('');
     var ORDER=['hp','attack','defense','special-attack','special-defense','speed'];
     var ivRows = ORDER.map(function(sn){
-      return '<div class="calc-box"><label>'+(STAT_NAMES[sn]||sn)+' IV (0-31)</label><div class="calc-iv-hybrid"><input type="range" min="0" max="31" value="31" oninput="syncCalcIVHybrid(this,\'range\',\''+sn+'\')" /><input class="calc-field" type="number" min="0" max="31" value="31" id="calc-iv-'+sn+'" oninput="syncCalcIVHybrid(this,\'number\',\''+sn+'\')" /></div></div>';
+      return '<div class="calc-box"><label>'+(STAT_NAMES[sn]||sn)+' IV</label><div class="iv-slider-row calc-slider-row" data-stat="'+sn+'"><input type="range" min="0" max="31" value="31" id="calc-iv-'+sn+'" oninput="syncCalcIVSlider(this,\''+sn+'\')" /><span class="iv-val" id="calc-iv-val-'+sn+'">31</span></div></div>';
     }).join('');
     var natures = ['Hardy','Lonely','Brave','Adamant','Naughty','Bold','Docile','Relaxed','Impish','Lax','Timid','Hasty','Serious','Jolly','Naive','Modest','Mild','Quiet','Bashful','Rash','Calm','Gentle','Sassy','Careful','Quirky'];
     var natureOpts = natures.map(function(n){return '<option value="'+n+'">'+natureName(n)+(natureName(n)!==n?' ('+n+')':'')+'</option>';}).join('');
