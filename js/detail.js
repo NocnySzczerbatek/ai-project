@@ -241,6 +241,10 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   function getIVRecommendation(buildType, r) {
     var ivs = {hp:31, attack:31, defense:31, 'special-attack':31, 'special-defense':31, speed:31};
     var notes = [];
+    if (buildType === 'physical') {
+      ivs['special-attack'] = 0;
+      notes.push(currentLang==='en' ? 'SP.ATK IV = 0 \u2014 stat unused, minimizes Download boost for opponent' : 'SP.ATK IV = 0 \u2014 stat nieu\u017cywany, minimalizuje boost Download przeciwnika');
+    }
     if (buildType === 'special' || (buildType === 'support' && !r.isPhys)) {
       ivs['attack'] = 0;
       notes.push(currentLang==='en' ? 'ATK IV = 0 \u2014 minimizes Foul Play / Confusion damage' : 'ATK IV = 0 \u2014 minimalizacja obra\u017ce\u0144 od Foul Play / Confusion');
@@ -414,6 +418,9 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var screenMoves = ['reflect','light-screen','aurora-veil','tailwind','trick-room','healing-wish','lunar-dance'];
     var prioMoves = ['extreme-speed','quick-attack','aqua-jet','ice-shard','mach-punch','bullet-punch','sucker-punch','shadow-sneak','vacuum-wave','first-impression','grassy-glide','accelerock','water-shuriken','jet-punch'];
 
+    // ── BANNED 2-TURN / CHARGE MOVES (Smogon competitive standard) ──
+    var bannedMoves = new Set(['fly','bounce','dig','dive','sky-attack','phantom-force','shadow-force','solar-beam','solar-blade','meteor-beam','skull-bash','razor-wind','sky-drop','freeze-shock','ice-burn','geomancy']);
+
     var pool = [];
     moves.forEach(function(m){
       var vgd = m.version_group_details.slice().sort(function(a,b){return b.version_group.url.localeCompare(a.version_group.url,undefined,{numeric:true});})[0];
@@ -421,6 +428,8 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       var method = vgd.move_learn_method.name;
       if (!['level-up','machine','egg','tutor'].includes(method)) return;
       var nm = m.move.name, md = MOVE_DATA[nm], lv = vgd.level_learned_at;
+      // Skip banned 2-turn / charge moves
+      if (bannedMoves.has(nm)) return;
       var power = md ? md[0] : 0, mtype = md ? md[1] : 'normal', cat = md ? md[2] : (power > 0 ? (r.isPhys ? 'P' : 'S') : 'Z');
       var score = 0;
       var isStab = typeSet.has(mtype);
@@ -618,12 +627,13 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var tabsHTML = builds.map(function(b,i){
       var bestStar = i===0 ? '<span class="best-choice-star">\u2b50</span>' : '';
       var bestBadge = i===0 ? ' <span class="best-choice-badge">'+t('build.bestChoice')+'</span>' : '';
-      return '<button class="build-tab'+(i===0?' active':'')+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">'+bestStar+(i+1)+'. '+b.icon+' '+b.label+bestBadge+'</button>';
+      return '<button class="build-tab'+(i===0?' active':'')+'" data-build-label="'+b.icon+' '+b.label+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">' +bestStar+(i+1)+'. '+b.icon+' '+b.label+bestBadge+'</button>';
     }).join('');
     var panelsHTML = builds.map(function(b,i){
       return '<div class="build-panel'+(i===0?' active':'')+'" id="build-panel-'+i+'">'+generateBuild(statMap,pokemonTypes,moves,b.key,pokemonAbilities,abilityDetails)+'</div>';
     }).join('');
-    return '<div class="comp-section"><h2>\ud83c\udfc6 '+t('sec.comp')+' \u2014 '+r.label+'</h2><button class="copy-link-btn" id="copy-link-btn" onclick="copyBuildLink()">\ud83d\udd17 '+t('build.copyLink')+'</button>'
+    var firstBuildLabel = builds.length > 0 ? builds[0].icon+' '+builds[0].label : r.label;
+    return '<div class="comp-section"><h2>\ud83c\udfc6 '+t('sec.comp')+' \u2014 '+firstBuildLabel+'</h2><button class="copy-link-btn" id="copy-link-btn" onclick="copyBuildLink()">\ud83d\udd17 '+t('build.copyLink')+'</button>'
       +'<div class="build-tabs">'+tabsHTML+'</div>'
       +panelsHTML
       +'</div>';

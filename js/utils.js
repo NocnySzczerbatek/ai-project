@@ -26,6 +26,12 @@ function switchBuildTab(btn, panelId) {
   btn.classList.add('active');
   var panel = document.getElementById(panelId);
   if (panel) panel.classList.add('active');
+  // Dynamic header — update section title to match active tab
+  var label = btn.getAttribute('data-build-label');
+  if (label) {
+    var h2 = section.querySelector('h2');
+    if (h2) h2.innerHTML = '\uD83C\uDFC6 ' + t('sec.comp') + ' \u2014 ' + label;
+  }
 }
 
 /* ── Hamburger menu mobilne ── */
