@@ -396,14 +396,51 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var stratHTML = '<div class="build-strategy-box"><div class="build-strategy-icon">\ud83d\udcd6</div><div class="build-strategy-text">'+stratDesc+'</div></div>';
 
     var natureHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udc8e '+t('build.nature')+'</div><div class="nature-badge">'+natureName(nName)+'</div><div style="font-size:12px;color:#555;margin-bottom:4px">('+nName+')</div><div class="nature-detail"><span class="nature-up">\u25b2 '+nUp+'</span> | <span class="nature-down">\u25bc '+nDown+'</span></div><div style="font-size:14px;color:#666;margin-top:6px">'+nWhy+'</div></div>';
-    var itemHTML = renderItemBox(item, altItems);
     // Ability box
     var picked = pickAbility(pokemonAbilities, abilityDetails, buildType);
     var abilText = picked ? getAbilityText(picked.detail) : { name: '?', desc: '' };
     var hiddenTag = (picked && picked.isHidden) ? '<span class="ability-hidden-tag">'+t('build.abilityHidden')+'</span>' : '';
     var recTag = (picked && picked.score > 1) ? '<div class="ability-rec-tag">\u2705 '+t('build.abilityRec')+'</div>' : '';
     var abilityHTML='<div class="ability-box"><div class="comp-box-title">\u26a1 '+t('build.ability')+'</div><div class="ability-name">'+abilText.name+hiddenTag+'</div><div class="ability-desc">'+abilText.desc+'</div>'+recTag+'</div>';
-    var movesHTML = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
+    var movesResult = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
+    var chosenMoves = movesResult.chosen;
+
+    /* ═══ ITEM VALIDATION — post-move synergy check ═══ */
+    var chosenNames = chosenMoves.map(function(m){ return m.nm; });
+    var statusCount = chosenMoves.filter(function(m){ return m.cat === 'Z'; }).length;
+    var offensiveCount = chosenMoves.filter(function(m){ return m.cat !== 'Z' && m.power > 0; }).length;
+    var hasScreens = chosenNames.some(function(n){ return n === 'reflect' || n === 'light-screen' || n === 'aurora-veil'; });
+
+    // Light Clay: ONLY if screens are in the moveset
+    if (item === 'Light Clay' && !hasScreens) {
+      item = 'Leftovers';
+      altItems = ['Rocky Helmet','Heavy-Duty Boots','Sitrus Berry'];
+    }
+
+    // Choice items: ONLY for offensive builds with 4 attacks
+    if (['Choice Band','Choice Specs','Choice Scarf'].indexOf(item) !== -1) {
+      if (statusCount > 0) {
+        // Has status moves — Choice lock is bad
+        if (buildType === 'physical') { item = 'Life Orb'; altItems = ['Muscle Band','Lum Berry','Heavy-Duty Boots']; }
+        else if (buildType === 'special') { item = 'Life Orb'; altItems = ['Wise Glasses','Lum Berry','Heavy-Duty Boots']; }
+        else { item = 'Life Orb'; altItems = ['Expert Belt','Lum Berry','Heavy-Duty Boots']; }
+      }
+    }
+    // Choice items in alts: remove if status moves present
+    if (statusCount > 0) {
+      altItems = altItems.filter(function(it){ return ['Choice Band','Choice Specs','Choice Scarf'].indexOf(it) === -1; });
+    }
+
+    // Assault Vest: FORBIDDEN if any status moves
+    if (item === 'Assault Vest' && statusCount > 0) {
+      item = 'Life Orb'; altItems = altItems.filter(function(it){ return it !== 'Assault Vest'; });
+    }
+    altItems = altItems.filter(function(it){ return !(it === 'Assault Vest' && statusCount > 0); });
+
+    // Render item box AFTER validation
+    var itemHTML = renderItemBox(item, altItems);
+
+    var movesHTML = movesResult.html;
     return stratHTML
       +'<div class="comp-grid-full">'+evHTML+'</div>'
       +'<div class="comp-grid">'+natureHTML+itemHTML+abilityHTML+'</div>'
@@ -412,7 +449,8 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       +'<div class="best4-grid">'+movesHTML+'</div>';
   }
 
-  // ── BEST 4 FOR BUILD TYPE — Smogon/VGC STAB-enforced ──
+  // ── BEST 4 FOR BUILD TYPE — Smogon/VGC STAB-enforced + 2+2 rule ──
+  // Returns { chosen: Array, html: String }
   function buildBest4ForType(moves, pokemonTypes, statMap, buildType) {
     var r = detectRole(statMap);
     var typeSet = new Set(pokemonTypes);
@@ -425,6 +463,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var utilityMoves = ['rapid-spin','defog','u-turn','volt-switch','flip-turn','teleport','knock-off','encore','taunt','haze','whirlwind','roar','trick','switcheroo','court-change'];
     var screenMoves = ['reflect','light-screen','aurora-veil','tailwind','trick-room','healing-wish','lunar-dance'];
     var prioMoves = ['extreme-speed','quick-attack','aqua-jet','ice-shard','mach-punch','bullet-punch','sucker-punch','shadow-sneak','vacuum-wave','first-impression','grassy-glide','accelerock','water-shuriken','jet-punch'];
+    var allStatusPools = [].concat(defRecovery, hazards, statusMoves, utilityMoves, screenMoves, offSetup);
 
     // ── BANNED 2-TURN / CHARGE MOVES (Smogon competitive standard) ──
     var bannedMoves = new Set(['fly','bounce','dig','dive','sky-attack','phantom-force','shadow-force','solar-beam','solar-blade','meteor-beam','skull-bash','razor-wind','sky-drop','freeze-shock','ice-burn']);
@@ -436,7 +475,6 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       var method = vgd.move_learn_method.name;
       if (!['level-up','machine','egg','tutor'].includes(method)) return;
       var nm = m.move.name, md = MOVE_DATA[nm], lv = vgd.level_learned_at;
-      // Skip banned 2-turn / charge moves
       if (bannedMoves.has(nm)) return;
       var power = md ? md[0] : 0, mtype = md ? md[1] : 'normal', cat = md ? md[2] : (power > 0 ? (r.isPhys ? 'P' : 'S') : 'Z');
       var score = 0;
@@ -453,36 +491,29 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
           else if (offSetup.includes(nm)) score = 40;
           else score = 15;
         } else {
-          // Offensive builds: setup moves are valuable
           if (offSetup.includes(nm)) score = 85;
           else if (defRecovery.includes(nm)) score = 20;
           else if (utilityMoves.includes(nm)) score = 30;
           else score = 10;
         }
       } else {
-        // Damaging moves scoring — CATEGORY ENFORCEMENT
         score = power || 50;
 
-        // STRICT CATEGORY FILTER: Physical builds only want Physical moves, etc.
+        // STRICT CATEGORY FILTER
         if (buildType === 'physical') {
           if (cat === 'P') score *= 1.6;
-          else if (cat === 'S') score *= 0.05; // effectively blocked
+          else if (cat === 'S') score *= 0.05;
         } else if (buildType === 'special') {
           if (cat === 'S') score *= 1.6;
-          else if (cat === 'P') score *= 0.05; // effectively blocked
+          else if (cat === 'P') score *= 0.05;
         } else if (buildType === 'mixed') {
           score *= 1.2;
         } else if (buildType === 'defensive' || buildType === 'support') {
           score *= 0.7;
         }
 
-        // STAB bonus — very high to ensure min 2 STAB
         if (isStab) score *= 2.0;
-
-        // Priority moves bonus
         if (prioMoves.includes(nm)) score += 35;
-
-        // Coverage bonus for non-STAB high-power moves
         if (!isStab && power >= 70) score += 15;
       }
 
@@ -494,67 +525,106 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var unique = pool.filter(function(m){ if(seen.has(m.nm)) return false; seen.add(m.nm); return true; });
     unique.sort(function(a,b){ return b.score - a.score; });
 
-    // ── STAB ENFORCEMENT: guarantee min 2 STAB attacks ──
-    var stabPool = unique.filter(function(m){ return m.isStab && m.cat !== 'Z' && m.power > 0; });
-    var nonStabPool = unique.filter(function(m){ return !m.isStab || m.cat === 'Z' || m.power === 0; });
-
     var chosen = [];
     var typeCounts = {};
-    var stabCount = 0;
 
-    // First: pick up to 2 best STAB moves
-    for (var i = 0; i < stabPool.length && stabCount < 2; i++) {
-      var m = stabPool[i];
-      var tc = typeCounts[m.mtype] || 0;
-      if (tc >= 2) continue;
-      // For physical builds, only take Physical STAB; for special, only Special STAB
-      if (buildType === 'physical' && m.cat !== 'P') continue;
-      if (buildType === 'special' && m.cat !== 'S') continue;
-      typeCounts[m.mtype] = (tc || 0) + 1;
-      chosen.push(m);
-      stabCount++;
-    }
+    // ═══ DEFENSIVE / SUPPORT: 2+2 RULE — min 2 status slots guaranteed ═══
+    if (buildType === 'defensive' || buildType === 'support') {
+      // Step 1: Pick best status moves (recovery > status > hazards > screens > utility)
+      var statusPool = unique.filter(function(m){ return m.cat === 'Z'; });
+      statusPool.sort(function(a,b){ return b.score - a.score; });
+      var statusChosen = [];
+      var statusNames = new Set();
+      for (var i = 0; i < statusPool.length && statusChosen.length < 2; i++) {
+        if (!statusNames.has(statusPool[i].nm)) {
+          statusNames.add(statusPool[i].nm);
+          statusChosen.push(statusPool[i]);
+        }
+      }
+      // Put status moves first
+      chosen = chosen.concat(statusChosen);
 
-    // If couldn't find 2 category-matching STAB, relax constraint
-    if (stabCount < 2) {
+      // Step 2: Fill remaining slots (up to 4) with best STAB attacks or more status
+      var attackPool = unique.filter(function(m){ return m.cat !== 'Z' && m.power > 0; });
+      attackPool.sort(function(a,b){ return b.score - a.score; });
+      for (var i = 0; i < attackPool.length && chosen.length < 4; i++) {
+        var m = attackPool[i];
+        if (chosen.some(function(c){ return c.nm === m.nm; })) continue;
+        var tc = typeCounts[m.mtype] || 0;
+        if (tc >= 2) continue;
+        typeCounts[m.mtype] = tc + 1;
+        chosen.push(m);
+      }
+      // If still < 4, fill with more status moves
+      for (var i = 0; i < statusPool.length && chosen.length < 4; i++) {
+        if (!chosen.some(function(c){ return c.nm === statusPool[i].nm; })) {
+          chosen.push(statusPool[i]);
+        }
+      }
+      // Final fallback
+      for (var i = 0; i < unique.length && chosen.length < 4; i++) {
+        if (!chosen.some(function(c){ return c.nm === unique[i].nm; })) chosen.push(unique[i]);
+      }
+
+    } else {
+      // ═══ OFFENSIVE BUILDS: STAB-enforced selection ═══
+      var stabPool = unique.filter(function(m){ return m.isStab && m.cat !== 'Z' && m.power > 0; });
+      var stabCount = 0;
+
+      // Pick up to 2 best STAB moves (category-matched)
       for (var i = 0; i < stabPool.length && stabCount < 2; i++) {
-        if (chosen.includes(stabPool[i])) continue;
-        chosen.push(stabPool[i]);
+        var m = stabPool[i];
+        var tc = typeCounts[m.mtype] || 0;
+        if (tc >= 2) continue;
+        if (buildType === 'physical' && m.cat !== 'P') continue;
+        if (buildType === 'special' && m.cat !== 'S') continue;
+        typeCounts[m.mtype] = (tc || 0) + 1;
+        chosen.push(m);
         stabCount++;
+      }
+      // Relax if couldn't find 2 category-matching STAB
+      if (stabCount < 2) {
+        for (var i = 0; i < stabPool.length && stabCount < 2; i++) {
+          if (chosen.some(function(c){ return c.nm === stabPool[i].nm; })) continue;
+          chosen.push(stabPool[i]);
+          stabCount++;
+        }
+      }
+
+      // Fill remaining slots — best coverage / status / setup
+      var allSorted = unique.slice();
+      allSorted.sort(function(a,b){ return b.score - a.score; });
+      for (var i = 0; i < allSorted.length && chosen.length < 4; i++) {
+        if (chosen.some(function(c){ return c.nm === allSorted[i].nm; })) continue;
+        var m = allSorted[i];
+        var tc = typeCounts[m.mtype] || 0;
+        if (tc >= 2 && m.cat !== 'Z') continue;
+        if (buildType === 'physical' && m.cat === 'S' && m.power > 0) continue;
+        if (buildType === 'special' && m.cat === 'P' && m.power > 0) continue;
+        typeCounts[m.mtype] = (tc || 0) + 1;
+        chosen.push(m);
+      }
+      // Final fallback
+      for (var i = 0; i < allSorted.length && chosen.length < 4; i++) {
+        if (!chosen.some(function(c){ return c.nm === allSorted[i].nm; })) chosen.push(allSorted[i]);
       }
     }
 
-    // Fill remaining 2 slots from the full sorted pool (best coverage / status / setup)
-    var allSorted = unique.slice();
-    allSorted.sort(function(a,b){ return b.score - a.score; });
-    for (var i = 0; i < allSorted.length && chosen.length < 4; i++) {
-      if (chosen.includes(allSorted[i])) continue;
-      var m = allSorted[i];
-      var tc = typeCounts[m.mtype] || 0;
-      if (tc >= 2 && m.cat !== 'Z') continue;
-      // Block wrong-category attacks for pure builds
-      if (buildType === 'physical' && m.cat === 'S' && m.power > 0) continue;
-      if (buildType === 'special' && m.cat === 'P' && m.power > 0) continue;
-      typeCounts[m.mtype] = (tc || 0) + 1;
-      chosen.push(m);
+    if (!chosen.length) {
+      return { chosen: [], html: '<div style="color:#666">'+(currentLang==='en'?'No move data available.':'Brak danych o atakach.')+'</div>' };
     }
-
-    // Final fallback: fill if still < 4
-    for (var i = 0; i < allSorted.length && chosen.length < 4; i++) {
-      if (!chosen.includes(allSorted[i])) chosen.push(allSorted[i]);
-    }
-
-    if (!chosen.length) return '<div style="color:#666">'+(currentLang==='en'?'No move data available.':'Brak danych o atakach.')+'</div>';
 
     var stars = function(sc){ return sc >= 200 ? '\u2b50\u2b50\u2b50\u2b50\u2b50' : sc >= 150 ? '\u2b50\u2b50\u2b50\u2b50' : sc >= 100 ? '\u2b50\u2b50\u2b50' : sc >= 50 ? '\u2b50\u2b50' : '\u2b50'; };
     var catLabel = function(cat){ return cat==='P' ? '<span class="move-cat-p">Fiz.</span>' : cat==='S' ? '<span class="move-cat-s">Spec.</span>' : '<span class="move-cat-z">Status</span>'; };
 
-    return chosen.map(function(m, i){
+    var html = chosen.map(function(m, i){
       var isStab = typeSet.has(m.mtype);
       var stabL = isStab ? '<span class="move-stab">STAB</span>' : '<span class="move-coverage">'+typeName(m.mtype)+'</span>';
       var pwrStr = m.power > 0 ? '<span class="move-power">MOC: '+m.power+'</span>' : '<span class="move-power" style="color:#666">Status</span>';
       return '<div class="move-card"><span class="move-card-num">'+(i+1)+'</span><div class="move-card-name">'+typeIconHTML(m.mtype,18)+' '+m.nm.replace(/-/g,' ')+'</div><div class="move-card-meta">'+catLabel(m.cat)+stabL+pwrStr+'</div><div class="move-stars">'+stars(m.score)+'</div></div>';
     }).join('');
+
+    return { chosen: chosen, html: html };
   }
 
   // ── ELIGIBLE BUILDS ──
