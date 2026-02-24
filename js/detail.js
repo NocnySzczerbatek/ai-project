@@ -87,8 +87,9 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var ORDER=['hp','attack','defense','special-attack','special-defense','speed'];
     var rows=ORDER.map(function(sn){
       var label=STAT_NAMES[sn]||sn;var color=STAT_COLORS[sn]||'#888';var t=targets[sn];
-      var rowClass=t.prio?'iv-row iv-row-priority':'iv-row';var prioIcon=t.prio?'\u2b50':'\u25aa';
       var defaultVal=t.val==='0'?0:31;
+      var tierClass=defaultVal>=28?'iv-perfect':defaultVal>=20?'iv-good':defaultVal>=10?'iv-average':'iv-poor';
+      var rowClass=t.prio?'iv-row iv-row-priority '+tierClass:'iv-row '+tierClass;var prioIcon=t.prio?'\u2b50':'\u25aa';
       return '<div class="'+rowClass+'" id="iv-row-'+sn+'">'
         +'<span class="iv-priority" title="'+t.note+'">'+prioIcon+'</span>'
         +'<span class="iv-name" style="color:'+color+'">'+label+'</span>'
@@ -446,7 +447,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var calcBuildOpts = calcEligible.map(function(key){return '<option value="'+key+'">'+(_bLabels[key]||key)+'</option>';}).join('');
     var ORDER=['hp','attack','defense','special-attack','special-defense','speed'];
     var ivRows = ORDER.map(function(sn){
-      return '<div class="calc-box"><label>'+(STAT_NAMES[sn]||sn)+' IV</label><div class="iv-slider-row calc-slider-row" data-stat="'+sn+'"><input type="range" min="0" max="31" value="31" id="calc-iv-'+sn+'" oninput="syncCalcIVSlider(this,\''+sn+'\')" /><span class="iv-val" id="calc-iv-val-'+sn+'">31</span></div></div>';
+      return '<div class="calc-box iv-perfect"><label>'+(STAT_NAMES[sn]||sn)+' IV</label><div class="iv-slider-row calc-slider-row" data-stat="'+sn+'"><input type="range" min="0" max="31" value="31" id="calc-iv-'+sn+'" oninput="syncCalcIVSlider(this,\''+sn+'\')" /><span class="iv-val" id="calc-iv-val-'+sn+'" style="color:#00ff99">31</span></div></div>';
     }).join('');
     var natures = ['Hardy','Lonely','Brave','Adamant','Naughty','Bold','Docile','Relaxed','Impish','Lax','Timid','Hasty','Serious','Jolly','Naive','Modest','Mild','Quiet','Bashful','Rash','Calm','Gentle','Sassy','Careful','Quirky'];
     var natureOpts = natures.map(function(n){return '<option value="'+n+'">'+natureName(n)+(natureName(n)!==n?' ('+n+')':'')+'</option>';}).join('');

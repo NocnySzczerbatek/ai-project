@@ -72,25 +72,48 @@ function getIVTierClass(val) {
   return 'iv-poor';
 }
 
+function getIVGlow(color) {
+  switch (color) {
+    case '#00ff99': return '0 0 15px rgba(0,255,153,0.8), 0 0 30px rgba(0,255,153,0.35)';
+    case '#ffcc00': return '0 0 15px rgba(255,204,0,0.8), 0 0 30px rgba(255,204,0,0.35)';
+    case '#ff8800': return '0 0 15px rgba(255,136,0,0.8), 0 0 30px rgba(255,136,0,0.35)';
+    case '#ff4444': return '0 0 15px rgba(255,68,68,0.8), 0 0 30px rgba(255,68,68,0.35)';
+    default:       return '0 0 15px rgba(0,255,153,0.8), 0 0 30px rgba(0,255,153,0.35)';
+  }
+}
+
 function applyIVSliderStyle(rangeEl, val) {
   var color = getIVSliderColor(val);
   var tierClass = getIVTierClass(val);
+  var glow = getIVGlow(color);
   var pct = Math.round(val / 31 * 100);
+
+  /* Ustaw CSS custom properties na inpucie */
   rangeEl.style.setProperty('--iv-thumb', color);
   rangeEl.style.setProperty('--iv-track', color);
   rangeEl.style.setProperty('--iv-pct', pct + '%');
+  rangeEl.style.setProperty('--iv-glow', glow);
+
+  /* Ustaw gradient BEZPOŚREDNIO na inpucie — wymusza repaint pseudo-elementów w WebKit */
+  var gradient = 'linear-gradient(to right, ' + color + ' 0%, ' + color + ' ' + pct + '%, rgba(15,15,30,0.7) ' + pct + '%, rgba(15,15,30,0.7) 100%)';
+  rangeEl.style.background = gradient;
+
+  /* Propaguj zmienne na rodzica */
   var parent = rangeEl.closest('.iv-slider-row, .calc-slider-row');
   if (parent) {
     parent.style.setProperty('--iv-thumb', color);
     parent.style.setProperty('--iv-track', color);
     parent.style.setProperty('--iv-pct', pct + '%');
+    parent.style.setProperty('--iv-glow', glow);
   }
-  /* Aktualizuj klasę wiersza IV */
-  var row = rangeEl.closest('.iv-row, .calc-box');
+
+  /* Aktualizuj klasę wiersza IV — usuń starą, dodaj nową */
+  var row = rangeEl.closest('.iv-row, .calc-box, .battle-iv-box');
   if (row) {
     row.classList.remove('iv-perfect', 'iv-good', 'iv-average', 'iv-poor');
     row.classList.add(tierClass);
   }
+
   /* Aktualizuj kolor wartości liczbowej */
   var valSpan = parent ? parent.querySelector('.iv-val') : null;
   if (valSpan) {

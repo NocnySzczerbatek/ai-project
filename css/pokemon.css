@@ -52,11 +52,9 @@
   flex: 1; height: 10px; border-radius: 5px;
   background: rgba(15, 15, 30, 0.7);
   border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(4px);
   outline: none; cursor: pointer;
   touch-action: manipulation;
   min-height: 28px;
-  transition: all 0.2s ease;
 }
 
 /* ── Thumb: Webkit ── */
@@ -66,7 +64,7 @@
   width: 28px; height: 28px; border-radius: 50%;
   background: var(--iv-thumb, #00ff99);
   border: 2px solid rgba(0,0,0,0.6);
-  box-shadow: 0 0 10px var(--iv-thumb, #00ff99), 0 0 20px color-mix(in srgb, var(--iv-thumb, #00ff99) 40%, transparent);
+  box-shadow: var(--iv-glow, 0 0 15px rgba(0,255,153,0.7), 0 0 30px rgba(0,255,153,0.3));
   cursor: pointer; margin-top: -9px;
   transition: box-shadow 0.2s ease, background 0.2s ease;
 }
@@ -77,7 +75,7 @@
   width: 28px; height: 28px; border-radius: 50%;
   background: var(--iv-thumb, #00ff99);
   border: 2px solid rgba(0,0,0,0.6);
-  box-shadow: 0 0 10px var(--iv-thumb, #00ff99), 0 0 20px color-mix(in srgb, var(--iv-thumb, #00ff99) 40%, transparent);
+  box-shadow: var(--iv-glow, 0 0 15px rgba(0,255,153,0.7), 0 0 30px rgba(0,255,153,0.3));
   cursor: pointer;
   transition: box-shadow 0.2s ease, background 0.2s ease;
 }
@@ -105,11 +103,10 @@
 /* ── Wyświetlana wartość liczbowa ── */
 .iv-val {
   min-width: 28px; text-align: center; font-size: 20px;
-  font-family: var(--font-main); color: var(--iv-thumb, #00ff99);
+  font-family: var(--font-main); color: #00ff99;
   font-weight: bold; flex-shrink: 0;
   background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.08); padding: 2px 6px;
   border-radius: 6px; user-select: none;
-  backdrop-filter: blur(4px);
   transition: color 0.2s ease;
 }
 .calc-slider-row .iv-val {

@@ -1,7 +1,7 @@
 /* Service Worker — Cobblemon Mastery Guide
    Cache'uje statyczne zasoby dla szybszego ładowania */
 
-const CACHE_NAME = 'cobblemon-v2.1';
+const CACHE_NAME = 'cobblemon-v3.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
