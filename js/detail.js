@@ -514,6 +514,8 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
 
   document.getElementById('main-area').innerHTML =
     '<div class="page-title"><span>#'+String(p.id).padStart(3,'0')+' '+p.name.toUpperCase()+' <button class="fav-star'+(isFav?' active':'')+'" id="fav-star-btn" onclick="toggleFavorite('+p.id+',\''+p.name+'\')" title="'+(currentLang==='en'?'Add to favorites':'Dodaj do ulubionych')+'">\u2b50</button></span></div>'
+    +'<div class="detail-desktop-grid">'
+    +'<div class="detail-col-left">'
     +'<div class="detail-grid"><div>'
     +'<div class="mc-panel pokemon-portrait"><img src="'+artworkUrl+'" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png\'" alt="'+p.name+'" style="width:160px;height:160px"/><div class="pokemon-name-big">'+p.name+'</div><div class="pokemon-number">#'+String(p.id).padStart(3,'0')+' \u00b7 '+getGen(p.id)+'</div><div class="types" style="margin-top:10px">'+typesHTML+'</div><hr class="section-sep" style="margin:10px 0"><div style="font-size:16px;color:#888;font-style:italic;max-width:200px;margin:0 auto;text-align:center">'+flavor+'</div></div>'
     +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83d\udccb '+t('sec.basicData')+'</h2><div class="info-entry"><span class="info-label">'+t('det.height')+':</span><span class="info-value">'+height+' m</span></div><div class="info-entry"><span class="info-label">'+t('det.weight')+':</span><span class="info-value">'+weight+' kg</span></div><div class="info-entry"><span class="info-label">'+t('det.types')+':</span><span class="info-value">'+p.types.map(function(tp){return typeName(tp.type.name);}).join(', ')+'</span></div><div class="info-entry"><span class="info-label">'+t('det.abilities')+':</span><span class="info-value" style="font-size:16px">'+abilitiesHTML+'</span></div><div class="info-entry"><span class="info-label">'+t('det.habitat')+':</span><span class="info-value">'+(s.habitat?s.habitat.name:'\u2014')+'</span></div><div class="info-entry"><span class="info-label">'+t('det.catch')+':</span><span class="info-value">'+s.capture_rate+'/255</span></div><div class="info-entry"><span class="info-label">'+t('det.baseExp')+':</span><span class="info-value">'+(p.base_experience||'?')+'</span></div></div>'
@@ -523,9 +525,13 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     +'<div class="mc-panel"><h2>\ud83d\udcca '+t('sec.baseStats')+'</h2>'+statsHTML+'<div style="font-size:15px;color:#666;margin-top:6px;">'+t('gen.sum')+': <span style="color:#fff">'+p.stats.reduce(function(a,st){return a+st.base_stat;},0)+'</span></div></div>'
     +buildIVSection(p.stats)
     +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83e\uddec '+t('sec.evo')+'</h2><div class="evo-chain" id="evo-chain-container">'+evoHTML+'</div></div></div></div>'
-    +'<div class="cobblemon-section" style="margin-top:16px"><h2><span class="cob-icon">\u2694</span> '+t('sec.cobblemon')+'</h2>'+cobHTML+'</div>'
+    +'</div>'
+    +'<div class="detail-col-right">'
     +buildCompetitiveSection(p.stats, p.types.map(function(tp){return tp.type.name;}), p.moves, p.abilities, abilityDetails || [])
     +buildMovesSection(p.moves)
+    +'</div>'
+    +'</div>'
+    +'<div class="cobblemon-section" style="margin-top:16px"><h2><span class="cob-icon">\u2694</span> '+t('sec.cobblemon')+'</h2>'+cobHTML+'</div>'
     +buildCalculatorSection(p.stats, abilityDetails)
     +'<div style="height:40px"></div>';
 
