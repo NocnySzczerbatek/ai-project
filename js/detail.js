@@ -205,64 +205,184 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       '<div class="item-layout">' + mainHTML + altsHTML + '</div></div>';
   }
 
+  // ── STRATEGIC DESCRIPTION PER ARCHETYPE ──
+  function getStrategyDesc(buildType) {
+    var descs = {
+      physical: {
+        pl: 'Ten build maksymalizuje obra\u017cenia fizyczne i szybko\u015b\u0107, pozwalaj\u0105c wyprzedzi\u0107 wi\u0119kszo\u015b\u0107 przeciwnik\u00f3w i zada\u0107 pot\u0119\u017cny cios STAB przed ich ruchem. Idealny jako g\u0142\u00f3wna si\u0142a ognia w teamie. ATK IV na 31, SP.ATK IV nieistotne.',
+        en: 'This build maximizes physical damage and speed, letting you outspeed most opponents and land a powerful STAB hit before they move. Ideal as the main firepower of your team. ATK IV at 31, SP.ATK IV irrelevant.'
+      },
+      special: {
+        pl: 'Ten build maksymalizuje obra\u017cenia specjalne i szybko\u015b\u0107, pozwalaj\u0105c wyprzedzi\u0107 wi\u0119kszo\u015b\u0107 przeciwnik\u00f3w i zada\u0107 pot\u0119\u017cny cios STAB przed ich ruchem. ATK IV ustawione na 0 \u2014 minimalizacja obra\u017ce\u0144 od Foul Play i zamieszania (Confusion).',
+        en: 'This build maximizes special damage and speed, letting you outspeed most opponents and land a powerful STAB hit before they move. ATK IV set to 0 \u2014 minimizes damage from Foul Play and Confusion.'
+      },
+      defensive: {
+        pl: 'Build skoncentrowany na przetrwaniu. Wysokie HP i statystyki obronne w po\u0142\u0105czeniu z przedmiotem Leftovers i ruchami statusowymi maj\u0105 za zadanie zm\u0119czy\u0107 przeciwnika. Priorytet dla ruch\u00f3w lecz\u0105cych (Roost, Recover) i statusowych (Toxic, Will-O-Wisp).',
+        en: 'Build focused on survival. High HP and defensive stats combined with Leftovers and status moves aim to wear down the opponent. Priority given to recovery moves (Roost, Recover) and status moves (Toxic, Will-O-Wisp).'
+      },
+      mixed: {
+        pl: 'Mieszany atakuj\u0105cy \u2014 wykorzystuje zar\u00f3wno ataki fizyczne jak i specjalne, aby pokona\u0107 r\u00f3\u017cne typy wall\u00f3w. Life Orb wzmacnia oba rodzaje obra\u017ce\u0144. Trudniejszy do kontrowania ni\u017c czysty atakuj\u0105cy.',
+        en: 'Mixed attacker \u2014 uses both physical and special moves to break through different walls. Life Orb boosts both damage types. Harder to counter than a pure attacker.'
+      },
+      support: {
+        pl: 'Build wsparcia dru\u017cyny. Stawia ekrany (Reflect / Light Screen), rozrzuca hazardy (Stealth Rock), leczy sojusznik\u00f3w lub kontroluje pole bitwy statusami. Przetrwanie jest kluczowe.',
+        en: 'Team support build. Sets screens (Reflect / Light Screen), spreads hazards (Stealth Rock), heals allies or controls the battlefield with status. Survival is key.'
+      },
+      niche: {
+        pl: 'Niszowy wariant \u2014 Trick Room, lead z Focus Sash, Choice Scarf revenge killer lub inny specjalistyczny zestaw. U\u017cywaj w konkretnym team comp, nie jako uniwersalny pick.',
+        en: 'Niche variant \u2014 Trick Room, Focus Sash lead, Choice Scarf revenge killer or other specialist set. Use in specific team comps, not as a universal pick.'
+      }
+    };
+    var d = descs[buildType] || descs.physical;
+    return currentLang === 'en' ? d.en : d.pl;
+  }
+
+  // ── IV RECOMMENDATION PER BUILD (Smogon standard) ──
+  function getIVRecommendation(buildType, r) {
+    var ivs = {hp:31, attack:31, defense:31, 'special-attack':31, 'special-defense':31, speed:31};
+    var notes = [];
+    if (buildType === 'special' || (buildType === 'support' && !r.isPhys)) {
+      ivs['attack'] = 0;
+      notes.push(currentLang==='en' ? 'ATK IV = 0 \u2014 minimizes Foul Play / Confusion damage' : 'ATK IV = 0 \u2014 minimalizacja obra\u017ce\u0144 od Foul Play / Confusion');
+    }
+    if (buildType === 'niche' && r.isTR) {
+      ivs['speed'] = 0;
+      notes.push(currentLang==='en' ? 'SPD IV = 0 \u2014 Trick Room optimization' : 'SPD IV = 0 \u2014 optymalizacja pod Trick Room');
+    }
+    return { ivs: ivs, notes: notes };
+  }
+
   function generateBuild(statMap, pokemonTypes, moves, buildType, pokemonAbilities, abilityDetails) {
     var r = detectRole(statMap);
     var spread, note, nName, nUp, nDown, nWhy, item, altItems;
+
+    /* ═══ HARDCODED META LOGIC — Smogon/VGC standard ═══ */
+
     if (buildType === 'physical') {
-      if(r.isFast) spread=[['attack',252],['speed',252],['hp',4]]; else spread=[['attack',252],['hp',252],['defense',4]];
-      note=currentLang==='en'?'Max physical damage.':'Maksuj fizyczne obra\u017cenia.';
-      if(r.isFast){nName='Jolly';nUp='+Szybk.';nDown='-Sp.Atak';nWhy=currentLang==='en'?'Faster without losing Atk':'Szybszy bez straty Ataku';}
-      else{nName='Adamant';nUp='+Atak';nDown='-Sp.Atak';nWhy=currentLang==='en'?'Max Atk':'Maks Atak';}
-      if(r.spe>=100){item='Choice Band';altItems=['Life Orb','Focus Sash'];}
-      else{item='Life Orb';altItems=['Choice Band','Assault Vest'];}
-    } else if (buildType === 'special') {
-      if(r.isFast) spread=[['special-attack',252],['speed',252],['hp',4]]; else spread=[['special-attack',252],['hp',252],['special-defense',4]];
-      note=currentLang==='en'?'Max special damage.':'Maksuj specjalne obra\u017cenia.';
-      if(r.isFast){nName='Timid';nUp='+Szybk.';nDown='-Atak';nWhy=currentLang==='en'?'Faster without losing SpAtk':'Szybszy bez straty Sp.Atak';}
-      else{nName='Modest';nUp='+Sp.Atak';nDown='-Atak';nWhy=currentLang==='en'?'Max SpAtk':'Maks Sp.Atak';}
-      if(r.spe>=100){item='Choice Specs';altItems=['Life Orb','Focus Sash'];}
-      else{item='Life Orb';altItems=['Choice Specs','Assault Vest'];}
-    } else if (buildType === 'defensive') {
-      var defMore = r.def >= r.spdef;
-      if(defMore) spread=[['hp',252],['defense',252],['special-defense',4]]; else spread=[['hp',252],['special-defense',252],['defense',4]];
-      note=currentLang==='en'?'Maximum endurance.':'Maksymalna wytrzyma\u0142o\u015b\u0107.';
-      if(defMore){nName='Impish';nUp='+'+(currentLang==='en'?'Def':'Obrona');nDown='-Sp.Atak';nWhy=currentLang==='en'?'Physical endurance':'Fizyczna wytrzyma\u0142o\u015b\u0107';}
-      else{nName='Calm';nUp='+'+(currentLang==='en'?'SpDef':'Sp.Obr');nDown='-Atak';nWhy=currentLang==='en'?'Special endurance':'Specjalna wytrzyma\u0142o\u015b\u0107';}
-      item='Leftovers';altItems=['Rocky Helmet','Sitrus Berry'];
-    } else if (buildType === 'mixed') {
-      spread=[['attack',128],['special-attack',128],['speed',252]];
-      note=currentLang==='en'?'Balanced offensive coverage.':'Zbalansowana ofensywa mieszana.';
-      if(r.isFast){nName='Naive';nUp='+Szybk.';nDown='-Sp.Obr';nWhy=currentLang==='en'?'Speed without losing offense':'Szybko\u015b\u0107 bez utraty ofensywy';}
-      else if(r.atk>r.spatk){nName='Lonely';nUp='+Atak';nDown='-Obrona';nWhy=currentLang==='en'?'Max physical for mixed':'Maks fiz. dla mieszanego';}
-      else{nName='Mild';nUp='+Sp.Atak';nDown='-Obrona';nWhy=currentLang==='en'?'Max special for mixed':'Maks spec. dla mieszanego';}
-      item='Life Orb';altItems=['Expert Belt','Weakness Policy'];
-    } else if (buildType === 'support') {
-      var defMore2 = r.def >= r.spdef;
-      spread=[['hp',252],[defMore2?'defense':'special-defense',252],[defMore2?'special-defense':'defense',4]];
-      note=currentLang==='en'?'Team support and utility.':'Wsparcie dru\u017cyny i u\u017cyteczno\u015b\u0107.';
-      if(defMore2){nName='Bold';nUp='+'+(currentLang==='en'?'Def':'Obrona');nDown='-Atak';nWhy=currentLang==='en'?'Max bulk for support':'Maks obrona dla wsparcia';}
-      else{nName='Calm';nUp='+'+(currentLang==='en'?'SpDef':'Sp.Obr');nDown='-Atak';nWhy=currentLang==='en'?'Max SpDef for support':'Maks Sp.Obr dla wsparcia';}
-      item='Light Clay';altItems=['Leftovers','Mental Herb','Red Card'];
-    } else {
-      // niche
-      if(r.spe<=50){
-        spread=[[r.isPhys?'attack':'special-attack',252],['hp',252],[r.isPhys?'defense':'special-defense',4]];
-        note=currentLang==='en'?'Trick Room abuser \u2014 minimum speed.':'Pod Trick Room \u2014 minimalna szybko\u015b\u0107.';
-        nName=r.isPhys?'Brave':'Quiet';nUp=r.isPhys?'+Atak':'+Sp.Atak';nDown='-Szybk.';nWhy=currentLang==='en'?'Min speed for Trick Room':'Min szybko\u015b\u0107 pod Trick Room';
-        item=r.isPhys?'Choice Band':'Choice Specs';altItems=['Life Orb','Assault Vest'];
+      // Physical Attacker: 252 Atk / 252 Spe / 4 HP
+      if (r.isFast || r.spe >= 70) {
+        spread = [['attack',252],['speed',252],['hp',4]];
       } else {
-        spread=[[r.isPhys?'attack':'special-attack',252],['speed',252],['hp',4]];
-        note=currentLang==='en'?'Revenge killer / lead.':'Revenge killer / lead.';
-        nName=r.isPhys?'Jolly':'Timid';nUp='+Szybk.';nDown=r.isPhys?'-Sp.Atak':'-Atak';nWhy=currentLang==='en'?'Max speed for revenge kills':'Maks szybko\u015b\u0107 na revenge kille';
-        item='Focus Sash';altItems=['Choice Scarf','Heavy-Duty Boots','Air Balloon'];
+        spread = [['attack',252],['hp',252],['defense',4]];
+      }
+      if (r.spe >= 90) {
+        nName='Jolly'; nUp='+SPD'; nDown='-SP.ATK';
+        nWhy=currentLang==='en'?'Outspeeds key threats without losing Attack':'Wyprzedza kluczowe zagro\u017cenia bez straty Ataku';
+      } else {
+        nName='Adamant'; nUp='+ATK'; nDown='-SP.ATK';
+        nWhy=currentLang==='en'?'Maximizes Attack power — speed not critical':'Maksymalizuje moc Ataku \u2014 szybko\u015b\u0107 niekrytyczna';
+      }
+      if (r.spe >= 100) { item='Choice Band'; altItems=['Life Orb','Focus Sash','Lum Berry']; }
+      else if (r.spe >= 70) { item='Life Orb'; altItems=['Choice Band','Choice Scarf','Heavy-Duty Boots']; }
+      else { item='Choice Band'; altItems=['Life Orb','Assault Vest','Leftovers']; }
+
+    } else if (buildType === 'special') {
+      // Special Attacker: 252 SpAtk / 252 Spe / 4 HP — ATK IV = 0
+      if (r.isFast || r.spe >= 70) {
+        spread = [['special-attack',252],['speed',252],['hp',4]];
+      } else {
+        spread = [['special-attack',252],['hp',252],['special-defense',4]];
+      }
+      if (r.spe >= 90) {
+        nName='Timid'; nUp='+SPD'; nDown='-ATK';
+        nWhy=currentLang==='en'?'Outspeeds key threats — ATK stat unused':'Wyprzedza kluczowe zagro\u017cenia \u2014 stat ATK nieu\u017cywany';
+      } else {
+        nName='Modest'; nUp='+SP.ATK'; nDown='-ATK';
+        nWhy=currentLang==='en'?'Maximizes Special Attack — ATK dumped':'Maksymalizuje Sp.Atak \u2014 ATK zrzucony';
+      }
+      if (r.spe >= 100) { item='Choice Specs'; altItems=['Life Orb','Focus Sash','Choice Scarf']; }
+      else if (r.spe >= 70) { item='Life Orb'; altItems=['Choice Specs','Choice Scarf','Heavy-Duty Boots']; }
+      else { item='Choice Specs'; altItems=['Life Orb','Assault Vest','Leftovers']; }
+
+    } else if (buildType === 'defensive') {
+      // Wall/Tank: 252 HP / 252 Def or SpDef / 4 other def
+      var physWall = r.def >= r.spdef;
+      if (physWall) {
+        spread = [['hp',252],['defense',252],['special-defense',4]];
+        nName='Impish'; nUp='+'+(currentLang==='en'?'DEF':'OBR'); nDown='-SP.ATK';
+        nWhy=currentLang==='en'?'Physical wall — tanks physical hits':'Fizyczny wall \u2014 trzyma fizyczne ataki';
+      } else {
+        spread = [['hp',252],['special-defense',252],['defense',4]];
+        nName='Calm'; nUp='+'+(currentLang==='en'?'SP.DEF':'SP.OBR'); nDown='-ATK';
+        nWhy=currentLang==='en'?'Special wall — tanks special hits':'Specjalny wall \u2014 trzyma specjalne ataki';
+      }
+      // Bold variant if very high def and sp.atk-based
+      if (r.isSpec && physWall) {
+        nName='Bold'; nUp='+'+(currentLang==='en'?'DEF':'OBR'); nDown='-ATK';
+        nWhy=currentLang==='en'?'Physical defense — ATK unused on this set':'Fizyczna obrona \u2014 ATK nieu\u017cywany w tym secie';
+      }
+      item='Leftovers'; altItems=['Rocky Helmet','Heavy-Duty Boots','Sitrus Berry'];
+
+    } else if (buildType === 'mixed') {
+      // Mixed Attacker: 128 Atk / 128 SpAtk / 252 Spe
+      spread = [['attack',128],['special-attack',128],['speed',252]];
+      if (r.isFast) {
+        nName='Naive'; nUp='+SPD'; nDown='-SP.DEF';
+        nWhy=currentLang==='en'?'Speed priority for mixed — slight SpDef cut':'Priorytet szybko\u015bci dla mieszanego \u2014 lekkie ci\u0119cie Sp.Obr';
+      } else if (r.atk > r.spatk) {
+        nName='Lonely'; nUp='+ATK'; nDown='-DEF';
+        nWhy=currentLang==='en'?'Physical-leaning mixed':'Mieszany z naciskiem fizycznym';
+      } else {
+        nName='Mild'; nUp='+SP.ATK'; nDown='-DEF';
+        nWhy=currentLang==='en'?'Special-leaning mixed':'Mieszany z naciskiem specjalnym';
+      }
+      item='Life Orb'; altItems=['Expert Belt','Weakness Policy','Choice Scarf'];
+
+    } else if (buildType === 'support') {
+      // Support: 252 HP / 252 Def or SpDef / 4 other
+      var defMore2 = r.def >= r.spdef;
+      spread = [['hp',252],[defMore2?'defense':'special-defense',252],[defMore2?'special-defense':'defense',4]];
+      if (defMore2) {
+        nName='Bold'; nUp='+'+(currentLang==='en'?'DEF':'OBR'); nDown='-ATK';
+        nWhy=currentLang==='en'?'Maximum physical bulk for utility':'Maks fizyczna wytrzyma\u0142o\u015b\u0107 dru\u017cynowa';
+      } else {
+        nName='Calm'; nUp='+'+(currentLang==='en'?'SP.DEF':'SP.OBR'); nDown='-ATK';
+        nWhy=currentLang==='en'?'Maximum special bulk for utility':'Maks specjalna wytrzyma\u0142o\u015b\u0107 dru\u017cynowa';
+      }
+      item='Light Clay'; altItems=['Leftovers','Mental Herb','Red Card','Eject Button'];
+
+    } else {
+      // niche — Trick Room or Revenge Killer / Lead
+      if (r.spe <= 50) {
+        // Trick Room abuser
+        spread = [[r.isPhys?'attack':'special-attack',252],['hp',252],[r.isPhys?'defense':'special-defense',4]];
+        nName = r.isPhys ? 'Brave' : 'Quiet';
+        nUp = r.isPhys ? '+ATK' : '+SP.ATK'; nDown = '-SPD';
+        nWhy = currentLang==='en' ? 'Minimum speed for Trick Room — moves first under TR' : 'Minimalna szybko\u015b\u0107 pod Trick Room \u2014 rusza si\u0119 pierwszy pod TR';
+        item = r.isPhys ? 'Choice Band' : 'Choice Specs'; altItems = ['Life Orb','Assault Vest','Room Service'];
+      } else {
+        // Revenge killer / lead
+        spread = [[r.isPhys?'attack':'special-attack',252],['speed',252],['hp',4]];
+        nName = r.isPhys ? 'Jolly' : 'Timid';
+        nUp = '+SPD'; nDown = r.isPhys ? '-SP.ATK' : '-ATK';
+        nWhy = currentLang==='en' ? 'Maximum speed — revenge killer or suicide lead' : 'Maks szybko\u015b\u0107 \u2014 revenge killer lub suicide lead';
+        item = 'Focus Sash'; altItems = ['Choice Scarf','Heavy-Duty Boots','Air Balloon'];
       }
     }
+
+    note = currentLang==='en'
+      ? ({physical:'Max physical damage + speed.',special:'Max special damage + speed. ATK IV = 0.',defensive:'Maximum endurance + recovery.',mixed:'Balanced dual offense.',support:'Team utility + bulk.',niche:r.spe<=50?'Trick Room specialist.':'Revenge killer / lead.'}[buildType])
+      : ({physical:'Maks. obra\u017cenia fizyczne + szybko\u015b\u0107.',special:'Maks. obra\u017cenia specjalne + szybko\u015b\u0107. ATK IV = 0.',defensive:'Maksymalna wytrzyma\u0142o\u015b\u0107 + leczenie.',mixed:'Zbalansowana podw\u00f3jna ofensywa.',support:'U\u017cyteczno\u015b\u0107 dru\u017cynowa + bulk.',niche:r.spe<=50?'Specjalista Trick Room.':'Revenge killer / lead.'}[buildType]);
+
+    /* ═══ IV RECOMMENDATION ═══ */
+    var ivRec = getIVRecommendation(buildType, r);
+    var ivNotesHTML = '';
+    if (ivRec.notes.length > 0) {
+      ivNotesHTML = '<div class="build-iv-note">' + ivRec.notes.map(function(n){ return '<div>\u26a0 ' + n + '</div>'; }).join('') + '</div>';
+    }
+
+    /* ═══ RENDER ═══ */
     var total = spread.reduce(function(s,e){return s+e[1];},0);
     var evRows = spread.map(function(e){
       var sn=e[0],val=e[1],color=STAT_COLORS[sn]||'#888',pct=Math.round(val/252*100);
       return '<div class="ev-row"><span class="ev-amount">'+val+'</span><span class="ev-stat-name" style="color:'+color+'">'+(STAT_NAMES[sn]||sn)+'</span><div class="ev-bar-bg"><div class="ev-bar" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
     }).join('');
-    var evHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udcca '+t('build.ev')+' <span style="font-size:10px;color:#888;font-family:VT323,monospace">(max 510)</span></div>'+evRows+'<div class="ev-total">'+t('gen.sum')+': '+total+'/510</div><div style="font-size:14px;color:#666;margin-top:5px">'+note+'</div></div>';
+    var evHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udcca '+t('build.ev')+' <span style="font-size:10px;color:#888;font-family:VT323,monospace">(max 510)</span></div>'+evRows+'<div class="ev-total">'+t('gen.sum')+': '+total+'/510</div><div style="font-size:14px;color:#666;margin-top:5px">'+note+'</div>'+ivNotesHTML+'</div>';
+
+    // Strategy description box
+    var stratDesc = getStrategyDesc(buildType);
+    var stratHTML = '<div class="build-strategy-box"><div class="build-strategy-icon">\ud83d\udcd6</div><div class="build-strategy-text">'+stratDesc+'</div></div>';
+
     var natureHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udc8e '+t('build.nature')+'</div><div class="nature-badge">'+natureName(nName)+'</div><div style="font-size:12px;color:#555;margin-bottom:4px">('+nName+')</div><div class="nature-detail"><span class="nature-up">\u25b2 '+nUp+'</span> | <span class="nature-down">\u25bc '+nDown+'</span></div><div style="font-size:14px;color:#666;margin-top:6px">'+nWhy+'</div></div>';
     var itemHTML = renderItemBox(item, altItems);
     // Ability box
@@ -272,64 +392,150 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var recTag = (picked && picked.score > 1) ? '<div class="ability-rec-tag">\u2705 '+t('build.abilityRec')+'</div>' : '';
     var abilityHTML='<div class="ability-box"><div class="comp-box-title">\u26a1 '+t('build.ability')+'</div><div class="ability-name">'+abilText.name+hiddenTag+'</div><div class="ability-desc">'+abilText.desc+'</div>'+recTag+'</div>';
     var movesHTML = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
-    return '<div class="comp-grid-full">'+evHTML+'</div>'
+    return stratHTML
+      +'<div class="comp-grid-full">'+evHTML+'</div>'
       +'<div class="comp-grid">'+natureHTML+itemHTML+abilityHTML+'</div>'
       +'<div class="comp-box-title" style="margin-bottom:8px">\u2694 '+t('build.best4')+'</div>'
-      +'<div style="font-size:14px;color:#666;margin-bottom:8px">'+(currentLang==='en'?'Automatically selected based on types and stats.':'Automatycznie dobrane na podstawie typ\u00f3w i statystyk.')+'</div>'
+      +'<div style="font-size:14px;color:#666;margin-bottom:8px">'+(currentLang==='en'?'Selected by Smogon/VGC meta logic based on types, category and stats.':'Dobrane wg logiki meta Smogon/VGC na podstawie typ\u00f3w, kategorii i statystyk.')+'</div>'
       +'<div class="best4-grid">'+movesHTML+'</div>';
   }
 
-  // ── BEST 4 FOR BUILD TYPE ──
+  // ── BEST 4 FOR BUILD TYPE — Smogon/VGC STAB-enforced ──
   function buildBest4ForType(moves, pokemonTypes, statMap, buildType) {
     var r = detectRole(statMap);
     var typeSet = new Set(pokemonTypes);
+
+    // Status/setup/recovery move pools — Smogon standard
+    var offSetup = ['swords-dance','dragon-dance','nasty-plot','quiver-dance','tail-glow','shell-smash','belly-drum','work-up','geomancy','calm-mind','bulk-up','coil','shift-gear','growth','victory-dance'];
+    var defRecovery = ['recover','roost','soft-boiled','slack-off','milk-drink','synthesis','moonlight','morning-sun','wish','rest','shore-up','strength-sap'];
+    var hazards = ['stealth-rock','spikes','toxic-spikes','sticky-web'];
+    var statusMoves = ['toxic','will-o-wisp','thunder-wave','yawn','sleep-powder','spore','glare','nuzzle','stun-spore'];
+    var utilityMoves = ['rapid-spin','defog','u-turn','volt-switch','flip-turn','teleport','knock-off','encore','taunt','haze','whirlwind','roar','trick','switcheroo','court-change'];
+    var screenMoves = ['reflect','light-screen','aurora-veil','tailwind','trick-room','healing-wish','lunar-dance'];
+    var prioMoves = ['extreme-speed','quick-attack','aqua-jet','ice-shard','mach-punch','bullet-punch','sucker-punch','shadow-sneak','vacuum-wave','first-impression','grassy-glide','accelerock','water-shuriken','jet-punch'];
+
     var pool = [];
     moves.forEach(function(m){
       var vgd = m.version_group_details.slice().sort(function(a,b){return b.version_group.url.localeCompare(a.version_group.url,undefined,{numeric:true});})[0];
-      if(!vgd) return;
+      if (!vgd) return;
       var method = vgd.move_learn_method.name;
-      if(!['level-up','machine','egg'].includes(method)) return;
+      if (!['level-up','machine','egg','tutor'].includes(method)) return;
       var nm = m.move.name, md = MOVE_DATA[nm], lv = vgd.level_learned_at;
-      var power = md?md[0]:0, mtype = md?md[1]:'normal', cat = md?md[2]:(power>0?(r.isPhys?'P':'S'):'Z');
+      var power = md ? md[0] : 0, mtype = md ? md[1] : 'normal', cat = md ? md[2] : (power > 0 ? (r.isPhys ? 'P' : 'S') : 'Z');
       var score = 0;
-      if(cat==='Z'){
-        var offSetup=['swords-dance','dragon-dance','nasty-plot','quiver-dance','tail-glow','shell-smash','belly-drum','work-up','geomancy','calm-mind','bulk-up','coil'];
-        var defSetup=['recover','roost','soft-boiled','slack-off','milk-drink','synthesis','moonlight','morning-sun','wish','rest','shore-up'];
-        if(buildType==='defensive'||buildType==='support'){
-          if(defSetup.includes(nm))score=90;else if(['stealth-rock','toxic','will-o-wisp','thunder-wave','spikes'].includes(nm))score=70;else if(offSetup.includes(nm))score=30;else score=20;
-          if(buildType==='support'){if(['stealth-rock','toxic','will-o-wisp','thunder-wave','spikes','reflect','light-screen','aurora-veil','tailwind','sticky-web','trick-room','healing-wish','rapid-spin','defog','u-turn','volt-switch','knock-off','encore','taunt','yawn','haze','whirlwind','roar'].includes(nm))score+=30;}
+      var isStab = typeSet.has(mtype);
+
+      if (cat === 'Z') {
+        // Status moves scoring
+        if (buildType === 'defensive' || buildType === 'support') {
+          if (defRecovery.includes(nm)) score = 130;
+          else if (hazards.includes(nm)) score = 110;
+          else if (statusMoves.includes(nm)) score = 100;
+          else if (utilityMoves.includes(nm)) score = 90;
+          else if (screenMoves.includes(nm)) score = (buildType === 'support') ? 120 : 80;
+          else if (offSetup.includes(nm)) score = 40;
+          else score = 15;
         } else {
-          if(offSetup.includes(nm))score=80;else if(defSetup.includes(nm))score=15;else score=10;
+          // Offensive builds: setup moves are valuable
+          if (offSetup.includes(nm)) score = 85;
+          else if (defRecovery.includes(nm)) score = 20;
+          else if (utilityMoves.includes(nm)) score = 30;
+          else score = 10;
         }
       } else {
-        score = power;
-        if(buildType==='physical'&&cat==='P')score*=1.5;else if(buildType==='special'&&cat==='S')score*=1.5;else if(buildType==='mixed')score*=1.2;else if(buildType==='defensive'||buildType==='support')score*=0.8;
-        if(buildType==='physical'&&cat==='S')score*=0.3;
-        if(buildType==='special'&&cat==='P')score*=0.3;
-        if(buildType==='mixed'){if(cat==='P')score*=1.1;if(cat==='S')score*=1.1;}
-        if(typeSet.has(mtype))score*=1.5;
-        var prioMoves=['extreme-speed','quick-attack','aqua-jet','ice-shard','mach-punch','bullet-punch','sucker-punch','shadow-sneak','vacuum-wave','first-impression'];
-        if(prioMoves.includes(nm))score+=25;
+        // Damaging moves scoring — CATEGORY ENFORCEMENT
+        score = power || 50;
+
+        // STRICT CATEGORY FILTER: Physical builds only want Physical moves, etc.
+        if (buildType === 'physical') {
+          if (cat === 'P') score *= 1.6;
+          else if (cat === 'S') score *= 0.05; // effectively blocked
+        } else if (buildType === 'special') {
+          if (cat === 'S') score *= 1.6;
+          else if (cat === 'P') score *= 0.05; // effectively blocked
+        } else if (buildType === 'mixed') {
+          score *= 1.2;
+        } else if (buildType === 'defensive' || buildType === 'support') {
+          score *= 0.7;
+        }
+
+        // STAB bonus — very high to ensure min 2 STAB
+        if (isStab) score *= 2.0;
+
+        // Priority moves bonus
+        if (prioMoves.includes(nm)) score += 35;
+
+        // Coverage bonus for non-STAB high-power moves
+        if (!isStab && power >= 70) score += 15;
       }
-      pool.push({nm:nm,power:power,mtype:mtype,cat:cat,score:score,lv:lv,method:method});
+
+      pool.push({nm:nm, power:power, mtype:mtype, cat:cat, score:score, lv:lv, method:method, isStab:isStab});
     });
+
+    // Deduplicate
     var seen = new Set();
-    var unique = pool.filter(function(m){if(seen.has(m.nm))return false;seen.add(m.nm);return true;});
-    unique.sort(function(a,b){return b.score-a.score;});
-    var chosen=[],typeCounts={};
-    for(var i=0;i<unique.length&&chosen.length<4;i++){
-      var m=unique[i],tc=typeCounts[m.mtype]||0;
-      if(tc>=2)continue;
-      typeCounts[m.mtype]=(tc||0)+1;chosen.push(m);
+    var unique = pool.filter(function(m){ if(seen.has(m.nm)) return false; seen.add(m.nm); return true; });
+    unique.sort(function(a,b){ return b.score - a.score; });
+
+    // ── STAB ENFORCEMENT: guarantee min 2 STAB attacks ──
+    var stabPool = unique.filter(function(m){ return m.isStab && m.cat !== 'Z' && m.power > 0; });
+    var nonStabPool = unique.filter(function(m){ return !m.isStab || m.cat === 'Z' || m.power === 0; });
+
+    var chosen = [];
+    var typeCounts = {};
+    var stabCount = 0;
+
+    // First: pick up to 2 best STAB moves
+    for (var i = 0; i < stabPool.length && stabCount < 2; i++) {
+      var m = stabPool[i];
+      var tc = typeCounts[m.mtype] || 0;
+      if (tc >= 2) continue;
+      // For physical builds, only take Physical STAB; for special, only Special STAB
+      if (buildType === 'physical' && m.cat !== 'P') continue;
+      if (buildType === 'special' && m.cat !== 'S') continue;
+      typeCounts[m.mtype] = (tc || 0) + 1;
+      chosen.push(m);
+      stabCount++;
     }
-    for(var i=0;i<unique.length&&chosen.length<4;i++){if(!chosen.includes(unique[i]))chosen.push(unique[i]);}
-    if(!chosen.length)return '<div style="color:#666">Brak danych o atakach.</div>';
-    var stars=function(sc){return sc>=180?'\u2b50\u2b50\u2b50\u2b50':sc>=120?'\u2b50\u2b50\u2b50':sc>=60?'\u2b50\u2b50':'\u2b50';};
-    var catLabel=function(cat){return cat==='P'?'<span class="move-cat-p">Fiz.</span>':cat==='S'?'<span class="move-cat-s">Spec.</span>':'<span class="move-cat-z">Status</span>';};
-    return chosen.map(function(m,i){
-      var isStab=typeSet.has(m.mtype);
-      var stabL=isStab?'<span class="move-stab">STAB</span>':'<span class="move-coverage">'+typeName(m.mtype)+'</span>';
-      var pwrStr=m.power>0?'<span class="move-power">MOC: '+m.power+'</span>':'<span class="move-power" style="color:#666">Status</span>';
+
+    // If couldn't find 2 category-matching STAB, relax constraint
+    if (stabCount < 2) {
+      for (var i = 0; i < stabPool.length && stabCount < 2; i++) {
+        if (chosen.includes(stabPool[i])) continue;
+        chosen.push(stabPool[i]);
+        stabCount++;
+      }
+    }
+
+    // Fill remaining 2 slots from the full sorted pool (best coverage / status / setup)
+    var allSorted = unique.slice();
+    allSorted.sort(function(a,b){ return b.score - a.score; });
+    for (var i = 0; i < allSorted.length && chosen.length < 4; i++) {
+      if (chosen.includes(allSorted[i])) continue;
+      var m = allSorted[i];
+      var tc = typeCounts[m.mtype] || 0;
+      if (tc >= 2 && m.cat !== 'Z') continue;
+      // Block wrong-category attacks for pure builds
+      if (buildType === 'physical' && m.cat === 'S' && m.power > 0) continue;
+      if (buildType === 'special' && m.cat === 'P' && m.power > 0) continue;
+      typeCounts[m.mtype] = (tc || 0) + 1;
+      chosen.push(m);
+    }
+
+    // Final fallback: fill if still < 4
+    for (var i = 0; i < allSorted.length && chosen.length < 4; i++) {
+      if (!chosen.includes(allSorted[i])) chosen.push(allSorted[i]);
+    }
+
+    if (!chosen.length) return '<div style="color:#666">'+(currentLang==='en'?'No move data available.':'Brak danych o atakach.')+'</div>';
+
+    var stars = function(sc){ return sc >= 200 ? '\u2b50\u2b50\u2b50\u2b50\u2b50' : sc >= 150 ? '\u2b50\u2b50\u2b50\u2b50' : sc >= 100 ? '\u2b50\u2b50\u2b50' : sc >= 50 ? '\u2b50\u2b50' : '\u2b50'; };
+    var catLabel = function(cat){ return cat==='P' ? '<span class="move-cat-p">Fiz.</span>' : cat==='S' ? '<span class="move-cat-s">Spec.</span>' : '<span class="move-cat-z">Status</span>'; };
+
+    return chosen.map(function(m, i){
+      var isStab = typeSet.has(m.mtype);
+      var stabL = isStab ? '<span class="move-stab">STAB</span>' : '<span class="move-coverage">'+typeName(m.mtype)+'</span>';
+      var pwrStr = m.power > 0 ? '<span class="move-power">MOC: '+m.power+'</span>' : '<span class="move-power" style="color:#666">Status</span>';
       return '<div class="move-card"><span class="move-card-num">'+(i+1)+'</span><div class="move-card-name">'+typeIconHTML(m.mtype,18)+' '+m.nm.replace(/-/g,' ')+'</div><div class="move-card-meta">'+catLabel(m.cat)+stabL+pwrStr+'</div><div class="move-stars">'+stars(m.score)+'</div></div>';
     }).join('');
   }
