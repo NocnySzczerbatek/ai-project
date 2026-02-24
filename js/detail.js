@@ -737,7 +737,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
 
       // ── UTILITY / SETUP SLOT RESERVATION ──
       // Priority strategic moves — if Pokémon has one, slot 4 is reserved
-      var utilityPriority = ['roost','recover','soft-boiled','nasty-plot','swords-dance','calm-mind','dragon-dance','bulk-up','quiver-dance','shell-smash'];
+      var utilityPriority = ['roost','recover','soft-boiled','nasty-plot','swords-dance','calm-mind','dragon-dance','bulk-up','quiver-dance','shell-smash','will-o-wisp','protect','toxic','encore','taunt'];
       var utilityMatch = null;
       if (!forceAllAttacks) {
         for (var ui = 0; ui < utilityPriority.length; ui++) {
