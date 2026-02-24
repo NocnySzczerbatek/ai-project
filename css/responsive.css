@@ -1,0 +1,137 @@
+/* ============================================================
+   responsive.css — Wszystkie zapytania mediów (skonsolidowane)
+   ============================================================ */
+
+/* ── Tablet / Mobilne (max-width: 768px) ── */
+@media (max-width: 768px) {
+  /* Nagłówek */
+  .hamburger-btn { display: block; }
+  .sidebar-close { display: block; }
+  header { flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
+  .header-title { font-size: 11px; }
+  .header-subtitle { font-size: 14px; }
+  .lang-toggle { margin-left: 0; order: 2; }
+  .header-right { display: none; width: 100%; flex-direction: column; gap: 6px; }
+  .header-right.mobile-open { display: flex; }
+
+  /* Układ */
+  .app-layout { flex-direction: column; height: auto; min-height: calc(100vh - 80px); }
+  aside {
+    position: fixed; left: -280px; top: 0; bottom: 0;
+    width: 280px; min-width: 280px; z-index: 1000; transition: left 0.25s ease;
+  }
+  aside.mobile-open { left: 0; }
+  .main-area { padding: 12px; padding-bottom: 50px; }
+
+  /* Siatki → 1 kolumna */
+  .detail-grid { grid-template-columns: 1fr; }
+  .comp-grid { grid-template-columns: 1fr; }
+  .best4-grid { grid-template-columns: 1fr; }
+  .info-cols { grid-template-columns: 1fr; }
+  .calc-grid { grid-template-columns: 1fr; }
+  .welcome-grid { grid-template-columns: 1fr; }
+  .items-grid { grid-template-columns: 1fr; }
+  .apricorn-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+
+  /* Tabela ruchów */
+  .move-table { display: block; max-width: 100%; overflow-x: auto; }
+
+  /* Odznaki */
+  .mc-badge { font-size: 12px; padding: 2px 6px; }
+
+  /* Kopiowanie linku */
+  .copy-link-btn {
+    width: 100% !important; display: block !important;
+    margin-top: 10px !important; float: none !important;
+    font-size: 18px; padding: 10px 14px;
+    text-align: center; box-sizing: border-box;
+  }
+
+  /* Zakładki budów */
+  .build-tabs { flex-wrap: wrap; }
+  .build-tab { font-size: 14px; padding: 4px 8px; }
+  .best-choice-badge { font-size: 6px; padding: 1px 5px; }
+
+  /* Przedmioty kompetycyjne */
+  .item-layout { flex-direction: column; }
+  .item-main { padding: 8px; }
+  .item-main .item-big-name { font-size: 8px; }
+  .item-main .item-big-desc { font-size: 14px; }
+  .item-alt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .item-alt-card { flex-direction: column; text-align: center; padding: 6px; gap: 4px; }
+  .item-alt-name { font-size: 14px; white-space: normal; }
+  .item-alt-desc { font-size: 11px; }
+  .item-alt-info { text-align: center; }
+
+  /* Reklamy */
+  .ad-container { min-height: 50px; font-size: 12px; }
+
+  /* Zespół PvP */
+  .team-slots { grid-template-columns: repeat(2, 1fr); }
+  .defense-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+
+  /* Symulacja walki */
+  .battle-setup { grid-template-columns: 1fr; }
+  .battle-arena { grid-template-columns: 1fr; }
+  .battle-card.opponent-card { order: -1; }
+  .battle-iv-grid { grid-template-columns: repeat(2, 1fr); }
+  .battle-moves-grid { grid-template-columns: 1fr; }
+  .battle-stat-preview { grid-template-columns: repeat(2, 1fr); }
+  .battle-start-btn { font-size: 11px; padding: 10px 20px; }
+
+  /* Weakness checker */
+  .wc-selector-row { flex-direction: column; align-items: stretch; }
+  .wc-selector-col { max-width: 100%; }
+  .wc-critical h4 { font-size: 10px; }
+
+  /* Suwaki IV — większe cele dotykowe */
+  .iv-hybrid input[type="range"]::-webkit-slider-thumb { width: 32px; height: 32px; margin-top: -11px; }
+  .iv-hybrid input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; }
+  .calc-iv-hybrid input[type="range"]::-webkit-slider-thumb { width: 32px; height: 32px; margin-top: -11px; }
+  .calc-iv-hybrid input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; }
+
+  /* Ewolucje */
+  .evo-chain { gap: 8px; padding: 10px 0; }
+  .evo-item { width: 100px; height: 140px; padding: 8px 4px 6px; }
+  .evo-item img { width: 60px; height: 60px; }
+  .evo-item span { font-size: 13px; }
+  .evo-arrow { font-size: 22px; line-height: 140px; }
+  .evo-condition { font-size: 11px; max-width: 95px; }
+  .evo-condition .evo-cond, .evo-condition .evo-cond-special { font-size: 11px; }
+
+  /* Ranking */
+  .ranking-grid { grid-template-columns: 1fr; gap: 12px; }
+  .ranking-card-header img { width: 60px; height: 60px; }
+  .ranking-card-name { font-size: 11px; }
+  .ranking-card { padding: 14px; }
+  .ranking-nav-btns { gap: 4px; }
+  .ranking-nav-btn { padding: 6px 10px; font-size: 14px; }
+  .ranking-counter-item { padding: 8px 10px; margin-bottom: 10px; }
+  .ranking-counter-name { font-size: 16px; }
+  .ranking-counter-reason { font-size: 13px; }
+
+  /* 44px minimalne cele dotykowe */
+  .mc-btn, .gen-filter-btn, .tab-btn, .build-tab, .moves-tab,
+  .wc-type-btn, .lang-btn, .battle-move-btn, .battle-random-btn,
+  .battle-start-btn, .donate-btn, .ranking-nav-btn {
+    min-height: 44px !important;
+    display: inline-flex !important; align-items: center; justify-content: center;
+  }
+  .iv-hybrid input[type="range"], .calc-iv-hybrid input[type="range"] {
+    min-height: 44px !important;
+  }
+  .mc-input, .calc-field, .calc-select {
+    min-height: 44px !important;
+  }
+}
+
+/* ── Mały telefon (max-width: 480px) ── */
+@media (max-width: 480px) {
+  .evo-chain { gap: 6px; padding: 8px 0; }
+  .evo-item { width: 85px; height: 125px; padding: 6px 3px 5px; border-radius: 8px; }
+  .evo-item img { width: 48px; height: 48px; }
+  .evo-item span { font-size: 12px; }
+  .evo-arrow { font-size: 18px; line-height: 125px; padding: 0; }
+  .evo-condition { font-size: 10px; max-width: 80px; }
+  .evo-condition .evo-cond, .evo-condition .evo-cond-special { font-size: 10px; }
+}

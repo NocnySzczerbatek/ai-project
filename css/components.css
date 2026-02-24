@@ -1,0 +1,122 @@
+/* ============================================================
+   components.css — Przyciski, inputy, panele, odznaki, ulubione
+   ============================================================ */
+
+/* ── PRZYCISK MC ── */
+.mc-btn {
+  font-family: var(--font-main); font-size: 16px;
+  background: var(--stone); color: var(--white);
+  border: 3px solid; border-top-color: var(--slot-light); border-left-color: var(--slot-light);
+  border-right-color: var(--slot-dark); border-bottom-color: var(--slot-dark);
+  padding: 8px 16px; cursor: pointer; transition: filter 0.1s;
+  text-shadow: 2px 2px #000; display: inline-flex; align-items: center; gap: 6px;
+}
+.mc-btn:hover { filter: brightness(1.2); }
+.mc-btn:active { border-top-color: var(--slot-dark); border-left-color: var(--slot-dark);
+  border-right-color: var(--slot-light); border-bottom-color: var(--slot-light);
+}
+
+/* ── INPUT MC ── */
+.mc-input {
+  font-family: var(--font-main); font-size: 18px;
+  background: #000; color: var(--white);
+  border: 3px solid var(--slot-dark); padding: 8px 12px; width: 100%;
+  outline: none; box-sizing: border-box;
+}
+.mc-input:focus { border-color: var(--green); }
+.mc-input::placeholder { color: #555; }
+
+/* ── PANEL MC ── */
+.mc-panel {
+  background: var(--stone2);
+  border: 3px solid;
+  border-top-color: var(--slot-light);
+  border-left-color: var(--slot-light);
+  border-right-color: #333;
+  border-bottom-color: #333;
+  padding: 14px;
+}
+.mc-panel h2 {
+  font-family: var(--font-pixel); font-size: 10px;
+  color: var(--gold); margin-bottom: 10px; padding-bottom: 6px;
+  border-bottom: 2px solid #000;
+}
+
+/* ── ODZNAKI / BADGE ── */
+.mc-badge {
+  background: var(--stone2);
+  border: 2px solid var(--slot-dark);
+  border-right-color: var(--slot-light);
+  border-bottom-color: var(--slot-light);
+  padding: 4px 10px;
+  font-size: 14px;
+  color: var(--aqua);
+}
+
+/* ── ODZNAKI TYPÓW ── */
+.type-badge {
+  font-family: var(--font-main); font-size: 16px;
+  padding: 2px 12px; border: 2px solid #000;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.type-normal   { background: #a8a878; color: #fff; }
+.type-fire     { background: #f08030; color: #fff; }
+.type-water    { background: #6890f0; color: #fff; }
+.type-electric { background: #f8d030; color: #000; }
+.type-grass    { background: #78c850; color: #fff; }
+.type-ice      { background: #98d8d8; color: #000; }
+.type-fighting { background: #c03028; color: #fff; }
+.type-poison   { background: #a040a0; color: #fff; }
+.type-ground   { background: #e0c068; color: #000; }
+.type-flying   { background: #a890f0; color: #fff; }
+.type-psychic  { background: #f85888; color: #fff; }
+.type-bug      { background: #a8b820; color: #fff; }
+.type-rock     { background: #b8a038; color: #fff; }
+.type-ghost    { background: #705898; color: #fff; }
+.type-dragon   { background: #7038f8; color: #fff; }
+.type-dark     { background: #705848; color: #fff; }
+.type-steel    { background: #b8b8d0; color: #000; }
+.type-fairy    { background: #ee99ac; color: #000; }
+
+/* ── ULUBIONE ── */
+.fav-star {
+  background: none; border: none; font-size: 24px; cursor: pointer;
+  padding: 2px 6px; filter: grayscale(1) opacity(0.5); transition: all 0.15s;
+}
+.fav-star:hover { filter: grayscale(0) opacity(0.8); }
+.fav-star.active { filter: grayscale(0) opacity(1); }
+.fav-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px; margin-top: 10px;
+}
+.fav-card {
+  background: var(--stone2);
+  border: 3px solid; border-top-color: var(--slot-light); border-left-color: var(--slot-light);
+  border-right-color: #333; border-bottom-color: #333;
+  padding: 10px; text-align: center; cursor: pointer; transition: border-color 0.15s;
+}
+.fav-card:hover { border-color: var(--green); }
+.fav-card img { width: 56px; height: 56px; image-rendering: pixelated; }
+.fav-card span { display: block; font-size: 16px; color: var(--white); text-transform: capitalize; margin-top: 4px; }
+
+/* ── KOPIOWANIE LINKU ── */
+.copy-link-btn {
+  font-family: var(--font-main); font-size: 18px; font-weight: 700;
+  background: rgba(26,26,60,0.8); color: var(--aqua); border: 2px solid rgba(80,130,255,0.35);
+  padding: 8px 16px; cursor: pointer; transition: all 0.15s;
+  border-radius: 8px; text-align: center; position: relative; z-index: 10;
+  backdrop-filter: blur(6px); box-shadow: 0 0 8px rgba(80,130,255,0.12);
+}
+.copy-link-btn:hover { background: rgba(42,42,80,0.9); box-shadow: 0 0 14px rgba(80,130,255,0.25); }
+
+/* ── IKONA TYPU RUCHU ── */
+.move-type-icon {
+  width: 20px; height: 20px; vertical-align: middle; margin-right: 2px;
+  image-rendering: pixelated; border-radius: 50%;
+}
+
+/* ── OGÓLNE ELEMENTY INFORMACYJNE ── */
+.info-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.info-entry { margin-bottom: 6px; display: flex; gap: 8px; }
+.info-label { color: var(--gray); font-size: 16px; min-width: 120px; }
+.info-value { color: var(--white); font-size: 18px; text-transform: capitalize; }

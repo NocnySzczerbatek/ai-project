@@ -1,0 +1,8 @@
+# Cobblemon Mastery Guide
+User-agent: *
+Allow: /
+
+Sitemap: https://cobblemon-mastery-guide.vercel.app/sitemap.xml
+
+# Blokuj bezpośredni dostęp do plików backup
+Disallow: /*.original.html

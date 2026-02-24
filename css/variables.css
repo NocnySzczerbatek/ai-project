@@ -1,0 +1,54 @@
+/* ============================================================
+   variables.css — Zmienne CSS (kolory, typografia, rozmiary)
+   Cobblemon Mastery Guide
+   ============================================================ */
+
+:root {
+  /* ── Główne kolory interfejsu ── */
+  --bg:         #1a1a1a;
+  --stone:      #2f2f2f;
+  --stone2:     #3a3a3a;
+  --slot:       #8b8b8b;
+  --slot-dark:  #555;
+  --slot-light: #c6c6c6;
+  --green:      #55ff55;
+  --gold:       #ffaa00;
+  --red:        #ff5555;
+  --blue:       #5555ff;
+  --aqua:       #55ffff;
+  --white:      #f0f0f0;
+  --gray:       #aaaaaa;
+  --border:     #000;
+
+  /* ── Kolory typów Pokémon ── */
+  --type-normal:   #a8a878;
+  --type-fire:     #f08030;
+  --type-water:    #6890f0;
+  --type-electric: #f8d030;
+  --type-grass:    #78c850;
+  --type-ice:      #98d8d8;
+  --type-fighting: #c03028;
+  --type-poison:   #a040a0;
+  --type-ground:   #e0c068;
+  --type-flying:   #a890f0;
+  --type-psychic:  #f85888;
+  --type-bug:      #a8b820;
+  --type-rock:     #b8a038;
+  --type-ghost:    #705898;
+  --type-dragon:   #7038f8;
+  --type-dark:     #705848;
+  --type-steel:    #b8b8d0;
+  --type-fairy:    #ee99ac;
+
+  /* ── Kolory statystyk ── */
+  --stat-hp:    #ff5555;
+  --stat-atk:   #f08030;
+  --stat-def:   #f8d030;
+  --stat-spatk: #6890f0;
+  --stat-spdef: #78c850;
+  --stat-spe:   #f85888;
+
+  /* ── Fonty ── */
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-main:  'VT323', monospace;
+}

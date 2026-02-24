@@ -1,0 +1,37 @@
+/* ============================================================
+   base.css — Reset, ciało dokumentu, pasek przewijania, typografia
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font-main);
+  font-size: 16px;
+  min-height: 100vh;
+}
+
+/* ── Pasek przewijania ── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--stone); }
+::-webkit-scrollbar-thumb { background: var(--slot-dark); border: 1px solid #000; }
+
+/* ── Spinner / ładowanie ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+@keyframes bestChoicePulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(255,170,0,0.3); }
+  50% { box-shadow: 0 0 12px rgba(255,170,0,0.6); }
+}
+@keyframes wc-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255,34,34,0.3); }
+  50% { box-shadow: 0 0 24px rgba(255,34,34,0.6); }
+}
+
+/* ── Separator ── */
+.section-sep { border: none; border-top: 3px solid #333; margin: 16px 0; }
+
+/* ── Pusty stan ── */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--gray); font-size: 22px; }
+.empty-state .big-icon { font-size: 64px; display: block; margin-bottom: 12px; }

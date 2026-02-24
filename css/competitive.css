@@ -1,0 +1,136 @@
+/* ============================================================
+   competitive.css — Sekcja buildów kompetycyjnych
+   ============================================================ */
+
+/* ── SEKCJA GŁÓWNA ── */
+.comp-section {
+  background: #12101e; border: 3px solid #5a3a9a; padding: 14px; margin-top: 12px;
+}
+.comp-section h2 {
+  font-family: var(--font-pixel); font-size: 10px;
+  color: #c084fc; margin-bottom: 12px; padding-bottom: 6px;
+  border-bottom: 2px solid #5a3a9a;
+}
+
+/* ── SIATKA BUILDÓW ── */
+.comp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.comp-grid-full { margin-bottom: 14px; }
+.comp-box {
+  background: rgba(10,8,24,0.8); border: 2px solid rgba(130,90,220,0.45);
+  padding: 12px; border-radius: 10px;
+  backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(130,90,220,0.12);
+}
+.comp-box-title {
+  font-family: var(--font-pixel); font-size: 8px;
+  color: #c084fc; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+
+/* ── EV ── */
+.ev-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.ev-amount { font-family: var(--font-pixel); font-size: 9px; min-width: 36px; color: #f0f0f0; }
+.ev-bar-bg { flex: 1; height: 8px; background: #111; border: 1px solid #222; }
+.ev-bar { height: 100%; }
+.ev-stat-name { width: 56px; font-size: 15px; text-align: right; }
+.ev-total { font-size: 16px; color: #ddd; margin-top: 6px; font-weight: 700; }
+
+/* ── NATURY ── */
+.nature-badge {
+  display: block; font-family: var(--font-pixel);
+  font-size: 11px; color: #f0f0f0; margin-bottom: 6px;
+}
+.nature-detail { font-size: 16px; line-height: 1.7; }
+.nature-up   { color: #55ff55; }
+.nature-down { color: #ff5555; }
+
+/* ── PRZEDMIOTY ── */
+.item-big-name {
+  font-family: var(--font-pixel); font-size: 9px;
+  color: var(--gold); margin-bottom: 6px;
+}
+.item-big-desc { font-size: 16px; color: #ddd; line-height: 1.5; font-weight: 700; }
+.item-layout { display: flex; gap: 12px; }
+.item-main {
+  flex: 1; background: rgba(13,10,26,0.85); border: 2px solid rgba(160,80,255,0.4);
+  border-radius: 10px; padding: 12px; text-align: center; min-width: 0;
+  backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(160,80,255,0.12);
+}
+.item-main-label {
+  font-family: var(--font-pixel); font-size: 7px;
+  color: #c084fc; margin-bottom: 8px; text-transform: uppercase;
+}
+.item-alt-section { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.item-alt-label {
+  font-family: var(--font-pixel); font-size: 7px;
+  color: #ccc; margin-bottom: 8px; text-transform: uppercase;
+}
+.item-alt-grid { display: flex; flex-direction: column; gap: 6px; }
+.item-alt-card {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(8,6,20,0.8); border: 1px solid rgba(120,60,200,0.3);
+  padding: 8px 10px; border-radius: 8px; transition: all 0.15s;
+  backdrop-filter: blur(4px);
+}
+.item-alt-card:hover { border-color: rgba(160,80,255,0.5); box-shadow: 0 0 8px rgba(160,80,255,0.15); }
+.item-alt-info { min-width: 0; }
+.item-alt-name {
+  font-family: var(--font-main); font-size: 16px;
+  color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.item-alt-desc { font-size: 14px; color: #ccc; line-height: 1.3; font-weight: 700; }
+
+/* ── ZDOLNOŚCI ── */
+.ability-box {
+  background: rgba(10,8,24,0.8); border: 2px solid rgba(140,70,200,0.45);
+  padding: 12px; border-radius: 10px;
+  backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(140,70,200,0.12);
+}
+.ability-name {
+  font-family: var(--font-pixel); font-size: 9px;
+  color: #c084fc; margin-bottom: 6px; text-transform: capitalize;
+}
+.ability-desc { font-size: 15px; color: #ddd; line-height: 1.5; font-weight: 700; }
+.ability-hidden-tag { font-size: 12px; color: #a855f7; margin-left: 4px; }
+.ability-rec-tag {
+  display: inline-block; font-size: 11px; color: #55ff55; margin-top: 6px;
+  border: 1px solid #2a5a2a; background: #0a1a0a; padding: 1px 6px;
+}
+
+/* ── NAJLEPSZE 4 RUCHY ── */
+.best4-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.move-card {
+  background: #0a0818; border: 2px solid #3a2a6a; padding: 8px 10px; position: relative;
+}
+.move-card-num { position: absolute; top: 6px; right: 8px; font-size: 13px; color: #554488; }
+.move-card-name {
+  font-family: var(--font-pixel); font-size: 8px;
+  color: #f0f0f0; margin-bottom: 5px; text-transform: capitalize;
+}
+.move-card-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.move-power { background: #1a1a0a; color: var(--gold); border: 1px solid #3a3a0a; padding: 1px 6px; font-size: 15px; }
+.move-cat-p { background: #2a1200; color: #f08030; border: 1px solid #5a2a00; padding: 1px 6px; font-size: 14px; }
+.move-cat-s { background: #00001a; color: #6890f0; border: 1px solid #00004a; padding: 1px 6px; font-size: 14px; }
+.move-cat-z { background: #1a1a1a; color: #aaa; border: 1px solid #333; padding: 1px 6px; font-size: 14px; }
+.move-stab  { background: #0a2a0a; color: #55ff55; border: 1px solid #2a5a2a; padding: 1px 6px; font-size: 14px; }
+.move-coverage { background: #1a0a2a; color: #c084fc; border: 1px solid #5a2a8a; padding: 1px 6px; font-size: 14px; }
+.move-stars { font-size: 15px; color: var(--gold); margin-top: 3px; }
+
+/* ── ZAKŁADKI BUILDÓW ── */
+.build-tabs { display: flex; gap: 0; margin-bottom: 12px; border-bottom: 2px solid #3a2a6a; }
+.build-tab {
+  font-family: var(--font-main); font-size: 18px;
+  background: #0a0818; color: #888; border: none; padding: 6px 16px;
+  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s;
+}
+.build-tab.active { color: #c084fc; border-bottom-color: #c084fc; background: #12101e; }
+.build-tab:hover:not(.active) { color: #ccc; background: #15132a; }
+.build-tab .best-choice-star { color: #ffaa00; margin-right: 2px; font-size: 16px; }
+.build-panel { display: none; }
+.build-panel.active { display: block; }
+.best-choice-badge {
+  display: inline-block; font-family: var(--font-pixel); font-size: 7px;
+  background: linear-gradient(90deg, #3a2a00 0%, #1a1400 100%);
+  color: #ffaa00; border: 1px solid #ffaa00; padding: 2px 8px;
+  margin-left: 8px; vertical-align: middle; letter-spacing: 0.5px;
+  text-shadow: 0 0 6px rgba(255,170,0,0.4);
+  animation: bestChoicePulse 2s ease-in-out infinite;
+}

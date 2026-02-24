@@ -1,0 +1,140 @@
+/* ═══════════════════════════════════════════════════════════
+   glassmorphism.css — UI Overhaul v2: Glassmorphism, Czytelność, Glow
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Czytelność: bazowy 16px, kluczowe nazwy 24px ── */
+body { font-size: 16px; }
+.pokemon-name-big { font-size: 24px !important; }
+.page-title span { font-size: 16px; }
+.mc-panel h2, .iv-section h2, .comp-section h2, .moves-section h2,
+.cobblemon-section h2, .calc-section h2, .team-section h2, .biome-section h2 {
+  font-size: 13px !important;
+}
+.entry-name { font-size: 22px !important; }
+.stat-val { font-size: 20px !important; }
+
+/* ── Font-weight 900 dla kluczowych danych ── */
+.type-badge, .iv-name, .iv-target, .stat-val, .stat-name,
+.ev-amount, .nature-badge, .item-big-name, .move-card-name,
+.pokemon-name-big, .entry-name, .defense-entry,
+.battle-pokemon-name, .comp-box-title, .iv-label {
+  font-weight: 900 !important;
+}
+
+/* ── Panele z glassmorphizmem ── */
+.mc-panel {
+  background: rgba(58, 58, 58, 0.65) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-top-color: rgba(200,200,200,0.15) !important;
+  border-left-color: rgba(200,200,200,0.15) !important;
+  border-right-color: rgba(0,0,0,0.3) !important;
+  border-bottom-color: rgba(0,0,0,0.3) !important;
+  padding: 17px !important;
+  border-radius: 10px;
+}
+.iv-section {
+  background: rgba(13, 26, 42, 0.7) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(26,74,106,0.6) !important;
+  padding: 17px !important;
+  border-radius: 10px;
+}
+.comp-section {
+  background: rgba(18, 16, 30, 0.7) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(90,58,154,0.5) !important;
+  padding: 17px !important;
+  border-radius: 10px;
+}
+.moves-section {
+  background: rgba(26, 26, 42, 0.7) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(58,58,122,0.5) !important;
+  padding: 17px !important;
+  border-radius: 10px;
+}
+.cobblemon-section {
+  background: rgba(26, 42, 26, 0.7) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(42,90,42,0.5) !important;
+  padding: 17px !important;
+  border-radius: 10px;
+}
+.calc-section {
+  background: rgba(26, 26, 10, 0.7) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(90,90,26,0.5) !important;
+  padding: 17px !important;
+  border-radius: 10px;
+}
+.team-section {
+  background: rgba(26, 10, 42, 0.7) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(90,42,138,0.5) !important;
+  padding: 17px !important;
+  border-radius: 10px;
+}
+.biome-section {
+  background: rgba(10, 26, 10, 0.7) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(26,90,26,0.5) !important;
+  padding: 17px !important;
+  border-radius: 10px;
+}
+.welcome-card {
+  background: rgba(58, 58, 58, 0.55) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
+}
+.item-card {
+  background: rgba(58, 58, 58, 0.55) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
+}
+.apricorn-card {
+  background: rgba(58, 58, 58, 0.55) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
+}
+
+/* ── Odznaki typów — pill-shaped z neonowym glow ── */
+.type-badge {
+  border-radius: 20px !important;
+  padding: 3px 14px !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  letter-spacing: 1.2px !important;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+.type-normal   { box-shadow: 0 0 10px rgba(168,168,120,0.5), 0 0 20px rgba(168,168,120,0.2); }
+.type-fire     { box-shadow: 0 0 10px rgba(240,128,48,0.6), 0 0 20px rgba(240,128,48,0.25); }
+.type-water    { box-shadow: 0 0 10px rgba(104,144,240,0.6), 0 0 20px rgba(104,144,240,0.25); }
+.type-electric { box-shadow: 0 0 10px rgba(248,208,48,0.6), 0 0 20px rgba(248,208,48,0.25); }
+.type-grass    { box-shadow: 0 0 10px rgba(120,200,80,0.6), 0 0 20px rgba(120,200,80,0.25); }
+.type-ice      { box-shadow: 0 0 10px rgba(152,216,216,0.6), 0 0 20px rgba(152,216,216,0.25); }
+.type-fighting { box-shadow: 0 0 10px rgba(192,48,40,0.6), 0 0 20px rgba(192,48,40,0.25); }
+.type-poison   { box-shadow: 0 0 10px rgba(160,64,160,0.6), 0 0 20px rgba(160,64,160,0.25); }
+.type-ground   { box-shadow: 0 0 10px rgba(224,192,104,0.5), 0 0 20px rgba(224,192,104,0.2); }
+.type-flying   { box-shadow: 0 0 10px rgba(168,144,240,0.6), 0 0 20px rgba(168,144,240,0.25); }
+.type-psychic  { box-shadow: 0 0 10px rgba(248,88,136,0.6), 0 0 20px rgba(248,88,136,0.25); }
+.type-bug      { box-shadow: 0 0 10px rgba(168,184,32,0.5), 0 0 20px rgba(168,184,32,0.2); }
+.type-rock     { box-shadow: 0 0 10px rgba(184,160,56,0.5), 0 0 20px rgba(184,160,56,0.2); }
+.type-ghost    { box-shadow: 0 0 10px rgba(112,88,152,0.7), 0 0 20px rgba(112,88,152,0.3); }
+.type-dragon   { box-shadow: 0 0 10px rgba(112,56,248,0.7), 0 0 20px rgba(112,56,248,0.3); }
+.type-dark     { box-shadow: 0 0 10px rgba(112,88,72,0.6), 0 0 20px rgba(112,88,72,0.25); }
+.type-steel    { box-shadow: 0 0 10px rgba(184,184,208,0.5), 0 0 20px rgba(184,184,208,0.2); }
+.type-fairy    { box-shadow: 0 0 10px rgba(238,153,172,0.6), 0 0 20px rgba(238,153,172,0.25); }
