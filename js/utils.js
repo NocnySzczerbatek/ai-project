@@ -57,16 +57,16 @@ function cobFallbackCopy(url) {
   } catch(e) {}
 }
 
-/* ── Kolory i style suwaków IV ── */
+/* ── Kolory i style suwaków IV — Heatmap RPG ── */
 function getIVSliderColor(val) {
-  if (val >= 28) return '#00ff99';
-  if (val >= 20) return '#ffcc00';
-  if (val >= 10) return '#ff8800';
-  return '#ff4444';
+  if (val >= 31) return '#00f2ff';
+  if (val >= 20) return '#39ff14';
+  if (val >= 10) return '#ffaa00';
+  return '#ff003c';
 }
 
 function getIVTierClass(val) {
-  if (val >= 28) return 'iv-perfect';
+  if (val >= 31) return 'iv-perfect';
   if (val >= 20) return 'iv-good';
   if (val >= 10) return 'iv-average';
   return 'iv-poor';
@@ -74,11 +74,11 @@ function getIVTierClass(val) {
 
 function getIVGlow(color) {
   switch (color) {
-    case '#00ff99': return '0 0 15px rgba(0,255,153,0.8), 0 0 30px rgba(0,255,153,0.35)';
-    case '#ffcc00': return '0 0 15px rgba(255,204,0,0.8), 0 0 30px rgba(255,204,0,0.35)';
-    case '#ff8800': return '0 0 15px rgba(255,136,0,0.8), 0 0 30px rgba(255,136,0,0.35)';
-    case '#ff4444': return '0 0 15px rgba(255,68,68,0.8), 0 0 30px rgba(255,68,68,0.35)';
-    default:       return '0 0 15px rgba(0,255,153,0.8), 0 0 30px rgba(0,255,153,0.35)';
+    case '#00f2ff': return '0 0 12px rgba(0,242,255,0.9), 0 0 28px rgba(0,242,255,0.5), 0 0 48px rgba(0,242,255,0.2)';
+    case '#39ff14': return '0 0 10px rgba(57,255,20,0.8), 0 0 24px rgba(57,255,20,0.4)';
+    case '#ffaa00': return '0 0 10px rgba(255,170,0,0.8), 0 0 24px rgba(255,170,0,0.4)';
+    case '#ff003c': return '0 0 10px rgba(255,0,60,0.8), 0 0 24px rgba(255,0,60,0.4)';
+    default:       return '0 0 12px rgba(0,242,255,0.9), 0 0 28px rgba(0,242,255,0.5)';
   }
 }
 
@@ -95,7 +95,7 @@ function applyIVSliderStyle(rangeEl, val) {
   rangeEl.style.setProperty('--iv-glow', glow);
 
   /* Ustaw gradient BEZPOŚREDNIO na inpucie — wymusza repaint pseudo-elementów w WebKit */
-  var gradient = 'linear-gradient(to right, ' + color + ' 0%, ' + color + ' ' + pct + '%, rgba(15,15,30,0.7) ' + pct + '%, rgba(15,15,30,0.7) 100%)';
+  var gradient = 'linear-gradient(to right, ' + color + ' 0%, ' + color + ' ' + pct + '%, rgba(0,0,0,0.6) ' + pct + '%, rgba(0,0,0,0.6) 100%)';
   rangeEl.style.background = gradient;
 
   /* Propaguj zmienne na rodzica */
@@ -135,14 +135,14 @@ function syncIVSlider(rangeEl) {
   var lbl = document.getElementById('ivlabel-' + sn);
   if (bar) {
     var pct = Math.round(val / 31 * 100);
-    var color = val>=28?'#00ff99':val>=20?'#ffcc00':val>=10?'#ff8800':'#ff4444';
+    var color = val>=31?'#00f2ff':val>=20?'#39ff14':val>=10?'#ffaa00':'#ff003c';
     bar.style.width = pct + '%'; bar.style.background = color;
   }
   if (lbl) {
-    if(val>=28) lbl.innerHTML='<span style="color:#00ff99">Doskona\u0142e</span>';
-    else if(val>=20) lbl.innerHTML='<span style="color:#ffcc00">Dobre</span>';
-    else if(val>=10) lbl.innerHTML='<span style="color:#ff8800">\u015arednie</span>';
-    else lbl.innerHTML='<span style="color:#ff4444">S\u0142abe</span>';
+    if(val>=31) lbl.innerHTML='<span style="color:#00f2ff">Doskona\u0142e</span>';
+    else if(val>=20) lbl.innerHTML='<span style="color:#39ff14">Dobre</span>';
+    else if(val>=10) lbl.innerHTML='<span style="color:#ffaa00">\u015arednie</span>';
+    else lbl.innerHTML='<span style="color:#ff003c">S\u0142abe</span>';
   }
 }
 

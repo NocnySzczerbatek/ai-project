@@ -59,12 +59,12 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   }
 
   // ── IV helpers ──
-  function getIVColor(iv) { return iv>=28?'#00ff99':iv>=20?'#ffcc00':iv>=10?'#ff8800':'#ff4444'; }
+  function getIVColor(iv) { return iv>=31?'#00f2ff':iv>=20?'#39ff14':iv>=10?'#ffaa00':'#ff003c'; }
   function getIVLabel(iv) {
-    if(iv>=28) return '<span style="color:#00ff99">Doskona\u0142e</span>';
-    if(iv>=20) return '<span style="color:#ffcc00">Dobre</span>';
-    if(iv>=10) return '<span style="color:#ff8800">\u015arednie</span>';
-    return '<span style="color:#ff4444">S\u0142abe</span>';
+    if(iv>=31) return '<span style="color:#00f2ff">Doskona\u0142e</span>';
+    if(iv>=20) return '<span style="color:#39ff14">Dobre</span>';
+    if(iv>=10) return '<span style="color:#ffaa00">\u015arednie</span>';
+    return '<span style="color:#ff003c">S\u0142abe</span>';
   }
 
   function buildIVSection(stats) {
@@ -91,15 +91,17 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       var tierClass=defaultVal>=28?'iv-perfect':defaultVal>=20?'iv-good':defaultVal>=10?'iv-average':'iv-poor';
       var rowClass=t.prio?'iv-row iv-row-priority '+tierClass:'iv-row '+tierClass;var prioIcon=t.prio?'\u2b50':'\u25aa';
       return '<div class="'+rowClass+'" id="iv-row-'+sn+'">'
-        +'<span class="iv-priority" title="'+t.note+'">'+prioIcon+'</span>'
-        +'<span class="iv-name" style="color:'+color+'">'+label+'</span>'
-        +'<div class="iv-slider-row" data-stat="'+sn+'">' 
-        +'<input type="range" min="0" max="31" value="'+defaultVal+'" data-stat="'+sn+'" oninput="syncIVSlider(this)" />' 
+        +'<div class="iv-stat-header">'
+        +'<div class="iv-header-left"><span class="iv-priority" title="'+t.note+'">'+prioIcon+'</span><span class="iv-name" style="color:'+color+'">'+label+'</span></div>'
         +'<span class="iv-val" id="iv-val-'+sn+'">'+defaultVal+'</span>'
         +'</div>'
-        +'<div class="iv-bar-wrap"><div class="iv-bar" id="ivbar-'+sn+'" style="width:'+Math.round(defaultVal/31*100)+'%;background:'+getIVColor(defaultVal)+'"></div></div>'
-        +'<div class="iv-target" style="color:'+t.color+'" title="'+t.note+'">CEL: '+t.val+'</div>'
-        +'<div class="iv-label" id="ivlabel-'+sn+'">'+getIVLabel(defaultVal)+'</div></div>';
+        +'<div class="iv-slider-row" data-stat="'+sn+'">'
+        +'<input type="range" min="0" max="31" value="'+defaultVal+'" data-stat="'+sn+'" oninput="syncIVSlider(this)" />'
+        +'</div>'
+        +'<div class="iv-stat-meta">'
+        +'<span class="iv-target" style="color:'+t.color+'" title="'+t.note+'">CEL: '+t.val+'</span>'
+        +'<span class="iv-label" id="ivlabel-'+sn+'">'+getIVLabel(defaultVal)+'</span>'
+        +'</div></div>';
     }).join('');
     return '<div class="iv-section"><h2>\ud83c\udfb2 Individual Values (IV) <span style="font-size:11px;color:#aaa;font-family:VT323,monospace">skala 0\u201331</span></h2>'
       +'<div class="iv-role-badge">Rola: '+role+'</div>'
@@ -107,10 +109,10 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       +'<div style="font-size:14px;color:#666;margin-bottom:6px">\u2b50 priorytet | \u25aa mniej wa\u017cne | Przesu\u0144 suwak \u017ceby sprawdzi\u0107</div>'
       +rows
       +'<div class="iv-legend">'
-      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#00ff99"></div>28\u201331 Doskona\u0142e</div>'
-      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ffcc00"></div>20\u201327 Dobre</div>'
-      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ff8800"></div>10\u201319 \u015arednie</div>'
-      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ff4444"></div>0\u20139 S\u0142abe</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#00f2ff;box-shadow:0 0 8px rgba(0,242,255,0.6)"></div>31 Doskona\u0142e</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#39ff14;box-shadow:0 0 8px rgba(57,255,20,0.4)"></div>20\u201330 Dobre</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ffaa00;box-shadow:0 0 8px rgba(255,170,0,0.4)"></div>10\u201319 \u015arednie</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ff003c;box-shadow:0 0 8px rgba(255,0,60,0.4)"></div>0\u20139 S\u0142abe</div>'
       +'</div></div>';
   }
 
@@ -447,7 +449,11 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var calcBuildOpts = calcEligible.map(function(key){return '<option value="'+key+'">'+(_bLabels[key]||key)+'</option>';}).join('');
     var ORDER=['hp','attack','defense','special-attack','special-defense','speed'];
     var ivRows = ORDER.map(function(sn){
-      return '<div class="calc-box iv-perfect"><label>'+(STAT_NAMES[sn]||sn)+' IV</label><div class="iv-slider-row calc-slider-row" data-stat="'+sn+'"><input type="range" min="0" max="31" value="31" id="calc-iv-'+sn+'" oninput="syncCalcIVSlider(this,\''+sn+'\')" /><span class="iv-val" id="calc-iv-val-'+sn+'" style="color:#00ff99">31</span></div></div>';
+      return '<div class="calc-box iv-perfect">'
+        +'<div class="iv-stat-header"><span class="iv-name">'+(STAT_NAMES[sn]||sn)+' IV</span><span class="iv-val" id="calc-iv-val-'+sn+'" style="color:#00f2ff">31</span></div>'
+        +'<div class="iv-slider-row calc-slider-row" data-stat="'+sn+'">'
+        +'<input type="range" min="0" max="31" value="31" id="calc-iv-'+sn+'" oninput="syncCalcIVSlider(this,\''+sn+'\')" />'
+        +'</div></div>';
     }).join('');
     var natures = ['Hardy','Lonely','Brave','Adamant','Naughty','Bold','Docile','Relaxed','Impish','Lax','Timid','Hasty','Serious','Jolly','Naive','Modest','Mild','Quiet','Bashful','Rash','Calm','Gentle','Sassy','Careful','Quirky'];
     var natureOpts = natures.map(function(n){return '<option value="'+n+'">'+natureName(n)+(natureName(n)!==n?' ('+n+')':'')+'</option>';}).join('');

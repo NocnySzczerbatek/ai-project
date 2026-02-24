@@ -35,47 +35,54 @@
   border-bottom: 2px solid #1a4a6a; display: flex; align-items: center; gap: 8px;
 }
 .iv-row {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
-  padding: 4px 6px; border-radius: 4px;
+  display: flex; flex-direction: column; gap: 2px; margin-bottom: 16px;
+  padding: 10px 14px; border-radius: 8px; width: 100%;
+  background: rgba(10, 15, 30, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.2s ease;
 }
-.iv-name { width: 52px; font-size: 16px; color: var(--gray); flex-shrink: 0; font-weight: bold; }
+.iv-row:hover {
+  background: rgba(10, 15, 30, 0.55);
+}
+.iv-name { font-size: 16px; color: var(--gray); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
 
-/* ── Suwakowy wiersz IV (bez pól tekstowych) ── */
+/* ── Suwakowy wiersz IV — Full-Width RPG Design ── */
 .iv-slider-row {
-  display: flex; align-items: center; gap: 8px; flex: 1;
+  width: 100%;
   touch-action: manipulation;
 }
 
 .iv-slider-row input[type="range"],
 .calc-slider-row input[type="range"] {
   -webkit-appearance: none; appearance: none;
-  flex: 1; height: 10px; border-radius: 5px;
-  background: rgba(15, 15, 30, 0.7);
-  border: 1px solid rgba(255,255,255,0.08);
+  width: 100%; height: 12px; border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   outline: none; cursor: pointer;
   touch-action: manipulation;
-  min-height: 28px;
+  padding: 0; margin: 0;
 }
 
-/* ── Thumb: Webkit ── */
+/* ── Thumb: Webkit — Neonowy prostokąt ── */
 .iv-slider-row input[type="range"]::-webkit-slider-thumb,
 .calc-slider-row input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--iv-thumb, #00ff99);
-  border: 2px solid rgba(0,0,0,0.6);
-  box-shadow: var(--iv-glow, 0 0 15px rgba(0,255,153,0.7), 0 0 30px rgba(0,255,153,0.3));
-  cursor: pointer; margin-top: -9px;
+  width: 8px; height: 24px; border-radius: 4px;
+  background: var(--iv-thumb, #00f2ff);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: var(--iv-glow, 0 0 12px rgba(0,242,255,0.9), 0 0 28px rgba(0,242,255,0.5));
+  cursor: pointer; margin-top: -6px;
   transition: box-shadow 0.2s ease, background 0.2s ease;
 }
 
-/* ── Thumb: Firefox ── */
+/* ── Thumb: Firefox — Neonowy prostokąt ── */
 .iv-slider-row input[type="range"]::-moz-range-thumb,
 .calc-slider-row input[type="range"]::-moz-range-thumb {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--iv-thumb, #00ff99);
-  border: 2px solid rgba(0,0,0,0.6);
-  box-shadow: var(--iv-glow, 0 0 15px rgba(0,255,153,0.7), 0 0 30px rgba(0,255,153,0.3));
+  width: 8px; height: 24px; border-radius: 4px;
+  background: var(--iv-thumb, #00f2ff);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: var(--iv-glow, 0 0 12px rgba(0,242,255,0.9), 0 0 28px rgba(0,242,255,0.5));
   cursor: pointer;
   transition: box-shadow 0.2s ease, background 0.2s ease;
 }
@@ -83,40 +90,55 @@
 /* ── Track: Webkit ── */
 .iv-slider-row input[type="range"]::-webkit-slider-runnable-track,
 .calc-slider-row input[type="range"]::-webkit-slider-runnable-track {
-  height: 10px; border-radius: 5px;
+  height: 12px; border-radius: 6px;
   background: linear-gradient(to right,
-    var(--iv-track, #00ff99) 0%,
-    var(--iv-track, #00ff99) var(--iv-pct, 100%),
-    rgba(15,15,30,0.7) var(--iv-pct, 100%), rgba(15,15,30,0.7) 100%);
+    var(--iv-track, #00f2ff) 0%,
+    var(--iv-track, #00f2ff) var(--iv-pct, 100%),
+    rgba(0,0,0,0.6) var(--iv-pct, 100%), rgba(0,0,0,0.6) 100%);
 }
 
 /* ── Track: Firefox ── */
 .iv-slider-row input[type="range"]::-moz-range-track,
 .calc-slider-row input[type="range"]::-moz-range-track {
-  height: 10px; border-radius: 5px; border: none;
+  height: 12px; border-radius: 6px; border: none;
   background: linear-gradient(to right,
-    var(--iv-track, #00ff99) 0%,
-    var(--iv-track, #00ff99) var(--iv-pct, 100%),
-    rgba(15,15,30,0.7) var(--iv-pct, 100%), rgba(15,15,30,0.7) 100%);
+    var(--iv-track, #00f2ff) 0%,
+    var(--iv-track, #00f2ff) var(--iv-pct, 100%),
+    rgba(0,0,0,0.6) var(--iv-pct, 100%), rgba(0,0,0,0.6) 100%);
+}
+
+/* ── Header statystyki (nazwa + wartość) ── */
+.iv-stat-header {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; margin-bottom: 4px;
+}
+.iv-header-left {
+  display: flex; align-items: center; gap: 6px;
+}
+.iv-stat-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; margin-top: 4px;
 }
 
 /* ── Wyświetlana wartość liczbowa ── */
 .iv-val {
   min-width: 28px; text-align: center; font-size: 20px;
-  font-family: var(--font-main); color: #00ff99;
+  font-family: var(--font-main); color: #00f2ff;
   font-weight: bold; flex-shrink: 0;
-  background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.08); padding: 2px 6px;
-  border-radius: 6px; user-select: none;
+  user-select: none;
   transition: color 0.2s ease;
+  text-shadow: 0 0 8px currentColor;
 }
-.calc-slider-row .iv-val {
-  font-size: 18px; border-color: rgba(255,255,255,0.06);
+.calc-slider-row .iv-val,
+.calc-box .iv-val {
+  font-size: 18px;
 }
 
-.iv-bar-wrap { flex: 1; height: 12px; background: #0a0a0a; border: 1px solid #111; position: relative; min-width: 40px; }
+.iv-bar-wrap { display: none; }
 .iv-bar { height: 100%; transition: width 0.2s, background 0.2s; }
-.iv-label { width: 72px; font-size: 15px; text-align: right; flex-shrink: 0; }
+.iv-label { font-size: 14px; color: #aaa; }
 .iv-priority { width: 20px; text-align: center; font-size: 18px; cursor: help; flex-shrink: 0; }
+.iv-target { font-size: 14px; font-weight: bold; }
 .iv-legend {
   display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px;
   padding-top: 8px; border-top: 1px solid #1a4a6a; font-size: 15px;
@@ -131,8 +153,8 @@
   background: #000; border: 2px solid #1a4a6a; padding: 8px 12px;
   margin-bottom: 10px; font-size: 17px; line-height: 1.8;
 }
-.iv-target { width: 64px; font-size: 15px; text-align: center; font-weight: bold; flex-shrink: 0; }
-.iv-row-priority { background: #05151f; }
+.iv-target { font-size: 14px; font-weight: bold; }
+.iv-row-priority { background: rgba(5, 21, 31, 0.6); border-color: rgba(0, 242, 255, 0.08); }
 
 /* ── SEKCJA RUCHÓW ── */
 .moves-section {

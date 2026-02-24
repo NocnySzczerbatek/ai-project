@@ -115,58 +115,58 @@
   image-rendering: pixelated; border-radius: 50%;
 }
 
-/* ── DYNAMICZNE KLASY IV TIERS ── */
+/* ── DYNAMICZNE KLASY IV TIERS — Heatmap RPG ── */
 .iv-row.iv-perfect .iv-val,
-.calc-box.iv-perfect .iv-val { color: #00ff99 !important; }
+.calc-box.iv-perfect .iv-val { color: #00f2ff !important; text-shadow: 0 0 10px rgba(0,242,255,0.6) !important; }
 .iv-row.iv-good .iv-val,
-.calc-box.iv-good .iv-val { color: #ffcc00 !important; }
+.calc-box.iv-good .iv-val { color: #39ff14 !important; text-shadow: 0 0 10px rgba(57,255,20,0.4) !important; }
 .iv-row.iv-average .iv-val,
-.calc-box.iv-average .iv-val { color: #ff8800 !important; }
+.calc-box.iv-average .iv-val { color: #ffaa00 !important; text-shadow: 0 0 10px rgba(255,170,0,0.4) !important; }
 .iv-row.iv-poor .iv-val,
-.calc-box.iv-poor .iv-val { color: #ff4444 !important; }
+.calc-box.iv-poor .iv-val { color: #ff003c !important; text-shadow: 0 0 10px rgba(255,0,60,0.4) !important; }
 
 /* Glow per tier — Webkit thumb */
 .iv-row.iv-perfect input[type="range"]::-webkit-slider-thumb,
 .calc-box.iv-perfect input[type="range"]::-webkit-slider-thumb {
-  background: #00ff99 !important;
-  box-shadow: 0 0 15px rgba(0,255,153,0.8), 0 0 30px rgba(0,255,153,0.35) !important;
+  background: #00f2ff !important;
+  box-shadow: 0 0 12px rgba(0,242,255,0.9), 0 0 28px rgba(0,242,255,0.5), 0 0 48px rgba(0,242,255,0.2) !important;
 }
 .iv-row.iv-good input[type="range"]::-webkit-slider-thumb,
 .calc-box.iv-good input[type="range"]::-webkit-slider-thumb {
-  background: #ffcc00 !important;
-  box-shadow: 0 0 15px rgba(255,204,0,0.8), 0 0 30px rgba(255,204,0,0.35) !important;
+  background: #39ff14 !important;
+  box-shadow: 0 0 10px rgba(57,255,20,0.8), 0 0 24px rgba(57,255,20,0.4) !important;
 }
 .iv-row.iv-average input[type="range"]::-webkit-slider-thumb,
 .calc-box.iv-average input[type="range"]::-webkit-slider-thumb {
-  background: #ff8800 !important;
-  box-shadow: 0 0 15px rgba(255,136,0,0.8), 0 0 30px rgba(255,136,0,0.35) !important;
+  background: #ffaa00 !important;
+  box-shadow: 0 0 10px rgba(255,170,0,0.8), 0 0 24px rgba(255,170,0,0.4) !important;
 }
 .iv-row.iv-poor input[type="range"]::-webkit-slider-thumb,
 .calc-box.iv-poor input[type="range"]::-webkit-slider-thumb {
-  background: #ff4444 !important;
-  box-shadow: 0 0 15px rgba(255,68,68,0.8), 0 0 30px rgba(255,68,68,0.35) !important;
+  background: #ff003c !important;
+  box-shadow: 0 0 10px rgba(255,0,60,0.8), 0 0 24px rgba(255,0,60,0.4) !important;
 }
 
 /* Glow per tier — Firefox thumb */
 .iv-row.iv-perfect input[type="range"]::-moz-range-thumb,
 .calc-box.iv-perfect input[type="range"]::-moz-range-thumb {
-  background: #00ff99 !important;
-  box-shadow: 0 0 15px rgba(0,255,153,0.8), 0 0 30px rgba(0,255,153,0.35) !important;
+  background: #00f2ff !important;
+  box-shadow: 0 0 12px rgba(0,242,255,0.9), 0 0 28px rgba(0,242,255,0.5), 0 0 48px rgba(0,242,255,0.2) !important;
 }
 .iv-row.iv-good input[type="range"]::-moz-range-thumb,
 .calc-box.iv-good input[type="range"]::-moz-range-thumb {
-  background: #ffcc00 !important;
-  box-shadow: 0 0 15px rgba(255,204,0,0.8), 0 0 30px rgba(255,204,0,0.35) !important;
+  background: #39ff14 !important;
+  box-shadow: 0 0 10px rgba(57,255,20,0.8), 0 0 24px rgba(57,255,20,0.4) !important;
 }
 .iv-row.iv-average input[type="range"]::-moz-range-thumb,
 .calc-box.iv-average input[type="range"]::-moz-range-thumb {
-  background: #ff8800 !important;
-  box-shadow: 0 0 15px rgba(255,136,0,0.8), 0 0 30px rgba(255,136,0,0.35) !important;
+  background: #ffaa00 !important;
+  box-shadow: 0 0 10px rgba(255,170,0,0.8), 0 0 24px rgba(255,170,0,0.4) !important;
 }
 .iv-row.iv-poor input[type="range"]::-moz-range-thumb,
 .calc-box.iv-poor input[type="range"]::-moz-range-thumb {
-  background: #ff4444 !important;
-  box-shadow: 0 0 15px rgba(255,68,68,0.8), 0 0 30px rgba(255,68,68,0.35) !important;
+  background: #ff003c !important;
+  box-shadow: 0 0 10px rgba(255,0,60,0.8), 0 0 24px rgba(255,0,60,0.4) !important;
 }
 
 /* ── OGÓLNE ELEMENTY INFORMACYJNE ── */
