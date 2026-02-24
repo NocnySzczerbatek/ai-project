@@ -433,6 +433,27 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var movesResult = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
     var chosenMoves = movesResult.chosen;
 
+    /* ═══ ASSAULT VEST ENFORCEMENT — re-pick moves if needed ═══ */
+    // Assault Vest forbids status moves entirely. If AV is the item,
+    // re-run move selection in attacks-only mode.
+    if (item === 'Assault Vest') {
+      var avStatusCount = chosenMoves.filter(function(m){ return m.cat === 'Z'; }).length;
+      if (avStatusCount > 0) {
+        var avResult = buildBest4ForType(moves, pokemonTypes, statMap, buildType, true /* forceAllAttacks */);
+        var avOffensive = avResult.chosen.filter(function(m){ return m.cat !== 'Z' && m.power > 0; }).length;
+        if (avOffensive >= 4) {
+          // Successfully filled 4 attack slots — keep Assault Vest
+          movesResult = avResult;
+          chosenMoves = avResult.chosen;
+        } else {
+          // Can't fill 4 attacks — drop Assault Vest, keep original moves
+          item = 'Leftovers';
+          altItems = altItems.filter(function(it){ return it !== 'Assault Vest'; });
+          if (altItems.indexOf('Life Orb') === -1) altItems.unshift('Life Orb');
+        }
+      }
+    }
+
     /* ═══ ITEM VALIDATION — post-move synergy check ═══ */
     var chosenNames = chosenMoves.map(function(m){ return m.nm; });
     var statusCount = chosenMoves.filter(function(m){ return m.cat === 'Z'; }).length;
@@ -479,7 +500,8 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
 
   // ── BEST 4 FOR BUILD TYPE — Smogon/VGC STAB-enforced + 2+2 rule ──
   // Returns { chosen: Array, html: String }
-  function buildBest4ForType(moves, pokemonTypes, statMap, buildType) {
+  // forceAllAttacks: if true, exclude all status moves (for Assault Vest enforcement)
+  function buildBest4ForType(moves, pokemonTypes, statMap, buildType, forceAllAttacks) {
     var r = detectRole(statMap);
     var typeSet = new Set(pokemonTypes);
 
@@ -505,6 +527,8 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       var nm = m.move.name, md = MOVE_DATA[nm], lv = vgd.level_learned_at;
       if (bannedMoves.has(nm)) return;
       var power = md ? md[0] : 0, mtype = md ? md[1] : 'normal', cat = md ? md[2] : (power > 0 ? (r.isPhys ? 'P' : 'S') : 'Z');
+      // Assault Vest mode: skip all status moves
+      if (forceAllAttacks && cat === 'Z') return;
       var score = 0;
       var isStab = typeSet.has(mtype);
 
