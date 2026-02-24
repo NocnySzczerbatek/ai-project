@@ -378,8 +378,22 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     }
 
     note = currentLang==='en'
-      ? ({physical:'Max physical damage + speed.',special:'Max special damage + speed. ATK IV = 0.',defensive:'Maximum endurance + recovery.',mixed:'Balanced dual offense.',support:'Team utility + bulk.',niche:r.spe<=50?'Trick Room specialist.':'Revenge killer / lead.'}[buildType])
-      : ({physical:'Maks. obra\u017cenia fizyczne + szybko\u015b\u0107.',special:'Maks. obra\u017cenia specjalne + szybko\u015b\u0107. ATK IV = 0.',defensive:'Maksymalna wytrzyma\u0142o\u015b\u0107 + leczenie.',mixed:'Zbalansowana podw\u00f3jna ofensywa.',support:'U\u017cyteczno\u015b\u0107 dru\u017cynowa + bulk.',niche:r.spe<=50?'Specjalista Trick Room.':'Revenge killer / lead.'}[buildType]);
+      ? ({
+          physical:'252 ATK / 252 SPE \u2014 full physical power with maximum speed. Lets you outspeed most threats and eliminate them with powerful STAB hits before they move.',
+          special:'252 SP.ATK / 252 SPE \u2014 full special power with maximum speed. ATK IV set to 0 minimizes Foul Play and Confusion damage. STAB hits deal exceptional damage.',
+          defensive:'252 HP with prioritized defense \u2014 ensures surviving multiple hits and controlling the pace of battle. Recovery (Roost, Recover) and status (Toxic, Will-O-Wisp) complement survival.',
+          mixed:'Balanced EVs between ATK and SP.ATK let you break through both physical and special walls. Life Orb boosts both damage types. Max SPE ensures initiative.',
+          support:'Full HP with prioritized defense ensures survival while setting screens, hazards and status. Offense is secondary \u2014 maintaining team support is key.',
+          niche:r.spe<=50?'Max offense + HP, minimum speed for Trick Room \u2014 you move first under reversed turn order. Powerful STAB attacks compensate for no priority moves.':'Max speed + offense \u2014 Focus Sash lead guarantees survival for setting hazards, or picking off weakened targets as a revenge killer.'
+        }[buildType])
+      : ({
+          physical:'252 ATK / 252 SPD \u2014 pe\u0142na si\u0142a fizyczna z maksymaln\u0105 szybko\u015bci\u0105. Pozwala wyprzedzi\u0107 wi\u0119kszo\u015b\u0107 zagro\u017ce\u0144 i wyeliminowa\u0107 je pot\u0119\u017cnymi ciosami STAB przed ich ruchem.',
+          special:'252 SP.ATK / 252 SPD \u2014 pe\u0142na si\u0142a specjalna z maksymaln\u0105 szybko\u015bci\u0105. ATK IV ustawione na 0 minimalizuj\u0105 obra\u017cenia od Foul Play i Confusion. Ataki STAB uderzaj\u0105 wyj\u0105tkowo mocno.',
+          defensive:'252 HP z priorytetow\u0105 obron\u0105 \u2014 zapewnia wielokrotne przyjmowanie cios\u00f3w i kontrol\u0119 tempa walki. Ruchy lecz\u0105ce (Roost, Recover) i statusowe (Toxic, Will-O-Wisp) uzupe\u0142niaj\u0105 przetrwanie.',
+          mixed:'Zbalansowane EV mi\u0119dzy ATK a SP.ATK pozwalaj\u0105 \u0142ama\u0107 zar\u00f3wno fizyczne jak i specjalne walle. Life Orb wzmacnia oba rodzaje obra\u017ce\u0144. SPD na maks zapewnia inicjatyw\u0119.',
+          support:'Pe\u0142ne HP z priorytetow\u0105 obron\u0105 zapewniaj\u0105 przetrwanie podczas stawiania ekran\u00f3w, hazard\u00f3w i status\u00f3w. Ofensywa jest drugorz\u0119dna \u2014 kluczowe jest utrzymanie wsparcia dru\u017cyny.',
+          niche:r.spe<=50?'Maks ofensywa + HP, minimalna szybko\u015b\u0107 pod Trick Room \u2014 ruszasz si\u0119 jako pierwszy pod odwr\u00f3con\u0105 kolejno\u015bci\u0105. Pot\u0119\u017cne ataki STAB kompensuj\u0105 brak priorytetowych ruch\u00f3w.':'Maks szybko\u015b\u0107 + ofensywa \u2014 Focus Sash gwarantuje przetrwanie jednego ciosu, pozwalaj\u0105c ustawi\u0107 hazardy lub wyeliminowa\u0107 os\u0142abionego przeciwnika jako revenge killer.'
+        }[buildType]);
 
     /* ═══ IV RECOMMENDATION ═══ */
     var ivRec = getIVRecommendation(buildType, r);
@@ -529,6 +543,13 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
         if (isStab) score *= 2.0;
         if (prioMoves.includes(nm)) score += 35;
         if (!isStab && power >= 70) score += 15;
+
+        // Known competitive coverage moves get extra priority
+        var coverageGold = ['earthquake','knock-off','stone-edge','close-combat','superpower','ice-punch','thunder-punch','fire-punch','ice-beam','thunderbolt','flamethrower','shadow-ball','energy-ball','dark-pulse','flash-cannon','focus-blast','play-rough','brave-bird','iron-head','zen-headbutt','poison-jab','drill-run','rock-slide','seed-bomb','wild-charge','crunch','psycho-cut','x-scissor','dragon-claw','outrage','aqua-tail','cross-chop','iron-tail'];
+        if (!isStab && cat !== 'Z' && coverageGold.indexOf(nm) !== -1) score += 25;
+
+        // Normal-type coverage is never super-effective — deprioritize non-STAB Normal
+        if (mtype === 'normal' && !isStab) score *= 0.2;
       }
 
       pool.push({nm:nm, power:power, mtype:mtype, cat:cat, score:score, lv:lv, method:method, isStab:isStab});
