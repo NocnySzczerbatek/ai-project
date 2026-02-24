@@ -120,8 +120,16 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   function detectRole(statMap) {
     var atk=statMap['attack']||0,spatk=statMap['special-attack']||0,def=statMap['defense']||0,spdef=statMap['special-defense']||0,spe=statMap['speed']||0,hp=statMap['hp']||0;
     var isPhys=atk>=spatk+15,isSpec=spatk>=atk+15,isMixed=!isPhys&&!isSpec,isTank=(def+spdef)/2>=90&&spe<80,isFast=spe>=80,isTR=spe<=50;
-    var label='\u2696 Zbalansowany';
-    if(isPhys&&isFast)label='\u2694 Fizyczny Atakuj\u0105cy';else if(isPhys&&isTank)label='\ud83d\udee1 Fizyczny Tank';else if(isPhys)label='\u2694 Fizyczny (wolny)';else if(isSpec&&isFast)label='\u2728 Specjalny Atakuj\u0105cy';else if(isSpec&&isTank)label='\ud83d\udd2e Specjalny Tank';else if(isSpec)label='\u2728 Specjalny (wolny)';else if(isTank)label='\ud83d\udee1 Tank';else if(isFast)label='\ud83d\udca8 Szybki Mieszany';else label='\u2694\u2728 Mieszany';
+    var label, en = currentLang==='en';
+    if(isPhys&&isFast) label=en?'\u2694 Physical Attacker':'\u2694 Fizyczny Atakuj\u0105cy';
+    else if(isPhys&&isTank) label=en?'\ud83d\udee1 Physical Tank':'\ud83d\udee1 Fizyczny Tank';
+    else if(isPhys) label=en?'\u2694 Physical (slow)':'\u2694 Fizyczny (wolny)';
+    else if(isSpec&&isFast) label=en?'\u2728 Special Attacker':'\u2728 Specjalny Atakuj\u0105cy';
+    else if(isSpec&&isTank) label=en?'\ud83d\udd2e Special Tank':'\ud83d\udd2e Specjalny Tank';
+    else if(isSpec) label=en?'\u2728 Special (slow)':'\u2728 Specjalny (wolny)';
+    else if(isTank) label=en?'\ud83d\udee1 Tank':'\ud83d\udee1 Tank';
+    else if(isFast) label=en?'\ud83d\udca8 Fast Mixed':'\ud83d\udca8 Szybki Mieszany';
+    else label=en?'\u2694\u2728 Mixed':'\u2694\u2728 Mieszany';
     return {atk:atk,spatk:spatk,def:def,spdef:spdef,spe:spe,hp:hp,isPhys:isPhys,isSpec:isSpec,isMixed:isMixed,isTank:isTank,isFast:isFast,isTR:isTR,label:label};
   }
 
@@ -419,7 +427,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var prioMoves = ['extreme-speed','quick-attack','aqua-jet','ice-shard','mach-punch','bullet-punch','sucker-punch','shadow-sneak','vacuum-wave','first-impression','grassy-glide','accelerock','water-shuriken','jet-punch'];
 
     // ── BANNED 2-TURN / CHARGE MOVES (Smogon competitive standard) ──
-    var bannedMoves = new Set(['fly','bounce','dig','dive','sky-attack','phantom-force','shadow-force','solar-beam','solar-blade','meteor-beam','skull-bash','razor-wind','sky-drop','freeze-shock','ice-burn','geomancy']);
+    var bannedMoves = new Set(['fly','bounce','dig','dive','sky-attack','phantom-force','shadow-force','solar-beam','solar-blade','meteor-beam','skull-bash','razor-wind','sky-drop','freeze-shock','ice-burn']);
 
     var pool = [];
     moves.forEach(function(m){

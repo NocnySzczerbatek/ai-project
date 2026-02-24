@@ -147,28 +147,36 @@
 
   /* ── IV bars: constrain width on large screens ── */
   .iv-slider-row {
-    max-width: 400px;
+    max-width: 420px;
+    min-width: 200px;
   }
 
   .iv-row {
-    max-width: 440px;
+    max-width: 460px;
   }
 
   .iv-stat-header {
-    max-width: 400px;
+    max-width: 420px;
   }
 
   .iv-stat-meta {
-    max-width: 400px;
+    max-width: 420px;
   }
 
   /* ── Calculator sliders also constrained ── */
   .calc-slider-row {
-    max-width: 400px;
+    max-width: 420px;
+    min-width: 200px;
   }
 
   .calc-box .iv-stat-header {
-    max-width: 400px;
+    max-width: 420px;
+  }
+
+  /* ── IV value at 0: ensure thumb remains visible ── */
+  .iv-slider-row input[type="range"][value="0"],
+  .calc-slider-row input[type="range"][value="0"] {
+    --iv-pct: 1%;
   }
 
   /* ── Competitive grid: better use of space ── */
