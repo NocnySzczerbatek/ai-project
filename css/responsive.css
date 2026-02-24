@@ -87,12 +87,19 @@
   /* Suwaki IV — większe cele dotykowe na mobile */
   .iv-slider-row input[type="range"]::-webkit-slider-thumb,
   .calc-slider-row input[type="range"]::-webkit-slider-thumb {
-    width: 34px; height: 34px; margin-top: -12px;
+    width: 30px; height: 30px; margin-top: -10px;
+    transition: box-shadow 0.2s ease, background 0.2s ease;
   }
 
   .iv-slider-row input[type="range"]::-moz-range-thumb,
   .calc-slider-row input[type="range"]::-moz-range-thumb {
-    width: 34px; height: 34px;
+    width: 30px; height: 30px;
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .iv-slider-row input[type="range"],
+  .calc-slider-row input[type="range"] {
+    transition: all 0.2s ease;
   }
 
   .iv-row {

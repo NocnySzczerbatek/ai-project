@@ -59,14 +59,22 @@ function cobFallbackCopy(url) {
 
 /* ── Kolory i style suwaków IV ── */
 function getIVSliderColor(val) {
-  if (val >= 31) return '#55ffff';
-  if (val >= 26) return '#88ff88';
-  if (val >= 16) return '#f8d030';
-  return '#ff5555';
+  if (val >= 28) return '#00ff99';
+  if (val >= 20) return '#ffcc00';
+  if (val >= 10) return '#ff8800';
+  return '#ff4444';
+}
+
+function getIVTierClass(val) {
+  if (val >= 28) return 'iv-perfect';
+  if (val >= 20) return 'iv-good';
+  if (val >= 10) return 'iv-average';
+  return 'iv-poor';
 }
 
 function applyIVSliderStyle(rangeEl, val) {
   var color = getIVSliderColor(val);
+  var tierClass = getIVTierClass(val);
   var pct = Math.round(val / 31 * 100);
   rangeEl.style.setProperty('--iv-thumb', color);
   rangeEl.style.setProperty('--iv-track', color);
@@ -76,6 +84,17 @@ function applyIVSliderStyle(rangeEl, val) {
     parent.style.setProperty('--iv-thumb', color);
     parent.style.setProperty('--iv-track', color);
     parent.style.setProperty('--iv-pct', pct + '%');
+  }
+  /* Aktualizuj klasę wiersza IV */
+  var row = rangeEl.closest('.iv-row, .calc-box');
+  if (row) {
+    row.classList.remove('iv-perfect', 'iv-good', 'iv-average', 'iv-poor');
+    row.classList.add(tierClass);
+  }
+  /* Aktualizuj kolor wartości liczbowej */
+  var valSpan = parent ? parent.querySelector('.iv-val') : null;
+  if (valSpan) {
+    valSpan.style.color = color;
   }
 }
 
@@ -93,14 +112,14 @@ function syncIVSlider(rangeEl) {
   var lbl = document.getElementById('ivlabel-' + sn);
   if (bar) {
     var pct = Math.round(val / 31 * 100);
-    var color = val>=28?'#55ff55':val>=20?'#f8d030':val>=10?'#f08030':'#ff5555';
+    var color = val>=28?'#00ff99':val>=20?'#ffcc00':val>=10?'#ff8800':'#ff4444';
     bar.style.width = pct + '%'; bar.style.background = color;
   }
   if (lbl) {
-    if(val>=28) lbl.innerHTML='<span style="color:#55ff55">Doskona\u0142e</span>';
-    else if(val>=20) lbl.innerHTML='<span style="color:#f8d030">Dobre</span>';
-    else if(val>=10) lbl.innerHTML='<span style="color:#f08030">S\u0142abe</span>';
-    else lbl.innerHTML='<span style="color:#ff5555">Z\u0142e</span>';
+    if(val>=28) lbl.innerHTML='<span style="color:#00ff99">Doskona\u0142e</span>';
+    else if(val>=20) lbl.innerHTML='<span style="color:#ffcc00">Dobre</span>';
+    else if(val>=10) lbl.innerHTML='<span style="color:#ff8800">\u015arednie</span>';
+    else lbl.innerHTML='<span style="color:#ff4444">S\u0142abe</span>';
   }
 }
 
@@ -111,6 +130,7 @@ function syncCalcIVSlider(rangeEl, sn) {
   applyIVSliderStyle(rangeEl, val);
   var valSpan = document.getElementById('calc-iv-val-' + sn);
   if (valSpan) valSpan.textContent = val;
+  if (typeof updateCalcSliderTier === 'function') updateCalcSliderTier(rangeEl, sn);
 }
 
 function syncBattleIVSlider(rangeEl, side, sn) {
@@ -136,10 +156,10 @@ function updateIVBar(sn, val) {
   var bar = document.getElementById('ivbar-' + sn);
   var lbl = document.getElementById('ivlabel-' + sn);
   if (!bar || !lbl) return;
-  var color = val>=28?'#55ff55':val>=20?'#f8d030':val>=10?'#f08030':'#ff5555';
+  var color = val>=28?'#00ff99':val>=20?'#ffcc00':val>=10?'#ff8800':'#ff4444';
   bar.style.width = pct + '%'; bar.style.background = color;
-  if(val>=28) lbl.innerHTML='<span style="color:#55ff55">Doskona\u0142e</span>';
-  else if(val>=20) lbl.innerHTML='<span style="color:#f8d030">Dobre</span>';
-  else if(val>=10) lbl.innerHTML='<span style="color:#f08030">S\u0142abe</span>';
-  else lbl.innerHTML='<span style="color:#ff5555">Z\u0142e</span>';
+  if(val>=28) lbl.innerHTML='<span style="color:#00ff99">Doskona\u0142e</span>';
+  else if(val>=20) lbl.innerHTML='<span style="color:#ffcc00">Dobre</span>';
+  else if(val>=10) lbl.innerHTML='<span style="color:#ff8800">\u015arednie</span>';
+  else lbl.innerHTML='<span style="color:#ff4444">S\u0142abe</span>';
 }

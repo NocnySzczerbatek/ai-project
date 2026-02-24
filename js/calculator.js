@@ -1,6 +1,24 @@
 /* ================================================================
    calculator.js — Ocena Pokémona (kalkulator IV/Natura)
    ================================================================ */
+
+/* ── Dynamiczna klasa CSS dla wiersza statystyki ── */
+function updateCalcSliderTier(rangeEl, sn) {
+  var val = parseInt(rangeEl.value) || 0;
+  if (val < 0) val = 0; if (val > 31) val = 31;
+  var tierClass = getIVTierClass(val);
+  var color = getIVSliderColor(val);
+  var row = rangeEl.closest('.calc-box');
+  if (row) {
+    row.classList.remove('iv-perfect', 'iv-good', 'iv-average', 'iv-poor');
+    row.classList.add(tierClass);
+  }
+  var valSpan = document.getElementById('calc-iv-val-' + sn);
+  if (valSpan) {
+    valSpan.style.color = color;
+  }
+}
+
 function evaluatePokemon() {
   if (!lastBuildData) return;
   var buildType = document.getElementById('calc-build-type').value;

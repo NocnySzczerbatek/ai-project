@@ -59,12 +59,12 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   }
 
   // ── IV helpers ──
-  function getIVColor(iv) { return iv>=28?'#55ff55':iv>=20?'#f8d030':iv>=10?'#f08030':'#ff5555'; }
+  function getIVColor(iv) { return iv>=28?'#00ff99':iv>=20?'#ffcc00':iv>=10?'#ff8800':'#ff4444'; }
   function getIVLabel(iv) {
-    if(iv>=28) return '<span style="color:#55ff55">Doskona\u0142e</span>';
-    if(iv>=20) return '<span style="color:#f8d030">Dobre</span>';
-    if(iv>=10) return '<span style="color:#f08030">S\u0142abe</span>';
-    return '<span style="color:#ff5555">Z\u0142e</span>';
+    if(iv>=28) return '<span style="color:#00ff99">Doskona\u0142e</span>';
+    if(iv>=20) return '<span style="color:#ffcc00">Dobre</span>';
+    if(iv>=10) return '<span style="color:#ff8800">\u015arednie</span>';
+    return '<span style="color:#ff4444">S\u0142abe</span>';
   }
 
   function buildIVSection(stats) {
@@ -106,10 +106,10 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       +'<div style="font-size:14px;color:#666;margin-bottom:6px">\u2b50 priorytet | \u25aa mniej wa\u017cne | Przesu\u0144 suwak \u017ceby sprawdzi\u0107</div>'
       +rows
       +'<div class="iv-legend">'
-      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#55ff55"></div>28\u201331 Doskona\u0142e</div>'
-      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#f8d030"></div>20\u201327 Dobre</div>'
-      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#f08030"></div>10\u201319 S\u0142abe</div>'
-      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ff5555"></div>0\u20139 Z\u0142e</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#00ff99"></div>28\u201331 Doskona\u0142e</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ffcc00"></div>20\u201327 Dobre</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ff8800"></div>10\u201319 \u015arednie</div>'
+      +'<div class="iv-legend-item"><div class="iv-legend-dot" style="background:#ff4444"></div>0\u20139 S\u0142abe</div>'
       +'</div></div>';
   }
 
