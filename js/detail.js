@@ -69,19 +69,79 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     return '<span style="color:#ff003c">S\u0142abe</span>';
   }
 
-  function buildIVSection(stats) {
+  // ── Compute best build type + nature for IV sync ──
+  function getBestBuildInfo(statMap) {
+    var r = detectRole(statMap);
+    var allBuilds = [
+      {key:'physical'},{key:'special'},{key:'defensive'},{key:'mixed'},{key:'support'},{key:'niche'}
+    ];
+    var eligible = getEligibleBuilds(statMap);
+    var filteredBuilds = allBuilds.filter(function(b){ return eligible.indexOf(b.key) !== -1; });
+    var sorted = sortBuildsByStats(filteredBuilds, statMap);
+    var bestType = sorted.length > 0 ? sorted[0].key : 'physical';
+    // Determine nature for the best build type
+    var nName = 'Hardy';
+    if (bestType === 'physical') {
+      nName = r.spe >= 90 ? 'Jolly' : 'Adamant';
+    } else if (bestType === 'special') {
+      nName = r.spe >= 90 ? 'Timid' : 'Modest';
+    } else if (bestType === 'defensive') {
+      var physWall = r.def >= r.spdef;
+      if (r.isSpec && physWall) nName = 'Bold';
+      else if (physWall) nName = 'Impish';
+      else nName = 'Calm';
+    } else if (bestType === 'mixed') {
+      if (r.isFast) nName = 'Naive';
+      else if (r.atk > r.spatk) nName = 'Lonely';
+      else nName = 'Mild';
+    } else if (bestType === 'support') {
+      nName = r.def >= r.spdef ? 'Bold' : 'Calm';
+    } else {
+      if (r.spe <= 50) nName = r.isPhys ? 'Brave' : 'Quiet';
+      else nName = r.isPhys ? 'Jolly' : 'Timid';
+    }
+    return { buildType: bestType, natureName: nName };
+  }
+
+  function buildIVSection(stats, bestBuildType, bestNatureName) {
     var statMap = {}; stats.forEach(function(s){statMap[s.stat.name]=s.base_stat;});
     var atk=statMap['attack']||0, spatk=statMap['special-attack']||0, def=statMap['defense']||0, spdef=statMap['special-defense']||0, spe=statMap['speed']||0, hp=statMap['hp']||0;
     var isPhysical=atk>=spatk+15,isSpecial=spatk>=atk+15,isMixed=!isPhysical&&!isSpecial,isTank=(def+spdef)/2>=90&&spe<80,isSpeedy=spe>=80,isTrickRoom=spe<=50;
+    var isDefensive = bestBuildType === 'defensive' || bestBuildType === 'support';
+    var defNatures = ['Impish','Bold','Relaxed','Lax'];
+    var isDefNature = defNatures.indexOf(bestNatureName) !== -1;
     var role='\u2696 Zbalansowany';
-    if(isPhysical&&isSpeedy)role='\u2694 Fizyczny Atakuj\u0105cy';else if(isPhysical&&isTank)role='\ud83d\udee1 Fizyczny Tank';else if(isPhysical)role='\u2694 Fizyczny';else if(isSpecial&&isSpeedy)role='\u2728 Specjalny Atakuj\u0105cy';else if(isSpecial&&isTank)role='\ud83d\udd2e Specjalny Tank';else if(isSpecial)role='\u2728 Specjalny';else if(isTank)role='\ud83d\udee1 Tank';else if(isSpeedy)role='\ud83d\udca8 Szybko\u015bciowy';else if(isMixed)role='\u2694\u2728 Mieszany';
+    if(isDefensive)role=bestBuildType==='support'?'\ud83d\udc9a Wsparcie':'\ud83d\udee1 Defensywny';
+    else if(isPhysical&&isSpeedy)role='\u2694 Fizyczny Atakuj\u0105cy';else if(isPhysical&&isTank)role='\ud83d\udee1 Fizyczny Tank';else if(isPhysical)role='\u2694 Fizyczny';else if(isSpecial&&isSpeedy)role='\u2728 Specjalny Atakuj\u0105cy';else if(isSpecial&&isTank)role='\ud83d\udd2e Specjalny Tank';else if(isSpecial)role='\u2728 Specjalny';else if(isTank)role='\ud83d\udee1 Tank';else if(isSpeedy)role='\ud83d\udca8 Szybko\u015bciowy';else if(isMixed)role='\u2694\u2728 Mieszany';
     var targets={};
-    targets['hp']={val:'31',color:'#55ff55',prio:true,note:'Zawsze przydatne'};
-    if(isTrickRoom)targets['speed']={val:'0',color:'#aaa',prio:false,note:'Trick Room'};else if(isSpeedy)targets['speed']={val:'31',color:'#55ff55',prio:true,note:'Kluczowe'};else targets['speed']={val:'\u226520',color:'#f8d030',prio:false,note:'Pomocne'};
-    if(isPhysical||isMixed)targets['attack']={val:'31',color:'#55ff55',prio:true,note:'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'};else targets['attack']={val:'0',color:'#888',prio:false,note:'Nie u\u017cywasz'};
-    if(isSpecial||isMixed)targets['special-attack']={val:'31',color:'#55ff55',prio:true,note:'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'};else targets['special-attack']={val:'0',color:'#888',prio:false,note:'Nie u\u017cywasz'};
-    if(isTank||def>=100)targets['defense']={val:'31',color:'#55ff55',prio:true,note:'Warto maksowa\u0107'};else targets['defense']={val:'\u226520',color:'#f8d030',prio:false,note:'Przydatne'};
-    if(isTank||spdef>=100)targets['special-defense']={val:'31',color:'#55ff55',prio:true,note:'Warto maksowa\u0107'};else targets['special-defense']={val:'\u226520',color:'#f8d030',prio:false,note:'Przydatne'};
+
+    if (isDefensive) {
+      // Defensive/Support: HP, DEF, SP.DEF → priority 31; ATK → 0; SPD → low priority
+      targets['hp']={val:'31',color:'#55ff55',prio:true,note:'Kluczowe dla przetrwania'};
+      targets['defense']={val:'31',color:'#55ff55',prio:true,note:'Priorytet obronny'};
+      targets['special-defense']={val:'31',color:'#55ff55',prio:true,note:'Priorytet obronny'};
+      targets['attack']={val:'0',color:'#888',prio:false,note:'Minimalizacja Foul Play/Confusion'};
+      targets['special-attack']={val:'0',color:'#888',prio:false,note:'Nie u\u017cywasz ofensywnie'};
+      targets['speed']={val:'\u226520',color:'#f8d030',prio:false,note:'Drugorz\u0119dne dla walla'};
+      // If the defensive build uses physical attacks (Impish nature = phys wall doing phys dmg sometimes)
+      if (isPhysical && bestBuildType === 'defensive') {
+        targets['attack']={val:'31',color:'#55ff55',prio:false,note:'U\u017cywane fizycznie, ale nie priorytet'};
+        targets['special-attack']={val:'0',color:'#888',prio:false,note:'Nie u\u017cywasz'};
+      }
+    } else {
+      // Original logic for non-defensive builds
+      targets['hp']={val:'31',color:'#55ff55',prio:true,note:'Zawsze przydatne'};
+      if(isTrickRoom)targets['speed']={val:'0',color:'#aaa',prio:false,note:'Trick Room'};else if(isSpeedy)targets['speed']={val:'31',color:'#55ff55',prio:true,note:'Kluczowe'};else targets['speed']={val:'\u226520',color:'#f8d030',prio:false,note:'Pomocne'};
+      if(isPhysical||isMixed)targets['attack']={val:'31',color:'#55ff55',prio:true,note:'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'};else targets['attack']={val:'0',color:'#888',prio:false,note:'Nie u\u017cywasz'};
+      if(isSpecial||isMixed)targets['special-attack']={val:'31',color:'#55ff55',prio:true,note:'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'};else targets['special-attack']={val:'0',color:'#888',prio:false,note:'Nie u\u017cywasz'};
+      if(isTank||def>=100)targets['defense']={val:'31',color:'#55ff55',prio:true,note:'Warto maksowa\u0107'};else targets['defense']={val:'\u226520',color:'#f8d030',prio:false,note:'Przydatne'};
+      if(isTank||spdef>=100)targets['special-defense']={val:'31',color:'#55ff55',prio:true,note:'Warto maksowa\u0107'};else targets['special-defense']={val:'\u226520',color:'#f8d030',prio:false,note:'Przydatne'};
+    }
+
+    // Nature sync: DEF-boosting natures always force DEF priority
+    if (isDefNature && targets['defense'].prio !== true) {
+      targets['defense']={val:'31',color:'#55ff55',prio:true,note:'Natura wzmacnia Obron\u0119'};
+    }
     var mustBe31=['hp','attack','defense','special-attack','special-defense','speed'].filter(function(sn){return targets[sn].val==='31';}).map(function(sn){return '<span style="color:'+(STAT_COLORS[sn]||'#fff')+'">'+STAT_NAMES[sn]+'</span>';});
     var mustBe0=['attack','special-attack','speed'].filter(function(sn){return targets[sn].val==='0';}).map(function(sn){return '<span style="color:#888">'+STAT_NAMES[sn]+'</span>';});
     var summaryLine='Celuj w <b style="color:#55ff55">31</b>: '+mustBe31.join(', ');
@@ -987,6 +1047,10 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   // Build biome section
   var biomeHTML = buildBiomeSection(s.habitat, p.types);
 
+  // Compute best build type + nature for IV section sync
+  var _statMapForBuild = {}; p.stats.forEach(function(s){_statMapForBuild[s.stat.name]=s.base_stat;});
+  var bestInfo = getBestBuildInfo(_statMapForBuild);
+
   document.getElementById('main-area').innerHTML =
     '<div class="page-title"><span>#'+String(p.id).padStart(3,'0')+' '+p.name.toUpperCase()+' <button class="fav-star'+(isFav?' active':'')+'" id="fav-star-btn" onclick="toggleFavorite('+p.id+',\''+p.name+'\')" title="'+(currentLang==='en'?'Add to favorites':'Dodaj do ulubionych')+'">\u2b50</button></span></div>'
     +'<div class="detail-desktop-grid">'
@@ -998,7 +1062,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     +'</div>'
     +'<div>'
     +'<div class="mc-panel"><h2>\ud83d\udcca '+t('sec.baseStats')+'</h2>'+statsHTML+'<div style="font-size:15px;color:#666;margin-top:6px;">'+t('gen.sum')+': <span style="color:#fff">'+p.stats.reduce(function(a,st){return a+st.base_stat;},0)+'</span></div></div>'
-    +buildIVSection(p.stats)
+    +buildIVSection(p.stats, bestInfo.buildType, bestInfo.natureName)
     +'<div class="mc-panel" style="margin-top:12px"><h2>\ud83e\uddec '+t('sec.evo')+'</h2><div class="evo-chain" id="evo-chain-container">'+evoHTML+'</div></div></div></div>'
     +'</div>'
     +'<div class="detail-col-right">'
