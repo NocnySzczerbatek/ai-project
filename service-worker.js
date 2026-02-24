@@ -1,43 +1,43 @@
-/* Service Worker — Cobblemon Mastery Guide
-   Cache'uje statyczne zasoby dla szybszego ładowania */
+﻿/* Service Worker â€” Cobblemon Mastery Guide
+   Cache'uje statyczne zasoby dla szybszego Ĺ‚adowania */
 
-const CACHE_NAME = 'cobblemon-v6.0';
+const CACHE_NAME = 'cobblemon-v7.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/arena.html',
   '/manifest.json',
-  '/css/variables.css?v=5',
-  '/css/base.css?v=5',
-  '/css/layout.css?v=5',
-  '/css/components.css?v=5',
-  '/css/pokemon.css?v=5',
-  '/css/competitive.css?v=5',
-  '/css/pages.css?v=5',
-  '/css/evolution.css?v=5',
-  '/css/glassmorphism.css?v=5',
-  '/css/responsive.css?v=5',
+  '/css/variables.css?v=6',
+  '/css/base.css?v=6',
+  '/css/layout.css?v=6',
+  '/css/components.css?v=6',
+  '/css/pokemon.css?v=6',
+  '/css/competitive.css?v=6',
+  '/css/pages.css?v=6',
+  '/css/evolution.css?v=6',
+  '/css/glassmorphism.css?v=6',
+  '/css/responsive.css?v=6',
   '/css/arena.css',
-  '/assets/styles.css?v=5',
-  '/js/config.js?v=5',
-  '/js/i18n.js?v=5',
-  '/js/types.js?v=5',
-  '/js/data.js?v=5',
-  '/js/state.js?v=5',
-  '/js/favorites.js?v=5',
-  '/js/team.js?v=5',
-  '/js/evolution.js?v=5',
-  '/js/weakness.js?v=5',
-  '/js/battle.js?v=5',
-  '/js/detail.js?v=5',
-  '/js/calculator.js?v=5',
-  '/js/pages.js?v=5',
-  '/js/utils.js?v=5',
-  '/js/app.js?v=5',
+  '/assets/styles.css?v=6',
+  '/js/config.js?v=6',
+  '/js/i18n.js?v=6',
+  '/js/types.js?v=6',
+  '/js/data.js?v=6',
+  '/js/state.js?v=6',
+  '/js/favorites.js?v=6',
+  '/js/team.js?v=6',
+  '/js/evolution.js?v=6',
+  '/js/weakness.js?v=6',
+  '/js/battle.js?v=6',
+  '/js/detail.js?v=6',
+  '/js/calculator.js?v=6',
+  '/js/pages.js?v=6',
+  '/js/utils.js?v=6',
+  '/js/app.js?v=6',
   '/js/arena.js'
 ];
 
-/* Instalacja — cache'uj zasoby statyczne */
+/* Instalacja â€” cache'uj zasoby statyczne */
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
@@ -47,7 +47,7 @@ self.addEventListener('install', function(event) {
   self.skipWaiting();
 });
 
-/* Aktywacja — usuń stare wersje cache */
+/* Aktywacja â€” usuĹ„ stare wersje cache */
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(keys) {
@@ -60,11 +60,11 @@ self.addEventListener('activate', function(event) {
   self.clients.claim();
 });
 
-/* Fetch — strategia stale-while-revalidate dla statycznych, network-first dla API */
+/* Fetch â€” strategia stale-while-revalidate dla statycznych, network-first dla API */
 self.addEventListener('fetch', function(event) {
   var url = new URL(event.request.url);
 
-  /* Żądania do PokeAPI — network-first z fallbackiem na cache */
+  /* Ĺ»Ä…dania do PokeAPI â€” network-first z fallbackiem na cache */
   if (url.hostname === 'pokeapi.co') {
     event.respondWith(
       fetch(event.request).then(function(response) {
@@ -80,7 +80,7 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
-  /* Zasoby statyczne — cache-first */
+  /* Zasoby statyczne â€” cache-first */
   event.respondWith(
     caches.match(event.request).then(function(cached) {
       var fetchPromise = fetch(event.request).then(function(response) {

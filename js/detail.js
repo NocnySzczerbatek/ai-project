@@ -430,7 +430,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
                  ['Expert Belt','Focus Sash','Lum Berry'];
     }
 
-    var movesResult = buildBest4ForType(moves, pokemonTypes, statMap, buildType);
+    var movesResult = buildBest4ForType(moves, pokemonTypes, statMap, buildType, false, picked ? picked.slug : null);
     var chosenMoves = movesResult.chosen;
 
     /* ═══ ASSAULT VEST ENFORCEMENT — re-pick moves if needed ═══ */
@@ -439,7 +439,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     if (item === 'Assault Vest') {
       var avStatusCount = chosenMoves.filter(function(m){ return m.cat === 'Z'; }).length;
       if (avStatusCount > 0) {
-        var avResult = buildBest4ForType(moves, pokemonTypes, statMap, buildType, true /* forceAllAttacks */);
+        var avResult = buildBest4ForType(moves, pokemonTypes, statMap, buildType, true, picked ? picked.slug : null);
         var avOffensive = avResult.chosen.filter(function(m){ return m.cat !== 'Z' && m.power > 0; }).length;
         if (avOffensive >= 4) {
           // Successfully filled 4 attack slots — keep Assault Vest
@@ -501,7 +501,8 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   // ── BEST 4 FOR BUILD TYPE — Smogon/VGC STAB-enforced + 2+2 rule ──
   // Returns { chosen: Array, html: String }
   // forceAllAttacks: if true, exclude all status moves (for Assault Vest enforcement)
-  function buildBest4ForType(moves, pokemonTypes, statMap, buildType, forceAllAttacks) {
+  // abilitySlug: the picked ability slug for ability-move synergy scoring
+  function buildBest4ForType(moves, pokemonTypes, statMap, buildType, forceAllAttacks, abilitySlug) {
     var r = detectRole(statMap);
     var typeSet = new Set(pokemonTypes);
 
@@ -516,7 +517,50 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var allStatusPools = [].concat(defRecovery, hazards, statusMoves, utilityMoves, screenMoves, offSetup);
 
     // ── BANNED 2-TURN / CHARGE MOVES (Smogon competitive standard) ──
-    var bannedMoves = new Set(['fly','bounce','dig','dive','sky-attack','phantom-force','shadow-force','solar-beam','solar-blade','meteor-beam','skull-bash','razor-wind','sky-drop','freeze-shock','ice-burn','last-resort','hyper-beam','giga-impact','explosion','self-destruct','struggle','constrict','barrage','egg-bomb','natural-gift','secret-power','hidden-power','frustration','return','snore','round']);
+    var bannedMoves = new Set(['fly','bounce','dig','dive','sky-attack','phantom-force','shadow-force','solar-beam','solar-blade','meteor-beam','skull-bash','razor-wind','sky-drop','freeze-shock','ice-burn','last-resort','hyper-beam','giga-impact','explosion','self-destruct','struggle','constrict','barrage','egg-bomb','natural-gift','secret-power','hidden-power','frustration','return','snore','round','future-sight','doom-desire','bide','focus-punch','synchronoise','magnitude','psywave','trump-card','wring-out']);
+
+    // ── WEAKNESS-BASED COVERAGE — compute which attacking types counter our weaknesses ──
+    var coverageTypeBonuses = {};
+    if (typeof TYPE_EFF !== 'undefined') {
+      // Find types that are super-effective against Pokémon that are strong vs us
+      pokemonTypes.forEach(function(pt) {
+        var eff = TYPE_EFF[pt];
+        if (!eff) return;
+        eff.weak.forEach(function(weakType) {
+          // We're weak to weakType — find types that hit weakType super-effectively
+          var weakEff = TYPE_EFF[weakType];
+          if (weakEff) {
+            weakEff.weak.forEach(function(counterType) {
+              coverageTypeBonuses[counterType] = (coverageTypeBonuses[counterType] || 0) + 20;
+            });
+          }
+        });
+      });
+      // Don't double-count our own STAB types as coverage
+      pokemonTypes.forEach(function(pt) { delete coverageTypeBonuses[pt]; });
+    }
+
+    // ── ABILITY-MOVE SYNERGY MAP ──
+    var abilitySynergyMoves = {};
+    if (abilitySlug === 'serene-grace') {
+      // Serene Grace doubles secondary effect chances → flinch/status moves are gold
+      ['air-slash','iron-head','zen-headbutt','rock-slide','bite','headbutt','water-pulse','charge-beam','fire-blast','thunder','blizzard','focus-blast','shadow-ball','flamethrower','ice-beam','thunderbolt','psychic','energy-ball','earth-power','flash-cannon','moonblast','mystical-fire','ancient-power','silver-wind','ominous-wind'].forEach(function(m){ abilitySynergyMoves[m] = 40; });
+    } else if (abilitySlug === 'technician') {
+      // Technician boosts moves with base power ≤60 by 50%
+      ['bullet-punch','mach-punch','aqua-jet','quick-attack','vacuum-wave','fake-out','aerial-ace','swift','hidden-power','power-up-punch','force-palm','rapid-spin','bug-bite','struggle-bug','icicle-spear','rock-blast','bullet-seed','tail-slap','water-shuriken','triple-axel','dual-wingbeat'].forEach(function(m){ abilitySynergyMoves[m] = 30; });
+    } else if (abilitySlug === 'skill-link') {
+      ['icicle-spear','rock-blast','bullet-seed','tail-slap','pin-missile','arm-thrust','water-shuriken','scale-shot'].forEach(function(m){ abilitySynergyMoves[m] = 50; });
+    } else if (abilitySlug === 'sheer-force') {
+      ['flamethrower','ice-beam','thunderbolt','fire-blast','thunder','blizzard','focus-blast','shadow-ball','sludge-bomb','earth-power','psychic','moonblast','flash-cannon','energy-ball','air-slash','iron-head','rock-slide','crunch','waterfall','poison-jab','zen-headbutt','fire-punch','ice-punch','thunder-punch','play-rough'].forEach(function(m){ abilitySynergyMoves[m] = 35; });
+    } else if (abilitySlug === 'iron-fist') {
+      ['thunder-punch','fire-punch','ice-punch','mach-punch','bullet-punch','drain-punch','power-up-punch','hammer-arm','close-combat','focus-punch','shadow-punch','meteor-mash','dynamic-punch','sky-uppercut','mega-punch','comet-punch','plasma-fists','jet-punch','surging-strikes','wicked-blow'].forEach(function(m){ abilitySynergyMoves[m] = 30; });
+    } else if (abilitySlug === 'strong-jaw') {
+      ['crunch','fire-fang','ice-fang','thunder-fang','poison-fang','psychic-fangs','hyper-fang','bite','fishious-rend','jaw-lock'].forEach(function(m){ abilitySynergyMoves[m] = 35; });
+    } else if (abilitySlug === 'mega-launcher') {
+      ['dark-pulse','water-pulse','aura-sphere','dragon-pulse','origin-pulse','heal-pulse','terrain-pulse'].forEach(function(m){ abilitySynergyMoves[m] = 35; });
+    } else if (abilitySlug === 'adaptability') {
+      // STAB is already ×2, adaptability makes it even more valuable — handled by existing STAB score
+    }
 
     var pool = [];
     moves.forEach(function(m){
@@ -574,6 +618,16 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
 
         // Normal-type coverage is never super-effective — deprioritize non-STAB Normal
         if (mtype === 'normal' && !isStab) score *= 0.2;
+
+        // Weakness-based coverage bonus — attacks that hit our counters super-effectively
+        if (!isStab && cat !== 'Z' && coverageTypeBonuses[mtype]) {
+          score += coverageTypeBonuses[mtype];
+        }
+
+        // Ability-move synergy bonus
+        if (abilitySynergyMoves[nm]) {
+          score += abilitySynergyMoves[nm];
+        }
       }
 
       pool.push({nm:nm, power:power, mtype:mtype, cat:cat, score:score, lv:lv, method:method, isStab:isStab});
