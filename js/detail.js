@@ -657,15 +657,17 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       // Put status moves first
       chosen = chosen.concat(statusChosen);
 
-      // Step 2: Fill remaining slots (up to 4) with best STAB attacks or more status
+      // Step 2: Fill remaining slots (up to 4) with best STAB attacks (type+cat unique)
       var attackPool = unique.filter(function(m){ return m.cat !== 'Z' && m.power > 0; });
       attackPool.sort(function(a,b){ return b.score - a.score; });
+      var defTypeCat = {};
       for (var i = 0; i < attackPool.length && chosen.length < 4; i++) {
         var m = attackPool[i];
         if (chosen.some(function(c){ return c.nm === m.nm; })) continue;
-        var tc = typeCounts[m.mtype] || 0;
-        if (tc >= 2) continue;
-        typeCounts[m.mtype] = tc + 1;
+        var tcKey = m.mtype + '-' + m.cat;
+        if (defTypeCat[tcKey] >= 1) continue; // No two attacks of same type+category
+        defTypeCat[tcKey] = (defTypeCat[tcKey] || 0) + 1;
+        typeCounts[m.mtype] = (typeCounts[m.mtype] || 0) + 1;
         chosen.push(m);
       }
       // If still < 4, fill with more status moves
@@ -680,46 +682,106 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       }
 
     } else {
-      // ═══ OFFENSIVE BUILDS: STAB-enforced selection ═══
+      // ═══ OFFENSIVE BUILDS: STAB-enforced + type-uniqueness + utility slot ═══
+      var typeCatCounts = {}; // "fire-P", "fire-S" — prevent same type+category duplicates
+
+      // ── MUST-HAVE MOVES (ability-specific) ──
+      var mustHaveMoves = [];
+      if (abilitySlug === 'serene-grace') {
+        var airSlashInPool = unique.find(function(m){ return m.nm === 'air-slash'; });
+        if (airSlashInPool) mustHaveMoves.push(airSlashInPool);
+      }
+      // Force must-have moves first
+      mustHaveMoves.forEach(function(m) {
+        if (chosen.length < 4 && !chosen.some(function(c){ return c.nm === m.nm; })) {
+          var tcKey = m.mtype + '-' + m.cat;
+          typeCatCounts[tcKey] = (typeCatCounts[tcKey] || 0) + 1;
+          typeCounts[m.mtype] = (typeCounts[m.mtype] || 0) + 1;
+          chosen.push(m);
+        }
+      });
+
+      // ── STAB selection (category-matched, type+cat unique) ──
       var stabPool = unique.filter(function(m){ return m.isStab && m.cat !== 'Z' && m.power > 0; });
       var stabCount = 0;
-
-      // Pick up to 2 best STAB moves (category-matched)
       for (var i = 0; i < stabPool.length && stabCount < 2; i++) {
         var m = stabPool[i];
-        var tc = typeCounts[m.mtype] || 0;
-        if (tc >= 2) continue;
+        if (chosen.some(function(c){ return c.nm === m.nm; })) continue;
+        var tcKey = m.mtype + '-' + m.cat;
+        if (typeCatCounts[tcKey] >= 1) continue;
         if (buildType === 'physical' && m.cat !== 'P') continue;
         if (buildType === 'special' && m.cat !== 'S') continue;
-        typeCounts[m.mtype] = (tc || 0) + 1;
+        typeCatCounts[tcKey] = (typeCatCounts[tcKey] || 0) + 1;
+        typeCounts[m.mtype] = (typeCounts[m.mtype] || 0) + 1;
         chosen.push(m);
         stabCount++;
       }
-      // Relax if couldn't find 2 category-matching STAB
+      // Relax category filter if couldn't find 2 STAB
       if (stabCount < 2) {
         for (var i = 0; i < stabPool.length && stabCount < 2; i++) {
           if (chosen.some(function(c){ return c.nm === stabPool[i].nm; })) continue;
+          var tcKey2 = stabPool[i].mtype + '-' + stabPool[i].cat;
+          if (typeCatCounts[tcKey2] >= 1) continue;
+          typeCatCounts[tcKey2] = (typeCatCounts[tcKey2] || 0) + 1;
+          typeCounts[stabPool[i].mtype] = (typeCounts[stabPool[i].mtype] || 0) + 1;
           chosen.push(stabPool[i]);
           stabCount++;
         }
       }
 
-      // Fill remaining slots — best coverage / status / setup
+      // ── UTILITY / SETUP SLOT RESERVATION ──
+      // Priority strategic moves — if Pokémon has one, slot 4 is reserved
+      var utilityPriority = ['roost','recover','soft-boiled','nasty-plot','swords-dance','calm-mind','dragon-dance','bulk-up','quiver-dance','shell-smash'];
+      var utilityMatch = null;
+      if (!forceAllAttacks) {
+        for (var ui = 0; ui < utilityPriority.length; ui++) {
+          var um = unique.find(function(m){ return m.nm === utilityPriority[ui] && m.cat === 'Z'; });
+          if (um && !chosen.some(function(c){ return c.nm === um.nm; })) {
+            // Match setup move to build type
+            var setupOk = true;
+            if (buildType === 'physical' && (um.nm === 'nasty-plot' || um.nm === 'calm-mind')) setupOk = false;
+            if (buildType === 'special' && (um.nm === 'swords-dance' || um.nm === 'bulk-up')) setupOk = false;
+            if (setupOk) { utilityMatch = um; break; }
+          }
+        }
+      }
+      var maxAttackSlots = utilityMatch ? 3 : 4;
+
+      // ── FILL COVERAGE SLOTS (type+cat unique, category-matched) ──
       var allSorted = unique.slice();
       allSorted.sort(function(a,b){ return b.score - a.score; });
+      for (var i = 0; i < allSorted.length && chosen.length < maxAttackSlots; i++) {
+        if (chosen.some(function(c){ return c.nm === allSorted[i].nm; })) continue;
+        var m = allSorted[i];
+        if (m.cat === 'Z') continue; // Attacks only in coverage slots
+        var tcKey = m.mtype + '-' + m.cat;
+        if (typeCatCounts[tcKey] >= 1) continue; // Type+Category uniqueness
+        if (buildType === 'physical' && m.cat === 'S' && m.power > 0) continue;
+        if (buildType === 'special' && m.cat === 'P' && m.power > 0) continue;
+        typeCatCounts[tcKey] = (typeCatCounts[tcKey] || 0) + 1;
+        typeCounts[m.mtype] = (typeCounts[m.mtype] || 0) + 1;
+        chosen.push(m);
+      }
+
+      // ── INSERT UTILITY MOVE in slot 4 ──
+      if (utilityMatch && chosen.length < 4) {
+        chosen.push(utilityMatch);
+      }
+
+      // ── FINAL FALLBACK — fill remaining with best available ──
       for (var i = 0; i < allSorted.length && chosen.length < 4; i++) {
         if (chosen.some(function(c){ return c.nm === allSorted[i].nm; })) continue;
         var m = allSorted[i];
-        var tc = typeCounts[m.mtype] || 0;
-        if (tc >= 2 && m.cat !== 'Z') continue;
-        if (buildType === 'physical' && m.cat === 'S' && m.power > 0) continue;
-        if (buildType === 'special' && m.cat === 'P' && m.power > 0) continue;
-        typeCounts[m.mtype] = (tc || 0) + 1;
+        if (m.cat !== 'Z') {
+          var tcKey = m.mtype + '-' + m.cat;
+          if (typeCatCounts[tcKey] >= 1) continue;
+          typeCatCounts[tcKey] = (typeCatCounts[tcKey] || 0) + 1;
+        }
         chosen.push(m);
       }
-      // Final fallback
-      for (var i = 0; i < allSorted.length && chosen.length < 4; i++) {
-        if (!chosen.some(function(c){ return c.nm === allSorted[i].nm; })) chosen.push(allSorted[i]);
+      // Absolute fallback
+      for (var i = 0; i < unique.length && chosen.length < 4; i++) {
+        if (!chosen.some(function(c){ return c.nm === unique[i].nm; })) chosen.push(unique[i]);
       }
     }
 
