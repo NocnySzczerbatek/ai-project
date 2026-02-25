@@ -212,3 +212,230 @@
   border-color: rgba(60,200,100,0.3);
   box-shadow: 0 0 10px rgba(60,200,100,0.15);
 }
+
+/* ================================================================
+   TEAM ANALYZER — Role Summary
+   ================================================================ */
+.team-role-summary {
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: rgba(30,30,50,0.85);
+  border: 2px solid rgba(180,160,80,0.35);
+  border-radius: 8px;
+}
+.team-role-summary h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  color: #e0d080;
+}
+.role-bar-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.role-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.role-bar-label {
+  color: #ccc;
+  font-size: 13px;
+  min-width: 160px;
+  white-space: nowrap;
+}
+.role-bar-track {
+  flex: 1;
+  height: 12px;
+  background: rgba(60,60,80,0.7);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.role-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width .3s ease;
+}
+.role-bar-ph-atk  { background: linear-gradient(90deg,#c03030,#e06060); }
+.role-bar-sp-atk  { background: linear-gradient(90deg,#6060cc,#8888ee); }
+.role-bar-defense { background: linear-gradient(90deg,#208020,#40c040); }
+.role-bar-support { background: linear-gradient(90deg,#208080,#40cccc); }
+.role-bar-count {
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: right;
+}
+
+/* ================================================================
+   TEAM ANALYZER — AI Recommendation Section
+   ================================================================ */
+.team-ai-section {
+  margin: 20px 0;
+  padding: 16px;
+  background: rgba(20,30,50,0.9);
+  border: 2px solid rgba(100,180,255,0.35);
+  border-radius: 8px;
+  box-shadow: 0 0 14px rgba(100,180,255,0.08);
+}
+.team-ai-section h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: #90c0ff;
+}
+.team-ai-desc {
+  color: #999;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+.team-rec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+.team-rec-card {
+  background: rgba(30,40,60,0.95);
+  border: 2px solid rgba(100,180,255,0.2);
+  border-radius: 8px;
+  padding: 12px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, transform .15s, box-shadow .2s;
+  position: relative;
+}
+.team-rec-card:hover {
+  border-color: rgba(100,200,255,0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(100,180,255,0.15);
+}
+.team-rec-sprite {
+  width: 68px;
+  height: 68px;
+  image-rendering: pixelated;
+}
+.team-rec-name {
+  font-size: 15px;
+  font-weight: bold;
+  color: #e0e0e0;
+  text-transform: capitalize;
+  margin: 4px 0;
+}
+.team-rec-types {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+.team-rec-role {
+  font-size: 11px;
+  color: #90c0ff;
+  margin-bottom: 6px;
+}
+.team-rec-reasons {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 6px;
+  text-align: left;
+}
+.team-rec-reasons li {
+  font-size: 11px;
+  color: #aaa;
+  padding: 1px 0;
+}
+.team-rec-reasons li::before {
+  content: '\2714 ';
+  color: #5c5;
+}
+.team-rec-score {
+  font-size: 13px;
+  color: #e0d060;
+  font-weight: bold;
+}
+
+/* ================================================================
+   TEAM ANALYZER — Meta Teams Section
+   ================================================================ */
+.team-meta-section {
+  margin: 24px 0;
+  padding: 16px;
+  background: rgba(30,25,15,0.9);
+  border: 2px solid rgba(240,200,60,0.3);
+  border-radius: 8px;
+  box-shadow: 0 0 14px rgba(240,200,60,0.06);
+}
+.team-meta-section h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: #e0c040;
+}
+.team-meta-desc {
+  color: #999;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+.team-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+.team-meta-card {
+  background: rgba(40,35,20,0.95);
+  border: 2px solid rgba(200,170,50,0.25);
+  border-radius: 8px;
+  padding: 14px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.team-meta-card:hover {
+  border-color: rgba(240,200,60,0.5);
+  box-shadow: 0 0 12px rgba(240,200,60,0.12);
+}
+.meta-card-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #f0d040;
+  margin-bottom: 4px;
+}
+.meta-card-desc {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+.meta-card-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.meta-member-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.meta-member-mini img {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+}
+.meta-member-mini span {
+  font-size: 10px;
+  color: #bbb;
+  text-transform: capitalize;
+}
+.meta-load-btn {
+  width: 100%;
+  font-size: 14px;
+  background: rgba(60,50,20,0.9);
+  border-top-color: #c0a040;
+  border-left-color: #c0a040;
+}
+.meta-load-btn:hover {
+  background: rgba(80,70,30,0.95);
+}
+
+@media (max-width:600px){
+  .team-rec-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  .team-meta-grid { grid-template-columns: 1fr; }
+  .role-bar-label { min-width: 120px; font-size: 12px; }
+}
