@@ -1,16 +1,23 @@
 {
   "name": "Cobblemon Mastery Guide",
   "short_name": "Cobblemon",
-  "description": "Najlepsza polska baza buildów competitive Cobblemon. Poradnik IV, EV, Nature, Moveset.",
+  "description": "Najlepsza polska baza buildow competitive Cobblemon. Poradnik IV, EV, Nature, Moveset.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#1a1a1a",
   "theme_color": "#55ff55",
   "lang": "pl",
   "icons": [
     {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAR3SURBVFhH7VdNSGNXFD4vqZlR8xLzkhlf3ktmgv2BMuiuCLYLKUFxMZROp0w7yLTQRcGl1KpgS8GFuGlBt4KUFtoM/dkJxS6ycOFu0Hamlhn/Bxx/GjFRC2reV87zXRNvfvybdtUPDi/vvnvP991zzz33huh/nA9VRPQqETUTUZvz5Hdu/9dwiYjeI6IfiegpEaGIcfsPRHTH6f/c8AER/SkTai4XDLcbIZcL7kIxM0R0T3Z0VgSI6Cfh1KMouF1ZiW80DY90HZuGgb9NE1umice6jkQwiDuVlahWlHwhHDH2c2ZEiOh34ehuVRX+0HXg2rVDi0YPLRLJ/XbaH1y9ig+rqvJF/EZEpkxQDn4iesSDKxQFX2tajpQJT2E7hoFvNQ01LpcQwZPxyUSl8LMg/+XKFeD69QKCk2zHNJE2DPwaCiGQE8HLeSI4g+0B9szPQS5sNRzGlmEgoWlQcsvxrkyYjwoiesIdb1VWHoa9iONjVmZZ9kwTc7qOXcPAx9XVQsBjh6co3hah56wu6dxJOCZYNwzsc1uJHHkWDuNpOIyHtbX2tnVEvCUTC9znDjcvXy49+2gUGdPEJ6qKCBFcRIgSoUtVsW2aBSI4D57oOrYNAx/lovC9TMzgyrV8tPbFBESjSEcieM3jsR25vV68cuMGXI7jRo8HGREhZwxHaV7X8Zdh4L6mCQFLROSRBbxERFme0TPDAGKx3J4XFovhU1W1nbS1tVnLy8tgLC0toaWlxW7vVVVLHsuz5zxY1nWxLbNE9KIs4A12cElR0O/z4cuamqIWUBT4/H5sbGzY5AJra2vw+nwIKorF/b7Ksy98PnyuqvhMVfPzoEkWEHc+nGgNDQ3HyAXq6+sL+paxN2UBr/OH2tpaDA8PY2hoqKhpmgav12vPOB+rq6t2eygUKhjT399vW1dXl1VRUSEEFETAzgF2UA49PT22g3g8jvn5ebuNn/F43OL2vr4+eQi2t7exv7+PyclJSzk8qDgH6mQBnJWcnZiYmLBkJwKZTAaNjY1Hoayrqzv63dTUhJ2dnWP99/b2MDc3h62tLQwODtoiiWixVDFKcIfOzs6SAhhM0t3djVgsBg4pP3t7e7G7uyt3RTqdxuzsLDY3N9Hc3CwEfCcTC3CF4nW00ul0WRGMg4MDpFIpZLNZ+dMRVlZW7HwZHx+33G63iNZNmViAw8K1mhOmtNdTgsO/sLBgh1/kiHOzekEmzsdt7qgoipVMJi8kgncGJ+DAwIAgZ7slExYDXywRDAatqampc4ngfGDy0dHR/NDzWXMqqEQ0zYM0TbPGxsbOLEJkvStX+aaIyCsTlUPYGWQ76OjoyC4uLp6YmIxkMmnxWZEX9gdEpMsEpwHfDe0jmo0rXXt7ezaRSGRnZmasVCplZTIZa3193ZqenrZGRkas1tZWUWyE8dF76rtgKdwlood5TjlJEQgE7NLt9/vzCYXxJfR92dFFwFv0HWdGXMm4nOYT8vuCU2Q408dutYuCLy8vOwcYn6L85Pfn+nfsP8E/5+M/g2IKie4AAAAASUVORK5CYII=",
-      "sizes": "32x32",
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]

@@ -1,0 +1,17 @@
+# Pliki tymczasowe i notatki
+kontekst-rozmowy.txt
+
+# System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (jeśli używane lokalnie)
+node_modules/
+npm-debug.log*
