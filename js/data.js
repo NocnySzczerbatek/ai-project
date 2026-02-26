@@ -111,6 +111,7 @@ function buildBiomeSection(habitat,types){
    COBBLEMON EVO OVERRIDES
    ================================================================ */
 var COBBLEMON_EVO_EXTRA = {
+    'greninja>ash-greninja': {pl:'Forma aktywowana przez umiejętność Battle Bond po użyciu Czapki Asha przy 255 Friendship',en:'Form activated by Battle Bond ability after using Ash Cap at 255 Friendship'},
   'goomy>sliggoo':     {pl:'+ Deszcz',en:'+ Rain'},
   'sliggoo>goodra':    {pl:'+ Deszcz',en:'+ Rain'},
   'eevee>espeon':      {pl:'+ Dzie\u0144',en:'+ Day'},
@@ -256,7 +257,7 @@ function renderApricorns() {
 const TYPE_RANKING = {
   normal:   [[143,'snorlax',['normal']],[242,'blissey',['normal']],[474,'porygon-z',['normal']],[398,'staraptor',['normal','flying']],[428,'lopunny',['normal']],[289,'slaking',['normal']]],
   fire:     [[6,'charizard',['fire','flying']],[59,'arcanine',['fire']],[257,'blaziken',['fire','fighting']],[392,'infernape',['fire','fighting']],[637,'volcarona',['bug','fire']],[815,'cinderace',['fire']]],
-  water:    [[130,'gyarados',['water','flying']],[260,'swampert',['water','ground']],[350,'milotic',['water']],[658,'greninja',['water','dark']],[748,'toxapex',['water','poison']],[818,'inteleon',['water']]],
+  water:    [[130,'gyarados',['water','flying']],[260,'swampert',['water','ground']],[350,'milotic',['water']],[658,'greninja',['water','dark']],[658.1,'ash-greninja',['water','dark'],{formOf:'greninja',special:true}],[748,'toxapex',['water','poison']],[818,'inteleon',['water']]],
   electric: [[135,'jolteon',['electric']],[243,'raikou',['electric']],[462,'magnezone',['electric','steel']],[466,'electivire',['electric']],[807,'zeraora',['electric']],[894,'regieleki',['electric']]],
   grass:    [[3,'venusaur',['grass','poison']],[497,'serperior',['grass']],[591,'amoonguss',['grass','poison']],[598,'ferrothorn',['grass','steel']],[812,'rillaboom',['grass']],[724,'decidueye',['grass','ghost']]],
   ice:      [[131,'lapras',['water','ice']],[461,'weavile',['dark','ice']],[473,'mamoswine',['ice','ground']],[471,'glaceon',['ice']],[646,'kyurem',['dragon','ice']],[713,'avalugg',['ice']]],
@@ -277,6 +278,8 @@ const TYPE_RANKING = {
 /* ── Counter Pool — różnorodne Pokémony do dynamicznego dobierania kontrpicków ── */
 const COUNTER_POOL = [
   {id:6,  name:'charizard',  types:['fire','flying'],    atk:['fire','flying']},
+  {id:658,name:'greninja',  types:['water','dark'],    atk:['water','dark']},
+  {id:658.1,name:'ash-greninja',types:['water','dark'],atk:['water','dark'],formOf:'greninja',special:true},
   {id:34, name:'nidoking',   types:['poison','ground'],  atk:['poison','ground','ice']},
   {id:59, name:'arcanine',   types:['fire'],             atk:['fire']},
   {id:65, name:'alakazam',   types:['psychic'],          atk:['psychic']},
