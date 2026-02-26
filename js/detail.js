@@ -948,7 +948,52 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
       var bestBadge = i===0 ? ' <span class="best-choice-badge">'+t('build.bestChoice')+'</span>' : '';
       return '<button class="build-tab'+(i===0?' active':'')+'" data-build-label="'+b.icon+' '+b.label+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">' +bestStar+(i+1)+'. '+b.icon+' '+b.label+bestBadge+'</button>';
     }).join('');
+    // Special handling for Ash-Greninja
+    var isAshGreninja = false;
+    if (typeof p !== 'undefined' && (p.name === 'ash-greninja' || p.id === 658.1)) isAshGreninja = true;
+
     var panelsHTML = builds.map(function(b,i){
+      // Custom build for Ash-Greninja
+      if (isAshGreninja && i === 0) {
+        // Naive Nature, 252 Sp. Atk / 252 Speed / 4 Attack, Choice Specs/Life Orb
+        var statMapAsh = statMap;
+        var customSpread = [['special-attack',252],['speed',252],['attack',4]];
+        var customNature = 'Naive';
+        var customItem = 'Choice Specs';
+        var customAltItems = ['Life Orb','Focus Sash'];
+        var customAbility = 'battle-bond';
+        var customMoves = [
+          {nm:'water-shuriken',power:15,mtype:'water',cat:'P',score:200},
+          {nm:'dark-pulse',power:80,mtype:'dark',cat:'S',score:180},
+          {nm:'hydro-pump',power:110,mtype:'water',cat:'S',score:170},
+          {nm:'u-turn',power:70,mtype:'bug',cat:'P',score:120}
+        ];
+        var movesHTML = customMoves.map(function(m,i){
+          var stab = (m.mtype==='water'||m.mtype==='dark')?'<span class="move-stab">STAB</span>':'<span class="move-coverage">'+typeName(m.mtype)+'</span>';
+          var catLabel = m.cat==='P'?'<span class="move-cat-p">Fiz.</span>':m.cat==='S'?'<span class="move-cat-s">Spec.</span>':'<span class="move-cat-z">Status</span>';
+          var pwrStr = m.power>0?'<span class="move-power">MOC: '+m.power+'</span>':'<span class="move-power" style="color:#666">Status</span>';
+          var stars = m.score>=200?'⭐⭐⭐⭐⭐':m.score>=150?'⭐⭐⭐⭐':'⭐⭐⭐';
+          return '<div class="move-card"><span class="move-card-num">'+(i+1)+'</span><div class="move-card-name">'+typeIconHTML(m.mtype,18)+' '+m.nm.replace(/-/g,' ')+'</div><div class="move-card-meta">'+catLabel+stab+pwrStr+'</div><div class="move-stars">'+stars+'</div></div>';
+        }).join('');
+        var evRows = customSpread.map(function(e){
+          var sn=e[0],val=e[1],color=STAT_COLORS[sn]||'#888',pct=Math.round(val/252*100);
+          return '<div class="ev-row"><span class="ev-amount">'+val+'</span><span class="ev-stat-name" style="color:'+color+'">'+(STAT_NAMES[sn]||sn)+'</span><div class="ev-bar-bg"><div class="ev-bar" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
+        }).join('');
+        var evHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udcca '+t('build.ev')+' <span style="font-size:10px;color:#888;font-family:VT323,monospace">(max 510)</span></div>'+evRows+'<div class="ev-total">'+t('gen.sum')+': 508/510</div><div style="font-size:14px;color:#666;margin-top:5px">252 Sp. Atk / 252 Speed / 4 Attack</div></div>';
+        var natureHTML='<div class="comp-box"><div class="comp-box-title">\ud83d\udc8e '+t('build.nature')+'</div><div class="nature-badge">'+natureName(customNature)+'</div><div style="font-size:12px;color:#555;margin-bottom:4px">('+customNature+')</div><div class="nature-detail"><span class="nature-up">\u25b2 +SPD</span> | <span class="nature-down">\u25bc -SP.DEF</span></div><div style="font-size:14px;color:#666;margin-top:6px">Naive: boosts Speed, lowers Sp. Def</div></div>';
+        var itemHTML = renderItemBox(customItem, customAltItems);
+        var abilityHTML='<div class="ability-box"><div class="comp-box-title">\u26a1 '+t('build.ability')+'</div><div class="ability-name">Battle Bond</div><div class="ability-desc">After knocking out an opponent, Greninja transforms into Ash-Greninja, boosting its offensive stats and powering up Water Shuriken.</div></div>';
+        var stratHTML = '<div class="build-strategy-box"><div class="build-strategy-icon">\ud83d\udcd6</div><div class="build-strategy-text">'+(currentLang==='en'?"Ash-Greninja is a hyper-offensive sweeper. After activating Battle Bond, it outspeeds and KOs most threats with boosted Water Shuriken and coverage. Use Choice Specs for maximum power or Life Orb for flexibility. U-turn lets you pivot out of bad matchups.":"Ash-Greninja to hiperofensywny sweeper. Po aktywacji Battle Bond wyprzedza i nokautuje większość przeciwników wzmocnionym Water Shuriken i coverage. Choice Specs daje maksymalną moc, Life Orb elastyczność. U-turn pozwala pivotować z niekorzystnych starć.")+'</div></div>';
+        return '<div class="build-panel active" id="build-panel-'+i+'">'
+          +stratHTML
+          +'<div class="comp-grid-full">'+evHTML+'</div>'
+          +'<div class="comp-grid">'+natureHTML+itemHTML+abilityHTML+'</div>'
+          +'<div class="comp-box-title" style="margin-bottom:8px">\u2694 '+t('build.best4')+'</div>'
+          +'<div style="font-size:14px;color:#666;margin-bottom:8px">'+(currentLang==='en'?"Recommended moveset for Ash-Greninja:":"Rekomendowany moveset dla Ash-Greninja:")+'</div>'
+          +'<div class="best4-grid">'+movesHTML+'</div>'
+          +'<div class="comp-box-title" style="margin-top:18px">\ud83d\udcdd '+(currentLang==='en'?"Special Description":"Opis specjalny")+'</div>'
+          +'<div style="font-size:15px;color:#fff;background:#1a2233;padding:10px 14px;border-radius:8px;margin-top:6px">'+(currentLang==='en'?"Ash-Greninja is a unique transformation of Greninja, triggered by the Battle Bond ability after using Ash's Cap at max friendship. In this form, Greninja's Speed and Special Attack are greatly increased, and Water Shuriken becomes a devastating multi-hit move. This form is a tribute to the bond between Ash and his Greninja in the anime.":"Ash-Greninja to unikalna transformacja Greninji, aktywowana przez umiejętność Battle Bond po użyciu Czapki Asha przy maksymalnej przyjaźni. W tej formie Greninja zyskuje ogromny wzrost Szybkości i Specjalnego Ataku, a Water Shuriken staje się niszczycielskim ruchem wielohitowym. Forma ta jest hołdem dla więzi Asha i jego Greninji w anime.")+'</div>';
+      }
       return '<div class="build-panel'+(i===0?' active':'')+'" id="build-panel-'+i+'">'+generateBuild(statMap,pokemonTypes,moves,b.key,pokemonAbilities,abilityDetails)+'</div>';
     }).join('');
     var firstBuildLabel = builds.length > 0 ? builds[0].icon+' '+builds[0].label : r.label;
