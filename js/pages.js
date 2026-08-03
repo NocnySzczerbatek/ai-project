@@ -130,7 +130,81 @@ function showPage(page) {
 
   if (page === 'mega-z') {
     main.innerHTML = renderMegaZPage();
+    if (!window._megaZTab || window._megaZTab === 'mega') {
+      initMegaSprites();
+    }
   }
+}
+
+/* ── MEGA SPRITE ASYNC LOADER ─────────────────────────────────
+   Fetches official artwork URLs from PokeAPI for mega forms,
+   caches in sessionStorage, updates card images.
+   ──────────────────────────────────────────────────────────── */
+var _megaSpriteCache = null;
+
+function getMegaSpriteCache() {
+  if (_megaSpriteCache) return _megaSpriteCache;
+  try {
+    var s = sessionStorage.getItem('cob_mega_art_v2');
+    _megaSpriteCache = s ? JSON.parse(s) : {};
+  } catch(e) { _megaSpriteCache = {}; }
+  return _megaSpriteCache;
+}
+
+function saveMegaSpriteCache() {
+  try { sessionStorage.setItem('cob_mega_art_v2', JSON.stringify(_megaSpriteCache)); } catch(e) {}
+}
+
+function swapMegaImg(imgEl, slug) {
+  if (!imgEl) return;
+  var cache = getMegaSpriteCache();
+  if (cache[slug]) { imgEl.src = cache[slug]; return; }
+  fetch('https://pokeapi.co/api/v2/pokemon/' + slug)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var url = data.sprites && data.sprites.other && data.sprites.other['official-artwork']
+        && data.sprites.other['official-artwork'].front_default;
+      if (url) { cache[slug] = url; imgEl.src = url; saveMegaSpriteCache(); }
+    }).catch(function() {});
+}
+
+function initMegaSprites() {
+  var imgs = document.querySelectorAll('.mega-img[data-mega-slug]');
+  if (!imgs.length) return;
+  var cache = getMegaSpriteCache();
+
+  // Apply cached URLs immediately (no flicker)
+  imgs.forEach(function(img) {
+    var slug = img.dataset.megaSlug;
+    if (cache[slug]) img.src = cache[slug];
+  });
+
+  // Find slugs that still need fetching
+  var needed = [];
+  imgs.forEach(function(img) {
+    var slug = img.dataset.megaSlug;
+    if (!cache[slug]) needed.push(slug);
+  });
+  if (!needed.length) return;
+
+  // Fetch all missing slugs in parallel from PokeAPI
+  Promise.all(needed.map(function(slug) {
+    return fetch('https://pokeapi.co/api/v2/pokemon/' + slug)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var url = data.sprites && data.sprites.other && data.sprites.other['official-artwork']
+          && data.sprites.other['official-artwork'].front_default;
+        if (url) cache[slug] = url;
+      })
+      .catch(function() {});
+  })).then(function() {
+    saveMegaSpriteCache();
+    // Update all images with fetched URLs
+    document.querySelectorAll('.mega-img[data-mega-slug]').forEach(function(img) {
+      var url = cache[img.dataset.megaSlug];
+      if (url && img.src !== url) img.src = url;
+    });
+  });
 }
 
 /* ── MEGA / Z-MOVE PAGE RENDERER ── */
@@ -229,24 +303,22 @@ function renderMegaZPage() {
     html += '<div class="megaz-grid">';
     MEGA_EVO_DATA.filter(function(m){ return !m.special; }).forEach(function(m) {
       var dexSlug = toDex(m.sdn);
-      var sdnUrl = dexSlug ? 'https://play.pokemonshowdown.com/sprites/dex/' + dexSlug + '.png'
-                           : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + m.id + '.png';
-      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + m.id + '.png';
-      var dexSlugX = m.sdn ? toDex(m.sdn) : null;
-      var dexSlugY = m.formB && m.formB.sdn ? toDex(m.formB.sdn) : null;
       var color = TYPE_HEX[m.types[0]] || '#888';
       var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
-      // Click loads mega form (venusaur-mega), not base Pokémon
       var clickSlug = dexSlug || m.name + '-mega';
+      // Show base Pokémon artwork as placeholder; mega artwork loaded async via initMegaSprites()
+      var placeholder = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + m.id + '.png';
+      var fallback    = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + m.id + '.png';
       html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail(\''+clickSlug+'\',\''+m.megaName+'\')">';
-      html += '<div class="megaz-card-img"><img src="'+sdnUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+m.megaName+'" style="image-rendering:auto"/></div>';
+      html += '<div class="megaz-card-img"><img src="'+placeholder+'" onerror="this.src=\''+fallback+'\'" data-mega-slug="'+clickSlug+'" class="mega-img" loading="lazy" alt="'+m.megaName+'"/></div>';
       html += '<div class="megaz-card-body">';
       html += '<div class="megaz-card-name" style="color:'+color+'">'+m.megaName+'</div>';
-      if (m.formB && dexSlugX && dexSlugY) {
-        var baseUrl = 'https://play.pokemonshowdown.com/sprites/dex/';
+      if (m.formB) {
+        var slugX = dexSlug || m.name + '-mega-x';
+        var slugY = (m.formB && toDex(m.formB.sdn)) || m.name + '-mega-y';
         html += '<div class="megaz-card-forms">'
-          + '<span class="megaz-form-tag" style="cursor:pointer" onclick="event.stopPropagation();this.closest(\'.megaz-card\').querySelector(\'img\').src=\''+baseUrl+dexSlugX+'.png\'">X</span>'
-          + '<span class="megaz-form-tag" style="cursor:pointer;margin-left:4px" onclick="event.stopPropagation();this.closest(\'.megaz-card\').querySelector(\'img\').src=\''+baseUrl+dexSlugY+'.png\'">Y</span>'
+          + '<span class="megaz-form-tag" style="cursor:pointer" onclick="event.stopPropagation();swapMegaImg(this.closest(\'.megaz-card\').querySelector(\'.mega-img\'),\''+slugX+'\')">X</span>'
+          + '<span class="megaz-form-tag" style="cursor:pointer;margin-left:4px" onclick="event.stopPropagation();swapMegaImg(this.closest(\'.megaz-card\').querySelector(\'.mega-img\'),\''+slugY+'\')">Y</span>'
           + '</div>';
       }
       html += '<div class="megaz-card-types">'+typeBadges+'</div>';
