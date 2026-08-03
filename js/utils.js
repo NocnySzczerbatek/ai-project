@@ -32,6 +32,149 @@ function switchBuildTab(btn, panelId) {
     var h2 = section.querySelector('h2');
     if (h2) h2.innerHTML = '\uD83C\uDFC6 ' + t('sec.comp') + ' \u2014 ' + label;
   }
+  // Update IV recommendations for the selected build type
+  var buildType = btn.getAttribute('data-build-type');
+  if (buildType && window._detailStatMap) {
+    updateIVSectionForBuild(buildType);
+  }
+}
+
+/* ── Dynamiczna aktualizacja sekcji IV po zmianie buildu ── */
+function updateIVSectionForBuild(buildType) {
+  var statMap = window._detailStatMap;
+  if (!statMap) return;
+  var ivSection = document.querySelector('.iv-section');
+  if (!ivSection) return;
+
+  var atk   = statMap['attack'] || 0;
+  var spatk = statMap['special-attack'] || 0;
+  var def   = statMap['defense'] || 0;
+  var spdef = statMap['special-defense'] || 0;
+  var spe   = statMap['speed'] || 0;
+  var isPhys = atk >= spatk + 15;
+  var isFast = spe >= 80;
+  var isTR   = spe <= 50;
+  var isTank = (def + spdef) / 2 >= 90 && spe < 80;
+
+  var ORDER = ['hp','attack','defense','special-attack','special-defense','speed'];
+  var targets = {};
+
+  if (buildType === 'defensive') {
+    var physWall = def >= spdef;
+    targets['hp']              = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Key for survival':'Kluczowe dla przetrwania'};
+    targets['defense']         = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Defensive priority':'Priorytet obronny'};
+    targets['special-defense'] = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Defensive priority':'Priorytet obronny'};
+    targets['attack']          = {val:'0',       color:'#888',    prio:false, note: currentLang==='en'?'Minimize Foul Play':'Minimalizacja Foul Play'};
+    targets['special-attack']  = {val:'0',       color:'#888',    prio:false, note: currentLang==='en'?'Not used offensively':'Nie u\u017cywasz ofensywnie'};
+    targets['speed']           = {val:'\u226520',color:'#f8d030', prio:false, note: currentLang==='en'?'Secondary for wall':'Drugorz\u0119dne dla walla'};
+
+  } else if (buildType === 'support') {
+    targets['hp']              = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Always useful':'Zawsze przydatne'};
+    targets['defense']         = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Bulk for utility':'Wytrzyma\u0142o\u015b\u0107 dru\u017cynowa'};
+    targets['special-defense'] = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Bulk for utility':'Wytrzyma\u0142o\u015b\u0107 dru\u017cynowa'};
+    targets['attack']          = {val:'0',       color:'#888',    prio:false, note: currentLang==='en'?'Not used':'Nie u\u017cywasz'};
+    targets['special-attack']  = {val:'0',       color:'#888',    prio:false, note: currentLang==='en'?'Not used':'Nie u\u017cywasz'};
+    targets['speed']           = {val:'\u226520',color:'#f8d030', prio:false, note: currentLang==='en'?'Secondary':'Drugorz\u0119dne'};
+
+  } else if (buildType === 'physical') {
+    targets['hp']              = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Always useful':'Zawsze przydatne'};
+    targets['attack']          = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Main damage source':'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'};
+    targets['defense']         = isTank ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Worth maxing':'Warto maksowa\u0107'} : {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Przydatne'};
+    targets['special-attack']  = {val:'0',       color:'#888',    prio:false, note: currentLang==='en'?'Not used':'Nie u\u017cywasz'};
+    targets['special-defense'] = isTank ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Worth maxing':'Warto maksowa\u0107'} : {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Przydatne'};
+    targets['speed']           = isTR ? {val:'0',color:'#aaa',prio:false,note:'Trick Room'} : isFast ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Key':'Kluczowe'} : {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Pomocne'};
+
+  } else if (buildType === 'special') {
+    targets['hp']              = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Always useful':'Zawsze przydatne'};
+    targets['attack']          = {val:'0',       color:'#888',    prio:false, note: currentLang==='en'?'Minimize Foul Play/Confusion':'Minimalizacja Foul Play/Confusion'};
+    targets['defense']         = isTank ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Worth maxing':'Warto maksowa\u0107'} : {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Przydatne'};
+    targets['special-attack']  = {val:'31',      color:'#55ff55', prio:true,  note: currentLang==='en'?'Main damage source':'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'};
+    targets['special-defense'] = isTank ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Worth maxing':'Warto maksowa\u0107'} : {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Przydatne'};
+    targets['speed']           = isTR ? {val:'0',color:'#aaa',prio:false,note:'Trick Room'} : isFast ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Key':'Kluczowe'} : {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Pomocne'};
+
+  } else if (buildType === 'mixed') {
+    targets['hp']              = {val:'31',      color:'#55ff55', prio:true, note: currentLang==='en'?'Always useful':'Zawsze przydatne'};
+    targets['attack']          = {val:'31',      color:'#55ff55', prio:true, note: currentLang==='en'?'Physical coverage':'Fizyczne pokrycie'};
+    targets['defense']         = {val:'\u226520',color:'#f8d030', prio:false,note: currentLang==='en'?'Helpful':'Przydatne'};
+    targets['special-attack']  = {val:'31',      color:'#55ff55', prio:true, note: currentLang==='en'?'Special coverage':'Specjalne pokrycie'};
+    targets['special-defense'] = {val:'\u226520',color:'#f8d030', prio:false,note: currentLang==='en'?'Helpful':'Przydatne'};
+    targets['speed']           = {val:'31',      color:'#55ff55', prio:true, note: currentLang==='en'?'Key':'Kluczowe'};
+
+  } else { // niche
+    if (isTR) {
+      targets['hp']              = {val:'31', color:'#55ff55', prio:true,  note: currentLang==='en'?'Bulk for Trick Room':'Wytrzyma\u0142o\u015b\u0107 pod TR'};
+      targets['attack']          = isPhys ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Max power under TR':'Maks moc pod TR'} : {val:'0',color:'#888',prio:false,note:currentLang==='en'?'Not used':'Nie u\u017cywasz'};
+      targets['defense']         = {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Przydatne'};
+      targets['special-attack']  = !isPhys ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Max power under TR':'Maks moc pod TR'} : {val:'0',color:'#888',prio:false,note:currentLang==='en'?'Not used':'Nie u\u017cywasz'};
+      targets['special-defense'] = {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Przydatne'};
+      targets['speed']           = {val:'0', color:'#aaa', prio:false, note: currentLang==='en'?'Trick Room — min speed':'Trick Room \u2014 min szybko\u015b\u0107'};
+    } else {
+      targets['hp']              = {val:'31',      color:'#55ff55', prio:true, note: currentLang==='en'?'Always useful':'Zawsze przydatne'};
+      targets['attack']          = isPhys ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Main damage source':'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'} : {val:'0',color:'#888',prio:false,note:currentLang==='en'?'Not used':'Nie u\u017cywasz'};
+      targets['defense']         = {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Przydatne'};
+      targets['special-attack']  = !isPhys ? {val:'31',color:'#55ff55',prio:true,note:currentLang==='en'?'Main damage source':'G\u0142\u00f3wne \u017ar\u00f3d\u0142o obra\u017ce\u0144'} : {val:'0',color:'#888',prio:false,note:currentLang==='en'?'Not used':'Nie u\u017cywasz'};
+      targets['special-defense'] = {val:'\u226520',color:'#f8d030',prio:false,note:currentLang==='en'?'Helpful':'Przydatne'};
+      targets['speed']           = {val:'31',      color:'#55ff55',prio:true, note: currentLang==='en'?'Max speed':'Maks szybko\u015b\u0107'};
+    }
+  }
+
+  // Update each IV row in the DOM
+  ORDER.forEach(function(sn) {
+    var tgt = targets[sn];
+    if (!tgt) return;
+    var row = document.getElementById('iv-row-' + sn);
+    if (!row) return;
+
+    row.setAttribute('data-target-val', tgt.val);
+    row.classList.toggle('iv-row-priority', !!tgt.prio);
+
+    var prioIcon = row.querySelector('.iv-priority');
+    if (prioIcon) prioIcon.textContent = tgt.prio ? '\u2b50' : '\u25aa';
+
+    var targetSpan = row.querySelector('.iv-target');
+    if (targetSpan) {
+      targetSpan.style.color = tgt.color;
+      targetSpan.textContent = 'CEL: ' + tgt.val;
+      targetSpan.title = tgt.note;
+    }
+
+    var slider = row.querySelector('input[type="range"]');
+    if (slider) {
+      var newVal = tgt.val === '0' ? 0 : 31;
+      slider.value = newVal;
+      syncIVSlider(slider);
+    }
+  });
+
+  // Update summary line
+  var summaryDiv = ivSection.querySelector('.iv-summary');
+  if (summaryDiv) {
+    var must31 = ORDER.filter(function(sn){ return targets[sn] && targets[sn].val === '31'; }).map(function(sn){
+      return '<span style="color:'+(STAT_COLORS[sn]||'#fff')+'">'+(STAT_NAMES[sn]||sn)+'</span>';
+    });
+    var must0 = ORDER.filter(function(sn){ return targets[sn] && targets[sn].val === '0'; }).map(function(sn){
+      return '<span style="color:#888">'+(STAT_NAMES[sn]||sn)+'</span>';
+    });
+    var line = (currentLang==='en'?'Target <b style="color:#55ff55">31</b>: ':'Celuj w <b style="color:#55ff55">31</b>: ') + (must31.length ? must31.join(', ') : '\u2014');
+    if (must0.length) line += '<br>'+(currentLang==='en'?'Leave at <b style="color:#888">0</b>: ':'Zostaw na <b style="color:#888">0</b>: ') + must0.join(', ');
+    summaryDiv.innerHTML = line;
+  }
+
+  // Update role badge
+  var roleBadge = ivSection.querySelector('.iv-role-badge');
+  if (roleBadge) {
+    var roleLabels = {
+      physical:  currentLang==='en'?'\u2694 Physical Attacker':'\u2694 Fizyczny Atakuj\u0105cy',
+      special:   currentLang==='en'?'\u2728 Special Attacker':'\u2728 Specjalny Atakuj\u0105cy',
+      defensive: currentLang==='en'?'\ud83d\udee1 Defensive':'\ud83d\udee1 Defensywny',
+      mixed:     currentLang==='en'?'\u2694\u2728 Mixed':'\u2694\u2728 Mieszany',
+      support:   currentLang==='en'?'\ud83d\udc9a Support':'\ud83d\udc9a Wsparcie',
+      niche:     currentLang==='en'?'\ud83c\udfaf Niche':'\ud83c\udfaf Niszowy'
+    };
+    roleBadge.textContent = (currentLang==='en'?'Role: ':'Rola: ') + (roleLabels[buildType] || buildType);
+  }
+
+  window._detailBuildType = buildType;
 }
 
 /* ── Hamburger menu mobilne ── */

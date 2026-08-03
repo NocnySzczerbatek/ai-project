@@ -211,6 +211,8 @@ const TR = {
   'welcome.howUse':  {pl:'Jak u\u017cywa\u0107 bazy?',en:'How to use the database?'},
   'welcome.friend':  {pl:'Przyja\u017a\u0144 (/checkfriendship)',en:'Friendship (/checkfriendship)'},
   'welcome.link':    {pl:'Link Cable (Wymiana)',en:'Link Cable (Trade)'},
+  'nav.megaz':        {pl:'Mega / Z-Moves',en:'Mega / Z-Moves'},
+  'sec.megaz':        {pl:'Mega Ewolucje i Ruchy Z',en:'Mega Evolutions & Z-Moves'},
   'nav.typechart':   {pl:'Kalkulator S\u0142abo\u015bci',en:'Weakness Checker'},
   'sec.typechart':   {pl:'\u2696 Kalkulator S\u0142abo\u015bci',en:'\u2696 Weakness Checker'},
   'tc.intro':        {pl:'Wybierz typ(y) swojego Pok\u00e9mona, aby sprawdzi\u0107 na co jest s\u0142aby, odporny lub ca\u0142kowicie immunizowany. Obs\u0142uguje podw\u00f3jne typy z mno\u017cnikami \u00d74!',en:'Select your Pok\u00e9mon\'s type(s) to check weaknesses, resistances and immunities. Supports dual types with \u00d74 multipliers!'},

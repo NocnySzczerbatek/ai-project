@@ -15,12 +15,12 @@ async function loadDetail(id, name) {
   try {
     var data = detailCache[id];
     if (!data) {
-      var results = await Promise.all([
-        fetch('https://pokeapi.co/api/v2/pokemon/'+id),
-        fetch('https://pokeapi.co/api/v2/pokemon-species/'+id)
-      ]);
-      var p = await results[0].json();
-      var s = await results[1].json();
+      var pRes = await fetch('https://pokeapi.co/api/v2/pokemon/'+id);
+      var p = await pRes.json();
+      // Use species.url from the pokemon response — handles regional forms (IDs > 1025)
+      var speciesUrl = p.species && p.species.url ? p.species.url : 'https://pokeapi.co/api/v2/pokemon-species/'+id;
+      var sRes = await fetch(speciesUrl);
+      var s = await sRes.json();
       data = { p:p, s:s };
       detailCache[id] = data;
     }
@@ -946,7 +946,7 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
     var tabsHTML = builds.map(function(b,i){
       var bestStar = i===0 ? '<span class="best-choice-star">\u2b50</span>' : '';
       var bestBadge = i===0 ? ' <span class="best-choice-badge">'+t('build.bestChoice')+'</span>' : '';
-      return '<button class="build-tab'+(i===0?' active':'')+'" data-build-label="'+b.icon+' '+b.label+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">' +bestStar+(i+1)+'. '+b.icon+' '+b.label+bestBadge+'</button>';
+      return '<button class="build-tab'+(i===0?' active':'')+'" data-build-label="'+b.icon+' '+b.label+'" data-build-type="'+b.key+'" onclick="switchBuildTab(this,\'build-panel-'+i+'\')">' +bestStar+(i+1)+'. '+b.icon+' '+b.label+bestBadge+'</button>';
     }).join('');
     // Special handling for Ash-Greninja
     var isAshGreninja = false;
@@ -1095,6 +1095,9 @@ function renderDetail(p, s, evoChain, name, abilityDetails) {
   // Compute best build type + nature for IV section sync
   var _statMapForBuild = {}; p.stats.forEach(function(s){_statMapForBuild[s.stat.name]=s.base_stat;});
   var bestInfo = getBestBuildInfo(_statMapForBuild);
+  // Expose globally so IV section can update on build tab switch
+  window._detailStatMap = _statMapForBuild;
+  window._detailBuildType = bestInfo.buildType;
 
   document.getElementById('main-area').innerHTML =
     '<div class="page-title"><span>#'+String(p.id).padStart(3,'0')+' '+p.name.toUpperCase()+' <button class="fav-star'+(isFav?' active':'')+'" id="fav-star-btn" onclick="toggleFavorite('+p.id+',\''+p.name+'\')" title="'+(currentLang==='en'?'Add to favorites':'Dodaj do ulubionych')+'">\u2b50</button></span></div>'
