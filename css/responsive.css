@@ -27,10 +27,8 @@ html, body {
     display: flex !important;
     flex-wrap: nowrap;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     gap: 6px;
     padding: 8px 0 6px;
-    scrollbar-width: none;
     -ms-overflow-style: none;
     scroll-snap-type: x mandatory;
   }
@@ -88,7 +86,7 @@ html, body {
   }
 
   /* Tabela ruchów */
-  .move-table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .move-table { display: block; max-width: 100%; overflow-x: auto; }
 
   /* Odznaki */
   .mc-badge { font-size: 12px; padding: 2px 6px; }
@@ -106,8 +104,6 @@ html, body {
     display: flex;
     flex-wrap: nowrap !important;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
     -ms-overflow-style: none;
     gap: 0;
     padding-bottom: 2px;
@@ -127,8 +123,6 @@ html, body {
     display: flex;
     flex-wrap: nowrap !important;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
   }
   .moves-tabs::-webkit-scrollbar { display: none; }
   .moves-tab {
@@ -277,9 +271,7 @@ html, body {
   .evo-chain {
     gap: 8px; padding: 10px 0;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     flex-wrap: nowrap;
-    scrollbar-width: none;
   }
   .evo-chain::-webkit-scrollbar { display: none; }
   .evo-item { width: 90px; height: 130px; padding: 8px 4px 6px; flex-shrink: 0; }
@@ -347,8 +339,6 @@ html, body {
   .gen-filters {
     flex-wrap: nowrap;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
     padding: 8px 12px;
     gap: 4px;
   }
