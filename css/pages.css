@@ -388,6 +388,15 @@
   text-align: center; font-family: var(--font-main);
   transition: color 0.2s, background 0.2s;
 }
+.megaz-card-special {
+  border-radius: 12px;
+}
+.megaz-special-banner {
+  background: linear-gradient(90deg, rgba(0,200,255,0.18), rgba(0,200,255,0.06));
+  border-bottom: 1px solid rgba(0,200,255,0.3);
+  color: #00c8ff; font-family: var(--font-pixel); font-size: 8px;
+  padding: 6px 14px; letter-spacing: 1px; text-align: center;
+}
 .megaz-card:hover .megaz-card-footer { color: #aaa; background: rgba(80,60,140,0.3); }
 .zmove-card .megaz-card-img { background: rgba(0,0,0,0.35); }
 .megaz-region-badge {
