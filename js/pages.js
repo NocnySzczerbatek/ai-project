@@ -153,43 +153,48 @@ function renderMegaZPage() {
       ? '<strong>Mega Evolutions</strong> &mdash; temporary power-ups activated by a Mega Stone during battle (Gen VI). Click any card to open full Build, IV Calculator and Competitive recommendations.'
       : '<strong>Mega Ewolucje</strong> &mdash; tymczasowe wzmocnienia aktywowane przez Mega Kamie\u0144 podczas walki (Gen VI). Kliknij kart\u0119, by otworzy\u0107 Build, Kalkulator IV i rekomendacje Competitive.';
     html += '</div>';
-    html += '<div class="megaz-grid">';
-    // Ash-Greninja special card first
+    // Convert sdn (showdown ID: lucariomega) → dex slug (lucario-mega) for /sprites/dex/
+    function toDex(sdn) {
+      if (!sdn) return null;
+      if (sdn.endsWith('megax')) return sdn.slice(0,-5) + '-mega-x';
+      if (sdn.endsWith('megay')) return sdn.slice(0,-5) + '-mega-y';
+      if (sdn.endsWith('mega'))  return sdn.slice(0,-4) + '-mega';
+      return sdn;
+    }
+    // Ash-Greninja special card — outside the grid
     var ashM = MEGA_EVO_DATA.find(function(m){ return m.special; });
     if (ashM) {
-      html += '<div class="megaz-card megaz-card-special" style="border-color:#00c8ff88;box-shadow:0 0 18px #00c8ff33;grid-column:1/-1;max-width:340px" onclick="loadDetail(\''+ashM.id+'\',\''+ashM.megaName+'\')">';
-      html += '<div class="megaz-special-banner">\u2728 SPECJALNA FORMA \u2022 Battle Bond</div>';
-      html += '<div style="display:flex;align-items:center;gap:14px;padding:10px 14px 0">';
-      html += '<img src="https://play.pokemonshowdown.com/sprites/dex/greninja-ash.png" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png\'" loading="lazy" alt="Ash-Greninja" style="width:80px;height:80px;image-rendering:auto"/>';
-      html += '<div class="megaz-card-body" style="padding:0">';
-      html += '<div class="megaz-card-name" style="color:#00c8ff">' + ashM.megaName + '</div>';
-      html += '<div class="megaz-card-types">' + ashM.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('') + '</div>';
-      html += '<div class="megaz-card-row"><span class="megaz-label">'+(currentLang==='en'?'Ability':'Zdolno\u015b\u0107')+'</span><span class="megaz-val" style="color:#00c8ff">Battle Bond</span></div>';
-      html += '<div class="megaz-card-row"><span class="megaz-label">BST</span><span class="megaz-bst" style="color:#00c8ff">'+ashM.bst+'</span></div>';
-      html += '</div></div>';
       var note = typeof ashM.specialNote==='object' ? (ashM.specialNote[currentLang]||ashM.specialNote.pl) : '';
-      html += '<div class="megaz-card-desc" style="padding:8px 14px;border-top:1px solid #00c8ff22;margin-top:8px">'+note+'</div>';
-      html += '<div class="megaz-card-footer">\ud83d\udccb '+(currentLang==='en'?'Full Build & Calculator':'Pe\u0142ny Build i Kalkulator')+'</div>';
+      html += '<div class="megaz-ash-card" onclick="loadDetail(\'ash-greninja\',\'Ash-Greninja\')">';
+      html += '<div class="megaz-ash-left">';
+      html += '<img src="https://play.pokemonshowdown.com/sprites/dex/greninja-ash.png" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png\'" loading="lazy" alt="Ash-Greninja"/>';
+      html += '</div>';
+      html += '<div class="megaz-ash-body">';
+      html += '<div class="megaz-ash-banner">\u2728 SPECJALNA FORMA &mdash; Battle Bond</div>';
+      html += '<div class="megaz-ash-name">Ash-Greninja</div>';
+      html += '<div class="megaz-ash-types">' + ashM.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('') + '</div>';
+      html += '<div class="megaz-ash-desc">'+note+'</div>';
+      html += '</div>';
+      html += '<div class="megaz-ash-right">';
+      html += '<div class="megaz-ash-bst">BST <strong>'+ashM.bst+'</strong></div>';
+      html += '<div class="megaz-ash-ability">Battle Bond</div>';
+      html += '<div class="megaz-ash-cta">\ud83d\udccb '+(currentLang==='en'?'Full Build & Calculator':'Pe\u0142ny Build i Kalkulator')+'</div>';
+      html += '</div>';
       html += '</div>';
     }
+    html += '<div class="megaz-grid">';
     MEGA_EVO_DATA.filter(function(m){ return !m.special; }).forEach(function(m) {
-      // Convert sdn (showdown ID: lucariomega) → dex slug (lucario-mega) for /sprites/dex/
-      function toDex(sdn) {
-        if (!sdn) return null;
-        if (sdn.endsWith('megax')) return sdn.slice(0,-5) + '-mega-x';
-        if (sdn.endsWith('megay')) return sdn.slice(0,-5) + '-mega-y';
-        if (sdn.endsWith('mega'))  return sdn.slice(0,-4) + '-mega';
-        return sdn;
-      }
       var dexSlug = toDex(m.sdn);
       var sdnUrl = dexSlug ? 'https://play.pokemonshowdown.com/sprites/dex/' + dexSlug + '.png'
                            : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + m.id + '.png';
       var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + m.id + '.png';
-      var dexSlugX = m.formB && m.sdn ? toDex(m.sdn) : null;
+      var dexSlugX = m.sdn ? toDex(m.sdn) : null;
       var dexSlugY = m.formB && m.formB.sdn ? toDex(m.formB.sdn) : null;
       var color = TYPE_HEX[m.types[0]] || '#888';
       var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
-      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail('+m.id+',\''+m.name+'\')">';
+      // Click loads mega form (venusaur-mega), not base Pokémon
+      var clickSlug = dexSlug || m.name + '-mega';
+      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail(\''+clickSlug+'\',\''+m.megaName+'\')">';
       html += '<div class="megaz-card-img"><img src="'+sdnUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+m.megaName+'" style="image-rendering:auto"/></div>';
       html += '<div class="megaz-card-body">';
       html += '<div class="megaz-card-name" style="color:'+color+'">'+m.megaName+'</div>';
@@ -197,7 +202,7 @@ function renderMegaZPage() {
         var baseUrl = 'https://play.pokemonshowdown.com/sprites/dex/';
         html += '<div class="megaz-card-forms">'
           + '<span class="megaz-form-tag" style="cursor:pointer" onclick="event.stopPropagation();this.closest(\'.megaz-card\').querySelector(\'img\').src=\''+baseUrl+dexSlugX+'.png\'">X</span>'
-          + '<span class="megaz-form-tag" style="cursor:pointer" onclick="event.stopPropagation();this.closest(\'.megaz-card\').querySelector(\'img\').src=\''+baseUrl+dexSlugY+'.png\'">Y</span>'
+          + '<span class="megaz-form-tag" style="cursor:pointer;margin-left:4px" onclick="event.stopPropagation();this.closest(\'.megaz-card\').querySelector(\'img\').src=\''+baseUrl+dexSlugY+'.png\'">Y</span>'
           + '</div>';
       }
       html += '<div class="megaz-card-types">'+typeBadges+'</div>';
