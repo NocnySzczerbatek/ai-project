@@ -366,52 +366,6 @@ var MEGA_EVO_DATA = [
   // ── SPECJALNE FORMY ──
   {id:'ash-greninja', name:'ash-greninja', megaName:'Ash-Greninja', types:['water','dark'], ability:'Battle Bond', bst:640, stone:'Battle Bond \u2014 255 Friendship + Ash Cap', sdn:'greninjaash', fid:10087, special:true, specialNote:{pl:'Aktywuj Battle Bond \u2014 Greninja z Czapk\u0105 Asha przy 255 Friendship. Po nokaucie zamienia si\u0119 w Ash-Greninja z gigantycznym Water Shuriken.',en:'Activate Battle Bond \u2014 Greninja with Ash\'s Cap at 255 Friendship. After a KO it transforms, boosting Speed/SpAtk and powering Water Shuriken.'}}
 ];
-  {id:9,  name:'blastoise',  megaName:'Mega Blastoise',       types:['water'],              ability:'Mega Launcher', bst:630, stone:'Blastoisinite',   sdn:'blastoisemega'},
-  {id:15, name:'beedrill',   megaName:'Mega Beedrill',        types:['bug','poison'],       ability:'Adaptability',  bst:495, stone:'Beedrillite',     sdn:'beedrillmega'},
-  {id:18, name:'pidgeot',    megaName:'Mega Pidgeot',         types:['normal','flying'],    ability:'No Guard',      bst:579, stone:'Pidgeotite',      sdn:'pidgeotmega'},
-  {id:65, name:'alakazam',   megaName:'Mega Alakazam',        types:['psychic'],            ability:'Trace',         bst:590, stone:'Alakazite',       sdn:'alakazammega'},
-  {id:80, name:'slowbro',    megaName:'Mega Slowbro',         types:['water','psychic'],    ability:'Shell Armor',   bst:590, stone:'Slowbronite',     sdn:'slowbromega'},
-  {id:94, name:'gengar',     megaName:'Mega Gengar',          types:['ghost','poison'],     ability:'Shadow Tag',    bst:600, stone:'Gengarite',       sdn:'gengarmega'},
-  {id:115,name:'kangaskhan', megaName:'Mega Kangaskhan',      types:['normal'],             ability:'Parental Bond', bst:590, stone:'Kangaskhanite',   sdn:'kangaskhanmega'},
-  {id:127,name:'pinsir',     megaName:'Mega Pinsir',          types:['bug','flying'],       ability:'Aerilate',      bst:600, stone:'Pinsirite',       sdn:'pinsirmega'},
-  {id:130,name:'gyarados',   megaName:'Mega Gyarados',        types:['water','dark'],       ability:'Mold Breaker',  bst:640, stone:'Gyaradosite',     sdn:'gyaradosmega'},
-  {id:142,name:'aerodactyl', megaName:'Mega Aerodactyl',      types:['rock','flying'],      ability:'Tough Claws',   bst:615, stone:'Aerodactylite',   sdn:'aerodactylmega'},
-  {id:150,name:'mewtwo',     megaName:'Mega Mewtwo X',        types:['psychic','fighting'], ability:'Steadfast',     bst:780, stone:'Mewtwonite X',    sdn:'mewtwomegax', formB:{megaName:'Mega Mewtwo Y',types:['psychic'],ability:'Insomnia',bst:780,stone:'Mewtwonite Y',sdn:'mewtwomegay'}},
-  {id:181,name:'ampharos',   megaName:'Mega Ampharos',        types:['electric','dragon'],  ability:'Mold Breaker',  bst:610, stone:'Ampharosite',     sdn:'ampharosmega'},
-  {id:208,name:'steelix',    megaName:'Mega Steelix',         types:['steel','ground'],     ability:'Sand Force',    bst:610, stone:'Steelixite',      sdn:'steelixmega'},
-  {id:212,name:'scizor',     megaName:'Mega Scizor',          types:['bug','steel'],        ability:'Technician',    bst:600, stone:'Scizorite',       sdn:'scizormega'},
-  {id:214,name:'heracross',  megaName:'Mega Heracross',       types:['bug','fighting'],     ability:'Skill Link',    bst:600, stone:'Heracronite',     sdn:'heracrossmega'},
-  {id:228,name:'houndoom',   megaName:'Mega Houndoom',        types:['dark','fire'],        ability:'Solar Power',   bst:580, stone:'Houndoominite',   sdn:'houndoommega'},
-  {id:248,name:'tyranitar',  megaName:'Mega Tyranitar',       types:['rock','dark'],        ability:'Sand Stream',   bst:700, stone:'Tyranitarite',    sdn:'tyranitarmega'},
-  {id:254,name:'sceptile',   megaName:'Mega Sceptile',        types:['grass','dragon'],     ability:'Lightning Rod', bst:630, stone:'Sceptilite',      sdn:'sceptilemega'},
-  {id:257,name:'blaziken',   megaName:'Mega Blaziken',        types:['fire','fighting'],    ability:'Speed Boost',   bst:630, stone:'Blazikenite',     sdn:'blazikenmega'},
-  {id:260,name:'swampert',   megaName:'Mega Swampert',        types:['water','ground'],     ability:'Swift Swim',    bst:635, stone:'Swampertite',     sdn:'swampertmega'},
-  {id:282,name:'gardevoir',  megaName:'Mega Gardevoir',       types:['psychic','fairy'],    ability:'Pixilate',      bst:618, stone:'Gardevoirite',    sdn:'gardevoirmega'},
-  {id:302,name:'sableye',    megaName:'Mega Sableye',         types:['dark','ghost'],       ability:'Magic Bounce',  bst:480, stone:'Sableyite',       sdn:'sableyemega'},
-  {id:303,name:'mawile',     megaName:'Mega Mawile',          types:['steel','fairy'],      ability:'Huge Power',    bst:480, stone:'Mawilite',        sdn:'mawilemega'},
-  {id:306,name:'aggron',     megaName:'Mega Aggron',          types:['steel'],              ability:'Filter',        bst:630, stone:'Aggronite',       sdn:'aggronmega'},
-  {id:308,name:'medicham',   megaName:'Mega Medicham',        types:['fighting','psychic'], ability:'Pure Power',    bst:510, stone:'Medichamite',     sdn:'medichammega'},
-  {id:310,name:'manectric',  megaName:'Mega Manectric',       types:['electric'],           ability:'Intimidate',    bst:575, stone:'Manectite',       sdn:'manectricmega'},
-  {id:319,name:'sharpedo',   megaName:'Mega Sharpedo',        types:['water','dark'],       ability:'Strong Jaw',    bst:560, stone:'Sharpedonite',    sdn:'sharpedomega'},
-  {id:323,name:'camerupt',   megaName:'Mega Camerupt',        types:['fire','ground'],      ability:'Sheer Force',   bst:560, stone:'Cameruptite',     sdn:'cameruptmega'},
-  {id:334,name:'altaria',    megaName:'Mega Altaria',         types:['dragon','fairy'],     ability:'Pixilate',      bst:590, stone:'Altarianite',     sdn:'altariamega'},
-  {id:354,name:'banette',    megaName:'Mega Banette',         types:['ghost'],              ability:'Prankster',     bst:555, stone:'Banettite',       sdn:'banettemega'},
-  {id:359,name:'absol',      megaName:'Mega Absol',           types:['dark'],               ability:'Magic Bounce',  bst:565, stone:'Absolite',        sdn:'absolmega'},
-  {id:362,name:'glalie',     megaName:'Mega Glalie',          types:['ice'],                ability:'Refrigerate',   bst:580, stone:'Glalitite',       sdn:'glaliemega'},
-  {id:373,name:'salamence',  megaName:'Mega Salamence',       types:['dragon','flying'],    ability:'Aerilate',      bst:700, stone:'Salamencite',     sdn:'salamencemega'},
-  {id:376,name:'metagross',  megaName:'Mega Metagross',       types:['steel','psychic'],    ability:'Tough Claws',   bst:700, stone:'Metagrossite',    sdn:'metagrossmega'},
-  {id:380,name:'latias',     megaName:'Mega Latias',          types:['dragon','psychic'],   ability:'Levitate',      bst:700, stone:'Latiasite',       sdn:'latiasmega'},
-  {id:381,name:'latios',     megaName:'Mega Latios',          types:['dragon','psychic'],   ability:'Levitate',      bst:700, stone:'Latiosite',       sdn:'latiosmega'},
-  {id:384,name:'rayquaza',   megaName:'Mega Rayquaza',        types:['dragon','flying'],    ability:'Delta Stream',  bst:780, stone:'Dragon Ascent',   sdn:'rayquazamega'},
-  {id:428,name:'lopunny',    megaName:'Mega Lopunny',         types:['normal','fighting'],  ability:'Scrappy',       bst:580, stone:'Lopunnite',       sdn:'lopunnymega'},
-  {id:448,name:'lucario',    megaName:'Mega Lucario',         types:['fighting','steel'],   ability:'Adaptability',  bst:625, stone:'Lucarionite',     sdn:'lucariomega'},
-  {id:460,name:'abomasnow',  megaName:'Mega Abomasnow',       types:['grass','ice'],        ability:'Snow Warning',  bst:594, stone:'Abomasite',       sdn:'abomasnowmega'},
-  {id:475,name:'gallade',    megaName:'Mega Gallade',         types:['psychic','fighting'], ability:'Inner Focus',   bst:618, stone:'Galladite',       sdn:'gallademega'},
-  {id:531,name:'audino',     megaName:'Mega Audino',          types:['normal','fairy'],     ability:'Healer',        bst:545, stone:'Audinite',        sdn:'audinomega'},
-  {id:719,name:'diancie',    megaName:'Mega Diancie',         types:['rock','fairy'],       ability:'Magic Bounce',  bst:700, stone:'Diancite',        sdn:'dianciemega'},
-  // ── SPECJALNE FORMY ──
-  {id:'ash-greninja', name:'ash-greninja', megaName:'Ash-Greninja', types:['water','dark'], ability:'Battle Bond', bst:640, stone:'Battle Bond \u2014 255 Friendship + Ash Cap', sdn:'greninjaash', special:true, specialNote:{pl:'Aktywuj Battle Bond \u2014 Greninja z Czapk\u0105 Asha przy 255 Friendship. Po nokaucie zamienia si\u0119 w Ash-Greninja z gigantycznym Water Shuriken.',en:'Activate Battle Bond \u2014 Greninja with Ash\'s Cap at 255 Friendship. After a KO it transforms, boosting Speed/SpAtk and powering Water Shuriken.'}}
-];
 
 /* ================================================================
    Z-MOVE DATA (Ekskluzywne Ruchy Z)
