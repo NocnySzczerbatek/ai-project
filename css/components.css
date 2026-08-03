@@ -105,7 +105,7 @@
   background: rgba(26,26,60,0.8); color: var(--aqua); border: 2px solid rgba(80,130,255,0.35);
   padding: 8px 16px; cursor: pointer; transition: all 0.15s;
   border-radius: 8px; text-align: center; position: relative; z-index: 10;
-  backdrop-filter: blur(6px); box-shadow: 0 0 8px rgba(80,130,255,0.12);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 8px rgba(80,130,255,0.12);
 }
 .copy-link-btn:hover { background: rgba(42,42,80,0.9); box-shadow: 0 0 14px rgba(80,130,255,0.25); }
 

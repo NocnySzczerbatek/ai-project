@@ -12,7 +12,7 @@
 .welcome-card {
   background: rgba(45,45,55,0.65);
   border: 2px solid rgba(85,255,85,0.25); border-radius: 12px;
-  padding: 18px; backdrop-filter: blur(8px);
+  padding: 18px; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   box-shadow: 0 0 8px rgba(85,255,85,0.08);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -93,7 +93,7 @@
   background: rgba(58,58,58,0.6);
   border: 2px solid rgba(220,180,60,0.35); border-radius: 10px;
   padding: 14px; display: flex; gap: 12px; align-items: flex-start;
-  backdrop-filter: blur(8px); box-shadow: 0 0 8px rgba(220,180,60,0.1);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 0 8px rgba(220,180,60,0.1);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .item-card:hover {
@@ -128,7 +128,7 @@
   background: rgba(40,60,40,0.6);
   border: 2px solid rgba(80,200,80,0.3); border-radius: 10px;
   padding: 14px; text-align: center;
-  backdrop-filter: blur(8px); box-shadow: 0 0 8px rgba(80,200,80,0.1);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 0 8px rgba(80,200,80,0.1);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .apricorn-card:hover {
@@ -698,8 +698,8 @@
 /* ── RANKING TYPÓW ── */
 .ranking-section {
   background: rgba(20, 15, 35, 0.75);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
   border: 3px solid; padding: 22px; margin-bottom: 20px;
   border-radius: 14px; transition: border-color 0.3s, box-shadow 0.3s;
 }
@@ -711,7 +711,7 @@
 .ranking-type-header {
   display: flex; align-items: center; gap: 12px;
   margin-bottom: 16px; padding: 12px 16px;
-  border-radius: 10px; backdrop-filter: blur(8px);
+  border-radius: 10px; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
 }
 .ranking-type-header h3 {
   font-family: var(--font-pixel); font-size: 14px;
@@ -758,7 +758,7 @@
   padding: 8px 10px; margin-bottom: 8px;
   background: rgba(50,15,15,0.5); border-radius: 8px;
   border: 1px solid rgba(255,100,100,0.25);
-  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
 }
 .ranking-counter-item img {
   width: 36px; height: 36px; image-rendering: pixelated;
@@ -779,7 +779,7 @@
   color: #55ff55; border: 2px solid rgba(85,255,85,0.4);
   border-radius: 8px; padding: 8px 14px; cursor: pointer;
   transition: all 0.15s; width: 100%; margin-top: 10px;
-  backdrop-filter: blur(6px); text-shadow: 0 0 8px rgba(85,255,85,0.3);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); text-shadow: 0 0 8px rgba(85,255,85,0.3);
   box-shadow: 0 0 8px rgba(85,255,85,0.15);
 }
 .ranking-build-btn:hover {

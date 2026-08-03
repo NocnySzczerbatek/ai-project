@@ -22,6 +22,12 @@ header img.logo { width: 48px; height: 48px; image-rendering: pixelated; }
   text-shadow: 2px 2px #000, 0 0 12px #00aa00;
   line-height: 1.6;
 }
+.header-logo {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.mc-btn-link { text-decoration: none; }
 .header-subtitle {
   font-family: var(--font-main);
   font-size: 18px;
@@ -112,7 +118,7 @@ aside {
 .pokemon-entry {
   display: flex; align-items: center; gap: 10px; padding: 6px 12px;
   border-bottom: 1px solid #2a2a2a; cursor: pointer;
-  transition: background 0.1s; user-select: none;
+  transition: background 0.1s; -webkit-user-select: none; user-select: none;
 }
 .pokemon-entry:hover { background: #3a3a3a; }
 .pokemon-entry.selected { background: #2a4a2a; border-left: 3px solid var(--green); }

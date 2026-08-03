@@ -18,7 +18,7 @@
 .comp-box {
   background: rgba(10,8,24,0.8); border: 2px solid rgba(130,90,220,0.45);
   padding: 12px; border-radius: 10px;
-  backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(130,90,220,0.12);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(130,90,220,0.12);
 }
 .comp-box-title {
   font-family: var(--font-pixel); font-size: 8px;
@@ -52,7 +52,7 @@
 .item-main {
   flex: 1; background: rgba(13,10,26,0.85); border: 2px solid rgba(160,80,255,0.4);
   border-radius: 10px; padding: 12px; text-align: center; min-width: 0;
-  backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(160,80,255,0.12);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(160,80,255,0.12);
 }
 .item-main-label {
   font-family: var(--font-pixel); font-size: 7px;
@@ -68,7 +68,7 @@
   display: flex; align-items: center; gap: 8px;
   background: rgba(8,6,20,0.8); border: 1px solid rgba(120,60,200,0.3);
   padding: 8px 10px; border-radius: 8px; transition: all 0.15s;
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
 }
 .item-alt-card:hover { border-color: rgba(160,80,255,0.5); box-shadow: 0 0 8px rgba(160,80,255,0.15); }
 .item-alt-info { min-width: 0; }
@@ -82,7 +82,7 @@
 .ability-box {
   background: rgba(10,8,24,0.8); border: 2px solid rgba(140,70,200,0.45);
   padding: 12px; border-radius: 10px;
-  backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(140,70,200,0.12);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 0 10px rgba(140,70,200,0.12);
 }
 .ability-name {
   font-family: var(--font-pixel); font-size: 9px;
@@ -141,7 +141,7 @@
   background: rgba(90,58,154,0.12);
   border: 1.5px solid rgba(192,132,252,0.25);
   border-radius: 10px; padding: 12px 14px; margin-bottom: 14px;
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
 }
 .build-strategy-icon {
   font-size: 22px; flex-shrink: 0; margin-top: 1px;
