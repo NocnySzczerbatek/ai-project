@@ -81,6 +81,7 @@ function showPage(page) {
       + '<div class="welcome-card accent-blue"><h3>\u2696 '+t('nav.typechart')+'</h3><p>'+(currentLang==='en'?'Check your Pok\u00e9mon\'s weaknesses, resistances and immunities with dual-type support.':'Sprawd\u017a s\u0142abo\u015bci, odporno\u015bci i immunitety swojego Pok\u00e9mona z obs\u0142ug\u0105 podw\u00f3jnych typ\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'type-chart\')" style="background:rgba(40,50,110,0.75);border-color:rgba(100,120,255,0.3)">\u2192 '+t('nav.typechart')+'</button></p></div>'
       + '<div class="welcome-card accent-purple"><h3>\ud83c\udfc6 '+t('nav.ranking')+'</h3><p>'+(currentLang==='en'?'Explore the Top 6 Pok\u00e9mon of each type with counter-strategies and build recommendations.':'Przegl\u0105daj Top 6 Pok\u00e9mon\u00f3w ka\u017cdego typu z kontrstrategiami i rekomendacjami build\u00f3w.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'ranking\')" style="background:rgba(70,40,120,0.75);border-color:rgba(160,100,255,0.3)">\u2192 '+t('nav.ranking')+'</button></p></div>'
       + '<div class="welcome-card accent-red"><h3>\u2694 '+t('nav.battle')+'</h3><p>'+t('battle.welcomeDesc')+'</p><p style="margin-top:6px"><a class="mc-btn" href="arena.html" style="background:rgba(140,40,40,0.75);border-color:rgba(255,80,80,0.3);text-decoration:none">\u2192 '+t('nav.battle')+'</a></p></div>'
+      + '<div class="welcome-card" style="border-color:rgba(180,140,255,0.35);box-shadow:0 0 10px rgba(160,100,255,0.12)"><h3 style="color:#c0a0ff">\u2728 '+t('sec.megaz')+'</h3><p>'+(currentLang==='en'?'All Pok\u00e9mon with Mega Evolutions and exclusive Z-Moves \u2014 click to open builds & IV calculator.':'Wszystkie Pok\u00e9mony z Mega Ewolucjami i ekskluzywne Ruchy Z \u2014 kliknij, by otworzy\u0107 buildy i kalkulator IV.')+'</p><p style="margin-top:6px"><button class="mc-btn" onclick="showPage(\'mega-z\')" style="background:rgba(70,40,120,0.75);border-color:rgba(180,140,255,0.3)">\u2192 '+t('sec.megaz')+'</button></p></div>'
       + '</div>';
   }
 
@@ -126,4 +127,112 @@ function showPage(page) {
   if (page === 'ranking') {
     main.innerHTML = renderRankingPage();
   }
+
+  if (page === 'mega-z') {
+    main.innerHTML = renderMegaZPage();
+  }
+}
+
+/* ── MEGA / Z-MOVE PAGE RENDERER ── */
+function renderMegaZPage() {
+  var tab = window._megaZTab || 'mega';
+  var html = '<div class="page-title"><span>\u2728 ' + (currentLang==='en' ? 'Mega Evolutions & Z-Moves' : 'Mega Ewolucje i Ruchy Z') + '</span></div>';
+
+  html += '<div class="megaz-tab-row">';
+  html += '<button class="megaz-tab-btn' + (tab==='mega' ? ' active' : '') + '" onclick="window._megaZTab=\'mega\';showPage(\'mega-z\')">';
+  html += '\u2b21 ' + (currentLang==='en' ? 'Mega Evolutions' : 'Mega Ewolucje') + ' <span class="megaz-tab-count">' + MEGA_EVO_DATA.length + '</span></button>';
+  html += '<button class="megaz-tab-btn' + (tab==='zmove' ? ' active' : '') + '" onclick="window._megaZTab=\'zmove\';showPage(\'mega-z\')">';
+  html += '\u26a1 ' + (currentLang==='en' ? 'Z-Moves' : 'Ruchy Z') + ' <span class="megaz-tab-count">' + Z_MOVE_DATA.length + '</span></button>';
+  html += '<button class="megaz-tab-btn' + (tab==='forms' ? ' active' : '') + '" onclick="window._megaZTab=\'forms\';showPage(\'mega-z\')">';
+  html += '\uD83C\uDF0D ' + (currentLang==='en' ? 'Regional Forms' : 'Regionalne Formy') + ' <span class="megaz-tab-count">' + REGIONAL_FORMS_DATA.length + '</span></button>';
+  html += '</div>';
+
+  if (tab === 'mega') {
+    html += '<div class="megaz-intro">';
+    html += currentLang==='en'
+      ? '<strong>Mega Evolutions</strong> &mdash; temporary power-ups activated by a Mega Stone during battle (Gen VI). Click any card to open full Build, IV Calculator and Competitive recommendations.'
+      : '<strong>Mega Ewolucje</strong> &mdash; tymczasowe wzmocnienia aktywowane przez Mega Kamie\u0144 podczas walki (Gen VI). Kliknij kart\u0119, by otworzy\u0107 Build, Kalkulator IV i rekomendacje Competitive.';
+    html += '</div>';
+    html += '<div class="megaz-grid">';
+    MEGA_EVO_DATA.forEach(function(m) {
+      var artUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + m.id + '.png';
+      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + m.id + '.png';
+      var color = TYPE_HEX[m.types[0]] || '#888';
+      var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
+      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail('+m.id+',\''+m.name+'\')">';
+      html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+m.name+'"/></div>';
+      html += '<div class="megaz-card-body">';
+      html += '<div class="megaz-card-name" style="color:'+color+'">'+m.megaName+'</div>';
+      if (m.formB) {
+        html += '<div class="megaz-card-forms"><span class="megaz-form-tag">X &amp; Y form</span></div>';
+      }
+      html += '<div class="megaz-card-types">'+typeBadges+'</div>';
+      html += '<div class="megaz-card-row"><span class="megaz-label">'+(currentLang==='en'?'Ability':'Zdolno\u015b\u0107')+'</span><span class="megaz-val">'+m.ability+'</span></div>';
+      html += '<div class="megaz-card-row"><span class="megaz-label">'+(currentLang==='en'?'Stone':'Kamie\u0144')+'</span><span class="megaz-stone">'+m.stone+'</span></div>';
+      html += '<div class="megaz-card-row"><span class="megaz-label">BST</span><span class="megaz-bst" style="color:'+color+'">'+m.bst+'</span></div>';
+      html += '</div>';
+      html += '<div class="megaz-card-footer">\ud83d\udccb '+(currentLang==='en'?'Build & Calculator':'Build i Kalkulator')+'</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  } else if (tab === 'zmove') {
+    html += '<div class="megaz-intro">';
+    html += currentLang==='en'
+      ? '<strong>Exclusive Z-Moves</strong> &mdash; signature Z-Moves for specific Pok&eacute;mon requiring a matching Z-Crystal and base move (Gen VII). Click any card to view full Build and Competitive data.'
+      : '<strong>Ekskluzywne Ruchy Z</strong> &mdash; unikalne Ruchy Z dla konkretnych Pok\u00e9mon\u00f3w, wymagaj\u0105ce odpowiedniego Z-Kryszta\u0142u i bazowego ataku (Gen VII). Kliknij kart\u0119, by zobaczy\u0107 Build i dane Competitive.';
+    html += '</div>';
+    html += '<div class="megaz-grid">';
+    Z_MOVE_DATA.forEach(function(z) {
+      var artUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + z.id + '.png';
+      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + z.id + '.png';
+      var color = TYPE_HEX[z.type] || '#888';
+      var desc = typeof z.desc === 'object' ? (z.desc[currentLang] || z.desc.pl) : z.desc;
+      html += '<div class="megaz-card zmove-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail('+z.id+',\''+z.name+'\')">';
+      html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+z.name+'"/></div>';
+      html += '<div class="megaz-card-body">';
+      html += '<div class="megaz-card-name" style="color:'+color+'">'+z.zmove+'</div>';
+      html += '<div class="megaz-card-pokemon">'+z.name.charAt(0).toUpperCase()+z.name.slice(1).replace(/-/g,' ')+'</div>';
+      html += '<div class="megaz-card-types"><span class="type-badge type-'+z.type+'">'+typeName(z.type)+'</span></div>';
+      html += '<div class="megaz-card-row"><span class="megaz-label">'+(currentLang==='en'?'Base Move':'Bazowy Ruch')+'</span><span class="megaz-val">'+z.baseMove+'</span></div>';
+      if (z.power > 0) {
+        html += '<div class="megaz-card-row"><span class="megaz-label">'+(currentLang==='en'?'Power':'Moc')+'</span><span class="megaz-bst" style="color:'+color+'">'+z.power+'</span></div>';
+      } else {
+        html += '<div class="megaz-card-row"><span class="megaz-label">'+(currentLang==='en'?'Power':'Moc')+'</span><span class="megaz-val">'+(currentLang==='en'?'Status':'Status')+'</span></div>';
+      }
+      html += '<div class="megaz-card-desc">'+desc+'</div>';
+      html += '</div>';
+      html += '<div class="megaz-card-footer">\ud83d\udccb '+(currentLang==='en'?'Build & Calculator':'Build i Kalkulator')+'</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  } else if (tab === 'forms') {
+    html += '<div class="megaz-intro">';
+    html += currentLang==='en'
+      ? '<strong>Regional Forms</strong> &mdash; Alolan, Galarian, Hisuian and Paldean variants with different types and abilities. Click any card to open full Build, IV Calculator and Competitive data for that specific form.'
+      : '<strong>Regionalne Formy</strong> &mdash; Warianty Alo\u0142a\u0144skie, Galari\u0144skie, Hisuia\u0144skie i Paldejskie z innymi typami i zdolno\u015bciami. Kliknij kart\u0119, by otworzy\u0107 Build, Kalkulator IV i dane Competitive tej formy.';
+    html += '</div>';
+    var regionColors = { Alola:'#f59e0b', Galar:'#8b5cf6', Hisui:'#10b981', Paldea:'#ef4444' };
+    html += '<div class="megaz-grid">';
+    REGIONAL_FORMS_DATA.forEach(function(f) {
+      var spriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + f.baseId + '.png';
+      var color = TYPE_HEX[f.types[0]] || '#888';
+      var regionColor = regionColors[f.region] || '#888';
+      var typeBadges = f.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
+      var desc = typeof f.desc === 'object' ? (f.desc[currentLang] || f.desc.pl) : f.desc;
+      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail(\''+f.slug+'\',\''+f.formName+'\')">';
+      html += '<div class="megaz-card-img" style="position:relative">';
+      html += '<img src="'+spriteUrl+'" loading="lazy" alt="'+f.formName+'" style="width:72px;height:72px;image-rendering:pixelated"/>';
+      html += '<span class="megaz-region-badge" style="background:'+regionColor+'22;border:1px solid '+regionColor+'88;color:'+regionColor+'">'+f.region+'</span>';
+      html += '</div>';
+      html += '<div class="megaz-card-body">';
+      html += '<div class="megaz-card-name" style="color:'+color+'">'+f.formName+'</div>';
+      html += '<div class="megaz-card-types">'+typeBadges+'</div>';
+      html += '<div class="megaz-card-desc">'+desc+'</div>';
+      html += '</div>';
+      html += '<div class="megaz-card-footer">\ud83d\udccb '+(currentLang==='en'?'Build & Calculator':'Build i Kalkulator')+'</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+  return html;
 }

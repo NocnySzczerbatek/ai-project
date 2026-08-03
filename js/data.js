@@ -312,3 +312,123 @@ const COUNTER_POOL = [
   {id:887,name:'dragapult',  types:['dragon','ghost'],   atk:['dragon','ghost']},
   {id:892,name:'urshifu',    types:['fighting','dark'],  atk:['fighting','dark']}
 ];
+
+/* ================================================================
+   MEGA EVOLUTION DATA
+   ================================================================ */
+var MEGA_EVO_DATA = [
+  {id:3,  name:'venusaur',   megaName:'Mega Venusaur',        types:['grass','poison'],     ability:'Thick Fat',     bst:625, stone:'Venusaurite'},
+  {id:6,  name:'charizard',  megaName:'Mega Charizard X',     types:['fire','dragon'],      ability:'Tough Claws',   bst:634, stone:'Charizardite X', formB:{megaName:'Mega Charizard Y',types:['fire','flying'],ability:'Drought',bst:634,stone:'Charizardite Y'}},
+  {id:9,  name:'blastoise',  megaName:'Mega Blastoise',       types:['water'],              ability:'Mega Launcher', bst:630, stone:'Blastoisinite'},
+  {id:15, name:'beedrill',   megaName:'Mega Beedrill',        types:['bug','poison'],       ability:'Adaptability',  bst:495, stone:'Beedrillite'},
+  {id:18, name:'pidgeot',    megaName:'Mega Pidgeot',         types:['normal','flying'],    ability:'No Guard',      bst:579, stone:'Pidgeotite'},
+  {id:65, name:'alakazam',   megaName:'Mega Alakazam',        types:['psychic'],            ability:'Trace',         bst:590, stone:'Alakazite'},
+  {id:80, name:'slowbro',    megaName:'Mega Slowbro',         types:['water','psychic'],    ability:'Shell Armor',   bst:590, stone:'Slowbronite'},
+  {id:94, name:'gengar',     megaName:'Mega Gengar',          types:['ghost','poison'],     ability:'Shadow Tag',    bst:600, stone:'Gengarite'},
+  {id:115,name:'kangaskhan', megaName:'Mega Kangaskhan',      types:['normal'],             ability:'Parental Bond', bst:590, stone:'Kangaskhanite'},
+  {id:127,name:'pinsir',     megaName:'Mega Pinsir',          types:['bug','flying'],       ability:'Aerilate',      bst:600, stone:'Pinsirite'},
+  {id:130,name:'gyarados',   megaName:'Mega Gyarados',        types:['water','dark'],       ability:'Mold Breaker',  bst:640, stone:'Gyaradosite'},
+  {id:142,name:'aerodactyl', megaName:'Mega Aerodactyl',      types:['rock','flying'],      ability:'Tough Claws',   bst:615, stone:'Aerodactylite'},
+  {id:150,name:'mewtwo',     megaName:'Mega Mewtwo X',        types:['psychic','fighting'], ability:'Steadfast',     bst:780, stone:'Mewtwonite X', formB:{megaName:'Mega Mewtwo Y',types:['psychic'],ability:'Insomnia',bst:780,stone:'Mewtwonite Y'}},
+  {id:181,name:'ampharos',   megaName:'Mega Ampharos',        types:['electric','dragon'],  ability:'Mold Breaker',  bst:610, stone:'Ampharosite'},
+  {id:208,name:'steelix',    megaName:'Mega Steelix',         types:['steel','ground'],     ability:'Sand Force',    bst:610, stone:'Steelixite'},
+  {id:212,name:'scizor',     megaName:'Mega Scizor',          types:['bug','steel'],        ability:'Technician',    bst:600, stone:'Scizorite'},
+  {id:214,name:'heracross',  megaName:'Mega Heracross',       types:['bug','fighting'],     ability:'Skill Link',    bst:600, stone:'Heracronite'},
+  {id:228,name:'houndoom',   megaName:'Mega Houndoom',        types:['dark','fire'],        ability:'Solar Power',   bst:580, stone:'Houndoominite'},
+  {id:248,name:'tyranitar',  megaName:'Mega Tyranitar',       types:['rock','dark'],        ability:'Sand Stream',   bst:700, stone:'Tyranitarite'},
+  {id:254,name:'sceptile',   megaName:'Mega Sceptile',        types:['grass','dragon'],     ability:'Lightning Rod', bst:630, stone:'Sceptilite'},
+  {id:257,name:'blaziken',   megaName:'Mega Blaziken',        types:['fire','fighting'],    ability:'Speed Boost',   bst:630, stone:'Blazikenite'},
+  {id:260,name:'swampert',   megaName:'Mega Swampert',        types:['water','ground'],     ability:'Swift Swim',    bst:635, stone:'Swampertite'},
+  {id:282,name:'gardevoir',  megaName:'Mega Gardevoir',       types:['psychic','fairy'],    ability:'Pixilate',      bst:618, stone:'Gardevoirite'},
+  {id:302,name:'sableye',    megaName:'Mega Sableye',         types:['dark','ghost'],       ability:'Magic Bounce',  bst:480, stone:'Sableyite'},
+  {id:303,name:'mawile',     megaName:'Mega Mawile',          types:['steel','fairy'],      ability:'Huge Power',    bst:480, stone:'Mawilite'},
+  {id:306,name:'aggron',     megaName:'Mega Aggron',          types:['steel'],              ability:'Filter',        bst:630, stone:'Aggronite'},
+  {id:308,name:'medicham',   megaName:'Mega Medicham',        types:['fighting','psychic'], ability:'Pure Power',    bst:510, stone:'Medichamite'},
+  {id:310,name:'manectric',  megaName:'Mega Manectric',       types:['electric'],           ability:'Intimidate',    bst:575, stone:'Manectite'},
+  {id:319,name:'sharpedo',   megaName:'Mega Sharpedo',        types:['water','dark'],       ability:'Strong Jaw',    bst:560, stone:'Sharpedonite'},
+  {id:323,name:'camerupt',   megaName:'Mega Camerupt',        types:['fire','ground'],      ability:'Sheer Force',   bst:560, stone:'Cameruptite'},
+  {id:334,name:'altaria',    megaName:'Mega Altaria',         types:['dragon','fairy'],     ability:'Pixilate',      bst:590, stone:'Altarianite'},
+  {id:354,name:'banette',    megaName:'Mega Banette',         types:['ghost'],              ability:'Prankster',     bst:555, stone:'Banettite'},
+  {id:359,name:'absol',      megaName:'Mega Absol',           types:['dark'],               ability:'Magic Bounce',  bst:565, stone:'Absolite'},
+  {id:362,name:'glalie',     megaName:'Mega Glalie',          types:['ice'],                ability:'Refrigerate',   bst:580, stone:'Glalitite'},
+  {id:373,name:'salamence',  megaName:'Mega Salamence',       types:['dragon','flying'],    ability:'Aerilate',      bst:700, stone:'Salamencite'},
+  {id:376,name:'metagross',  megaName:'Mega Metagross',       types:['steel','psychic'],    ability:'Tough Claws',   bst:700, stone:'Metagrossite'},
+  {id:380,name:'latias',     megaName:'Mega Latias',          types:['dragon','psychic'],   ability:'Levitate',      bst:700, stone:'Latiasite'},
+  {id:381,name:'latios',     megaName:'Mega Latios',          types:['dragon','psychic'],   ability:'Levitate',      bst:700, stone:'Latiosite'},
+  {id:384,name:'rayquaza',   megaName:'Mega Rayquaza',        types:['dragon','flying'],    ability:'Delta Stream',  bst:780, stone:'Dragon Ascent'},
+  {id:428,name:'lopunny',    megaName:'Mega Lopunny',         types:['normal','fighting'],  ability:'Scrappy',       bst:580, stone:'Lopunnite'},
+  {id:448,name:'lucario',    megaName:'Mega Lucario',         types:['fighting','steel'],   ability:'Adaptability',  bst:625, stone:'Lucarionite'},
+  {id:460,name:'abomasnow',  megaName:'Mega Abomasnow',       types:['grass','ice'],        ability:'Snow Warning',  bst:594, stone:'Abomasite'},
+  {id:475,name:'gallade',    megaName:'Mega Gallade',         types:['psychic','fighting'], ability:'Inner Focus',   bst:618, stone:'Galladite'},
+  {id:531,name:'audino',     megaName:'Mega Audino',          types:['normal','fairy'],     ability:'Healer',        bst:545, stone:'Audinite'},
+  {id:719,name:'diancie',    megaName:'Mega Diancie',         types:['rock','fairy'],       ability:'Magic Bounce',  bst:700, stone:'Diancite'}
+];
+
+/* ================================================================
+   Z-MOVE DATA (Ekskluzywne Ruchy Z)
+   ================================================================ */
+var Z_MOVE_DATA = [
+  {id:25, name:'pikachu',    zmove:'Catastropika',                baseMove:'Volt Tackle',    type:'electric',power:210,desc:{pl:'Ekskluzywny Ruch Z Pikachu \u2014 musi zna\u0107 Volt Tackle',en:'Pikachu exclusive Z-Move \u2014 must know Volt Tackle'}},
+  {id:26, name:'raichu',     zmove:'Stoked Sparksurfer',          baseMove:'Thunderbolt',    type:'electric',power:175,desc:{pl:'Ekskluzywny dla Alola Raichu',en:'Exclusive to Alolan Raichu'}},
+  {id:133,name:'eevee',      zmove:'Extreme Evoboost',            baseMove:'Last Resort',    type:'normal',  power:0,  desc:{pl:'+2 do wszystkich statystyk, wymaga Last Resort',en:'+2 to all stats, requires Last Resort'}},
+  {id:143,name:'snorlax',    zmove:'Pulverizing Pancake',         baseMove:'Giga Impact',    type:'normal',  power:210,desc:{pl:'Ekskluzywny dla Snorlax',en:'Snorlax exclusive'}},
+  {id:151,name:'mew',        zmove:'Genesis Supernova',           baseMove:'Psychic',        type:'psychic', power:185,desc:{pl:'Tworzy Psychic Terrain, ekskluzywny dla Mew',en:'Sets Psychic Terrain, Mew exclusive'}},
+  {id:448,name:'lucario',    zmove:'Breakneck Blitz',             baseMove:'Extreme Speed',  type:'normal',  power:200,desc:{pl:'Lucario \u2014 najlepszy Normal Z-Move z Extreme Speed',en:'Lucario \u2014 best Normal Z-Move with Extreme Speed'}},
+  {id:724,name:'decidueye',  zmove:'Sinister Arrow Raid',         baseMove:'Spirit Shackle', type:'ghost',   power:180,desc:{pl:'Ekskluzywny dla Decidueye',en:'Decidueye exclusive'}},
+  {id:727,name:'incineroar', zmove:'Malicious Moonsault',         baseMove:'Darkest Lariat', type:'dark',    power:180,desc:{pl:'Ekskluzywny dla Incineroar',en:'Incineroar exclusive'}},
+  {id:730,name:'primarina',  zmove:'Oceanic Operetta',            baseMove:'Sparkling Aria', type:'water',   power:195,desc:{pl:'Ekskluzywny dla Primarina',en:'Primarina exclusive'}},
+  {id:745,name:'lycanroc',   zmove:'Splintered Stormshards',      baseMove:'Stone Edge',     type:'rock',    power:190,desc:{pl:'Ekskluzywny dla Lycanroc',en:'Lycanroc exclusive'}},
+  {id:778,name:'mimikyu',    zmove:"Let's Snuggle Forever",       baseMove:'Play Rough',     type:'fairy',   power:190,desc:{pl:'Ekskluzywny dla Mimikyu',en:'Mimikyu exclusive'}},
+  {id:784,name:'kommo-o',    zmove:'Clangorous Soulblaze',        baseMove:'Clanging Scales',type:'dragon',  power:185,desc:{pl:'Ekskluzywny dla Kommo-o, zwi\u0119ksza wszystkie staty',en:"Kommo-o exclusive, boosts all stats"}},
+  {id:785,name:'tapu-koko',  zmove:'Guardian of Alola',           baseMove:"Nature's Madness",type:'fairy',  power:0,  desc:{pl:'Ruch Z Opiekun\u00f3w Alola \u2014 zadaje 75% max HP',en:'Alola Guardian Z-Move \u2014 deals 75% of max HP'}},
+  {id:786,name:'tapu-lele',  zmove:'Guardian of Alola',           baseMove:"Nature's Madness",type:'fairy',  power:0,  desc:{pl:'Ruch Z Opiekun\u00f3w Alola \u2014 zadaje 75% max HP',en:'Alola Guardian Z-Move \u2014 deals 75% of max HP'}},
+  {id:787,name:'tapu-bulu',  zmove:'Guardian of Alola',           baseMove:"Nature's Madness",type:'fairy',  power:0,  desc:{pl:'Ruch Z Opiekun\u00f3w Alola \u2014 zadaje 75% max HP',en:'Alola Guardian Z-Move \u2014 deals 75% of max HP'}},
+  {id:788,name:'tapu-fini',  zmove:'Guardian of Alola',           baseMove:"Nature's Madness",type:'fairy',  power:0,  desc:{pl:'Ruch Z Opiekun\u00f3w Alola \u2014 zadaje 75% max HP',en:'Alola Guardian Z-Move \u2014 deals 75% of max HP'}},
+  {id:791,name:'solgaleo',   zmove:'Searing Sunraze Smash',       baseMove:'Sunsteel Strike', type:'steel',  power:200,desc:{pl:'Ignoruje zdolno\u015bci przeciwnika',en:"Ignores the opponent's ability"}},
+  {id:792,name:'lunala',     zmove:'Menacing Moonraze Maelstrom', baseMove:'Moongeist Beam',  type:'ghost',  power:200,desc:{pl:'Ignoruje zdolno\u015bci przeciwnika',en:"Ignores the opponent's ability"}},
+  {id:800,name:'necrozma',   zmove:'Light That Burns the Sky',    baseMove:'Photon Geyser',   type:'psychic',power:200,desc:{pl:'U\u017cywa lepszego z Atk/Sp.Atk, ignoruje zdolno\u015bci',en:'Uses higher of Atk/SpAtk, ignores abilities'}},
+  {id:802,name:'marshadow',  zmove:'Soul-Stealing 7-Star Strike', baseMove:'Spectral Thief',  type:'ghost',  power:195,desc:{pl:'Kradnie statystyki przeciwnika przed atakiem',en:'Steals opponent stats before hitting'}}
+];
+
+/* ================================================================
+   REGIONAL FORMS DATA
+   ================================================================ */
+var REGIONAL_FORMS_DATA = [
+  // ── ALOLAN FORMS ──
+  {baseId:26,  slug:'raichu-alola',     formName:'Alolan Raichu',     region:'Alola', types:['electric','psychic'], desc:{pl:'Surfuje na ogonie \u2014 Electric/Psychic forma z Aloli',en:'Surfs on its tail \u2014 Electric/Psychic form from Alola'}},
+  {baseId:38,  slug:'ninetales-alola',  formName:'Alolan Ninetales',  region:'Alola', types:['ice','fairy'],        desc:{pl:'Lodowo-bajkowa li\u015bcia z Aloli \u2014 Snow Warning',en:'Ice/Fairy fox from Alola \u2014 Snow Warning ability'}},
+  {baseId:103, slug:'exeggutor-alola',  formName:'Alolan Exeggutor',  region:'Alola', types:['grass','dragon'],     desc:{pl:'Wysoki jak palma \u2014 Grass/Dragon z Aloli',en:'Tall as a palm tree \u2014 Grass/Dragon from Alola'}},
+  {baseId:105, slug:'marowak-alola',    formName:'Alolan Marowak',    region:'Alola', types:['fire','ghost'],       desc:{pl:'Ognisty duch \u2014 pali ko\u015b\u0107 duchow\u0105 moc\u0105',en:'Fire/Ghost \u2014 burns its bone with spirit fire'}},
+  {baseId:28,  slug:'sandslash-alola',  formName:'Alolan Sandslash',  region:'Alola', types:['ice','steel'],        desc:{pl:'Stalowo-lodowa forma \u2014 ostre lodowe kolce',en:'Ice/Steel form \u2014 sharp icy spikes'}},
+  {baseId:37,  slug:'vulpix-alola',     formName:'Alolan Vulpix',     region:'Alola', types:['ice'],                desc:{pl:'\u015anie\u017cna lisiczka z Aloli \u2014 Snow Warning',en:'Snow fox from Alola \u2014 Snow Warning'}},
+  {baseId:52,  slug:'meowth-alola',     formName:'Alolan Meowth',     region:'Alola', types:['dark'],               desc:{pl:'Mroczna forma Meowtha \u2014 zarozumia\u0142y i ciemny',en:'Dark form \u2014 conceited and cunning'}},
+  {baseId:53,  slug:'persian-alola',    formName:'Alolan Persian',    region:'Alola', types:['dark'],               desc:{pl:'Okr\u0105g\u0142otwarzowy mroczny Persian \u2014 Fur Coat',en:'Round-faced Dark Persian \u2014 Fur Coat ability'}},
+  {baseId:88,  slug:'grimer-alola',     formName:'Alolan Grimer',     region:'Alola', types:['poison','dark'],      desc:{pl:'Kolorowy truj\u0105cy Grimer z Aloli',en:'Colorful Poison/Dark Grimer from Alola'}},
+  {baseId:89,  slug:'muk-alola',        formName:'Alolan Muk',        region:'Alola', types:['poison','dark'],      desc:{pl:'T\u0119czowy Poison/Dark Muk \u2014 Power of Alchemy',en:'Rainbow Poison/Dark Muk \u2014 Power of Alchemy'}},
+  {baseId:76,  slug:'golem-alola',      formName:'Alolan Golem',      region:'Alola', types:['rock','electric'],    desc:{pl:'Elektryczny Golem \u2014 strzela namagnesowanymi kulami',en:'Electric Golem \u2014 shoots magnetized rock balls'}},
+  {baseId:27,  slug:'sandshrew-alola',  formName:'Alolan Sandshrew',  region:'Alola', types:['ice','steel'],        desc:{pl:'Lodowy je\u017c stalowy z Aloli',en:'Ice/Steel hedgehog from Alola'}},
+  // ── GALARIAN FORMS ──
+  {baseId:77,  slug:'ponyta-galar',     formName:'Galarian Ponyta',   region:'Galar', types:['psychic'],            desc:{pl:'R\u00f3\u017cowy kucyk z Galaru \u2014 Pastel Veil',en:'Pink pony from Galar \u2014 Pastel Veil ability'}},
+  {baseId:78,  slug:'rapidash-galar',   formName:'Galarian Rapidash', region:'Galar', types:['psychic','fairy'],    desc:{pl:'Psycho-bajkowy jednoróg \u2014 Fairy/Psychic coverage',en:'Psychic/Fairy unicorn \u2014 great Fairy/Psychic coverage'}},
+  {baseId:80,  slug:'slowbro-galar',    formName:'Galarian Slowbro',  region:'Galar', types:['poison','psychic'],   desc:{pl:'Truciznowy Slowbro z Galaru \u2014 Shell Side Arm STAB',en:'Poison/Psychic Slowbro \u2014 Shell Side Arm STAB'}},
+  {baseId:83,  slug:'farfetchd-galar',  formName:"Galarian Farfetch'd",region:'Galar',types:['fighting'],           desc:{pl:'Wojowniczy Farfetch\u0027d \u2014 ewoluuje w Sir Fetch\u0027d',en:"Fighting Farfetch'd \u2014 evolves into Sir Fetched"}},
+  {baseId:110, slug:'weezing-galar',    formName:'Galarian Weezing',  region:'Galar', types:['poison','fairy'],     desc:{pl:'Bajkowy truj\u0105cy Weezing \u2014 Neutralizing Gas',en:'Poison/Fairy Weezing \u2014 Neutralizing Gas ability'}},
+  {baseId:122, slug:'mr-mime-galar',    formName:'Galarian Mr. Mime', region:'Galar', types:['ice','psychic'],      desc:{pl:'Lodowy Mime z Galaru \u2014 ewoluuje w Mr. Rime',en:'Ice/Psychic Mr. Mime \u2014 evolves into Mr. Rime'}},
+  {baseId:554, slug:'darmanitan-galar', formName:'Galarian Darmanitan',region:'Galar',types:['ice'],               desc:{pl:'Lodowy ba\u0142wan \u2014 Zen Mode: Ice/Fire',en:'Ice snowman \u2014 Zen Mode changes to Ice/Fire type'}},
+  {baseId:618, slug:'stunfisk-galar',   formName:'Galarian Stunfisk', region:'Galar', types:['ground','steel'],     desc:{pl:'Stalowa pu\u0142apka pod\u0142ogi z Galaru',en:'Ground/Steel floor trap from Galar'}},
+  {baseId:569, slug:'corsola-galar',    formName:'Galarian Corsola',  region:'Galar', types:['ghost'],              desc:{pl:'Duch martwego korala \u2014 ewoluuje w Cursola',en:'Ghost coral \u2014 evolves into Cursola'}},
+  {baseId:262, slug:'linoone-galar',    formName:'Galarian Linoone',  region:'Galar', types:['dark','normal'],      desc:{pl:'Mroczny Linoone \u2014 ewoluuje w Obstagoon',en:'Dark/Normal Linoone \u2014 evolves into Obstagoon'}},
+  // ── HISUIAN FORMS ──
+  {baseId:58,  slug:'growlithe-hisui',  formName:'Hisuian Growlithe', region:'Hisui', types:['fire','rock'],        desc:{pl:'Skalisto-ogniowy pies z Hisui \u2014 Intimidate',en:'Fire/Rock dog from Hisui \u2014 Intimidate ability'}},
+  {baseId:59,  slug:'arcanine-hisui',   formName:'Hisuian Arcanine',  region:'Hisui', types:['fire','rock'],        desc:{pl:'Legendarne Fire/Rock Arcanine \u2014 Rock Head',en:'Legendary Fire/Rock Arcanine \u2014 Rock Head ability'}},
+  {baseId:100, slug:'voltorb-hisui',    formName:'Hisuian Voltorb',   region:'Hisui', types:['electric','grass'],   desc:{pl:'Drewniany Voltorb \u2014 Electric/Grass',en:'Wooden Voltorb \u2014 Electric/Grass type'}},
+  {baseId:101, slug:'electrode-hisui',  formName:'Hisuian Electrode', region:'Hisui', types:['electric','grass'],   desc:{pl:'Drewniany Electrode \u2014 Chlorophyll',en:'Wooden Electrode \u2014 Chlorophyll ability'}},
+  {baseId:157, slug:'typhlosion-hisui', formName:'Hisuian Typhlosion',region:'Hisui', types:['fire','ghost'],       desc:{pl:'Ognisto-duchowy Typhlosion \u2014 Frisk',en:'Fire/Ghost Typhlosion \u2014 ghostly fire'}},
+  {baseId:503, slug:'samurott-hisui',   formName:'Hisuian Samurott',  region:'Hisui', types:['water','dark'],       desc:{pl:'Ciemny rycerz wodny \u2014 Water/Dark + Sharpness',en:'Water/Dark knight \u2014 Sharpness ability'}},
+  {baseId:571, slug:'zoroark-hisui',    formName:'Hisuian Zoroark',   region:'Hisui', types:['normal','ghost'],     desc:{pl:'Normal/Ghost lisica \u2014 Illusion + z\u0142e duchy',en:'Normal/Ghost fox \u2014 Illusion + evil spirits'}},
+  {baseId:628, slug:'braviary-hisui',   formName:'Hisuian Braviary',  region:'Hisui', types:['psychic','flying'],   desc:{pl:'Psycho-lataj\u0105cy orze\u0142 \u2014 Tinted Lens',en:'Psychic/Flying eagle \u2014 Tinted Lens ability'}},
+  {baseId:724, slug:'decidueye-hisui',  formName:'Hisuian Decidueye', region:'Hisui', types:['grass','fighting'],   desc:{pl:'Waleczna sowa Grass/Fighting \u2014 Scrappy',en:'Grass/Fighting owl \u2014 Scrappy ability'}},
+  {baseId:503, slug:'samurott-hisui',   formName:'Hisuian Samurott',  region:'Hisui', types:['water','dark'],       desc:{pl:'Mroczny samuraj \u2014 Water/Dark + Sharpness',en:'Dark samurai \u2014 Water/Dark + Sharpness'}},
+  // ── PALDEAN FORMS ──
+  {baseId:194, slug:'wooper-paldea',    formName:'Paldean Wooper',    region:'Paldea',types:['poison','ground'],    desc:{pl:'Paldejski Wooper \u2014 Poison/Ground, ewoluuje w Clodsire',en:'Paldean Wooper \u2014 Poison/Ground, evolves into Clodsire'}}
+];
