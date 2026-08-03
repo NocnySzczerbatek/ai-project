@@ -180,68 +180,11 @@ function renderMegaZPage() {
     MEGA_EVO_DATA.filter(function(m){ return !m.special; }).forEach(function(m) {
       var artUrl  = ART + (m.fid  || m.id) + '.png';
       var artUrlB = ART + (m.formB && m.formB.fid ? m.formB.fid : (m.fid || m.id)) + '.png';
-      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + m.id + '.png';
+      // fallback: small sprite with fid — guaranteed to show the mega form sprite
+      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (m.fid || m.id) + '.png';
       var color   = TYPE_HEX[m.types[0]] || '#888';
       var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
       var clickSlug  = m.name + (m.megaName.endsWith(' X') ? '-mega-x' : m.megaName.endsWith(' Y') ? '-mega-y' : '-mega');
-      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail(\''+clickSlug+'\',\''+m.megaName+'\')">';
-      html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+m.megaName+'"/></div>';
-      html += '<div class="megaz-card-body">';
-      html += '<div class="megaz-card-name" style="color:'+color+'">'+m.megaName+'</div>';
-      if (m.formB) {
-        html += '<div class="megaz-card-forms">'
-          + '<span class="megaz-form-tag" style="cursor:pointer" onclick="event.stopPropagation();this.closest(\'.megaz-card\').querySelector(\'img\').src=\''+artUrl+'\'">X</span>'
-          + '<span class="megaz-form-tag" style="cursor:pointer;margin-left:4px" onclick="event.stopPropagation();this.closest(\'.megaz-card\').querySelector(\'img\').src=\''+artUrlB+'\'">Y</span>'
-          + '</div>';
-      }
-      html += '<div class="megaz-card-types">'+typeBadges+'</div>';
-      html += '<div class="megaz-card-row"><span class="megaz-label">'+(currentLang==='en'?'Ability':'Zdolno\u015b\u0107')+'</span><span class="megaz-val">'+m.ability+'</span></div>';
-      html += '<div class="megaz-card-row"><span class="megaz-label">'+(currentLang==='en'?'Stone':'Kamie\u0144')+'</span><span class="megaz-stone">'+m.stone+'</span></div>';
-      html += '<div class="megaz-card-row"><span class="megaz-label">BST</span><span class="megaz-bst" style="color:'+color+'">'+m.bst+'</span></div>';
-      html += '</div>';
-      html += '<div class="megaz-card-footer">\ud83d\udccb '+(currentLang==='en'?'Build & Calculator':'Build i Kalkulator')+'</div>';
-      html += '</div>';
-    });
-    html += '</div>';
-  } else if (tab === 'zmove') {
-      if (sdn.endsWith('megax')) return sdn.slice(0,-5) + '-mega-x';
-      if (sdn.endsWith('megay')) return sdn.slice(0,-5) + '-mega-y';
-      if (sdn.endsWith('mega'))  return sdn.slice(0,-4) + '-mega';
-      return sdn;
-    }
-    // Ash-Greninja special card — outside the grid
-    var ashM = MEGA_EVO_DATA.find(function(m){ return m.special; });
-    if (ashM) {
-      var note = typeof ashM.specialNote==='object' ? (ashM.specialNote[currentLang]||ashM.specialNote.pl) : '';
-      var ashArt = ashM.fid
-        ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'+ashM.fid+'.png'
-        : 'https://play.pokemonshowdown.com/sprites/dex/greninja-ash.png';
-      html += '<div class="megaz-ash-card" onclick="loadDetail(\'ash-greninja\',\'Ash-Greninja\')">';
-      html += '<div class="megaz-ash-left">';
-      html += '<img src="'+ashArt+'" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png\'" loading="lazy" alt="Ash-Greninja"/>';
-      html += '</div>';
-      html += '<div class="megaz-ash-body">';
-      html += '<div class="megaz-ash-banner">\u2728 SPECJALNA FORMA &mdash; Battle Bond</div>';
-      html += '<div class="megaz-ash-name">Ash-Greninja</div>';
-      html += '<div class="megaz-ash-types">' + ashM.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('') + '</div>';
-      html += '<div class="megaz-ash-desc">'+note+'</div>';
-      html += '</div>';
-      html += '<div class="megaz-ash-right">';
-      html += '<div class="megaz-ash-bst">BST <strong>'+ashM.bst+'</strong></div>';
-      html += '<div class="megaz-ash-ability">Battle Bond</div>';
-      html += '<div class="megaz-ash-cta">\ud83d\udccb '+(currentLang==='en'?'Full Build & Calculator':'Pe\u0142ny Build i Kalkulator')+'</div>';
-      html += '</div>';
-      html += '</div>';
-    }
-    html += '<div class="megaz-grid">';
-    MEGA_EVO_DATA.filter(function(m){ return !m.special; }).forEach(function(m) {
-      var ART = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
-      var artUrl = m.fid ? ART + m.fid + '.png' : ART + m.id + '.png';
-      var artUrlB = (m.formB && m.formB.fid) ? ART + m.formB.fid + '.png' : artUrl;
-      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + m.id + '.png';
-      var color = TYPE_HEX[m.types[0]] || '#888';
-      var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
-      var clickSlug = m.name + (m.megaName.endsWith(' X') ? '-mega-x' : m.megaName.endsWith(' Y') ? '-mega-y' : '-mega');
       html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail(\''+clickSlug+'\',\''+m.megaName+'\')">';
       html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+m.megaName+'"/></div>';
       html += '<div class="megaz-card-body">';
