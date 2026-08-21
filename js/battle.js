@@ -20,9 +20,6 @@ const NATURE_MODS = {
 const ALL_NATURES = Object.keys(NATURE_MODS);
 const BATTLE_LEVEL = 50;
 const BATTLE_STAT_ORDER = ['hp','attack','defense','special-attack','special-defense','speed'];
-let battleState = null;
-let battleSetupData = { player: null, opponent: null };
-let battleSearchTimeout = null;
 
 function battleCalcStat(baseStat, iv, ev, statName, nature) {
   if (statName === 'hp') {
