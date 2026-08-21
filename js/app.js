@@ -23,13 +23,14 @@ async function init() {
   setStatus((currentLang==='en'?'Fetching Pok\u00e9mon list from PokeAPI...':'Pobieranie listy Pok\u00e9mon\u00f3w z PokeAPI...'), true);
   var cached = localStorage.getItem('cob_pokemon_list');
   if (cached) {
-    allPokemon = JSON.parse(cached);
+    try { allPokemon = JSON.parse(cached); } catch(e) { allPokemon = []; }
     setStatus((currentLang==='en'?'Loaded ':'Za\u0142adowano ')+allPokemon.length+(currentLang==='en'?' Pok\u00e9mon from cache.':' Pok\u00e9mon\u00f3w z cache.'), false);
   } else {
     try {
-      var res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10000');
+      var res = await fetchWithTimeout('https://pokeapi.co/api/v2/pokemon?limit=10000', 12000);
+      if (!res.ok) throw new Error('HTTP '+res.status);
       var data = await res.json();
-      allPokemon = data.results.map(function(p){
+      allPokemon = (data.results || []).map(function(p){
         var parts = p.url.split('/').filter(Boolean);
         var id = parseInt(parts[parts.length - 1]);
         return { id: id, name: p.name };
@@ -37,7 +38,10 @@ async function init() {
       localStorage.setItem('cob_pokemon_list', JSON.stringify(allPokemon));
       setStatus((currentLang==='en'?'Loaded ':'Za\u0142adowano ')+allPokemon.length+(currentLang==='en'?' Pok\u00e9mon.':' Pok\u00e9mon\u00f3w.'), false);
     } catch (e) {
-      setStatus((currentLang==='en'?'Connection error with PokeAPI!':'B\u0142\u0105d po\u0142\u0105czenia z PokeAPI!'), false);
+      // Fallback — generuj listę z samych ID (bez nazw z API)
+      allPokemon = [];
+      for (var i = 1; i <= 1025; i++) { allPokemon.push({ id: i, name: 'pokemon-'+i }); }
+      setStatus((currentLang==='en'?'PokeAPI unavailable — basic list loaded.':'PokeAPI niedostępne — załadowano listę podstawową.'), false);
     }
   }
   // Zastosuj zapisany język do elementów nagłówka

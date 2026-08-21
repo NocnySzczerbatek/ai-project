@@ -220,6 +220,7 @@ var ITEMS_DATA = [
 ];
 
 function renderItems() {
+  if (!Array.isArray(ITEMS_DATA) || !ITEMS_DATA.length) return '<div class="empty-state">Brak danych przedmiotów.</div>';
   return ITEMS_DATA.map(function(item) {
     var imgTag = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+item.slug+'.png" onerror="this.parentNode.innerHTML=\'<span style=color:#555;font-size:28px>\u25A1</span>\'" />';
     var itemName = typeof item.name==='object'?item.name[currentLang]||item.name.pl:item.name;
@@ -243,6 +244,7 @@ var APRICORNS_DATA = [
 ];
 
 function renderApricorns() {
+  if (!Array.isArray(APRICORNS_DATA) || !APRICORNS_DATA.length) return '<div class="empty-state">Brak danych Apricornów.</div>';
   return APRICORNS_DATA.map(function(a) {
     var ballImg = '<img class="item-icon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/'+a.ballSlug+'.png" onerror="this.parentNode.innerHTML=\'\u25cf\'" style="vertical-align:middle" />';
     var colorName = typeof a.color==='object'?a.color[currentLang]||a.color.pl:a.color;

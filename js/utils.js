@@ -8,6 +8,13 @@ function setStatus(text, loading) {
   document.getElementById('spinner').classList.toggle('active', loading);
 }
 
+/* ── Fetch z timeoutem (domyślnie 9s) ── */
+function fetchWithTimeout(url, ms) {
+  var ctrl = new AbortController();
+  var tid = setTimeout(function(){ ctrl.abort(); }, ms || 9000);
+  return fetch(url, { signal: ctrl.signal }).finally(function(){ clearTimeout(tid); });
+}
+
 /* ── Przełączanie zakładek ataków ── */
 function switchMovesTab(btn, panelId) {
   var section = btn.closest('.moves-section');

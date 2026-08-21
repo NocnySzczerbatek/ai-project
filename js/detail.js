@@ -15,11 +15,13 @@ async function loadDetail(id, name) {
   try {
     var data = detailCache[id];
     if (!data) {
-      var pRes = await fetch('https://pokeapi.co/api/v2/pokemon/'+id);
+      var pRes = await fetchWithTimeout('https://pokeapi.co/api/v2/pokemon/'+id);
+      if (!pRes.ok) throw new Error('HTTP '+pRes.status);
       var p = await pRes.json();
       // Use species.url from the pokemon response — handles regional forms (IDs > 1025)
       var speciesUrl = p.species && p.species.url ? p.species.url : 'https://pokeapi.co/api/v2/pokemon-species/'+id;
-      var sRes = await fetch(speciesUrl);
+      var sRes = await fetchWithTimeout(speciesUrl);
+      if (!sRes.ok) throw new Error('HTTP '+sRes.status);
       var s = await sRes.json();
       data = { p:p, s:s };
       detailCache[id] = data;
@@ -28,21 +30,39 @@ async function loadDetail(id, name) {
     if (!data.abilityDetails) {
       try {
         var abilityPromises = data.p.abilities.map(function(a){
-          return fetch('https://pokeapi.co/api/v2/ability/'+a.ability.name).then(function(r){return r.json();});
+          return fetchWithTimeout('https://pokeapi.co/api/v2/ability/'+a.ability.name)
+            .then(function(r){ return r.ok ? r.json() : null; })
+            .catch(function(){ return null; });
         });
-        data.abilityDetails = await Promise.all(abilityPromises);
+        data.abilityDetails = (await Promise.all(abilityPromises)).filter(Boolean);
       } catch(e2) { data.abilityDetails = []; }
       detailCache[id] = data;
     }
     var evoChainUrl = data.s.evolution_chain ? data.s.evolution_chain.url : null;
     var evoChain = null;
-    if (evoChainUrl) { var evoRes = await fetch(evoChainUrl); evoChain = await evoRes.json(); }
+    if (evoChainUrl) {
+      try {
+        var evoRes = await fetchWithTimeout(evoChainUrl);
+        if (evoRes.ok) evoChain = await evoRes.json();
+      } catch(e3) { /* brak łańcucha ewolucji — renderuj bez */ }
+    }
     renderDetail(data.p, data.s, evoChain, name, data.abilityDetails);
     setStatus('#'+String(id).padStart(3,'0')+' '+name, false);
     window.location.hash = 'pokemon-'+id;
   } catch(e) {
-    setStatus('B\u0142\u0105d podczas pobierania danych.', false);
-    document.getElementById('main-area').innerHTML = '<div class="empty-state"><span class="big-icon">\u26a0</span>B\u0142\u0105d po\u0142\u0105czenia z PokeAPI.</div>';
+    var isTimeout = e && e.name === 'AbortError';
+    var errMsg = isTimeout
+      ? (currentLang==='en' ? 'Request timed out. PokeAPI may be slow.' : 'Przekroczono czas oczekiwania. PokeAPI może być przeciążone.')
+      : (currentLang==='en' ? 'Connection error with PokeAPI.' : 'Błąd połączenia z PokeAPI.');
+    setStatus(currentLang==='en' ? 'Error loading data.' : 'Błąd podczas pobierania danych.', false);
+    document.getElementById('main-area').innerHTML =
+      '<div class="empty-state">'
+      + '<span class="big-icon">\u26a0</span>'
+      + '<div style="margin-bottom:14px">'+errMsg+'</div>'
+      + '<button class="mc-btn" onclick="loadDetail('+JSON.stringify(id)+','+JSON.stringify(name)+')" style="font-size:14px">'
+      + '\ud83d\udd04 '+(currentLang==='en'?'Retry':'Spróbuj ponownie')
+      + '</button>'
+      + '</div>';
   }
 }
 

@@ -4,16 +4,18 @@
 
 /* ── RANKING RENDERER ── */
 function renderRankingPage() {
-  var typeClr = TYPE_HEX[rankingSelectedType] || '#888';
+  var allTypesArr = Array.isArray(ALL_TYPES) ? ALL_TYPES : Object.keys(TYPE_HEX || {});
+  var rankingData = (typeof TYPE_RANKING !== 'undefined' && TYPE_RANKING) ? TYPE_RANKING : {};
+  var typeClr = (TYPE_HEX && TYPE_HEX[rankingSelectedType]) || '#888';
   var html = '<div class="page-title"><span>'+t('sec.ranking')+'</span></div>';
   html += '<div style="text-align:center;font-size:18px;color:#ccc;margin-bottom:16px;font-weight:700">'+t('ranking.desc')+'</div>';
   html += '<div class="ranking-nav-btns">';
-  ALL_TYPES.forEach(function(tp) {
+  allTypesArr.forEach(function(tp) {
     var cls = tp === rankingSelectedType ? 'ranking-nav-btn type-badge type-'+tp+' active-rank' : 'ranking-nav-btn type-badge type-'+tp;
     html += '<button class="'+cls+'" onclick="selectRankingType(\''+tp+'\')">' + typeName(tp) + '</button>';
   });
   html += '</div>';
-  var pokes = TYPE_RANKING[rankingSelectedType] || [];
+  var pokes = rankingData[rankingSelectedType] || [];
   html += '<div class="ranking-section" style="border-color:'+typeClr+';box-shadow:0 0 20px '+typeClr+'44,0 0 40px '+typeClr+'22">';
   html += '<div class="ranking-type-header" style="border:1px solid '+typeClr+'55;background:'+typeClr+'18"><span class="type-badge type-'+rankingSelectedType+'" style="font-size:18px!important;padding:6px 18px!important">' + typeName(rankingSelectedType) + '</span>';
   html += '<h3>Top 6 ' + typeName(rankingSelectedType) + '</h3></div>';
@@ -66,7 +68,9 @@ function loadBuildFromRanking(id, name) {
 function showPage(page) {
   currentPage = page;
   var main = document.getElementById('main-area');
+  if (!main) return;
 
+  try {
   if (page === 'welcome') {
     main.innerHTML =
       '<div class="page-title"><span>\ud83c\udfe0 Cobblemon Mastery Guide</span></div>'
@@ -86,7 +90,7 @@ function showPage(page) {
   }
 
   if (page === 'detail-loading') {
-    main.innerHTML = '<div class="empty-state"><span class="big-icon">\u2699</span>'+(currentLang==='en'?'Loading Pok\u00e9mon data...':'\u0141adowanie danych Pok\u00e9mona...')+'</div>';
+    main.innerHTML = '<div class="empty-state"><div class="loading-spinner" style="margin:0 auto 16px"></div>'+(currentLang==='en'?'Loading Pok\u00e9mon data...':'\u0141adowanie danych Pok\u00e9mona...')+'</div>';
   }
 
   if (page === 'items') {
@@ -131,20 +135,30 @@ function showPage(page) {
   if (page === 'mega-z') {
     main.innerHTML = renderMegaZPage();
   }
+  } catch(e) {
+    console.error('showPage error ['+page+']:', e);
+    main.innerHTML = '<div class="empty-state"><span class="big-icon">\u26a0</span>'
+      + (currentLang==='en' ? 'Page failed to render. Try again.' : 'Błąd renderowania strony. Spróbuj ponownie.')
+      + '<br><button class="mc-btn" style="margin-top:12px" onclick="showPage(\''+page+'\')">\ud83d\udd04 '
+      + (currentLang==='en' ? 'Retry' : 'Ponów') + '</button></div>';
+  }
 }
 
 /* ── MEGA / Z-MOVE PAGE RENDERER ── */
 function renderMegaZPage() {
+  var megaData = Array.isArray(MEGA_EVO_DATA) ? MEGA_EVO_DATA : [];
+  var zData    = Array.isArray(Z_MOVE_DATA) ? Z_MOVE_DATA : [];
+  var formsData = Array.isArray(REGIONAL_FORMS_DATA) ? REGIONAL_FORMS_DATA : [];
   var tab = window._megaZTab || 'mega';
   var html = '<div class="page-title"><span>\u2728 ' + (currentLang==='en' ? 'Mega Evolutions & Z-Moves' : 'Mega Ewolucje i Ruchy Z') + '</span></div>';
 
   html += '<div class="megaz-tab-row">';
   html += '<button class="megaz-tab-btn' + (tab==='mega' ? ' active' : '') + '" onclick="window._megaZTab=\'mega\';showPage(\'mega-z\')">';
-  html += '\u2b21 ' + (currentLang==='en' ? 'Mega Evolutions' : 'Mega Ewolucje') + ' <span class="megaz-tab-count">' + MEGA_EVO_DATA.length + '</span></button>';
+  html += '\u2b21 ' + (currentLang==='en' ? 'Mega Evolutions' : 'Mega Ewolucje') + ' <span class="megaz-tab-count">' + megaData.length + '</span></button>';
   html += '<button class="megaz-tab-btn' + (tab==='zmove' ? ' active' : '') + '" onclick="window._megaZTab=\'zmove\';showPage(\'mega-z\')">';
-  html += '\u26a1 ' + (currentLang==='en' ? 'Z-Moves' : 'Ruchy Z') + ' <span class="megaz-tab-count">' + Z_MOVE_DATA.length + '</span></button>';
+  html += '\u26a1 ' + (currentLang==='en' ? 'Z-Moves' : 'Ruchy Z') + ' <span class="megaz-tab-count">' + zData.length + '</span></button>';
   html += '<button class="megaz-tab-btn' + (tab==='forms' ? ' active' : '') + '" onclick="window._megaZTab=\'forms\';showPage(\'mega-z\')">';
-  html += '\uD83C\uDF0D ' + (currentLang==='en' ? 'Regional Forms' : 'Regionalne Formy') + ' <span class="megaz-tab-count">' + REGIONAL_FORMS_DATA.length + '</span></button>';
+  html += '\uD83C\uDF0D ' + (currentLang==='en' ? 'Regional Forms' : 'Regionalne Formy') + ' <span class="megaz-tab-count">' + formsData.length + '</span></button>';
   html += '</div>';
 
   if (tab === 'mega') {
@@ -154,7 +168,7 @@ function renderMegaZPage() {
       : '<strong>Mega Ewolucje</strong> &mdash; tymczasowe wzmocnienia aktywowane przez Mega Kamie\u0144 podczas walki (Gen VI). Kliknij kart\u0119, by otworzy\u0107 Build, Kalkulator IV i rekomendacje Competitive.';
     html += '</div>';
     // Ash-Greninja special horizontal card (outside grid)
-    var ashM = MEGA_EVO_DATA.find(function(m){ return m.special; });
+    var ashM = megaData.find(function(m){ return m.special; });
     if (ashM) {
       var note = typeof ashM.specialNote==='object' ? (ashM.specialNote[currentLang]||ashM.specialNote.pl) : '';
       var ashArt = ashM.fid
@@ -177,7 +191,7 @@ function renderMegaZPage() {
     // ── Mega cards — artwork URL built directly from fid (PokeAPI form ID) ──
     var ART = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
     html += '<div class="megaz-grid">';
-    MEGA_EVO_DATA.filter(function(m){ return !m.special; }).forEach(function(m) {
+    megaData.filter(function(m){ return !m.special; }).forEach(function(m) {
       var artUrl  = ART + (m.fid  || m.id) + '.png';
       var artUrlB = ART + (m.formB && m.formB.fid ? m.formB.fid : (m.fid || m.id)) + '.png';
       // fallback: small sprite with fid — guaranteed to show the mega form sprite
@@ -211,7 +225,7 @@ function renderMegaZPage() {
       : '<strong>Ekskluzywne Ruchy Z</strong> &mdash; unikalne Ruchy Z dla konkretnych Pok\u00e9mon\u00f3w, wymagaj\u0105ce odpowiedniego Z-Kryszta\u0142u i bazowego ataku (Gen VII). Kliknij kart\u0119, by zobaczy\u0107 Build i dane Competitive.';
     html += '</div>';
     html += '<div class="megaz-grid">';
-    Z_MOVE_DATA.forEach(function(z) {
+    zData.forEach(function(z) {
       var artUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + z.id + '.png';
       var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + z.id + '.png';
       var color = TYPE_HEX[z.type] || '#888';
@@ -242,7 +256,7 @@ function renderMegaZPage() {
     html += '</div>';
     var regionColors = { Alola:'#f59e0b', Galar:'#8b5cf6', Hisui:'#10b981', Paldea:'#ef4444', Forma:'#00c8ff' };
     html += '<div class="megaz-grid">';
-    REGIONAL_FORMS_DATA.forEach(function(f) {
+    formsData.forEach(function(f) {
       var spriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + f.baseId + '.png';
       var color = TYPE_HEX[f.types[0]] || '#888';
       var regionColor = regionColors[f.region] || '#888';
