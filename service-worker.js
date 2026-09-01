@@ -1,39 +1,39 @@
 /* Service Worker — Cobblemon Mastery Guide
    Cache'uje statyczne zasoby dla szybszego ladowania */
 
-const CACHE_NAME = 'cobblemon-v17.0';
+const CACHE_NAME = 'cobblemon-v18.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/arena.html',
   '/manifest.json',
-  '/css/variables.css?v=17',
-  '/css/base.css?v=17',
-  '/css/layout.css?v=17',
-  '/css/components.css?v=17',
-  '/css/pokemon.css?v=17',
-  '/css/competitive.css?v=17',
-  '/css/pages.css?v=17',
-  '/css/evolution.css?v=17',
-  '/css/glassmorphism.css?v=17',
-  '/css/responsive.css?v=17',
+  '/css/variables.css?v=18',
+  '/css/base.css?v=18',
+  '/css/layout.css?v=18',
+  '/css/components.css?v=18',
+  '/css/pokemon.css?v=18',
+  '/css/competitive.css?v=18',
+  '/css/pages.css?v=18',
+  '/css/evolution.css?v=18',
+  '/css/glassmorphism.css?v=18',
+  '/css/responsive.css?v=18',
   '/css/arena.css',
-  '/assets/styles.css?v=17',
-  '/js/config.js?v=17',
-  '/js/i18n.js?v=17',
-  '/js/types.js?v=17',
-  '/js/utils.js?v=17',
-  '/js/data.js?v=17',
-  '/js/state.js?v=17',
-  '/js/favorites.js?v=17',
-  '/js/team.js?v=17',
-  '/js/evolution.js?v=17',
-  '/js/weakness.js?v=17',
-  '/js/battle.js?v=17',
-  '/js/detail.js?v=17',
-  '/js/calculator.js?v=17',
-  '/js/pages.js?v=17',
-  '/js/app.js?v=17',
+  '/assets/styles.css?v=18',
+  '/js/config.js?v=18',
+  '/js/i18n.js?v=18',
+  '/js/types.js?v=18',
+  '/js/utils.js?v=18',
+  '/js/data.js?v=18',
+  '/js/state.js?v=18',
+  '/js/favorites.js?v=18',
+  '/js/team.js?v=18',
+  '/js/evolution.js?v=18',
+  '/js/weakness.js?v=18',
+  '/js/battle.js?v=18',
+  '/js/detail.js?v=18',
+  '/js/calculator.js?v=18',
+  '/js/pages.js?v=18',
+  '/js/app.js?v=18',
   '/js/arena.js'
 ];
 
@@ -70,6 +70,15 @@ self.addEventListener('message', function(event) {
 self.addEventListener('fetch', function(event) {
   var url = new URL(event.request.url);
 
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+    event.respondWith(fetch(event.request).catch(function() {
+      return caches.match(event.request) || new Response('<h1>Offline</h1><p>Brak polaczenia z internetem. Sprobuj ponownie pozniej.</p>', {
+        headers: { 'Content-Type': 'text/html; charset=UTF-8' }
+      });
+    }));
+    return;
+  }
+
   /* Zadania do PokeAPI — network-first z fallbackiem na cache */
   if (url.hostname === 'pokeapi.co') {
     event.respondWith(
@@ -86,22 +95,18 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
-  /* Zasoby statyczne — cache-first */
+  /* Zasoby statyczne — network-first, by uniknac starego cache */
   event.respondWith(
-    caches.match(event.request).then(function(cached) {
-      var fetchPromise = fetch(event.request).then(function(response) {
-        var clone = response.clone();
-        caches.open(CACHE_NAME).then(function(cache) {
-          cache.put(event.request, clone);
-        });
-        return response;
-      }).catch(function() {
-        return cached || new Response('<h1>Offline</h1><p>Brak polaczenia z internetem. Sprobuj ponownie pozniej.</p>', {
-          headers: { 'Content-Type': 'text/html; charset=UTF-8' }
-        });
+    fetch(event.request).then(function(response) {
+      var clone = response.clone();
+      caches.open(CACHE_NAME).then(function(cache) {
+        cache.put(event.request, clone);
       });
-
-      return cached || fetchPromise;
+      return response;
+    }).catch(function() {
+      return caches.match(event.request) || new Response('<h1>Offline</h1><p>Brak polaczenia z internetem. Sprobuj ponownie pozniej.</p>', {
+        headers: { 'Content-Type': 'text/html; charset=UTF-8' }
+      });
     })
   );
 });
