@@ -180,6 +180,22 @@ function getPokemonDetailTarget(target, fallbackName) {
   return { id: 1, name: fallbackName || 'bulbasaur' };
 }
 
+function resolveCardAsset(entry, fallbackName) {
+  var formId = null;
+  if (entry && typeof entry === 'object') {
+    formId = entry.fid !== undefined ? entry.fid : (entry.baseId !== undefined ? entry.baseId : (entry.id !== undefined ? entry.id : null));
+  }
+  var artId = Number(formId) || 1;
+  var label = (entry && (entry.megaName || entry.formName || entry.name)) || fallbackName || 'Pokémon';
+  var route = getPokemonDetailTarget(entry, label);
+  return {
+    detailId: route.id,
+    detailName: route.name,
+    artId: artId,
+    label: label
+  };
+}
+
 function renderMegaZPage() {
   var megaData = Array.isArray(MEGA_EVO_DATA) ? MEGA_EVO_DATA : [];
   var zData    = Array.isArray(Z_MOVE_DATA) ? Z_MOVE_DATA : [];
@@ -228,10 +244,10 @@ function renderMegaZPage() {
     var ART = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
     html += '<div class="megaz-grid">';
     megaData.filter(function(m){ return !m.special; }).forEach(function(m) {
-      var mainRoute = getPokemonDetailTarget({ fid: m.fid, id: m.id, name: m.name, megaName: m.megaName }, m.megaName);
-      var altRoute = m.formB ? getPokemonDetailTarget({ fid: m.formB.fid, id: m.formB.id, name: m.formB.name, megaName: m.formB.megaName }, m.formB.megaName) : mainRoute;
-      var mainId = Number(mainRoute.id) || 1;
-      var altId = Number(altRoute.id) || mainId;
+      var mainCard = resolveCardAsset(m, m.megaName);
+      var altCard = m.formB ? resolveCardAsset({ fid: m.formB.fid, id: m.formB.id, name: m.formB.name, megaName: m.formB.megaName }, m.formB.megaName) : mainCard;
+      var mainId = Number(mainCard.artId) || 1;
+      var altId = Number(altCard.artId) || mainId;
       var artUrl  = ART + mainId + '.png';
       var artUrlB = ART + altId + '.png';
       var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + String(m.id || mainId) + '.png';
@@ -240,7 +256,7 @@ function renderMegaZPage() {
       var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
       var mainName = m.megaName;
       var altName = m.formB ? m.formB.megaName : mainName;
-      html += '<div class="megaz-card" data-main-id="'+String(mainRoute.id)+'" data-alt-id="'+String(altRoute.id)+'" data-main-name="'+mainName+'" data-alt-name="'+altName+'" data-form="main" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="var card=this; var form=card.getAttribute(\'data-form\')||\'main\'; var id=form===\'alt\' ? card.getAttribute(\'data-alt-id\') : card.getAttribute(\'data-main-id\'); var name=form===\'alt\' ? card.getAttribute(\'data-alt-name\') : card.getAttribute(\'data-main-name\'); loadDetail(id, name);">';
+      html += '<div class="megaz-card" data-main-id="'+String(mainCard.detailId)+'" data-alt-id="'+String(altCard.detailId)+'" data-main-name="'+mainName+'" data-alt-name="'+altName+'" data-form="main" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="var card=this; var form=card.getAttribute(\'data-form\')||\'main\'; var id=form===\'alt\' ? card.getAttribute(\'data-alt-id\') : card.getAttribute(\'data-main-id\'); var name=form===\'alt\' ? card.getAttribute(\'data-alt-name\') : card.getAttribute(\'data-main-name\'); loadDetail(id, name);">';
       html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+mainName+'"/></div>';
       html += '<div class="megaz-card-body">';
       html += '<div class="megaz-card-name" style="color:'+color+'">'+mainName+'</div>';
