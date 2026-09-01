@@ -48,13 +48,13 @@ html, body {
   }
 
   /* Układ */
-  .app-layout { flex-direction: column; height: auto; min-height: calc(100vh - 80px); }
+  .app-layout { flex-direction: column; flex: 1; min-height: 0; }
   aside {
     position: fixed; left: -280px; top: 0; bottom: 0;
     width: 280px; min-width: 280px; z-index: 1000; transition: left 0.25s ease;
   }
   aside.mobile-open { left: 0; }
-  .main-area { padding: 12px 10px; padding-bottom: 50px; overflow-x: hidden; }
+  .main-area { padding: 12px 10px; padding-bottom: calc(var(--statusbar-h) + 24px); overflow-x: hidden; }
 
   /* ── Detail page: 2-col → 1-col stack ── */
   .detail-desktop-grid {
