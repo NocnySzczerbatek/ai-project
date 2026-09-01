@@ -158,6 +158,11 @@ function showPage(page) {
 }
 
 /* ── MEGA / Z-MOVE PAGE RENDERER ── */
+function escAttr(value) {
+  // JSON.stringify uses double quotes, which must not collide with the double-quoted HTML attribute they're embedded in
+  return JSON.stringify(value).replace(/"/g, '&quot;');
+}
+
 function renderMegaZPage() {
   var megaData = Array.isArray(MEGA_EVO_DATA) ? MEGA_EVO_DATA : [];
   var zData    = Array.isArray(Z_MOVE_DATA) ? Z_MOVE_DATA : [];
@@ -189,7 +194,7 @@ function renderMegaZPage() {
       var ashArt = ashM.fid
         ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + ashM.fid + '.png'
         : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png';
-      html += '<div class="megaz-ash-card" onclick="openDetail(' + JSON.stringify(String(ashId)) + ',' + JSON.stringify(ashName) + ')">';
+      html += '<div class="megaz-ash-card" onclick="openDetail(' + escAttr(String(ashId)) + ',' + escAttr(ashName) + ')">';
       html += '<div class="megaz-ash-left"><img src="'+ashArt+'" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png\'" loading="lazy" alt="Ash-Greninja"/></div>';
       html += '<div class="megaz-ash-body">';
       html += '<div class="megaz-ash-banner">\u2728 SPECJALNA FORMA &mdash; Battle Bond</div>';
@@ -250,7 +255,7 @@ function renderMegaZPage() {
       var desc = typeof z.desc === 'object' ? (z.desc[currentLang] || z.desc.pl) : z.desc;
       var zId = Number(z.id || 1);
       var zName = z.name || 'pokemon';
-      html += '<div class="megaz-card zmove-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="openDetail(' + JSON.stringify(String(zId)) + ',' + JSON.stringify(zName) + ')">';
+      html += '<div class="megaz-card zmove-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="openDetail(' + escAttr(String(zId)) + ',' + escAttr(zName) + ')">';
       html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+zName+'"/></div>';
       html += '<div class="megaz-card-body">';
       html += '<div class="megaz-card-name" style="color:'+color+'">'+z.zmove+'</div>';
@@ -284,7 +289,7 @@ function renderMegaZPage() {
       var typeBadges = f.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
       var desc = typeof f.desc === 'object' ? (f.desc[currentLang] || f.desc.pl) : f.desc;
       var formName = f.formName || f.name || 'Pokémon';
-      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="openDetail(' + JSON.stringify(String(spriteId)) + ',' + JSON.stringify(formName) + ')">';
+      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="openDetail(' + escAttr(String(spriteId)) + ',' + escAttr(formName) + ')">';
       html += '<div class="megaz-card-img" style="position:relative">';
       html += '<img src="'+spriteUrl+'" loading="lazy" alt="'+formName+'" style="width:72px;height:72px;image-rendering:pixelated"/>';
       html += '<span class="megaz-region-badge" style="background:'+regionColor+'22;border:1px solid '+regionColor+'88;color:'+regionColor+'">'+f.region+'</span>';

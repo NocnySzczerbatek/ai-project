@@ -360,6 +360,7 @@ var MEGA_EVO_DATA = [
   {id:381,name:'latios',     megaName:'Mega Latios',          types:['dragon','psychic'],   ability:'Levitate',      bst:700, stone:'Latiosite',       sdn:'latiosmega',     fid:10063},
   {id:384,name:'rayquaza',   megaName:'Mega Rayquaza',        types:['dragon','flying'],    ability:'Delta Stream',  bst:780, stone:'Dragon Ascent',   sdn:'rayquazamega',   fid:10079},
   {id:428,name:'lopunny',    megaName:'Mega Lopunny',         types:['normal','fighting'],  ability:'Scrappy',       bst:580, stone:'Lopunnite',       sdn:'lopunnymega',    fid:10088},
+  {id:445,name:'garchomp',   megaName:'Mega Garchomp',        types:['dragon','ground'],    ability:'Sand Force',    bst:700, stone:'Garchompite',     sdn:'garchompmega',   fid:10058},
   {id:448,name:'lucario',    megaName:'Mega Lucario',         types:['fighting','steel'],   ability:'Adaptability',  bst:625, stone:'Lucarionite',     sdn:'lucariomega',    fid:10059},
   {id:460,name:'abomasnow',  megaName:'Mega Abomasnow',       types:['grass','ice'],        ability:'Snow Warning',  bst:594, stone:'Abomasite',       sdn:'abomasnowmega',  fid:10060},
   {id:475,name:'gallade',    megaName:'Mega Gallade',         types:['psychic','fighting'], ability:'Inner Focus',   bst:618, stone:'Galladite',       sdn:'gallademega',    fid:10068},
