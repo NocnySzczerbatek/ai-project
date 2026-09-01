@@ -65,6 +65,17 @@ function loadBuildFromRanking(id, name) {
   });
 }
 
+function safeRenderPageSection(renderFn, fallbackText) {
+  if (typeof renderFn === 'function') {
+    try {
+      return renderFn();
+    } catch (e) {
+      console.warn('safeRenderPageSection failed:', e);
+    }
+  }
+  return '<div class="empty-state"><span class="big-icon">⚠</span><div>' + (fallbackText || (currentLang === 'en' ? 'The section is temporarily unavailable.' : 'Sekcja jest chwilowo niedostępna.')) + '</div></div>';
+}
+
 function showPage(page) {
   currentPage = page;
   var main = document.getElementById('main-area');
@@ -94,16 +105,18 @@ function showPage(page) {
   }
 
   if (page === 'items') {
+    var itemsHtml = safeRenderPageSection(renderItems, currentLang === 'en' ? 'Items list could not load.' : 'Lista przedmiotów nie mogła się załadować.');
     main.innerHTML =
-      '<div class="page-title"><span>\ud83d\udce6 '+t('sec.items')+'</span></div>'
-      + '<div class="items-grid">' + renderItems() + '</div>';
+      '<div class="page-title"><span>📦 '+t('sec.items')+'</span></div>'
+      + '<div class="items-grid">' + itemsHtml + '</div>';
   }
 
   if (page === 'apricorns') {
+    var apricornsHtml = safeRenderPageSection(renderApricorns, currentLang === 'en' ? 'Apricorn data could not load.' : 'Dane o apricornach nie mogły się załadować.');
     main.innerHTML =
-      '<div class="page-title"><span>\ud83c\udf4e '+t('sec.apricorns')+'</span></div>'
-      + '<div class="mc-panel" style="margin-bottom:16px"><h2>\u2139\ufe0f '+t('apricorn.how')+'</h2><p style="font-size:18px;color:#aaa;line-height:1.6">'+t('apricorn.howDesc')+'</p></div>'
-      + '<div class="apricorn-grid">' + renderApricorns() + '</div>';
+      '<div class="page-title"><span>🌾 '+t('sec.apricorns')+'</span></div>'
+      + '<div class="mc-panel" style="margin-bottom:16px"><h2>ℹ️ '+t('apricorn.how')+'</h2><p style="font-size:18px;color:#aaa;line-height:1.6">'+t('apricorn.howDesc')+'</p></div>'
+      + '<div class="apricorn-grid">' + apricornsHtml + '</div>';
   }
 
   if (page === 'team-analyzer') {
@@ -194,19 +207,22 @@ function renderMegaZPage() {
     megaData.filter(function(m){ return !m.special; }).forEach(function(m) {
       var artUrl  = ART + (m.fid  || m.id) + '.png';
       var artUrlB = ART + (m.formB && m.formB.fid ? m.formB.fid : (m.fid || m.id)) + '.png';
-      // fallback: small sprite with fid — guaranteed to show the mega form sprite
       var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (m.fid || m.id) + '.png';
+      var fallUrlB = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (m.formB && m.formB.fid ? m.formB.fid : (m.fid || m.id)) + '.png';
       var color   = TYPE_HEX[m.types[0]] || '#888';
       var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
-      var clickSlug  = m.name + (m.megaName.endsWith(' X') ? '-mega-x' : m.megaName.endsWith(' Y') ? '-mega-y' : '-mega');
-      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail(\''+clickSlug+'\',\''+m.megaName+'\')">';
-      html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+m.megaName+'"/></div>';
+      var mainSlug = m.name + (m.megaName.endsWith(' X') ? '-mega-x' : m.megaName.endsWith(' Y') ? '-mega-y' : '-mega');
+      var altSlug = m.formB ? m.name + '-mega-y' : mainSlug;
+      var mainName = m.megaName;
+      var altName = m.formB ? m.formB.megaName : mainName;
+      html += '<div class="megaz-card" data-main-slug="'+mainSlug+'" data-alt-slug="'+altSlug+'" data-main-name="'+mainName+'" data-alt-name="'+altName+'" data-form="main" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="var card=this; var form=card.getAttribute(\'data-form\')||\'main\'; var slug=form===\'alt\' ? card.getAttribute(\'data-alt-slug\') : card.getAttribute(\'data-main-slug\'); var name=form===\'alt\' ? card.getAttribute(\'data-alt-name\') : card.getAttribute(\'data-main-name\'); loadDetail(slug, name);">';
+      html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+mainName+'"/></div>';
       html += '<div class="megaz-card-body">';
-      html += '<div class="megaz-card-name" style="color:'+color+'">'+m.megaName+'</div>';
+      html += '<div class="megaz-card-name" style="color:'+color+'">'+mainName+'</div>';
       if (m.formB) {
         html += '<div class="megaz-card-forms">'
-          + '<span class="megaz-form-tag" style="cursor:pointer" onclick="event.stopPropagation();this.closest(\'.megaz-card\').querySelector(\'img\').src=\''+artUrl+'\'">X</span>'
-          + '<span class="megaz-form-tag" style="cursor:pointer;margin-left:4px" onclick="event.stopPropagation();this.closest(\'.megaz-card\').querySelector(\'img\').src=\''+artUrlB+'\'">Y</span>'
+          + '<span class="megaz-form-tag" style="cursor:pointer" onclick="event.stopPropagation();var card=this.closest(\'.megaz-card\');card.setAttribute(\'data-form\',\'main\');var img=card.querySelector(\'img\');var nameEl=card.querySelector(\'.megaz-card-name\');img.src=\''+artUrl+'\';img.onerror=function(){this.src=\''+fallUrl+'\'};nameEl.textContent=card.getAttribute(\'data-main-name\');">X</span>'
+          + '<span class="megaz-form-tag" style="cursor:pointer;margin-left:4px" onclick="event.stopPropagation();var card=this.closest(\'.megaz-card\');card.setAttribute(\'data-form\',\'alt\');var img=card.querySelector(\'img\');var nameEl=card.querySelector(\'.megaz-card-name\');img.src=\''+artUrlB+'\';img.onerror=function(){this.src=\''+fallUrlB+'\'};nameEl.textContent=card.getAttribute(\'data-alt-name\');">Y</span>'
           + '</div>';
       }
       html += '<div class="megaz-card-types">'+typeBadges+'</div>';
