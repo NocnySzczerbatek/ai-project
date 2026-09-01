@@ -53,21 +53,8 @@ async function init() {
   // Sprawdź hash dla deep linku
   if (window.location.hash.startsWith('#pokemon-')) {
     var hid = window.location.hash.replace('#pokemon-','');
-    var hashTarget = null;
     if (hid) {
-      hashTarget = allPokemon.find(function(p){
-        return String(p.id) === String(hid) || p.name === hid || String(p.name) === String(hid);
-      });
-      if (!hashTarget) {
-        hashTarget = (Array.isArray(MEGA_EVO_DATA) ? MEGA_EVO_DATA : []).find(function(p){
-          var routeIds = [p.id, p.fid, p.name, p.megaName, p.slug];
-          return routeIds.some(function(v){ return String(v) === String(hid) || String(v).toLowerCase() === String(hid).toLowerCase(); });
-        });
-      }
-      if (hashTarget) {
-        var routeInfo = getPokemonDetailTarget(hashTarget, hashTarget.megaName || hashTarget.name || hid);
-        loadDetail(routeInfo.id, routeInfo.name);
-      }
+      openDetail(hid, hid);
     }
   }
 }
@@ -87,6 +74,32 @@ function applyFilters() {
   renderList();
 }
 
+function openDetail(targetId, fallbackName) {
+  var targetKey = String(targetId || '').trim();
+  var exactMatch = null;
+
+  if (Array.isArray(allPokemon) && targetKey) {
+    exactMatch = allPokemon.find(function(p) {
+      return String(p.fid || p.id) === targetKey || String(p.id) === targetKey || String(p.name) === targetKey;
+    });
+  }
+
+  if (!exactMatch && Array.isArray(MEGA_EVO_DATA) && targetKey) {
+    exactMatch = MEGA_EVO_DATA.find(function(p) {
+      return String(p.fid || p.id) === targetKey || String(p.id) === targetKey || String(p.name) === targetKey || String(p.megaName || '') === targetKey || String(p.slug || '') === targetKey;
+    });
+  }
+
+  if (exactMatch) {
+    var resolvedId = Number(exactMatch.fid || exactMatch.id || exactMatch.baseId || 1);
+    var resolvedName = exactMatch.megaName || exactMatch.formName || exactMatch.name || fallbackName || 'pokemon';
+    loadDetail(resolvedId, resolvedName);
+    return;
+  }
+
+  loadDetail(Number(targetId) || 1, fallbackName || targetKey || 'pokemon');
+}
+
 /* ── Renderowanie listy Pokémonów z lazy loading ── */
 function renderList() {
   var container = document.getElementById('pokemon-list');
@@ -98,19 +111,20 @@ function renderList() {
   var chunk = filteredList.slice(0, listOffset + PAGE_SIZE);
   container.innerHTML = '';
   chunk.forEach(function(p) {
+    var detailKey = p.fid || p.id;
     var div = document.createElement('div');
-    div.className = 'pokemon-entry' + (p.id === selectedId ? ' selected' : '');
-    div.dataset.id = p.id;
+    div.className = 'pokemon-entry' + (detailKey === selectedId ? ' selected' : '');
+    div.dataset.id = detailKey;
     var hasFriendship = FRIENDSHIP_EVOS.has(p.name);
     var hasTrade = p.name in LINK_CABLE_EVOS;
-    div.innerHTML = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\'/>\'" />'
+    div.innerHTML = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\'/ >\'" />'
       + '<span class="entry-name">'+p.name+'</span>'
       + '<span class="entry-id">#'+String(p.id).padStart(3,'0')+'</span>'
       + '<div class="entry-badges">'
-      + (hasFriendship ? '<span class="badge-friendship" title="Ewolucja przez przyja\u017a\u0144">\u2665</span>' : '')
-      + (hasTrade ? '<span class="badge-trade" title="Ewolucja przez wymian\u0119 (Link Cable)">\u21c4</span>' : '')
+      + (hasFriendship ? '<span class="badge-friendship" title="Ewolucja przez przyjaźń">♥</span>' : '')
+      + (hasTrade ? '<span class="badge-trade" title="Ewolucja przez wymianę (Link Cable)">⥄</span>' : '')
       + '</div>';
-    div.addEventListener('click', function(){ loadDetail(p.id, p.name); });
+    div.addEventListener('click', function(){ openDetail(detailKey, p.name); });
     container.appendChild(div);
   });
   if (chunk.length < filteredList.length) {

@@ -158,44 +158,6 @@ function showPage(page) {
 }
 
 /* ── MEGA / Z-MOVE PAGE RENDERER ── */
-function getPokemonDetailTarget(target, fallbackName) {
-  if (target && typeof target === 'object') {
-    var directId = target.detailId !== undefined ? target.detailId : (target.fid !== undefined ? target.fid : (target.baseId !== undefined ? target.baseId : target.id));
-    var directName = target.detailName || target.megaName || target.formName || target.name || fallbackName;
-    if (target.slug && !/^\d+([.]\d+)?$/.test(String(target.slug))) {
-      return { id: target.slug, name: directName || target.slug };
-    }
-    if (directId !== undefined && directId !== null && directId !== '') {
-      var numericId = Number(directId);
-      if (!Number.isNaN(numericId)) return { id: numericId, name: directName || String(directId) };
-      return { id: String(directId), name: directName || String(directId) };
-    }
-  }
-  if (typeof target === 'string' && target && target.trim()) {
-    var stringValue = target.trim();
-    if (/^\d+([.]\d+)?$/.test(stringValue)) return { id: Number(stringValue), name: fallbackName || stringValue };
-    return { id: stringValue, name: fallbackName || stringValue };
-  }
-  if (typeof target === 'number' && !Number.isNaN(target)) return { id: target, name: fallbackName || String(target) };
-  return { id: 1, name: fallbackName || 'bulbasaur' };
-}
-
-function resolveCardAsset(entry, fallbackName) {
-  var formId = null;
-  if (entry && typeof entry === 'object') {
-    formId = entry.fid !== undefined ? entry.fid : (entry.baseId !== undefined ? entry.baseId : (entry.id !== undefined ? entry.id : null));
-  }
-  var artId = Number(formId) || 1;
-  var label = (entry && (entry.megaName || entry.formName || entry.name)) || fallbackName || 'Pokémon';
-  var route = getPokemonDetailTarget(entry, label);
-  return {
-    detailId: route.id,
-    detailName: route.name,
-    artId: artId,
-    label: label
-  };
-}
-
 function renderMegaZPage() {
   var megaData = Array.isArray(MEGA_EVO_DATA) ? MEGA_EVO_DATA : [];
   var zData    = Array.isArray(Z_MOVE_DATA) ? Z_MOVE_DATA : [];
@@ -222,11 +184,12 @@ function renderMegaZPage() {
     var ashM = megaData.find(function(m){ return m.special; });
     if (ashM) {
       var note = typeof ashM.specialNote==='object' ? (ashM.specialNote[currentLang]||ashM.specialNote.pl) : '';
-      var ashRoute = getPokemonDetailTarget(ashM, 'Ash-Greninja');
+      var ashId = Number(ashM.fid || ashM.id || 658);
+      var ashName = ashM.megaName || ashM.name || 'Ash-Greninja';
       var ashArt = ashM.fid
         ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + ashM.fid + '.png'
         : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png';
-      html += '<div class="megaz-ash-card" onclick="loadDetail(' + JSON.stringify(ashRoute.id) + ',' + JSON.stringify(ashRoute.name) + ')">';
+      html += '<div class="megaz-ash-card" onclick="openDetail(' + JSON.stringify(String(ashId)) + ',' + JSON.stringify(ashName) + ')">';
       html += '<div class="megaz-ash-left"><img src="'+ashArt+'" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png\'" loading="lazy" alt="Ash-Greninja"/></div>';
       html += '<div class="megaz-ash-body">';
       html += '<div class="megaz-ash-banner">\u2728 SPECJALNA FORMA &mdash; Battle Bond</div>';
@@ -244,19 +207,17 @@ function renderMegaZPage() {
     var ART = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
     html += '<div class="megaz-grid">';
     megaData.filter(function(m){ return !m.special; }).forEach(function(m) {
-      var mainCard = resolveCardAsset(m, m.megaName);
-      var altCard = m.formB ? resolveCardAsset({ fid: m.formB.fid, id: m.formB.id, name: m.formB.name, megaName: m.formB.megaName }, m.formB.megaName) : mainCard;
-      var mainId = Number(mainCard.artId) || 1;
-      var altId = Number(altCard.artId) || mainId;
+      var mainId = Number(m.fid || m.id || 1);
+      var mainName = m.megaName || m.name || 'Pokémon';
+      var altId = Number((m.formB && (m.formB.fid || m.formB.id)) || mainId);
+      var altName = m.formB ? (m.formB.megaName || m.formB.name || mainName) : mainName;
       var artUrl  = ART + mainId + '.png';
       var artUrlB = ART + altId + '.png';
       var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + String(m.id || mainId) + '.png';
       var fallUrlB = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + String((m.formB && m.formB.id) || altId) + '.png';
       var color   = TYPE_HEX[m.types[0]] || '#888';
       var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
-      var mainName = m.megaName;
-      var altName = m.formB ? m.formB.megaName : mainName;
-      html += '<div class="megaz-card" data-main-id="'+String(mainCard.detailId)+'" data-alt-id="'+String(altCard.detailId)+'" data-main-name="'+mainName+'" data-alt-name="'+altName+'" data-form="main" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="var card=this; var form=card.getAttribute(\'data-form\')||\'main\'; var id=form===\'alt\' ? card.getAttribute(\'data-alt-id\') : card.getAttribute(\'data-main-id\'); var name=form===\'alt\' ? card.getAttribute(\'data-alt-name\') : card.getAttribute(\'data-main-name\'); loadDetail(id, name);">';
+      html += '<div class="megaz-card" data-main-id="'+String(mainId)+'" data-alt-id="'+String(altId)+'" data-main-name="'+mainName+'" data-alt-name="'+altName+'" data-form="main" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="var card=this; var form=card.getAttribute(\'data-form\')||\'main\'; var id=form===\'alt\' ? Number(card.getAttribute(\'data-alt-id\')) : Number(card.getAttribute(\'data-main-id\')); var name=form===\'alt\' ? card.getAttribute(\'data-alt-name\') : card.getAttribute(\'data-main-name\'); openDetail(id, name);">';
       html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+mainName+'"/></div>';
       html += '<div class="megaz-card-body">';
       html += '<div class="megaz-card-name" style="color:'+color+'">'+mainName+'</div>';
@@ -287,9 +248,10 @@ function renderMegaZPage() {
       var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + z.id + '.png';
       var color = TYPE_HEX[z.type] || '#888';
       var desc = typeof z.desc === 'object' ? (z.desc[currentLang] || z.desc.pl) : z.desc;
-      var zRoute = getPokemonDetailTarget({ id: z.id, name: z.name, slug: z.name }, z.name);
-      html += '<div class="megaz-card zmove-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail(' + JSON.stringify(zRoute.id) + ',' + JSON.stringify(zRoute.name) + ')">';
-      html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+z.name+'"/></div>';
+      var zId = Number(z.id || 1);
+      var zName = z.name || 'pokemon';
+      html += '<div class="megaz-card zmove-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="openDetail(' + JSON.stringify(String(zId)) + ',' + JSON.stringify(zName) + ')">';
+      html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+zName+'"/></div>';
       html += '<div class="megaz-card-body">';
       html += '<div class="megaz-card-name" style="color:'+color+'">'+z.zmove+'</div>';
       html += '<div class="megaz-card-pokemon">'+z.name.charAt(0).toUpperCase()+z.name.slice(1).replace(/-/g,' ')+'</div>';
@@ -315,19 +277,20 @@ function renderMegaZPage() {
     var regionColors = { Alola:'#f59e0b', Galar:'#8b5cf6', Hisui:'#10b981', Paldea:'#ef4444', Forma:'#00c8ff' };
     html += '<div class="megaz-grid">';
     formsData.forEach(function(f) {
-      var spriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + f.baseId + '.png';
+      var spriteId = Number(f.baseId || f.id || 1);
+      var spriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + spriteId + '.png';
       var color = TYPE_HEX[f.types[0]] || '#888';
       var regionColor = regionColors[f.region] || '#888';
       var typeBadges = f.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
       var desc = typeof f.desc === 'object' ? (f.desc[currentLang] || f.desc.pl) : f.desc;
-      var formRoute = getPokemonDetailTarget({ slug: f.slug, id: f.baseId, name: f.formName }, f.formName);
-      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="loadDetail(' + JSON.stringify(formRoute.id) + ',' + JSON.stringify(formRoute.name) + ')">';
+      var formName = f.formName || f.name || 'Pokémon';
+      html += '<div class="megaz-card" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="openDetail(' + JSON.stringify(String(spriteId)) + ',' + JSON.stringify(formName) + ')">';
       html += '<div class="megaz-card-img" style="position:relative">';
-      html += '<img src="'+spriteUrl+'" loading="lazy" alt="'+f.formName+'" style="width:72px;height:72px;image-rendering:pixelated"/>';
+      html += '<img src="'+spriteUrl+'" loading="lazy" alt="'+formName+'" style="width:72px;height:72px;image-rendering:pixelated"/>';
       html += '<span class="megaz-region-badge" style="background:'+regionColor+'22;border:1px solid '+regionColor+'88;color:'+regionColor+'">'+f.region+'</span>';
       html += '</div>';
       html += '<div class="megaz-card-body">';
-      html += '<div class="megaz-card-name" style="color:'+color+'">'+f.formName+'</div>';
+      html += '<div class="megaz-card-name" style="color:'+color+'">'+formName+'</div>';
       html += '<div class="megaz-card-types">'+typeBadges+'</div>';
       html += '<div class="megaz-card-desc">'+desc+'</div>';
       html += '</div>';
