@@ -52,8 +52,23 @@ async function init() {
   if (window._cobClearLoadTimer) window._cobClearLoadTimer();
   // Sprawdź hash dla deep linku
   if (window.location.hash.startsWith('#pokemon-')) {
-    var hid = parseInt(window.location.hash.replace('#pokemon-',''));
-    if (hid) { var found = allPokemon.find(function(p){return p.id===hid;}); if(found) loadDetail(found.id, found.name); }
+    var hid = window.location.hash.replace('#pokemon-','');
+    var hashTarget = null;
+    if (hid) {
+      hashTarget = allPokemon.find(function(p){
+        return String(p.id) === String(hid) || p.name === hid || String(p.name) === String(hid);
+      });
+      if (!hashTarget) {
+        hashTarget = (Array.isArray(MEGA_EVO_DATA) ? MEGA_EVO_DATA : []).find(function(p){
+          var routeIds = [p.id, p.fid, p.name, p.megaName, p.slug];
+          return routeIds.some(function(v){ return String(v) === String(hid) || String(v).toLowerCase() === String(hid).toLowerCase(); });
+        });
+      }
+      if (hashTarget) {
+        var routeInfo = getPokemonDetailTarget(hashTarget, hashTarget.megaName || hashTarget.name || hid);
+        loadDetail(routeInfo.id, routeInfo.name);
+      }
+    }
   }
 }
 

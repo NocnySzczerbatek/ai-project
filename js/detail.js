@@ -3,8 +3,32 @@
    ================================================================ */
 
 function buildOfflinePokemonData(id, name) {
-  var safeId = Number(id) || 1;
-  var safeName = String(name || 'pokemon-' + safeId).toLowerCase();
+  var knownFormMap = {};
+  var megaData = typeof MEGA_EVO_DATA !== 'undefined' ? MEGA_EVO_DATA : [];
+  if (Array.isArray(megaData)) {
+    megaData.forEach(function(entry) {
+      if (!entry) return;
+      if (entry.megaName) knownFormMap[String(entry.megaName).toLowerCase().replace(/\s+/g, '-')] = entry.fid || entry.id || 1;
+      if (entry.name) knownFormMap[String(entry.name).toLowerCase()] = entry.fid || entry.id || 1;
+      if (entry.formB && entry.formB.megaName) knownFormMap[String(entry.formB.megaName).toLowerCase().replace(/\s+/g, '-')] = entry.formB.fid || entry.id || 1;
+    });
+  }
+
+  var rawId = id;
+  var normalizedName = String(name || rawId || 'pokemon').toLowerCase();
+  var safeId = Number(rawId);
+  if (Number.isNaN(safeId)) {
+    var slugLookup = normalizedName.replace(/\s+/g, '-');
+    safeId = knownFormMap[slugLookup] || knownFormMap[normalizedName] || 1;
+  } else if (!Number.isFinite(safeId)) {
+    safeId = 1;
+  }
+
+  if (typeof rawId === 'string' && /^\d+(?:\.\d+)?$/.test(rawId)) {
+    safeId = Number(rawId);
+  }
+
+  var safeName = normalizedName || 'pokemon-' + safeId;
   var typePool = ['normal', 'grass', 'water', 'fire', 'electric', 'psychic', 'dark', 'fairy'];
   var typeName = typePool[(safeId + 3) % typePool.length];
 
