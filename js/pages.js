@@ -187,7 +187,7 @@ function renderMegaZPage() {
       var ashArt = ashM.fid
         ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'+ashM.fid+'.png'
         : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png';
-      html += '<div class="megaz-ash-card" onclick="loadDetail(\'ash-greninja\',\'Ash-Greninja\')">';
+      html += '<div class="megaz-ash-card" onclick="loadDetail('+Number(ashM.fid || 658.1)+',\'Ash-Greninja\')">';
       html += '<div class="megaz-ash-left"><img src="'+ashArt+'" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png\'" loading="lazy" alt="Ash-Greninja"/></div>';
       html += '<div class="megaz-ash-body">';
       html += '<div class="megaz-ash-banner">\u2728 SPECJALNA FORMA &mdash; Battle Bond</div>';
@@ -205,17 +205,17 @@ function renderMegaZPage() {
     var ART = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
     html += '<div class="megaz-grid">';
     megaData.filter(function(m){ return !m.special; }).forEach(function(m) {
-      var artUrl  = ART + (m.fid  || m.id) + '.png';
-      var artUrlB = ART + (m.formB && m.formB.fid ? m.formB.fid : (m.fid || m.id)) + '.png';
-      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (m.fid || m.id) + '.png';
-      var fallUrlB = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (m.formB && m.formB.fid ? m.formB.fid : (m.fid || m.id)) + '.png';
+      var mainId = Number(m.fid || m.id);
+      var altId = Number(m.formB && m.formB.fid ? m.formB.fid : m.fid || m.id);
+      var artUrl  = ART + mainId + '.png';
+      var artUrlB = ART + altId + '.png';
+      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + mainId + '.png';
+      var fallUrlB = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + altId + '.png';
       var color   = TYPE_HEX[m.types[0]] || '#888';
       var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
-      var mainSlug = m.name + (m.megaName.endsWith(' X') ? '-mega-x' : m.megaName.endsWith(' Y') ? '-mega-y' : '-mega');
-      var altSlug = m.formB ? m.name + '-mega-y' : mainSlug;
       var mainName = m.megaName;
       var altName = m.formB ? m.formB.megaName : mainName;
-      html += '<div class="megaz-card" data-main-slug="'+mainSlug+'" data-alt-slug="'+altSlug+'" data-main-name="'+mainName+'" data-alt-name="'+altName+'" data-form="main" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="var card=this; var form=card.getAttribute(\'data-form\')||\'main\'; var slug=form===\'alt\' ? card.getAttribute(\'data-alt-slug\') : card.getAttribute(\'data-main-slug\'); var name=form===\'alt\' ? card.getAttribute(\'data-alt-name\') : card.getAttribute(\'data-main-name\'); loadDetail(slug, name);">';
+      html += '<div class="megaz-card" data-main-id="'+mainId+'" data-alt-id="'+altId+'" data-main-name="'+mainName+'" data-alt-name="'+altName+'" data-form="main" style="border-color:'+color+'55;box-shadow:0 0 10px '+color+'22" onclick="var card=this; var form=card.getAttribute(\'data-form\')||\'main\'; var id=form===\'alt\' ? card.getAttribute(\'data-alt-id\') : card.getAttribute(\'data-main-id\'); var name=form===\'alt\' ? card.getAttribute(\'data-alt-name\') : card.getAttribute(\'data-main-name\'); loadDetail(Number(id), name);">';
       html += '<div class="megaz-card-img"><img src="'+artUrl+'" onerror="this.src=\''+fallUrl+'\'" loading="lazy" alt="'+mainName+'"/></div>';
       html += '<div class="megaz-card-body">';
       html += '<div class="megaz-card-name" style="color:'+color+'">'+mainName+'</div>';
