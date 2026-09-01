@@ -1,39 +1,39 @@
 /* Service Worker — Cobblemon Mastery Guide
    Cache'uje statyczne zasoby dla szybszego ladowania */
 
-const CACHE_NAME = 'cobblemon-v15.0';
+const CACHE_NAME = 'cobblemon-v16.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/arena.html',
   '/manifest.json',
-  '/css/variables.css?v=14',
-  '/css/base.css?v=14',
-  '/css/layout.css?v=14',
-  '/css/components.css?v=14',
-  '/css/pokemon.css?v=14',
-  '/css/competitive.css?v=14',
-  '/css/pages.css?v=14',
-  '/css/evolution.css?v=14',
-  '/css/glassmorphism.css?v=14',
-  '/css/responsive.css?v=14',
+  '/css/variables.css?v=16',
+  '/css/base.css?v=16',
+  '/css/layout.css?v=16',
+  '/css/components.css?v=16',
+  '/css/pokemon.css?v=16',
+  '/css/competitive.css?v=16',
+  '/css/pages.css?v=16',
+  '/css/evolution.css?v=16',
+  '/css/glassmorphism.css?v=16',
+  '/css/responsive.css?v=16',
   '/css/arena.css',
-  '/assets/styles.css?v=14',
-  '/js/config.js?v=14',
-  '/js/i18n.js?v=14',
-  '/js/types.js?v=14',
-  '/js/utils.js?v=14',
-  '/js/data.js?v=14',
-  '/js/state.js?v=14',
-  '/js/favorites.js?v=14',
-  '/js/team.js?v=14',
-  '/js/evolution.js?v=14',
-  '/js/weakness.js?v=14',
-  '/js/battle.js?v=14',
-  '/js/detail.js?v=14',
-  '/js/calculator.js?v=14',
-  '/js/pages.js?v=14',
-  '/js/app.js?v=14',
+  '/assets/styles.css?v=16',
+  '/js/config.js?v=16',
+  '/js/i18n.js?v=16',
+  '/js/types.js?v=16',
+  '/js/utils.js?v=16',
+  '/js/data.js?v=16',
+  '/js/state.js?v=16',
+  '/js/favorites.js?v=16',
+  '/js/team.js?v=16',
+  '/js/evolution.js?v=16',
+  '/js/weakness.js?v=16',
+  '/js/battle.js?v=16',
+  '/js/detail.js?v=16',
+  '/js/calculator.js?v=16',
+  '/js/pages.js?v=16',
+  '/js/app.js?v=16',
   '/js/arena.js'
 ];
 
@@ -58,6 +58,12 @@ self.addEventListener('activate', function(event) {
     })
   );
   self.clients.claim();
+});
+
+self.addEventListener('message', function(event) {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 /* Fetch — strategia stale-while-revalidate dla statycznych, network-first dla API */

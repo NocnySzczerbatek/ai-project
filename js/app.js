@@ -5,7 +5,7 @@
 /* ── Inicjalizacja aplikacji ── */
 async function init() {
   // Wersjonowanie cache — czyszczenie starych danych przy zmianie wersji
-  var COB_VERSION = '2.1';
+  var COB_VERSION = '2.2';
   try {
     var storedVer = localStorage.getItem('cob_version');
     if (storedVer !== COB_VERSION) {

@@ -61,18 +61,18 @@
   })();
   </script>
 
-  <!-- Arkusze stylów (modularny CSS) — v13 cache-bust -->
-  <link rel="stylesheet" href="css/variables.css?v=14" />
-  <link rel="stylesheet" href="css/base.css?v=14" />
-  <link rel="stylesheet" href="css/layout.css?v=14" />
-  <link rel="stylesheet" href="css/components.css?v=14" />
-  <link rel="stylesheet" href="css/pokemon.css?v=14" />
-  <link rel="stylesheet" href="css/competitive.css?v=14" />
-  <link rel="stylesheet" href="css/pages.css?v=14" />
-  <link rel="stylesheet" href="css/evolution.css?v=14" />
-  <link rel="stylesheet" href="css/glassmorphism.css?v=14" />
-  <link rel="stylesheet" href="css/responsive.css?v=14" />
-  <link rel="stylesheet" href="assets/styles.css?v=14" />
+  <!-- Arkusze stylów (modularny CSS) — v16 cache-bust -->
+  <link rel="stylesheet" href="css/variables.css?v=16" />
+  <link rel="stylesheet" href="css/base.css?v=16" />
+  <link rel="stylesheet" href="css/layout.css?v=16" />
+  <link rel="stylesheet" href="css/components.css?v=16" />
+  <link rel="stylesheet" href="css/pokemon.css?v=16" />
+  <link rel="stylesheet" href="css/competitive.css?v=16" />
+  <link rel="stylesheet" href="css/pages.css?v=16" />
+  <link rel="stylesheet" href="css/evolution.css?v=16" />
+  <link rel="stylesheet" href="css/glassmorphism.css?v=16" />
+  <link rel="stylesheet" href="css/responsive.css?v=16" />
+  <link rel="stylesheet" href="assets/styles.css?v=16" />
 </head>
 <body>
 
@@ -144,29 +144,43 @@
   <span id="status-text">Ladowanie listy Pok&eacute;mon&oacute;w...</span>
 </div>
 
-<!-- Skrypty JS (modularny, defer) — v14 cache-bust -->
-<script defer src="js/config.js?v=14"></script>
-<script defer src="js/i18n.js?v=14"></script>
-<script defer src="js/types.js?v=14"></script>
-<script defer src="js/utils.js?v=14"></script>
-<script defer src="js/data.js?v=14"></script>
-<script defer src="js/state.js?v=14"></script>
-<script defer src="js/favorites.js?v=14"></script>
-<script defer src="js/team.js?v=14"></script>
-<script defer src="js/evolution.js?v=14"></script>
-<script defer src="js/weakness.js?v=14"></script>
-<script defer src="js/battle.js?v=14"></script>
-<script defer src="js/detail.js?v=14"></script>
-<script defer src="js/calculator.js?v=14"></script>
-<script defer src="js/pages.js?v=14"></script>
-<script defer src="js/app.js?v=14"></script>
+<!-- Skrypty JS (modularny, defer) — v16 cache-bust -->
+<script defer src="js/config.js?v=16"></script>
+<script defer src="js/i18n.js?v=16"></script>
+<script defer src="js/types.js?v=16"></script>
+<script defer src="js/utils.js?v=16"></script>
+<script defer src="js/data.js?v=16"></script>
+<script defer src="js/state.js?v=16"></script>
+<script defer src="js/favorites.js?v=16"></script>
+<script defer src="js/team.js?v=16"></script>
+<script defer src="js/evolution.js?v=16"></script>
+<script defer src="js/weakness.js?v=16"></script>
+<script defer src="js/battle.js?v=16"></script>
+<script defer src="js/detail.js?v=16"></script>
+<script defer src="js/calculator.js?v=16"></script>
+<script defer src="js/pages.js?v=16"></script>
+<script defer src="js/app.js?v=16"></script>
 
 <!-- Service Worker -->
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/service-worker.js')
-      .then(function(reg) { console.log('SW registered, scope:', reg.scope); })
+      .then(function(reg) {
+        console.log('SW registered, scope:', reg.scope);
+        if (reg.waiting) {
+          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+        reg.addEventListener('updatefound', function() {
+          var nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', function() {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              window.location.reload();
+            }
+          });
+        });
+      })
       .catch(function(err) { console.warn('SW registration failed:', err); });
   });
 }

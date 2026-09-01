@@ -3,7 +3,7 @@
    ================================================================ */
 
 // Wersja cache — używana do invalidacji localStorage
-var COB_VERSION = '2.1';
+var COB_VERSION = '2.2';
 
 // Rozmiar strony listy Pokémonów (lazy loading)
 var PAGE_SIZE = 80;
