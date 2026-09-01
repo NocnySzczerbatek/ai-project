@@ -180,14 +180,14 @@ function renderMegaZPage() {
       ? '<strong>Mega Evolutions</strong> &mdash; temporary power-ups activated by a Mega Stone during battle (Gen VI). Click any card to open full Build, IV Calculator and Competitive recommendations.'
       : '<strong>Mega Ewolucje</strong> &mdash; tymczasowe wzmocnienia aktywowane przez Mega Kamie\u0144 podczas walki (Gen VI). Kliknij kart\u0119, by otworzy\u0107 Build, Kalkulator IV i rekomendacje Competitive.';
     html += '</div>';
-    // Ash-Greninja special horizontal card (outside grid)
+
     var ashM = megaData.find(function(m){ return m.special; });
     if (ashM) {
       var note = typeof ashM.specialNote==='object' ? (ashM.specialNote[currentLang]||ashM.specialNote.pl) : '';
       var ashArt = ashM.fid
-        ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'+ashM.fid+'.png'
+        ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + ashM.fid + '.png'
         : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png';
-      html += '<div class="megaz-ash-card" onclick="loadDetail('+Number(ashM.fid || 658.1)+',\'Ash-Greninja\')">';
+      html += '<div class="megaz-ash-card" onclick="loadDetail(' + Number(ashM.fid || 658) + ',\'Ash-Greninja\')">';
       html += '<div class="megaz-ash-left"><img src="'+ashArt+'" onerror="this.src=\'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/658.png\'" loading="lazy" alt="Ash-Greninja"/></div>';
       html += '<div class="megaz-ash-body">';
       html += '<div class="megaz-ash-banner">\u2728 SPECJALNA FORMA &mdash; Battle Bond</div>';
@@ -201,16 +201,16 @@ function renderMegaZPage() {
       html += '<div class="megaz-ash-cta">\ud83d\udccb '+(currentLang==='en'?'Full Build & Calculator':'Pe\u0142ny Build i Kalkulator')+'</div>';
       html += '</div></div>';
     }
-    // ── Mega cards — artwork URL built directly from fid (PokeAPI form ID) ──
+
     var ART = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
     html += '<div class="megaz-grid">';
     megaData.filter(function(m){ return !m.special; }).forEach(function(m) {
-      var mainId = Number(m.fid || m.id);
-      var altId = Number(m.formB && m.formB.fid ? m.formB.fid : m.fid || m.id);
+      var mainId = Number(m.fid || m.id || 1);
+      var altId = Number(m.formB && m.formB.fid ? m.formB.fid : (m.fid || m.id || 1));
       var artUrl  = ART + mainId + '.png';
       var artUrlB = ART + altId + '.png';
-      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + mainId + '.png';
-      var fallUrlB = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + altId + '.png';
+      var fallUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + String(m.id || mainId) + '.png';
+      var fallUrlB = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + String((m.formB && m.formB.id) || altId) + '.png';
       var color   = TYPE_HEX[m.types[0]] || '#888';
       var typeBadges = m.types.map(function(tp){ return '<span class="type-badge type-'+tp+'">'+typeName(tp)+'</span>'; }).join('');
       var mainName = m.megaName;
