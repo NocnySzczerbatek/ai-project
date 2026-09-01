@@ -74,21 +74,45 @@ function applyFilters() {
   renderList();
 }
 
+function matchPokemonKey(p, targetId) {
+  if (!p || !targetId) return false;
+  var normalizedTarget = String(targetId).trim();
+  if (!normalizedTarget) return false;
+
+  return (
+    p.fid == targetId ||
+    p.id == targetId ||
+    p.name == targetId ||
+    p.slug == targetId ||
+    p.megaName == targetId ||
+    p.formName == targetId ||
+    p.baseId == targetId
+  );
+}
+
+function resolveExactPokemonTarget(targetId) {
+  var key = String(targetId || '').trim();
+  if (!key) return null;
+
+  if (Array.isArray(allPokemon)) {
+    for (var i = 0; i < allPokemon.length; i++) {
+      var p = allPokemon[i];
+      if (matchPokemonKey(p, key)) return p;
+    }
+  }
+
+  if (Array.isArray(MEGA_EVO_DATA)) {
+    for (var j = 0; j < MEGA_EVO_DATA.length; j++) {
+      var form = MEGA_EVO_DATA[j];
+      if (matchPokemonKey(form, key)) return form;
+    }
+  }
+
+  return null;
+}
+
 function openDetail(targetId, fallbackName) {
-  var targetKey = String(targetId || '').trim();
-  var exactMatch = null;
-
-  if (Array.isArray(allPokemon) && targetKey) {
-    exactMatch = allPokemon.find(function(p) {
-      return String(p.fid || p.id) === targetKey || String(p.id) === targetKey || String(p.name) === targetKey;
-    });
-  }
-
-  if (!exactMatch && Array.isArray(MEGA_EVO_DATA) && targetKey) {
-    exactMatch = MEGA_EVO_DATA.find(function(p) {
-      return String(p.fid || p.id) === targetKey || String(p.id) === targetKey || String(p.name) === targetKey || String(p.megaName || '') === targetKey || String(p.slug || '') === targetKey;
-    });
-  }
+  var exactMatch = resolveExactPokemonTarget(targetId);
 
   if (exactMatch) {
     var resolvedId = Number(exactMatch.fid || exactMatch.id || exactMatch.baseId || 1);
@@ -97,7 +121,7 @@ function openDetail(targetId, fallbackName) {
     return;
   }
 
-  loadDetail(Number(targetId) || 1, fallbackName || targetKey || 'pokemon');
+  loadDetail(Number(targetId) || 1, fallbackName || String(targetId || 'pokemon') || 'pokemon');
 }
 
 /* ── Renderowanie listy Pokémonów z lazy loading ── */
@@ -111,20 +135,21 @@ function renderList() {
   var chunk = filteredList.slice(0, listOffset + PAGE_SIZE);
   container.innerHTML = '';
   chunk.forEach(function(p) {
-    var detailKey = p.fid || p.id;
+    var detailKey = Number(p.fid || p.id || 1);
+    var spriteId = Number(p.fid || p.id || 1);
     var div = document.createElement('div');
     div.className = 'pokemon-entry' + (detailKey === selectedId ? ' selected' : '');
-    div.dataset.id = detailKey;
+    div.dataset.id = String(detailKey);
     var hasFriendship = FRIENDSHIP_EVOS.has(p.name);
     var hasTrade = p.name in LINK_CABLE_EVOS;
-    div.innerHTML = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\'/ >\'" />'
+    div.innerHTML = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+spriteId+'.png" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\'/ >\'" alt="'+p.name+'" />'
       + '<span class="entry-name">'+p.name+'</span>'
       + '<span class="entry-id">#'+String(p.id).padStart(3,'0')+'</span>'
       + '<div class="entry-badges">'
       + (hasFriendship ? '<span class="badge-friendship" title="Ewolucja przez przyjaźń">♥</span>' : '')
       + (hasTrade ? '<span class="badge-trade" title="Ewolucja przez wymianę (Link Cable)">⥄</span>' : '')
       + '</div>';
-    div.addEventListener('click', function(){ openDetail(detailKey, p.name); });
+    div.addEventListener('click', function(){ openDetail(String(detailKey), p.name); });
     container.appendChild(div);
   });
   if (chunk.length < filteredList.length) {

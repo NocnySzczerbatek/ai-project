@@ -30,9 +30,10 @@ const dataSource = fs.readFileSync(path.join(__dirname, '..', 'js', 'data.js'), 
 const appSource = fs.readFileSync(path.join(__dirname, '..', 'js', 'app.js'), 'utf8');
 const pagesSource = fs.readFileSync(path.join(__dirname, '..', 'js', 'pages.js'), 'utf8');
 assert.ok(appSource.includes('function openDetail'), 'detail opener should exist');
-assert.ok(appSource.includes("String(p.fid || p.id) === targetKey") && appSource.includes('p.fid || p.id'), 'route lookup must match by the exact unique key from the object itself');
+assert.ok(appSource.includes('p.fid == targetId') || appSource.includes('p.fid === targetId'), 'route lookup must match exact object keys when opening details');
+assert.ok(!appSource.includes('allPokemon.find(function(p)') && !appSource.includes('MEGA_EVO_DATA.find(function(p)'), 'detail lookup must not resolve by first array match');
 assert.ok(dataSource.includes('fid:10033') && dataSource.includes("megaName:'Mega Venusaur'"), 'mega form data should include the correct Venusaur form ID and display name');
-assert.ok(dataSource.includes('fid:10087') && dataSource.includes("megaName:'Ash-Greninja'"), 'ash greninja data should use the unique form ID');
+assert.ok(dataSource.includes('fid:10117') && dataSource.includes("megaName:'Ash-Greninja'"), 'ash greninja data should use the unique form ID');
 assert.ok(pagesSource.includes('openDetail(') && pagesSource.includes('data-main-id'), 'page cards should open by exact identifier from the current object, not by default first result');
 
 console.log('offline fallback test passed');
