@@ -15,3 +15,5 @@ desktop.ini
 # Node (jeśli używane lokalnie)
 node_modules/
 npm-debug.log*
+
+.tmp-*.png
