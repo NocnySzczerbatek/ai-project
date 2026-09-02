@@ -14,9 +14,9 @@
 .dashboard-kicker { color: var(--aqua); font-size: 12px; font-weight: 800; letter-spacing: 0.1em; }
 .dashboard-hero h1 { font-size: 34px; line-height: 1.1; margin: 6px 0 10px; }
 .dashboard-hero p { max-width: 620px; color: var(--gray); font-size: 16px; }
-.dashboard-search { display: flex; gap: 8px; max-width: 650px; margin-top: 20px; position: relative; z-index: 1; }
+.dashboard-search { display: flex; flex-wrap: wrap; gap: 8px; max-width: 650px; margin-top: 20px; position: relative; z-index: 1; }
 .dashboard-search .mc-input { flex: 1 1 auto; min-width: 0; }.dashboard-search-btn { flex: 0 0 48px; min-width: 48px; justify-content: center; }
-.dashboard-search-suggestions { position: absolute; top: calc(100% + 6px); left: 0; right: 0; overflow: hidden; border: 1px solid var(--border-strong); border-radius: 6px; background: rgba(13,16,26,0.98); box-shadow: 0 14px 30px rgba(0,0,0,0.4); z-index: 20; }
+.dashboard-search-suggestions { flex: 1 0 100%; order: 3; overflow: hidden; border: 1px solid var(--border-strong); border-radius: 6px; background: rgba(13,16,26,0.98); box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
 .dashboard-suggestion { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; width: 100%; min-height: 48px; gap: 10px; padding: 6px 12px; color: var(--white); background: transparent; border: 0; border-bottom: 1px solid var(--border); cursor: pointer; font: inherit; text-align: left; }
 .dashboard-suggestion:last-child { border-bottom: 0; }.dashboard-suggestion:hover, .dashboard-suggestion:focus-visible { background: rgba(34,211,238,0.12); outline: 0; }
 .dashboard-suggestion img { width: 34px; height: 34px; image-rendering: pixelated; }.dashboard-suggestion-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-transform: capitalize; font-weight: 700; }.dashboard-suggestion-id { color: var(--gray-dim); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }.dashboard-search-empty { padding: 14px; color: var(--gray); }

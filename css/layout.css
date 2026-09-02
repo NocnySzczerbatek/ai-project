@@ -86,6 +86,7 @@ aside {
   padding: 22px 22px calc(var(--statusbar-h) + 24px) 22px;
 }
 .dashboard-page aside { display: none; }
+.dashboard-page aside.pokedex-open { display: flex; }
 .sidebar-search {
   padding: 14px;
   border-bottom: 1px solid var(--border);

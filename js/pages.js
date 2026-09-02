@@ -78,6 +78,7 @@ function safeRenderPageSection(renderFn, fallbackText) {
 
 function openPokedex() {
   var sidebar = document.getElementById('sidebar');
+  sidebar.classList.add('pokedex-open');
   if (window.innerWidth <= 768 && !sidebar.classList.contains('mobile-open')) toggleHamburger();
   window.setTimeout(function() { document.getElementById('search-input').focus(); }, 150);
 }
