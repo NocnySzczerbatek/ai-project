@@ -264,6 +264,29 @@ var ROLE_LABELS={
   'support': {pl:'Wsparcie',en:'Support'}
 };
 
+function getDailyTeam(seed) {
+  var roles = ['defense', 'support', 'ph-atk', 'sp-atk', 'ph-atk', 'sp-atk'];
+  var value = Number(seed);
+  if (!value) {
+    var today = new Date().toISOString().slice(0, 10);
+    value = today.split('').reduce(function(total, character) { return total * 31 + character.charCodeAt(0); }, 7);
+  }
+  function next() { value = (value * 9301 + 49297) % 233280; return value / 233280; }
+  var used = {};
+  return roles.map(function(role) {
+    var candidates = TEAM_REC_POOL.filter(function(member) { return member.role === role && !used[member.id]; });
+    var member = candidates[Math.floor(next() * candidates.length)] || TEAM_REC_POOL.find(function(candidate) { return !used[candidate.id]; });
+    used[member.id] = true;
+    return { id: member.id, name: member.name, types: member.types, role: member.role };
+  });
+}
+
+function loadDailyTeamIntoAnalyzer(team) {
+  teamSlots = team.map(function(member) { return { id: member.id, name: member.name, types: member.types }; });
+  saveTeam();
+  showPage('team-analyzer');
+}
+
 /* ================================================================
    TEAMBUILDER AI — algorytm rekomendacji
    ================================================================ */

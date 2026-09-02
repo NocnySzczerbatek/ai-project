@@ -22,6 +22,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+@media (max-width: 768px) {
+  html, body { min-height: 100%; height: auto; overflow-y: auto; }
+  body { min-height: 100dvh; overflow-x: hidden; background-attachment: scroll; }
+}
+
 h1, h2, h3, h4 { font-family: var(--font-main); font-weight: 800; letter-spacing: -0.01em; }
 
 ::selection { background: rgba(91,140,255,0.35); color: #fff; }
@@ -44,6 +49,7 @@ h1, h2, h3, h4 { font-family: var(--font-main); font-weight: 800; letter-spacing
   0%, 100% { box-shadow: 0 0 8px rgba(255,77,106,0.3); }
   50% { box-shadow: 0 0 26px rgba(255,77,106,0.6); }
 }
+@keyframes pokeball-spin { to { transform: rotate(360deg); } }
 
 /* ── Separator ── */
 .section-sep { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
@@ -55,4 +61,14 @@ h1, h2, h3, h4 { font-family: var(--font-main); font-weight: 800; letter-spacing
   width: 42px; height: 42px; border-radius: 50%;
   border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--aqua);
   animation: spin 0.8s linear infinite;
+}
+.pokeball-loader, .loading-spinner, .spinner {
+  border: 2px solid #f4f5f7; border-radius: 50%; position: relative;
+  background: linear-gradient(to bottom, #eb3b3b 0 46%, #151820 46% 54%, #f4f5f7 54% 100%);
+  animation: pokeball-spin 0.85s linear infinite;
+}
+.pokeball-loader, .loading-spinner { width: 42px; height: 42px; }
+.pokeball-loader::after, .loading-spinner::after, .spinner::after {
+  content: ''; position: absolute; width: 10px; height: 10px; border: 2px solid #151820;
+  background: #f4f5f7; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }

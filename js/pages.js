@@ -76,12 +76,61 @@ function safeRenderPageSection(renderFn, fallbackText) {
   return '<div class="empty-state"><span class="big-icon">⚠</span><div>' + (fallbackText || (currentLang === 'en' ? 'The section is temporarily unavailable.' : 'Sekcja jest chwilowo niedostępna.')) + '</div></div>';
 }
 
+function openPokedex() {
+  var sidebar = document.getElementById('sidebar');
+  if (window.innerWidth <= 768 && !sidebar.classList.contains('mobile-open')) toggleHamburger();
+  window.setTimeout(function() { document.getElementById('search-input').focus(); }, 150);
+}
+
+function renderDailyTeamCards(team) {
+  return team.map(function(member) {
+    var color = (TYPE_HEX && TYPE_HEX[member.types[0]]) || '#888';
+    var role = ROLE_LABELS[member.role] ? (ROLE_LABELS[member.role][currentLang] || ROLE_LABELS[member.role].pl) : member.role;
+    var types = member.types.map(function(type) { return '<span class="type-badge type-'+type+'">'+typeName(type)+'</span>'; }).join('');
+    return '<button class="daily-team-member" style="--type-glow:'+color+'" onclick="openDetail('+member.id+',\''+member.name+'\')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+member.id+'.png" loading="lazy" alt="'+member.name+'"/><span class="daily-team-name">'+member.name+'</span><span class="daily-team-role">'+role+'</span><span class="daily-team-types">'+types+'</span></button>';
+  }).join('');
+}
+
+function refreshDailyTeam() {
+  var team = getDailyTeam(Date.now());
+  var container = document.getElementById('daily-team-members');
+  if (container) container.innerHTML = renderDailyTeamCards(team);
+  window._dailyTeam = team;
+}
+
+function loadDailyTeam() {
+  loadDailyTeamIntoAnalyzer(window._dailyTeam || getDailyTeam());
+}
+
+function renderDashboard() {
+  var dailyTeam = getDailyTeam();
+  window._dailyTeam = dailyTeam;
+  var searchPlaceholder = currentLang === 'en' ? 'Search the Pokedex by name or number...' : 'Szukaj w Pokedexie po nazwie lub numerze...';
+  var description = currentLang === 'en' ? 'Build stronger teams, inspect every Pokemon and prepare for the next server battle.' : 'Buduj mocniejsze zespoly, sprawdzaj kazdego Pokemona i przygotuj sie na kolejna serwerowa walke.';
+  return '<section class="dashboard-hero"><div class="dashboard-kicker">COBBLEMON DATABASE</div><h1>Cobblemon Mastery</h1><p>'+description+'</p><div class="dashboard-search"><input class="mc-input" type="search" placeholder="'+searchPlaceholder+'" onfocus="openPokedex()" oninput="document.getElementById(\'search-input\').value=this.value;searchQuery=this.value;applyFilters()"/><button class="mc-btn dashboard-search-btn" onclick="openPokedex()" aria-label="Pokedex">&#128269;</button></div><button class="dashboard-pokedex-link" onclick="openPokedex()">'+(currentLang==='en'?'Open Pokedex':'Otworz Pokedex')+' <span>&rarr;</span></button></section>'
+    +'<section class="daily-team-panel"><div><div class="dashboard-kicker">'+(currentLang==='en'?'DAILY SQUAD':'ZESPOL DNIA')+'</div><h2>'+(currentLang==='en'?'Ready for six roles':'Gotowy sklad szesciu rol')+'</h2><p>'+(currentLang==='en'?'A balanced starting point selected from the competitive pool.':'Zbalansowany punkt startowy wybrany z puli konkurencyjnej.')+'</p></div><div class="daily-team-actions"><button class="mc-btn" onclick="refreshDailyTeam()" title="'+(currentLang==='en'?'Draw another team':'Losuj ponownie')+'">&#10227;</button><button class="mc-btn daily-team-load" onclick="loadDailyTeam()">'+(currentLang==='en'?'Use in PvP analyzer':'Uzyj w analizatorze PvP')+'</button></div><div class="daily-team-members" id="daily-team-members">'+renderDailyTeamCards(dailyTeam)+'</div></section>'
+    +renderFavoritesSection();
+}
+
 function showPage(page) {
   currentPage = page;
+  document.body.classList.toggle('dashboard-page', page === 'welcome');
   var main = document.getElementById('main-area');
   if (!main) return;
 
   try {
+  if (page === 'welcome') {
+    main.innerHTML = renderDashboard()
+      + '<div class="welcome-grid">'
+      + '<div class="welcome-card accent-green"><h3>&#9876; '+t('welcome.what')+'</h3><p>'+t('welcome.whatDesc')+'</p></div>'
+      + '<div class="welcome-card accent-teal"><h3>&#9876; '+t('nav.team')+'</h3><p>'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sklad druzyny PvP i pokrycie typow.')+'</p><p><button class="mc-btn" onclick="showPage(\'team-analyzer\')">&rarr; '+t('nav.team')+'</button></p></div>'
+      + '<div class="welcome-card accent-blue"><h3>&#9878; '+t('nav.typechart')+'</h3><p>'+(currentLang==='en'?'Check weaknesses, resistances and immunities with dual-type support.':'Sprawdz slabosci, odpornosci i immunitety z obsluga dwoch typow.')+'</p><p><button class="mc-btn" onclick="showPage(\'type-chart\')">&rarr; '+t('nav.typechart')+'</button></p></div>'
+      + '<div class="welcome-card accent-apricorn"><h3>&#127822; '+t('nav.apricorns')+'</h3><p>'+(currentLang==='en'?'Craft unique Pokeballs from Apricorns.':'Craftuj unikalne Pokeballe z Apricornow.')+'</p><p><button class="mc-btn" onclick="showPage(\'apricorns\')">&rarr; '+t('nav.apricorns')+'</button></p></div>'
+      + '<div class="welcome-card accent-gold"><h3>&#128230; '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wazne przedmioty w jednym miejscu.')+'</p><p><button class="mc-btn" onclick="showPage(\'items\')">&rarr; '+t('nav.items')+'</button></p></div>'
+      + '<div class="welcome-card accent-purple"><h3>&#10024; '+t('sec.megaz')+'</h3><p>'+(currentLang==='en'?'Mega Evolutions, Z-Moves and build tools.':'Mega Ewolucje, Ruchy Z i narzedzia do buildow.')+'</p><p><button class="mc-btn" onclick="showPage(\'mega-z\')">&rarr; '+t('sec.megaz')+'</button></p></div>'
+      + '</div>';
+    return;
+  }
   if (page === 'welcome') {
     main.innerHTML =
       '<div class="page-title"><span>\ud83c\udfe0 Cobblemon Mastery Guide</span></div>'

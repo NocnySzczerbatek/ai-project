@@ -48,13 +48,14 @@ html, body {
   }
 
   /* Układ */
-  .app-layout { flex-direction: column; flex: 1; min-height: 0; }
+  .app-layout { display: block; flex: none; min-height: 0; }
   aside {
     position: fixed; left: -280px; top: 0; bottom: 0;
     width: 280px; min-width: 280px; z-index: 1000; transition: left 0.25s ease;
   }
   aside.mobile-open { left: 0; }
-  .main-area { padding: 12px 10px; padding-bottom: calc(var(--statusbar-h) + 24px); overflow-x: hidden; }
+  .dashboard-page aside.mobile-open { display: flex; }
+  .main-area { min-height: 0; padding: 12px 10px 28px; overflow: visible; overflow-x: hidden; }
 
   /* ── Detail page: 2-col → 1-col stack ── */
   .detail-desktop-grid {
@@ -84,6 +85,13 @@ html, body {
     width: 100%;
     margin-bottom: 4px;
   }
+  .dashboard-hero { padding: 20px 16px; }
+  .dashboard-hero h1 { font-size: 27px; }
+  .dashboard-search { align-items: stretch; }
+  .daily-team-panel { padding: 16px 12px; }
+  .daily-team-actions { justify-content: flex-start; margin-top: 14px; flex-wrap: wrap; }
+  .daily-team-members { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .daily-team-member { min-height: 132px; }
 
   /* ── Ash-Greninja banner: pełny stack pionowy zamiast ciasnego wiersza ── */
   .megaz-ash-card {
@@ -224,11 +232,12 @@ html, body {
     gap: 4px;
     margin-bottom: 6px;
   }
-  .iv-header-left { flex: 1; min-width: 0; }
+  .iv-header-left { flex: 1 1 150px; min-width: 0; }
   .iv-name { font-size: 14px; }
   .iv-val { font-size: 20px; flex-shrink: 0; }
   .iv-stat-meta {
     flex-wrap: wrap;
+    justify-content: flex-start;
     gap: 4px;
     margin-top: 6px;
   }
@@ -238,6 +247,7 @@ html, body {
   .iv-summary { font-size: 15px; padding: 8px 10px; }
   .iv-legend { font-size: 13px; gap: 8px; }
   .iv-slider-row, .calc-slider-row {
+    width: 100%;
     max-width: 100% !important;
     min-width: 0 !important;
   }

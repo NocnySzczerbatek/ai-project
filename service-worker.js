@@ -1,22 +1,22 @@
 /* Service Worker — Cobblemon Mastery Guide
    Cache'uje statyczne zasoby dla szybszego ladowania */
 
-const CACHE_NAME = 'cobblemon-v22.0';
+const CACHE_NAME = 'cobblemon-v23.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/arena.html',
   '/manifest.json',
   '/css/variables.css?v=22',
-  '/css/base.css?v=22',
-  '/css/layout.css?v=22',
+  '/css/base.css?v=23',
+  '/css/layout.css?v=23',
   '/css/components.css?v=22',
   '/css/pokemon.css?v=22',
   '/css/competitive.css?v=22',
-  '/css/pages.css?v=22',
+  '/css/pages.css?v=23',
   '/css/evolution.css?v=22',
   '/css/glassmorphism.css?v=22',
-  '/css/responsive.css?v=22',
+  '/css/responsive.css?v=23',
   '/css/arena.css',
   '/assets/styles.css?v=22',
   '/js/config.js?v=22',
@@ -26,13 +26,13 @@ const STATIC_ASSETS = [
   '/js/data.js?v=22',
   '/js/state.js?v=22',
   '/js/favorites.js?v=22',
-  '/js/team.js?v=22',
+  '/js/team.js?v=23',
   '/js/evolution.js?v=22',
   '/js/weakness.js?v=22',
   '/js/battle.js?v=22',
   '/js/detail.js?v=22',
   '/js/calculator.js?v=22',
-  '/js/pages.js?v=22',
+  '/js/pages.js?v=23',
   '/js/app.js?v=22',
   '/js/arena.js'
 ];
