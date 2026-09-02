@@ -60,14 +60,38 @@ async function init() {
 }
 
 /* ── Filtrowanie listy ── */
+function getPokedexEntries() {
+  var entries = Array.isArray(allPokemon) ? allPokemon.slice() : [];
+  var knownIds = {};
+  entries.forEach(function(pokemon) { knownIds[String(pokemon.fid || pokemon.id)] = true; });
+  if (!Array.isArray(MEGA_EVO_DATA)) return entries;
+
+  MEGA_EVO_DATA.forEach(function(form) {
+    var formId = Number(form.fid || form.id);
+    if (!formId || knownIds[String(formId)]) return;
+    knownIds[String(formId)] = true;
+    entries.push({
+      id: formId,
+      fid: formId,
+      baseId: Number(form.id),
+      name: String(form.megaName || form.name || '').toLowerCase(),
+      megaName: form.megaName,
+      types: form.types || [],
+      isMega: true
+    });
+  });
+  return entries;
+}
+
 function applyFilters() {
   var q = searchQuery.trim().toLowerCase();
-  filteredList = allPokemon.filter(function(p) {
+  filteredList = getPokedexEntries().filter(function(p) {
     if (selectedGen > 0) {
       var range = GEN_RANGES[selectedGen];
-      if (p.id < range[0] || p.id > range[1]) return false;
+      var generationId = Number(p.baseId || p.id);
+      if (generationId < range[0] || generationId > range[1]) return false;
     }
-    if (q) return p.name.includes(q) || String(p.id).includes(q);
+    if (q) return p.name.toLowerCase().includes(q) || String(p.fid || p.id).includes(q) || String(p.baseId || '').includes(q);
     return true;
   });
   listOffset = 0;
@@ -137,19 +161,20 @@ function renderList() {
   chunk.forEach(function(p) {
     var detailKey = Number(p.fid || p.id || 1);
     var spriteId = Number(p.fid || p.id || 1);
+    var displayName = p.megaName || p.formName || p.name;
     var div = document.createElement('div');
     div.className = 'pokemon-entry' + (detailKey === selectedId ? ' selected' : '');
     div.dataset.id = String(detailKey);
     var hasFriendship = FRIENDSHIP_EVOS.has(p.name);
     var hasTrade = p.name in LINK_CABLE_EVOS;
     div.innerHTML = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+spriteId+'.png" onerror="this.src=\'data:image/svg+xml,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\'/ >\'" alt="'+p.name+'" />'
-      + '<span class="entry-name">'+p.name+'</span>'
-      + '<span class="entry-id">#'+String(p.id).padStart(3,'0')+'</span>'
+      + '<span class="entry-name">'+displayName+'</span>'
+      + '<span class="entry-id">#'+String(detailKey).padStart(3,'0')+'</span>'
       + '<div class="entry-badges">'
       + (hasFriendship ? '<span class="badge-friendship" title="Ewolucja przez przyjaźń">♥</span>' : '')
       + (hasTrade ? '<span class="badge-trade" title="Ewolucja przez wymianę (Link Cable)">⥄</span>' : '')
       + '</div>';
-    div.addEventListener('click', function(){ openDetail(String(detailKey), p.name); });
+    div.addEventListener('click', function(){ openDetail(String(detailKey), displayName); });
     container.appendChild(div);
   });
   if (chunk.length < filteredList.length) {

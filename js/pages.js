@@ -110,8 +110,8 @@ function updateDashboardSearch(event) {
     return;
   }
 
-  var matches = allPokemon.filter(function(pokemon) {
-    return pokemon.name.toLowerCase().includes(query) || String(pokemon.id).includes(query);
+  var matches = getPokedexEntries().filter(function(pokemon) {
+    return pokemon.name.toLowerCase().includes(query) || String(pokemon.fid || pokemon.id).includes(query) || String(pokemon.baseId || '').includes(query);
   }).slice(0, 8);
   if (!suggestions) return;
   if (!matches.length) {
@@ -120,7 +120,9 @@ function updateDashboardSearch(event) {
     return;
   }
   suggestions.innerHTML = matches.map(function(pokemon) {
-    return '<button class="dashboard-suggestion" type="button" onclick="selectDashboardSuggestion('+pokemon.id+')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+pokemon.id+'.png" loading="lazy" alt=""/><span class="dashboard-suggestion-name">'+pokemon.name+'</span><span class="dashboard-suggestion-id">#'+String(pokemon.id).padStart(3, '0')+'</span></button>';
+    var detailId = Number(pokemon.fid || pokemon.id);
+    var displayName = pokemon.megaName || pokemon.formName || pokemon.name;
+    return '<button class="dashboard-suggestion" type="button" onclick="selectDashboardSuggestion('+detailId+')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+detailId+'.png" loading="lazy" alt=""/><span class="dashboard-suggestion-name">'+displayName+'</span><span class="dashboard-suggestion-id">#'+String(detailId).padStart(3, '0')+'</span></button>';
   }).join('');
   suggestions.hidden = false;
 }
