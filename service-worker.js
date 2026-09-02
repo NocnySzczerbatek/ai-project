@@ -1,7 +1,7 @@
 /* Service Worker — Cobblemon Mastery Guide
    Cache'uje statyczne zasoby dla szybszego ladowania */
 
-const CACHE_NAME = 'cobblemon-v23.0';
+const CACHE_NAME = 'cobblemon-v24.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -13,10 +13,10 @@ const STATIC_ASSETS = [
   '/css/components.css?v=22',
   '/css/pokemon.css?v=22',
   '/css/competitive.css?v=22',
-  '/css/pages.css?v=23',
+  '/css/pages.css?v=24',
   '/css/evolution.css?v=22',
   '/css/glassmorphism.css?v=22',
-  '/css/responsive.css?v=23',
+  '/css/responsive.css?v=24',
   '/css/arena.css',
   '/assets/styles.css?v=22',
   '/js/config.js?v=22',
@@ -32,7 +32,7 @@ const STATIC_ASSETS = [
   '/js/battle.js?v=22',
   '/js/detail.js?v=22',
   '/js/calculator.js?v=22',
-  '/js/pages.js?v=23',
+  '/js/pages.js?v=24',
   '/js/app.js?v=22',
   '/js/arena.js'
 ];

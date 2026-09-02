@@ -82,6 +82,54 @@ function openPokedex() {
   window.setTimeout(function() { document.getElementById('search-input').focus(); }, 150);
 }
 
+function selectDashboardSuggestion(id) {
+  var search = document.getElementById('dashboard-search-input');
+  if (search) search.value = '';
+  hideDashboardSuggestions();
+  openDetail(id);
+}
+
+function hideDashboardSuggestions() {
+  var suggestions = document.getElementById('dashboard-search-suggestions');
+  if (suggestions) {
+    suggestions.innerHTML = '';
+    suggestions.hidden = true;
+  }
+}
+
+function updateDashboardSearch(event) {
+  var query = event.target.value.toLowerCase().trim();
+  var sidebarSearch = document.getElementById('search-input');
+  var suggestions = document.getElementById('dashboard-search-suggestions');
+  if (sidebarSearch) sidebarSearch.value = query;
+  searchQuery = query;
+  applyFilters();
+
+  if (!query) {
+    hideDashboardSuggestions();
+    return;
+  }
+
+  var matches = allPokemon.filter(function(pokemon) {
+    return pokemon.name.toLowerCase().includes(query) || String(pokemon.id).includes(query);
+  }).slice(0, 8);
+  if (!suggestions) return;
+  if (!matches.length) {
+    suggestions.innerHTML = '<div class="dashboard-search-empty">'+(currentLang==='en'?'No Pokemon found.':'Nie znaleziono Pokemona.')+'</div>';
+    suggestions.hidden = false;
+    return;
+  }
+  suggestions.innerHTML = matches.map(function(pokemon) {
+    return '<button class="dashboard-suggestion" type="button" onclick="selectDashboardSuggestion('+pokemon.id+')"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+pokemon.id+'.png" loading="lazy" alt=""/><span class="dashboard-suggestion-name">'+pokemon.name+'</span><span class="dashboard-suggestion-id">#'+String(pokemon.id).padStart(3, '0')+'</span></button>';
+  }).join('');
+  suggestions.hidden = false;
+}
+
+function bindDashboardSearch() {
+  var search = document.getElementById('dashboard-search-input');
+  if (search) search.addEventListener('input', updateDashboardSearch);
+}
+
 function renderDailyTeamCards(team) {
   return team.map(function(member) {
     var color = (TYPE_HEX && TYPE_HEX[member.types[0]]) || '#888';
@@ -107,7 +155,7 @@ function renderDashboard() {
   window._dailyTeam = dailyTeam;
   var searchPlaceholder = currentLang === 'en' ? 'Search the Pokedex by name or number...' : 'Szukaj w Pokedexie po nazwie lub numerze...';
   var description = currentLang === 'en' ? 'Build stronger teams, inspect every Pokemon and prepare for the next server battle.' : 'Buduj mocniejsze zespoly, sprawdzaj kazdego Pokemona i przygotuj sie na kolejna serwerowa walke.';
-  return '<section class="dashboard-hero"><div class="dashboard-kicker">COBBLEMON DATABASE</div><h1>Cobblemon Mastery</h1><p>'+description+'</p><div class="dashboard-search"><input class="mc-input" type="search" placeholder="'+searchPlaceholder+'" onfocus="openPokedex()" oninput="document.getElementById(\'search-input\').value=this.value;searchQuery=this.value;applyFilters()"/><button class="mc-btn dashboard-search-btn" onclick="openPokedex()" aria-label="Pokedex">&#128269;</button></div><button class="dashboard-pokedex-link" onclick="openPokedex()">'+(currentLang==='en'?'Open Pokedex':'Otworz Pokedex')+' <span>&rarr;</span></button></section>'
+  return '<section class="dashboard-hero"><div class="dashboard-kicker">COBBLEMON DATABASE</div><h1>Cobblemon Mastery</h1><p>'+description+'</p><div class="dashboard-search"><input class="mc-input" id="dashboard-search-input" type="search" placeholder="'+searchPlaceholder+'" autocomplete="off"/><button class="mc-btn dashboard-search-btn" onclick="openPokedex()" aria-label="Pokedex">&#128269;</button><div class="dashboard-search-suggestions" id="dashboard-search-suggestions" hidden></div></div><button class="dashboard-pokedex-link" onclick="openPokedex()">'+(currentLang==='en'?'Open Pokedex':'Otworz Pokedex')+' <span>&rarr;</span></button></section>'
     +'<section class="daily-team-panel"><div><div class="dashboard-kicker">'+(currentLang==='en'?'DAILY SQUAD':'ZESPOL DNIA')+'</div><h2>'+(currentLang==='en'?'Ready for six roles':'Gotowy sklad szesciu rol')+'</h2><p>'+(currentLang==='en'?'A balanced starting point selected from the competitive pool.':'Zbalansowany punkt startowy wybrany z puli konkurencyjnej.')+'</p></div><div class="daily-team-actions"><button class="mc-btn" onclick="refreshDailyTeam()" title="'+(currentLang==='en'?'Draw another team':'Losuj ponownie')+'">&#10227;</button><button class="mc-btn daily-team-load" onclick="loadDailyTeam()">'+(currentLang==='en'?'Use in PvP analyzer':'Uzyj w analizatorze PvP')+'</button></div><div class="daily-team-members" id="daily-team-members">'+renderDailyTeamCards(dailyTeam)+'</div></section>'
     +renderFavoritesSection();
 }
@@ -129,6 +177,7 @@ function showPage(page) {
       + '<div class="welcome-card accent-gold"><h3>&#128230; '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wazne przedmioty w jednym miejscu.')+'</p><p><button class="mc-btn" onclick="showPage(\'items\')">&rarr; '+t('nav.items')+'</button></p></div>'
       + '<div class="welcome-card accent-purple"><h3>&#10024; '+t('sec.megaz')+'</h3><p>'+(currentLang==='en'?'Mega Evolutions, Z-Moves and build tools.':'Mega Ewolucje, Ruchy Z i narzedzia do buildow.')+'</p><p><button class="mc-btn" onclick="showPage(\'mega-z\')">&rarr; '+t('sec.megaz')+'</button></p></div>'
       + '</div>';
+    bindDashboardSearch();
     return;
   }
   if (page === 'welcome') {

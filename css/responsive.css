@@ -88,6 +88,7 @@ html, body {
   .dashboard-hero { padding: 20px 16px; }
   .dashboard-hero h1 { font-size: 27px; }
   .dashboard-search { align-items: stretch; }
+  .dashboard-search-suggestions { right: 52px; }
   .daily-team-panel { padding: 16px 12px; }
   .daily-team-actions { justify-content: flex-start; margin-top: 14px; flex-wrap: wrap; }
   .daily-team-members { grid-template-columns: repeat(2, minmax(0, 1fr)); }
