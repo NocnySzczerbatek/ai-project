@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Cobblemon Catch Zone</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Cobblemon Catch Zone — przeglądarkowa gra RPG: łap Pokémony, walcz i rozwijaj drużynę." />
+  <meta property="og:title" content="Cobblemon Catch Zone" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cobblemon-mastery.vercel.app/catch-zone.html" />
+  <meta property="og:image" content="https://cobblemon-mastery.vercel.app/favicon.png" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <!-- Czcionki Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" /></noscript>
+
+  <!-- Supabase JS SDK (client-side; realna logika Zero-Trust żyje w RPC/Edge Functions po stronie serwera) -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+  <link rel="stylesheet" href="css/catchzone.css?v=2" />
+</head>
+<body>
+
+<header>
+  <div>
+    <a href="index.html" class="header-title header-logo">🎮 Catch Zone</a>
+    <div class="header-sub">Cobblemon Catch Zone — Beta</div>
+  </div>
+  <div class="header-right">
+    <a href="index.html" class="cz-btn cz-btn-ghost">&#127968; Cobblemon Mastery</a>
+  </div>
+</header>
+
+<div id="cz-app" class="cz-layout"></div>
+
+<script defer src="js/catchzone.js?v=2"></script>
+
+</body>
+</html>

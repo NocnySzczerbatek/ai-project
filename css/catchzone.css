@@ -1,0 +1,162 @@
+/* Cobblemon Catch Zone — Focus Overlay samouczka (FTUE) + szkielet Menu Głównego
+   Paleta spójna z arena.css (Dark Cyber RPG). Osobny plik — nie wpływa na Cobblemon Mastery. */
+
+:root{
+  --bg:#090c14;--surface:rgba(20,24,38,0.62);--surface-solid:#131725;--border:rgba(255,255,255,0.09);
+  --green:#34e6a4;--gold:#ffb020;--red:#ff4d6a;--blue:#5b8cff;--aqua:#22d3ee;--purple:#a78bfa;
+  --white:#f1f5f9;--gray:#94a3b8;--radius:12px;--radius-sm:8px;--radius-lg:16px;
+  --ease:cubic-bezier(0.2,0.8,0.2,1);--font-main:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;--font-pixel:'Press Start 2P',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1200px 800px at 15% -10%, rgba(52,230,164,0.10), transparent 60%),
+    radial-gradient(1000px 700px at 100% 0%, rgba(34,211,238,0.08), transparent 55%),
+    var(--bg);
+  background-attachment:fixed;color:var(--white);font-family:var(--font-main);font-size:15px;
+  min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:20px}
+
+header{background:rgba(13,16,26,0.72);-webkit-backdrop-filter:blur(20px) saturate(140%);backdrop-filter:blur(20px) saturate(140%);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.header-title{font-weight:800;font-size:19px;letter-spacing:-0.01em;color:var(--white);text-decoration:none}
+.header-sub{font-size:13px;font-weight:500;color:var(--gray)}
+.header-right{margin-left:auto}
+.cz-btn{font-family:var(--font-main);font-size:14px;font-weight:600;background:var(--surface);color:#fff;border:1px solid var(--border);border-radius:999px;padding:10px 18px;min-height:48px;cursor:pointer;transition:all .16s var(--ease);text-decoration:none;display:inline-flex;align-items:center;gap:6px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.cz-btn:hover{background:rgba(30,36,54,0.78);border-color:rgba(255,255,255,0.16);transform:translateY(-1px)}
+.cz-btn-ghost{background:transparent}
+.cz-btn-primary{background:linear-gradient(135deg,#22c55e,#16a34a);border:none;box-shadow:0 6px 20px rgba(34,197,94,0.3)}
+.cz-btn-primary:hover{filter:brightness(1.1)}
+.cz-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;filter:none}
+
+.cz-layout{max-width:920px;margin:0 auto;padding:22px}
+
+/* ── Setup-needed banner (brak konfiguracji Supabase) ── */
+.cz-setup-banner{background:rgba(255,176,32,0.1);border:1px solid rgba(255,176,32,0.35);border-radius:var(--radius);padding:18px;text-align:center;color:var(--gold);font-size:14px;line-height:1.6}
+.cz-setup-banner code{background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;font-size:13px}
+
+/* ── FOCUS OVERLAY ── */
+.cz-overlay{position:fixed;inset:0;z-index:1000;background:rgba(5,6,10,0.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.cz-overlay-card{background:var(--surface-solid);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:640px;width:100%;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,0.55);position:relative;margin:auto}
+
+.cz-skip-btn{position:fixed;top:14px;right:14px;z-index:1001;font-family:var(--font-main);font-weight:700;font-size:13px;background:rgba(255,77,106,0.16);color:var(--red);border:1px solid rgba(255,77,106,0.4);border-radius:999px;padding:10px 16px;min-height:48px;cursor:pointer;transition:all .15s var(--ease)}
+.cz-skip-btn:hover{background:rgba(255,77,106,0.28)}
+
+.cz-step-indicator{display:flex;gap:8px;justify-content:center;margin-bottom:20px}
+.cz-step-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all .2s var(--ease)}
+.cz-step-dot.active{background:var(--aqua);box-shadow:0 0 10px rgba(34,211,238,0.6);transform:scale(1.3)}
+.cz-step-dot.done{background:var(--green)}
+
+/* ── Professor dialog ── */
+.cz-professor{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+.cz-professor-avatar{font-size:40px;flex-shrink:0;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:50%;width:64px;height:64px;display:flex;align-items:center;justify-content:center}
+.cz-speech-bubble{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:14px;line-height:1.6;color:var(--white);position:relative}
+
+.cz-name-row{margin:16px 0}
+.cz-name-row label{display:block;font-size:12px;color:var(--gray);margin-bottom:6px;font-weight:600}
+.cz-input{font-family:var(--font-main);font-size:15px;background:rgba(0,0,0,0.3);color:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;min-height:48px;outline:none;width:100%;transition:border-color .15s var(--ease)}
+.cz-input:focus{border-color:var(--aqua)}
+.cz-input.error{border-color:var(--red)}
+.cz-field-error{color:var(--red);font-size:12px;margin-top:6px;min-height:16px}
+
+/* ── Starter selection ── */
+.cz-starter-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.cz-starter-card{background:rgba(255,255,255,0.03);border:2px solid var(--border);border-radius:var(--radius);padding:14px 10px;text-align:center;cursor:pointer;transition:all .18s var(--ease);min-height:48px}
+.cz-starter-card:hover{border-color:rgba(52,230,164,0.4);background:rgba(52,230,164,0.06)}
+.cz-starter-card.selected{border-color:var(--green);background:rgba(52,230,164,0.14);box-shadow:0 0 18px rgba(52,230,164,0.25)}
+.cz-starter-card img{width:72px;height:72px;image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(255,255,255,0.15))}
+.cz-starter-name{font-size:13px;font-weight:700;margin-top:6px;text-transform:capitalize}
+.cz-starter-types{display:flex;gap:4px;justify-content:center;margin-top:4px;flex-wrap:wrap}
+.cz-type-chip{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;text-transform:uppercase;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.cz-type-grass{background:#78c850}.cz-type-poison{background:#a040a0}.cz-type-fire{background:#f08030}.cz-type-water{background:#6890f0}
+
+/* ── Step 2: scripted catch scene ── */
+.cz-catch-scene{text-align:center;padding:10px 0}
+.cz-wild-card{display:inline-block;padding:18px 26px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px}
+.cz-wild-card img{width:96px;height:96px;image-rendering:pixelated;transition:transform .2s}
+.cz-wild-card.shaking img{animation:cz-shake .4s ease-in-out}
+.cz-wild-card.caught img{animation:cz-catch-pop .5s ease-in-out forwards}
+@keyframes cz-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes cz-catch-pop{0%{transform:scale(1);opacity:1}60%{transform:scale(.4);opacity:.6}100%{transform:scale(0);opacity:0}}
+.cz-catch-result{font-family:var(--font-pixel);font-size:13px;color:var(--green);margin-top:10px;min-height:20px}
+
+/* ── Step 3: energy + inventory preview ── */
+.cz-energy-demo{margin:14px 0}
+.cz-energy-bar-bg{width:100%;height:20px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+.cz-energy-bar-fill{height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--aqua));border-radius:999px}
+.cz-energy-caption{font-size:12px;color:var(--gray);margin-top:6px;text-align:center}
+.cz-inventory-preview{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.cz-inv-chip{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;text-align:center;min-width:100px}
+.cz-inv-chip .cz-inv-icon{font-size:24px}
+.cz-inv-chip .cz-inv-qty{font-family:var(--font-pixel);font-size:13px;color:var(--gold);margin-top:6px}
+.cz-inv-chip .cz-inv-label{font-size:11px;color:var(--gray);margin-top:2px}
+
+/* ── Step 4: summary ── */
+.cz-summary{text-align:center}
+.cz-summary-reward{background:rgba(52,230,164,0.08);border:1px solid rgba(52,230,164,0.3);border-radius:var(--radius);padding:16px;margin:14px 0}
+.cz-summary-reward img{width:88px;height:88px;image-rendering:pixelated}
+.cz-summary-list{list-style:none;font-size:13px;color:var(--white);margin-top:10px;line-height:1.9}
+.cz-error-box{background:rgba(255,77,106,0.1);border:1px solid rgba(255,77,106,0.35);border-radius:var(--radius-sm);padding:12px 14px;color:var(--red);font-size:13px;margin-top:12px}
+.cz-loading{text-align:center;color:var(--gold);font-size:14px;padding:14px;animation:cz-blink 1s infinite}
+@keyframes cz-blink{0%,100%{opacity:1}50%{opacity:.5}}
+
+.cz-step-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+
+/* ── MAIN MENU (szkielet) ── */
+.cz-profile-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:20px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.cz-profile-avatar{width:64px;height:64px;border-radius:50%;background:rgba(52,230,164,0.14);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.cz-profile-info{flex:1;min-width:0}
+.cz-profile-name{font-weight:800;font-size:18px}
+.cz-profile-meta{font-size:13px;color:var(--gray);margin-top:2px}
+.cz-profile-stats{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}
+.cz-profile-stat{font-size:12px;color:var(--gray)}
+.cz-profile-stat b{color:var(--white);font-size:13px}
+
+.cz-menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cz-menu-tile{position:relative;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius);padding:18px 10px;text-align:center;cursor:pointer;transition:all .18s var(--ease);min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.cz-menu-tile:not(.locked):hover{border-color:rgba(34,211,238,0.4);background:rgba(34,211,238,0.06);transform:translateY(-2px)}
+.cz-menu-tile .cz-menu-icon{font-size:26px}
+.cz-menu-tile .cz-menu-label{font-size:12px;font-weight:700}
+.cz-menu-tile.locked{opacity:.45;cursor:not-allowed}
+.cz-menu-tile.locked::after{content:'🔒 Wkrótce';position:absolute;bottom:6px;font-size:9px;color:var(--gray);font-weight:700}
+
+@media(max-width:640px){
+  .cz-layout{padding:14px}
+  .cz-overlay-card{padding:18px}
+  .cz-starter-grid{grid-template-columns:1fr}
+  .cz-menu-grid{grid-template-columns:repeat(2,1fr)}
+  .cz-skip-btn{top:10px;right:10px;font-size:12px;padding:9px 13px}
+  header{padding:10px 14px}
+  .cz-battle-grid{grid-template-columns:1fr}
+  .cz-badge-grid{grid-template-columns:1fr}
+}
+
+/* ================================================================
+   MODULY 2-7: Eksploracja / Walka / Sale / Odznaki 3D / GTS / Sklep
+   Mobile-first: min. 48px strefa dotyku na wszystkich akcjach (Modul 7).
+   ================================================================ */
+.cz-screen-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.cz-screen-header h2{font-size:17px;font-weight:800;margin:0}
+
+.cz-gym-list{display:flex;flex-direction:column;gap:8px}
+.cz-gym-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;flex-wrap:wrap}
+.cz-gym-row .cz-btn{min-height:44px}
+
+.cz-battle-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.cz-battle-side{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
+.cz-battle-name{font-weight:800;font-size:13px;margin-bottom:6px}
+.cz-battle-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.cz-battle-actions .cz-btn{min-height:48px;width:100%}
+.cz-battle-log{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-size:12px;line-height:1.7;max-height:160px;overflow-y:auto}
+
+.cz-badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cz-badge-3d{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;perspective:600px}
+.cz-badge-3d-inner{transition:transform .12s ease-out;transform-style:preserve-3d;padding:10px;border-radius:var(--radius-sm);background:linear-gradient(145deg,rgba(255,176,32,0.14),rgba(255,255,255,0.02));border:1px solid rgba(255,176,32,0.3)}
+.cz-badge-icon{font-size:38px;filter:drop-shadow(0 4px 10px rgba(255,176,32,0.4))}
+.cz-badge-name{font-size:12px;font-weight:700;margin-top:6px}
+
+@media(max-width:640px){
+  .cz-battle-actions{grid-template-columns:1fr}
+}
+
