@@ -49,6 +49,12 @@
   color: var(--green); margin-bottom: 10px; padding-bottom: 10px;
   border-bottom: 1px solid var(--border);
 }
+/* Kafelki nawigacyjne (5 z 6 kart to teraz <button>, cala karta klikalna
+   zamiast osobnego wiersza z przyciskiem "-> Strona") — patrz brief "usunac
+   emotki z naglowkow, kafelki z ikona + krotkim opisem". */
+button.welcome-card { display: block; width: 100%; text-align: left; font: inherit; cursor: pointer; }
+.welcome-card-icon { font-size: 30px; line-height: 1; margin-bottom: 8px; }
+.welcome-card-desc { font-size: 13px !important; font-weight: 500 !important; color: var(--gray); line-height: 1.5; }
 
 /* ── ACCENT COLOR SYSTEM — tile border + header match ── */
 .welcome-card.accent-green {

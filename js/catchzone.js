@@ -988,7 +988,7 @@ async function buySku(sku) {
 
 /* ---- Drużyna / PC Box / Ekwipunek / Ranking ---- */
 async function loadTeamAndBox() {
-  const { data } = await sbClient.from('user_pokemon').select('*,pokemon_species(name)').eq('owner_id', czState.profile.id).order('party_slot', { ascending: true, nullsFirst: false });
+  const { data } = await sbClient.from('user_pokemon').select('*,pokemon_species(name,base_catch_rate)').eq('owner_id', czState.profile.id).order('party_slot', { ascending: true, nullsFirst: false });
   czState.myPokemon = data || [];
 }
 function nextFreeSlot() {
@@ -999,6 +999,12 @@ function nextFreeSlot() {
 // "Partner od poczatku" — brak realnego systemu przyjazni w danych, wiec jako
 // wskaznik przywiazania uzywamy faktu, ze ten Pokemon to oryginalny starter (Krok 1 samouczka).
 function bondBadge(p) { return p.caught_biome === 'tutorial' ? '<span class="cz-bond-badge" title="Partner od początku przygody">❤</span>' : ''; }
+// Podglad ceny sprzedazy (klient) — dokladnie ta sama formula co rpc_sell_pokemon
+// (serwer i tak liczy autorytatywnie na nowo). Rzadkosc = odwrotnosc base_catch_rate.
+function estimateSellPrice(p) {
+  const catchRate = (p.pokemon_species && p.pokemon_species.base_catch_rate) || 45;
+  return Math.max(5, Math.floor(p.level * 1.5 + (255 - catchRate) * 0.15));
+}
 function hpBarHtml(p) {
   const pct = p.max_hp ? Math.max(0, Math.round((p.current_hp / p.max_hp) * 100)) : 100;
   const color = pct > 50 ? 'var(--green)' : pct > 20 ? 'var(--gold)' : 'var(--red)';
@@ -1013,6 +1019,7 @@ function renderTeam() {
     const fainted = p.current_hp <= 0;
     const name = (p.pokemon_species && p.pokemon_species.name) || ('pokemon-' + p.species_id);
     const urls = spriteUrls(p.species_id, name);
+    const price = estimateSellPrice(p);
     return `<div class="cz-gym-row"><div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
       <img class="cz-team-sprite" src="${urls.animated}" data-fallback="${urls.artwork}|${urls.sprite}" onerror="imgFallback(this)" alt="${escapeAttr(name)}"/>
       <div style="flex:1;min-width:0">
@@ -1020,7 +1027,10 @@ function renderTeam() {
         ${inParty ? `<span style="color:var(--green);font-size:11px">(Drużyna #${p.party_slot})</span>` : '<span style="color:var(--gray);font-size:11px">(PC Box)</span>'}</div>
         <div style="max-width:180px;margin-top:4px">${hpBarHtml(p)}</div>
       </div></div>
-      ${inParty ? `<button class="cz-btn" onclick="setPartySlot('${p.id}',null)">Do Boxa</button>` : `<button class="cz-btn cz-btn-primary" onclick="setPartySlot('${p.id}',${nextFreeSlot()})">Do Drużyny</button>`}
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:stretch">
+        ${inParty ? `<button class="cz-btn" onclick="setPartySlot('${p.id}',null)">Do Boxa</button>` : `<button class="cz-btn cz-btn-primary" onclick="setPartySlot('${p.id}',${nextFreeSlot()})">Do Drużyny</button>`}
+        <button class="cz-btn" ${czState.busy ? 'disabled' : ''} onclick="sellPokemon('${p.id}','${escapeAttr(p.nickname || name)}',${price})">💰 Sprzedaj (~${price})</button>
+      </div>
     </div>`;
   }).join('') || '<div style="color:var(--gray);text-align:center;padding:16px">Brak Pokémonów</div>';
   return `${screenHeader('🐾 Drużyna i PC Box')}${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}${healBtn}<div class="cz-gym-list">${rows}</div>`;
@@ -1029,6 +1039,21 @@ async function healTeam() {
   czState.busy = true; czState.error = null; render();
   try { await sbClient.rpc('rpc_heal_team'); await loadTeamAndBox(); }
   catch (e) { czState.error = friendlyError(e); }
+  finally { czState.busy = false; render(); }
+}
+// Sprzedaz jest nieodwracalna (kasuje wiersz user_pokemon) — potwierdzenie przez
+// natywny confirm() zamiast budowac osobny ekran/modal dla jednej akcji.
+async function sellPokemon(pokemonId, displayName, estimatedPrice) {
+  if (czState.busy) return;
+  if (!confirm(`Sprzedać ${displayName} za ~${estimatedPrice} Catch Coins? Tej operacji nie można cofnąć.`)) return;
+  czState.busy = true; czState.error = null; render();
+  try {
+    const { data, error } = await sbClient.rpc('rpc_sell_pokemon', { p_pokemon_id: pokemonId });
+    if (error) throw error;
+    const row = Array.isArray(data) ? data[0] : data;
+    if (row) czState.profile.catch_coins = row.catch_coins;
+    await loadTeamAndBox();
+  } catch (e) { czState.error = friendlyError(e); }
   finally { czState.busy = false; render(); }
 }
 async function setPartySlot(pokemonId, slot) {

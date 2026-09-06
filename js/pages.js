@@ -173,12 +173,12 @@ function showPage(page) {
   if (page === 'welcome') {
     main.innerHTML = renderDashboard()
       + '<div class="welcome-grid">'
-      + '<div class="welcome-card accent-green"><h3>&#9876; '+t('welcome.what')+'</h3><p>'+t('welcome.whatDesc')+'</p></div>'
-      + '<div class="welcome-card accent-teal"><h3>&#9876; '+t('nav.team')+'</h3><p>'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sklad druzyny PvP i pokrycie typow.')+'</p><p><button class="mc-btn" onclick="showPage(\'team-analyzer\')">&rarr; '+t('nav.team')+'</button></p></div>'
-      + '<div class="welcome-card accent-blue"><h3>&#9878; '+t('nav.typechart')+'</h3><p>'+(currentLang==='en'?'Check weaknesses, resistances and immunities with dual-type support.':'Sprawdz slabosci, odpornosci i immunitety z obsluga dwoch typow.')+'</p><p><button class="mc-btn" onclick="showPage(\'type-chart\')">&rarr; '+t('nav.typechart')+'</button></p></div>'
-      + '<div class="welcome-card accent-apricorn"><h3>&#127822; '+t('nav.apricorns')+'</h3><p>'+(currentLang==='en'?'Craft unique Pokeballs from Apricorns.':'Craftuj unikalne Pokeballe z Apricornow.')+'</p><p><button class="mc-btn" onclick="showPage(\'apricorns\')">&rarr; '+t('nav.apricorns')+'</button></p></div>'
-      + '<div class="welcome-card accent-gold"><h3>&#128230; '+t('nav.items')+'</h3><p>'+(currentLang==='en'?'All key items in one place.':'Wszystkie wazne przedmioty w jednym miejscu.')+'</p><p><button class="mc-btn" onclick="showPage(\'items\')">&rarr; '+t('nav.items')+'</button></p></div>'
-      + '<div class="welcome-card accent-purple"><h3>&#10024; '+t('sec.megaz')+'</h3><p>'+(currentLang==='en'?'Mega Evolutions, Z-Moves and build tools.':'Mega Ewolucje, Ruchy Z i narzedzia do buildow.')+'</p><p><button class="mc-btn" onclick="showPage(\'mega-z\')">&rarr; '+t('sec.megaz')+'</button></p></div>'
+      + '<div class="welcome-card accent-green"><div class="welcome-card-icon">&#9876;</div><h3>'+t('welcome.what')+'</h3><p class="welcome-card-desc">'+t('welcome.whatDesc')+'</p></div>'
+      + '<button class="welcome-card accent-teal" onclick="showPage(\'team-analyzer\')"><div class="welcome-card-icon">&#9876;</div><h3>'+t('nav.team')+'</h3><p class="welcome-card-desc">'+(currentLang==='en'?'Analyze your PvP team composition and type coverage.':'Analizuj sklad druzyny PvP i pokrycie typow.')+'</p></button>'
+      + '<button class="welcome-card accent-blue" onclick="showPage(\'type-chart\')"><div class="welcome-card-icon">&#9878;</div><h3>'+t('nav.typechart')+'</h3><p class="welcome-card-desc">'+(currentLang==='en'?'Check weaknesses, resistances and immunities with dual-type support.':'Sprawdz slabosci, odpornosci i immunitety z obsluga dwoch typow.')+'</p></button>'
+      + '<button class="welcome-card accent-apricorn" onclick="showPage(\'apricorns\')"><div class="welcome-card-icon">&#127822;</div><h3>'+t('nav.apricorns')+'</h3><p class="welcome-card-desc">'+(currentLang==='en'?'Craft unique Pokeballs from Apricorns.':'Craftuj unikalne Pokeballe z Apricornow.')+'</p></button>'
+      + '<button class="welcome-card accent-gold" onclick="showPage(\'items\')"><div class="welcome-card-icon">&#128230;</div><h3>'+t('nav.items')+'</h3><p class="welcome-card-desc">'+(currentLang==='en'?'All key items in one place.':'Wszystkie wazne przedmioty w jednym miejscu.')+'</p></button>'
+      + '<button class="welcome-card accent-purple" onclick="showPage(\'mega-z\')"><div class="welcome-card-icon">&#10024;</div><h3>'+t('sec.megaz')+'</h3><p class="welcome-card-desc">'+(currentLang==='en'?'Mega Evolutions, Z-Moves and build tools.':'Mega Ewolucje, Ruchy Z i narzedzia do buildow.')+'</p></button>'
       + '</div>';
     bindDashboardSearch();
     return;
