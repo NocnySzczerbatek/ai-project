@@ -9,7 +9,7 @@
 // ⚠ UZUPEŁNIJ danymi swojego projektu (Project Settings → API).
 // "anonKey" to publiczny klucz "anon" / "publishable" — bezpieczny w kliencie,
 // bo wszystkie zapisy i tak przechodzą przez RLS + funkcje SECURITY DEFINER.
-const SUPABASE_CONFIG = { url: '', anonKey: '' };
+const SUPABASE_CONFIG = { url: 'https://haourlvzdbbzzufyzxyk.supabase.co', anonKey: 'sb_publishable_ZvQrxytjGj6_s0oMoMxTTQ_KAiF1bss' };
 const SUPABASE_CONFIGURED = !!(SUPABASE_CONFIG.url && SUPABASE_CONFIG.anonKey);
 let sbClient = null;
 if (SUPABASE_CONFIGURED && window.supabase) {
