@@ -117,6 +117,8 @@ async function initCatchZone() {
    RENDER (dispatcher)
    ================================================================ */
 function render() {
+  // Grafika ekranu logowania/samouczka znika, gdy tylko gracz wejdzie do wlasciwej gry
+  document.body.classList.toggle('cz-pre-game', !(czState.profile && czState.profile.tutorial_completed));
   const app = document.getElementById('cz-app');
   if (!app) return;
   if (!SUPABASE_CONFIGURED) { app.innerHTML = renderSetupBanner(); return; }

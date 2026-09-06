@@ -60,7 +60,7 @@ const TR = {
   'coach.youFaster':{pl:'✅ Jesteś szybszy — atakujesz pierwszy.',en:'✅ You are faster — you attack first.'},
   'coach.statusTip':{pl:'💡 Wróg nie ma statusu — rozważ nałożenie Burn/Paralyze.',en:'💡 Foe has no status — consider applying Burn/Paralyze.'},
   'coach.hpLow':{pl:'🩸 Wróg ma mało HP — skończ go!',en:'🩸 Foe has low HP — finish it off!'},
-  'lb.title':{pl:'🏆 Ranking Globalny',en:'🏆 Global Leaderboard'},
+  'lb.title':{pl:'🏆 Ranking Lokalny',en:'🏆 Local Leaderboard'},
   'lb.rank':{pl:'#',en:'#'},
   'lb.nick':{pl:'Nick',en:'Nick'},
   'lb.streak':{pl:'Seria',en:'Streak'},

@@ -16,6 +16,14 @@ body{
   background-attachment:fixed;color:var(--white);font-family:var(--font-main);font-size:15px;
   min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased;
 }
+/* Ekran logowania/samouczka (przed ukończeniem FTUE) — pełnoekranowa grafika zamiast gradientu */
+body.cz-pre-game{
+  background-image:url('../assets/backgrounds/catchzone-login.jpg');
+  background-size:cover;
+  background-position:center top;
+  background-attachment:fixed;
+  min-height:100vh;
+}
 ::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:20px}
 
@@ -37,8 +45,10 @@ header{background:rgba(13,16,26,0.72);-webkit-backdrop-filter:blur(20px) saturat
 .cz-setup-banner code{background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;font-size:13px}
 
 /* ── FOCUS OVERLAY ── */
-.cz-overlay{position:fixed;inset:0;z-index:1000;background:rgba(5,6,10,0.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
-.cz-overlay-card{background:var(--surface-solid);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:640px;width:100%;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,0.55);position:relative;margin:auto}
+/* Tlo (obrazek splash) zapewnia body.cz-pre-game — overlay zostaje przezroczysty,
+   zeby logo/przyciski wtopione w grafike na gorze ekranu byly widoczne. */
+.cz-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow-y:auto}
+.cz-overlay-card{background:rgba(15,23,42,0.75);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,0.2);border-radius:24px 24px 0 0;max-width:640px;width:100%;padding:24px;box-shadow:0 -12px 40px rgba(0,0,0,0.35);position:relative;max-height:92vh;overflow-y:auto}
 
 .cz-skip-btn{position:fixed;top:14px;right:14px;z-index:1001;font-family:var(--font-main);font-weight:700;font-size:13px;background:rgba(255,77,106,0.16);color:var(--red);border:1px solid rgba(255,77,106,0.4);border-radius:999px;padding:10px 16px;min-height:48px;cursor:pointer;transition:all .15s var(--ease)}
 .cz-skip-btn:hover{background:rgba(255,77,106,0.28)}

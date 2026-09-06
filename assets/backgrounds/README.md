@@ -44,3 +44,7 @@ i dopisz nową, pierwszą warstwę do `background-image` + `background-size:cove
 Po dodaniu/zmianie plików tutaj zwiększ numer `?v=` przy `css/arena.css`
 w `arena.html` i `service-worker.js` (cache-busting), inaczej zmiana może
 nie być widoczna dla powracających użytkowników.
+
+## Dodatkowe grafiki
+
+- [catchzone-login.jpg](assets/backgrounds/catchzone-login.jpg)
