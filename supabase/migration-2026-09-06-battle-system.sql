@@ -21,6 +21,9 @@ update pokemon_species set ability = v.ability from (values
 ) as v(id, ability) where pokemon_species.id = v.id and pokemon_species.ability is null;
 
 -- ---------------- rpc_explore_step: dodano znajdowanie itemow (Modul 2) ----------------
+-- Zwracane kolumny sie zmienily (doszly found_item_slug/found_item_qty) — Postgres
+-- nie pozwala podmienic RETURNS TABLE bez wczesniejszego DROP.
+drop function if exists rpc_explore_step(text);
 create or replace function rpc_explore_step(p_biome text)
 returns table(
   energy int, event_type text, encounter_id uuid, species_id int, level int,
