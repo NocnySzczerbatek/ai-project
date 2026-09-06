@@ -103,7 +103,7 @@
     .battle-card.player-card{border-left:3px solid var(--green)}.battle-card.opponent-card{border-left:3px solid var(--red)}
     .b-header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
     .b-img-wrap{position:relative;width:96px;height:96px;flex-shrink:0}
-    .b-img{width:96px;height:96px;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(52,230,164,0.3));transition:transform .15s}
+    .b-img{width:96px;height:96px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(52,230,164,0.3));transition:transform .15s}
     .b-name{font-family:var(--font-main);font-size:16px;font-weight:800;color:var(--white);text-transform:capitalize;margin-bottom:4px}
     .b-meta{font-size:12px;color:var(--gray);margin-top:2px}
 
@@ -228,4 +228,117 @@
       .lb-nick{max-width:100px}
       .page-title{font-size:17px}
       .mc-btn, .mode-btn, .start-btn, .random-btn { min-height:44px; }
+      .battle-scene{padding:14px 14px 2px}
+      .biome-badge{font-size:11px;padding:4px 10px;margin-bottom:10px}
+    }
+
+    /* ================================================================
+       BATTLE BIOME BACKGROUNDS — Dark Cyber RPG atmosfera areny
+       Czysta grafika CSS (gradienty + wzory SVG), bez zewnetrznych
+       plikow. Aby w przyszlosci podmienic na prawdziwa grafike
+       PNG/WebP: dopisz na poczatku listy background-image danego
+       biomu warstwe url('assets/backgrounds/<nazwa>.webp') i dodaj
+       background-size:cover — patrz assets/backgrounds/README.md
+       ================================================================ */
+    :root{
+      --biome-forest:#34e6a4;--biome-cave:#9aa3b8;--biome-ocean:#22d3ee;--biome-mountain:#d99a63;
+      --biome-plains:#b7e07a;--biome-desert:#e8c76f;--biome-snow:#b6f0ff;--biome-swamp:#b06de0;
+      --biome-volcano:#ff6a3d;--biome-cyber:#5b8cff;--biome-sky:#b39cf0;--biome-void:#9b6fe8;
+    }
+    .battle-scene{
+      position:relative;isolation:isolate;overflow:hidden;
+      border-radius:var(--radius-lg,16px);padding:18px 18px 2px;margin-bottom:16px;
+      background-color:var(--bg);
+      box-shadow:inset 0 0 0 1px var(--border),0 0 46px -14px var(--biome-accent,transparent),0 8px 30px rgba(0,0,0,0.4);
+      transition:box-shadow .5s var(--ease);
+    }
+    .battle-scene::after{
+      content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+      background:
+        linear-gradient(115deg,transparent 42%,rgba(255,255,255,0.05) 50%,transparent 58%),
+        radial-gradient(120% 90% at 50% 115%,rgba(0,0,0,0.55),transparent 60%);
+      background-size:260% 260%,auto;
+      animation:biomeSheen 10s ease-in-out infinite;
+    }
+    @keyframes biomeSheen{0%,100%{background-position:0% 50%,0 0}50%{background-position:100% 50%,0 0}}
+    .biome-badge{
+      position:relative;z-index:2;display:inline-flex;align-items:center;gap:6px;
+      font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--white);
+      padding:5px 13px;margin-bottom:14px;border-radius:999px;
+      background:rgba(9,12,20,0.55);border:1px solid var(--border);
+      -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    }
+    .battle-scene>.battle-grid{position:relative;z-index:2}
+
+    .battle-scene[data-biome="forest"]{--biome-accent:var(--biome-forest);
+      background-image:radial-gradient(85% 60% at 12% 0%,rgba(52,230,164,.18),transparent 62%),
+        radial-gradient(70% 55% at 100% 100%,rgba(10,60,40,.55),transparent 65%),
+        repeating-linear-gradient(112deg,rgba(52,230,164,.055) 0 12px,transparent 12px 30px),
+        linear-gradient(180deg,#0d1913,#090c14 75%);
+    }
+    .battle-scene[data-biome="cave"]{--biome-accent:var(--biome-cave);
+      background-image:radial-gradient(60% 45% at 20% 10%,rgba(154,163,184,.16),transparent 60%),
+        radial-gradient(55% 45% at 85% 90%,rgba(120,90,200,.14),transparent 65%),
+        repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.045) 0 2px,transparent 2px 26px),
+        linear-gradient(180deg,#0b0d16,#050609 80%);
+    }
+    .battle-scene[data-biome="ocean"]{--biome-accent:var(--biome-ocean);
+      background-image:radial-gradient(90% 60% at 50% 0%,rgba(34,211,238,.16),transparent 60%),
+        radial-gradient(70% 50% at 50% 100%,rgba(11,60,90,.4),transparent 65%),
+        repeating-linear-gradient(180deg,rgba(91,140,255,.07) 0 3px,transparent 3px 22px),
+        linear-gradient(180deg,#071722,#050c14 80%);
+    }
+    .battle-scene[data-biome="mountain"]{--biome-accent:var(--biome-mountain);
+      background-image:radial-gradient(80% 50% at 50% 0%,rgba(217,154,99,.18),transparent 60%),
+        radial-gradient(60% 45% at 90% 90%,rgba(60,40,30,.5),transparent 65%),
+        repeating-linear-gradient(64deg,rgba(217,154,99,.06) 0 16px,transparent 16px 40px),
+        linear-gradient(180deg,#14100c,#090c14 80%);
+    }
+    .battle-scene[data-biome="plains"]{--biome-accent:var(--biome-plains);
+      background-image:radial-gradient(100% 70% at 50% -10%,rgba(183,224,122,.16),transparent 62%),
+        radial-gradient(70% 50% at 100% 100%,rgba(30,50,20,.4),transparent 65%),
+        repeating-linear-gradient(180deg,rgba(183,224,122,.05) 0 3px,transparent 3px 24px),
+        linear-gradient(180deg,#10160d,#090c14 78%);
+    }
+    .battle-scene[data-biome="desert"]{--biome-accent:var(--biome-desert);
+      background-image:radial-gradient(90% 55% at 50% 0%,rgba(232,199,111,.18),transparent 60%),
+        radial-gradient(60% 45% at 90% 100%,rgba(60,45,20,.45),transparent 65%),
+        repeating-linear-gradient(150deg,rgba(232,199,111,.06) 0 20px,transparent 20px 46px),
+        linear-gradient(180deg,#171208,#090c14 78%);
+    }
+    .battle-scene[data-biome="snow"]{--biome-accent:var(--biome-snow);
+      background-image:radial-gradient(90% 60% at 50% 0%,rgba(182,240,255,.18),transparent 60%),
+        radial-gradient(60% 45% at 100% 100%,rgba(20,45,55,.45),transparent 65%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Ccircle cx='8' cy='9' r='1.5' fill='%23eaffff' fill-opacity='.5'/%3E%3Ccircle cx='30' cy='27' r='1' fill='%23eaffff' fill-opacity='.4'/%3E%3Ccircle cx='42' cy='41' r='1.7' fill='%23eaffff' fill-opacity='.5'/%3E%3Ccircle cx='18' cy='38' r='1' fill='%23eaffff' fill-opacity='.3'/%3E%3C/svg%3E"),
+        linear-gradient(180deg,#0c161a,#090c14 78%);
+    }
+    .battle-scene[data-biome="swamp"]{--biome-accent:var(--biome-swamp);
+      background-image:radial-gradient(75% 55% at 15% 100%,rgba(176,109,224,.16),transparent 62%),
+        radial-gradient(60% 45% at 90% 10%,rgba(40,55,25,.45),transparent 65%),
+        repeating-radial-gradient(circle at 50% 50%,rgba(176,109,224,.06) 0 4px,transparent 4px 34px),
+        linear-gradient(180deg,#101410,#090c14 80%);
+    }
+    .battle-scene[data-biome="volcano"]{--biome-accent:var(--biome-volcano);
+      background-image:radial-gradient(90% 65% at 50% 115%,rgba(255,106,61,.28),transparent 60%),
+        radial-gradient(55% 45% at 85% 0%,rgba(60,20,10,.5),transparent 65%),
+        repeating-linear-gradient(70deg,rgba(255,106,61,.07) 0 10px,transparent 10px 26px),
+        linear-gradient(180deg,#0f0806,#090c14 75%);
+    }
+    .battle-scene[data-biome="cyber"]{--biome-accent:var(--biome-cyber);
+      background-image:radial-gradient(90% 60% at 50% 0%,rgba(91,140,255,.2),transparent 62%),
+        radial-gradient(60% 45% at 100% 100%,rgba(10,20,60,.5),transparent 65%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M40 0H0V40' fill='none' stroke='%235b8cff' stroke-opacity='.22'/%3E%3C/svg%3E"),
+        linear-gradient(180deg,#070b18,#050609 80%);
+    }
+    .battle-scene[data-biome="sky"]{--biome-accent:var(--biome-sky);
+      background-image:radial-gradient(90% 60% at 50% 0%,rgba(179,156,240,.2),transparent 62%),
+        radial-gradient(60% 45% at 100% 100%,rgba(30,20,60,.45),transparent 65%),
+        repeating-linear-gradient(100deg,rgba(179,156,240,.06) 0 18px,transparent 18px 42px),
+        linear-gradient(180deg,#0d0c1a,#090c14 78%);
+    }
+    .battle-scene[data-biome="void"]{--biome-accent:var(--biome-void);
+      background-image:radial-gradient(80% 60% at 50% 30%,rgba(155,111,232,.2),transparent 62%),
+        radial-gradient(60% 50% at 15% 90%,rgba(40,15,55,.5),transparent 65%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='6' cy='10' r='1' fill='%23ffffff' fill-opacity='.5'/%3E%3Ccircle cx='34' cy='40' r='1.4' fill='%23ffffff' fill-opacity='.35'/%3E%3Ccircle cx='48' cy='14' r='.8' fill='%23ffffff' fill-opacity='.4'/%3E%3Ccircle cx='18' cy='52' r='1' fill='%23ffffff' fill-opacity='.3'/%3E%3C/svg%3E"),
+        linear-gradient(180deg,#0b0714,#050609 80%);
     }

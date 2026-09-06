@@ -60,7 +60,7 @@ const TR = {
   'coach.youFaster':{pl:'✅ Jesteś szybszy — atakujesz pierwszy.',en:'✅ You are faster — you attack first.'},
   'coach.statusTip':{pl:'💡 Wróg nie ma statusu — rozważ nałożenie Burn/Paralyze.',en:'💡 Foe has no status — consider applying Burn/Paralyze.'},
   'coach.hpLow':{pl:'🩸 Wróg ma mało HP — skończ go!',en:'🩸 Foe has low HP — finish it off!'},
-  'lb.title':{pl:'🏆 Ranking Globalny',en:'🏆 Global Leaderboard'},
+  'lb.title':{pl:'🏆 Ranking Lokalny',en:'🏆 Local Leaderboard'},
   'lb.rank':{pl:'#',en:'#'},
   'lb.nick':{pl:'Nick',en:'Nick'},
   'lb.streak':{pl:'Seria',en:'Streak'},
@@ -112,6 +112,48 @@ const TYPE_NAMES_EN={normal:'Normal',fire:'Fire',water:'Water',electric:'Electri
 function typeName(n){return currentLang==='en'?(TYPE_NAMES_EN[n]||n):(TYPE_NAMES_PL[n]||n)}
 const TYPE_COLORS={normal:'#a8a878',fire:'#f08030',water:'#6890f0',electric:'#f8d030',grass:'#78c850',ice:'#98d8d8',fighting:'#c03028',poison:'#a040a0',ground:'#e0c068',flying:'#a890f0',psychic:'#f85888',bug:'#a8b820',rock:'#b8a038',ghost:'#705898',dragon:'#7038f8',dark:'#705848',steel:'#b8b8d0',fairy:'#ee99ac'};
 function typeIcon(tp,sz){sz=sz||18;const c=TYPE_COLORS[tp]||'#888';const l=typeName(tp).substring(0,3).toUpperCase();return `<span style="display:inline-block;width:${sz}px;height:${sz}px;border-radius:50%;background:${c};text-align:center;line-height:${sz}px;font-size:${sz*.5}px;color:#fff;font-family:VT323,monospace;vertical-align:middle;margin-right:2px;border:1px solid rgba(0,0,0,.3)" title="${typeName(tp)}">${l}</span>`}
+
+/* ================================================================
+   BATTLE BIOME + ANIMATED SPRITES
+   ================================================================ */
+const BIOME_THEMES={
+  forest:  {icon:'🌲',pl:'Las',en:'Forest'},
+  cave:    {icon:'⛰️',pl:'Jaskinia',en:'Cave'},
+  ocean:   {icon:'🌊',pl:'Ocean',en:'Ocean'},
+  mountain:{icon:'🏔️',pl:'Góry',en:'Mountain'},
+  plains:  {icon:'🌾',pl:'Równiny',en:'Plains'},
+  desert:  {icon:'🏜️',pl:'Pustynia',en:'Desert'},
+  snow:    {icon:'❄️',pl:'Śnieg',en:'Snow'},
+  swamp:   {icon:'🐸',pl:'Bagno',en:'Swamp'},
+  volcano: {icon:'🌋',pl:'Wulkan',en:'Volcano'},
+  cyber:   {icon:'⚡',pl:'Cyber-Laboratorium',en:'Cyber Lab'},
+  sky:     {icon:'🌌',pl:'Niebo',en:'Sky'},
+  void:    {icon:'👻',pl:'Otchłań',en:'Void'}
+};
+const TYPE_TO_BIOME={
+  normal:'plains',fighting:'mountain',flying:'sky',poison:'swamp',ground:'desert',
+  rock:'cave',bug:'forest',ghost:'void',steel:'cyber',fire:'volcano',water:'ocean',
+  grass:'forest',electric:'cyber',psychic:'void',ice:'snow',dragon:'sky',dark:'void',fairy:'sky'
+};
+function pickBiome(player,opponent){
+  const pt=(player&&player.types&&player.types[0])||'normal';
+  const ot=(opponent&&opponent.types&&opponent.types[0])||'normal';
+  return TYPE_TO_BIOME[pt]||TYPE_TO_BIOME[ot]||'plains';
+}
+function biomeLabel(key){
+  const b=BIOME_THEMES[key]||BIOME_THEMES.plains;
+  return `${b.icon} ${currentLang==='en'?b.en:b.pl}`;
+}
+// Slug CDN Pokemon Showdown (np. "mr-mime"->"mrmime", "deoxys-attack"->"deoxysattack")
+function showdownSlug(name){return String(name||'').toLowerCase().replace(/[^a-z0-9]/g,'')}
+function animatedSpriteUrl(name){return 'https://play.pokemonshowdown.com/sprites/ani/'+showdownSlug(name)+'.gif'}
+// Lancuch fallbackow <img>: animowany sprite Showdown -> official artwork -> staty sprite PokeAPI
+function imgFallback(img){
+  const chain=(img.dataset.fallback||'').split('|').filter(Boolean);
+  if(!chain.length){img.onerror=null;return;}
+  img.src=chain.shift();
+  img.dataset.fallback=chain.join('|');
+}
 
 const STAT_NAMES={hp:'HP',attack:'ATK',defense:'DEF','special-attack':'SpATK','special-defense':'SpDEF',speed:'SPE'};
 const STAT_COLORS_MAP={hp:'#ff5555',attack:'#f08030',defense:'#f8d030','special-attack':'#6890f0','special-defense':'#78c850',speed:'#f85888'};
@@ -422,8 +464,11 @@ function getEffStat(base,stage){
 }
 
 function getTypeEff(moveType,defTypes){
+  // defTypes moze przyjsc jako null/string/obiekt zamiast tablicy — nigdy nie
+  // ufamy ksztaltowi danych obroncy (np. brakujace/zle dane Pokemona).
+  const types=Array.isArray(defTypes)?defTypes:[defTypes].filter(Boolean);
   let m=1;
-  defTypes.forEach(dt=>{
+  types.forEach(dt=>{
     if(!TYPE_EFF[dt])return;
     if(TYPE_EFF[dt].immune.includes(moveType))m*=0;
     else if(TYPE_EFF[dt].weak.includes(moveType))m*=2;
@@ -958,6 +1003,7 @@ async function startBattle(){
     opponent:JSON.parse(JSON.stringify(setupData.opponent.pokemon)),
     log:[],turn:0,isPlayerTurn:true,battleOver:false
   };
+  battleState.biome=pickBiome(battleState.player,battleState.opponent);
   // Determine who goes first
   const pSpd=getEffSpeed(battleState.player),oSpd=getEffSpeed(battleState.opponent);
   if(oSpd>pSpd)battleState.isPlayerTurn=false;
@@ -1053,11 +1099,12 @@ function renderArena(){
   }
 
   app.innerHTML=`<div class="page-title"><span>⚔ ${currentLang==='pl'?'Arena Walk':'Battle Arena'} — ${currentLang==='pl'?'Tura':'Turn'} ${battleState.turn+1}</span></div>`+
+    `<div class="battle-scene" data-biome="${battleState.biome||'plains'}"><div class="biome-badge">${biomeLabel(battleState.biome||'plains')}</div>`+
     `<div class="battle-grid">`+
     // PLAYER CARD
     `<div class="mc-panel battle-card player-card">`+
     `<div style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--green);margin-bottom:6px">${t('setup.player')}</div>`+
-    `<div class="b-header"><div class="b-img-wrap" id="b-img-wrap-player"><img class="b-img" id="b-img-player" src="${p.artwork}" onerror="this.src='${p.sprite}'"/></div>`+
+    `<div class="b-header"><div class="b-img-wrap" id="b-img-wrap-player"><img class="b-img" id="b-img-player" src="${animatedSpriteUrl(p.name)}" data-fallback="${p.artwork}|${p.sprite}" onerror="imgFallback(this)"/></div>`+
     `<div><div class="b-name">${p.name}</div><div class="preview-types">${pTypesH}</div>${renderStatus(p.status)}<div class="b-meta">${natName(p.nature)} | ${p.ability.replace(/-/g,' ')}</div></div></div>`+
     `<div class="hp-section"><div class="hp-label"><span class="hp-text">HP</span><span class="hp-val">${Math.max(0,p.currentHp)} / ${p.maxHp}</span></div>`+
     `<div class="hp-bar-bg"><div class="hp-bar-fill" style="width:${pHpPct}%;background:${getHpColor(pHpPct)}"></div></div></div>`+
@@ -1067,14 +1114,14 @@ function renderArena(){
     // OPPONENT CARD
     `<div class="mc-panel battle-card opponent-card">`+
     `<div style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--red);margin-bottom:6px">${t('setup.opponent')}</div>`+
-    `<div class="b-header"><div class="b-img-wrap" id="b-img-wrap-opponent"><img class="b-img" id="b-img-opponent" src="${o.artwork}" onerror="this.src='${o.sprite}'"/></div>`+
+    `<div class="b-header"><div class="b-img-wrap" id="b-img-wrap-opponent"><img class="b-img" id="b-img-opponent" src="${animatedSpriteUrl(o.name)}" data-fallback="${o.artwork}|${o.sprite}" onerror="imgFallback(this)"/></div>`+
     `<div><div class="b-name">${o.name}</div><div class="preview-types">${oTypesH}</div>${renderStatus(o.status)}<div class="b-meta">${natName(o.nature)} | ${o.ability.replace(/-/g,' ')}</div></div></div>`+
     `<div class="hp-section"><div class="hp-label"><span class="hp-text">HP</span><span class="hp-val">${Math.max(0,o.currentHp)} / ${o.maxHp}</span></div>`+
     `<div class="hp-bar-bg"><div class="hp-bar-fill" style="width:${oHpPct}%;background:${getHpColor(oHpPct)}"></div></div></div>`+
     renderStages(o.stages)+
     renderStatPreview(o)+
     `<div style="margin-top:10px"><div style="font-size:13px;color:#666;margin-bottom:3px">${t('battle.moves')}:</div>${oMovesH}</div></div>`+
-    `</div>`+
+    `</div></div>`+
     resultHTML+
     coachHTML+
     `<div class="battle-log" id="battle-log">${logHTML}</div>`;
