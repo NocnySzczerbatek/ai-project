@@ -1,17 +1,58 @@
 import { typeEffectiveness } from './typeChart.ts';
 
+export type Stat = 'attack'|'defense'|'special_attack'|'special_defense';
 export interface Move { slug: string; name: string; power: number; type: string; category: string; accuracy: number; }
 export interface Combatant {
   id?: string; species_id: number; name: string; level: number;
   current_hp: number; max_hp: number; attack: number; defense: number;
   special_attack: number; special_defense: number; speed: number;
   types: string[]; moves?: Move[]; mega_active?: boolean;
+  ability?: string; stages?: Partial<Record<Stat, number>>;
 }
 
 export const FALLBACK_MOVE: Move = { slug: 'tackle', name: 'Tackle', power: 40, type: 'normal', category: 'P', accuracy: 100 };
 
+// Mnoznik etapu staty (-6..+6), identyczny wzor co uzywany po stronie klienta w js/arena.js.
+function stageMult(stage: number): number {
+  const s = Math.max(-6, Math.min(6, stage));
+  return s >= 0 ? (2 + s) / 2 : 2 / (2 - s);
+}
 function effStat(c: Combatant, stat: 'attack'|'defense'|'special_attack'|'special_defense'|'speed') {
-  return c.mega_active ? Math.floor(c[stat] * 1.3) : c[stat];
+  const stage = stat === 'speed' ? 0 : (c.stages?.[stat as Stat] || 0);
+  const base = stage ? Math.floor(c[stat] * stageMult(stage)) : c[stat];
+  return c.mega_active ? Math.floor(base * 1.3) : base;
+}
+
+// Zmienia etap staty (-6..+6) na obiekcie walczacego i zwraca opis "o X%" do logu
+// (prawdziwy przelicznik ze stageMult, nie sztywna wartosc) — uzywane przez np. Growl/Bite.
+export function applyStatStage(target: Combatant, stat: Stat, delta: number): { applied: number; pct: number } {
+  if (!target.stages) target.stages = {};
+  const before = target.stages[stat] || 0;
+  const after = Math.max(-6, Math.min(6, before + delta));
+  target.stages[stat] = after;
+  const pct = Math.round((1 - stageMult(after) / stageMult(before)) * 100);
+  return { applied: after - before, pct };
+}
+
+const STAT_LABEL_PL: Record<Stat, string> = { attack: 'Atak', defense: 'Obrona', special_attack: 'Sp. Atak', special_defense: 'Sp. Obrona' };
+
+// Efekty dodatkowe ruchow (poza obrazeniami) — celowo maly, jawny katalog zamiast
+// pelnego silnika statusow/pogody: Growl (gwarantowane -1 Atak celu) i Bite (10%
+// szans na -1 Obrona celu), blokowane przez Shield Dust — dokladnie przyklady z prosby.
+export function resolveMoveEffects(attacker: Combatant, defender: Combatant, move: Move, attackerLabel: string, defenderLabel: string): string[] {
+  const lines: string[] = [];
+  if (move.slug === 'growl') {
+    const r = applyStatStage(defender, 'attack', -1);
+    if (r.applied !== 0) lines.push(`${attackerLabel} użył Growl! ${STAT_LABEL_PL.attack} ${defenderLabel} spadł o ${Math.abs(r.pct)}%!`);
+  } else if (move.slug === 'bite' && Math.random() < 0.1) {
+    if (defender.ability === 'shield-dust') {
+      lines.push(`Zdolność Shield Dust (${defenderLabel}) zablokowała dodatkowy efekt ataku!`);
+    } else {
+      const r = applyStatStage(defender, 'defense', -1);
+      if (r.applied !== 0) lines.push(`${attackerLabel} przestraszył ${defenderLabel} atakiem Bite! ${STAT_LABEL_PL.defense} spadła o ${Math.abs(r.pct)}%!`);
+    }
+  }
+  return lines;
 }
 
 // Uzupelnia ruchy Pokemona bez wlasnego movepoolu (np. dopiero co zlapane) — do
@@ -42,6 +83,19 @@ export function calcDamage(attacker: Combatant, defender: Combatant, move: Move)
   if (crit) dmg *= 1.5;
   dmg *= 0.85 + Math.random() * 0.15;
   return { damage: eff === 0 ? 0 : Math.max(1, Math.floor(dmg)), effectiveness: eff, crit, missed: false };
+}
+
+// Obrazenia pogody (np. burza piaskowa) — zwraca 0 dla typow odpornych/immunnych.
+export function weatherChipDamage(weather: string | null | undefined, c: Combatant): number {
+  if (!weather || isFainted(c)) return 0;
+  const types = Array.isArray(c.types) ? c.types : [];
+  if (weather === 'sandstorm' && !types.some((t) => ['rock', 'ground', 'steel'].includes(t))) {
+    return Math.max(1, Math.floor(c.max_hp / 16));
+  }
+  if (weather === 'hail' && !types.includes('ice')) {
+    return Math.max(1, Math.floor(c.max_hp / 16));
+  }
+  return 0;
 }
 
 export function isFainted(c: Combatant) { return c.current_hp <= 0; }

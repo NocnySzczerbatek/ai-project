@@ -464,8 +464,11 @@ function getEffStat(base,stage){
 }
 
 function getTypeEff(moveType,defTypes){
+  // defTypes moze przyjsc jako null/string/obiekt zamiast tablicy — nigdy nie
+  // ufamy ksztaltowi danych obroncy (np. brakujace/zle dane Pokemona).
+  const types=Array.isArray(defTypes)?defTypes:[defTypes].filter(Boolean);
   let m=1;
-  defTypes.forEach(dt=>{
+  types.forEach(dt=>{
     if(!TYPE_EFF[dt])return;
     if(TYPE_EFF[dt].immune.includes(moveType))m*=0;
     else if(TYPE_EFF[dt].weak.includes(moveType))m*=2;

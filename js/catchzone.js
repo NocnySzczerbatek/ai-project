@@ -38,6 +38,16 @@ function imgFallback(img) {
   img.src = chain.shift();
   img.dataset.fallback = chain.join('|');
 }
+/* ================================================================
+   MINI-GRAFIKI PRZEDMIOTOW (prawdziwe sprite'y PokeAPI zamiast emoji)
+   ================================================================ */
+// energy-bottle i mega-stone to wlasne przedmioty tej gry (nie istnieja w
+// oryginalnych grach Pokemon) — podpinamy pod najblizsze wizualnie realne sprite'y.
+const ITEM_SPRITE_OVERRIDES = { 'energy-bottle': 'energy-root', 'mega-stone': 'key-stone' };
+function itemSpriteUrl(slug) {
+  const real = ITEM_SPRITE_OVERRIDES[slug] || slug;
+  return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/' + real + '.png';
+}
 function escapeHtml(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function escapeAttr(s) { return escapeHtml(s).replace(/"/g, '&quot;'); }
 function friendlyError(e) {
@@ -127,8 +137,10 @@ function render() {
     return;
   }
   if (!czState.profile) { app.innerHTML = '<div class="cz-loading">⏳ Ładowanie profilu Trenera...</div>'; return; }
-  if (!czState.profile.tutorial_completed) {
-    app.innerHTML = renderSkipButton() + renderTutorialOverlay();
+  if (!czState.profile.tutorial_completed || czState.result) {
+    // trzymamy ekran nagrody (Krok 4) dopoki gracz go nie potwierdzi (enterGame),
+    // inaczej tutorial_completed=true w tym samym takcie od razu przeskakuje do menu
+    app.innerHTML = renderTutorialOverlay();
     return;
   }
   app.innerHTML = renderScreen();
@@ -179,7 +191,7 @@ function renderTutorialOverlay() {
   else if (czState.step === 2) body = renderStep2();
   else if (czState.step === 3) body = renderStep3();
   else body = renderStep4();
-  return `<div class="cz-overlay"><div class="cz-overlay-card"><div class="cz-step-indicator">${dots}</div>${body}</div></div>`;
+  return `<div class="cz-overlay"><div class="cz-overlay-card">${renderSkipButton()}<div class="cz-step-indicator">${dots}</div>${body}</div></div>`;
 }
 
 /* ---- Krok 1: Profesor + imię + starter ---- */
@@ -274,8 +286,8 @@ function renderStep3() {
     </div>
     <div class="cz-speech-bubble" style="margin:16px 0">Na start otrzymasz też podstawowy ekwipunek:</div>
     <div class="cz-inventory-preview">
-      <div class="cz-inv-chip"><div class="cz-inv-icon">🧪</div><div class="cz-inv-qty">5×</div><div class="cz-inv-label">Flakon Energii</div></div>
-      <div class="cz-inv-chip"><div class="cz-inv-icon">⚪</div><div class="cz-inv-qty">10×</div><div class="cz-inv-label">Poké Ball</div></div>
+      <div class="cz-inv-chip"><img class="cz-item-icon" src="${itemSpriteUrl('energy-bottle')}" alt=""/><div class="cz-inv-qty">5×</div><div class="cz-inv-label">Flakon Energii</div></div>
+      <div class="cz-inv-chip"><img class="cz-item-icon" src="${itemSpriteUrl('poke-ball')}" alt=""/><div class="cz-inv-qty">10×</div><div class="cz-inv-label">Poké Ball</div></div>
     </div>
     <div class="cz-step-actions">
       <button class="cz-btn cz-btn-primary" onclick="czState.step=4;render()">Dalej ▶</button>
@@ -305,7 +317,7 @@ function renderStep4() {
           </ul>
         </div>
         <div class="cz-step-actions" style="justify-content:center">
-          <button class="cz-btn cz-btn-primary" onclick="render()">▶ Rozpocznij Przygodę</button>
+          <button class="cz-btn cz-btn-primary" onclick="enterGame()">▶ Rozpocznij Przygodę</button>
         </div>
       </div>`;
   }
@@ -337,6 +349,10 @@ async function callCompleteTutorial(starterId) {
 }
 function finishTutorial() {
   callCompleteTutorial(czState.selectedStarter || STARTERS[0].id);
+}
+function enterGame() {
+  czState.result = null;
+  render();
 }
 function skipTutorial() {
   if (czState.busy) return;
@@ -398,10 +414,25 @@ const BIOMES = [
   { key: 'sky', icon: '🌌', pl: 'Niebo' }, { key: 'void', icon: '👻', pl: 'Otchłań' }
 ];
 const BALLS = [
-  { slug: 'poke-ball', icon: '⚪', name: 'Poké Ball' }, { slug: 'great-ball', icon: '🔵', name: 'Great Ball' },
-  { slug: 'ultra-ball', icon: '🟡', name: 'Ultra Ball' }, { slug: 'dusk-ball', icon: '⚫', name: 'Dusk Ball' },
-  { slug: 'master-ball', icon: '🟣', name: 'Master Ball' }
+  { slug: 'poke-ball', name: 'Poké Ball' }, { slug: 'great-ball', name: 'Great Ball' },
+  { slug: 'ultra-ball', name: 'Ultra Ball' }, { slug: 'dusk-ball', name: 'Dusk Ball' },
+  { slug: 'master-ball', name: 'Master Ball' }
 ];
+// Podglad szansy na zlapanie (klient) — dokladnie ta sama formula co Edge Function
+// catch-attempt (serwer i tak liczy autorytatywnie na nowo); patrz supabase/functions/catch-attempt.
+const BALL_MULT_PREVIEW = { 'poke-ball': 1.0, 'great-ball': 1.5, 'ultra-ball': 2.0, 'dusk-ball': 1.0, 'master-ball': Infinity };
+function isNightUtc() { const h = new Date().getUTCHours(); return h >= 20 || h < 6; }
+function computeCatchChancePreview() {
+  const enc = czState.currentEncounter;
+  if (!enc || enc.baseCatchRate == null || !enc.max_hp) return null;
+  if (enc.ball === 'master-ball') return 100;
+  let ballMult = BALL_MULT_PREVIEW[enc.ball] != null ? BALL_MULT_PREVIEW[enc.ball] : 1.0;
+  if (enc.ball === 'dusk-ball') ballMult = isNightUtc() ? 3.0 : 1.0;
+  const berryMult = enc.useBerry ? 1.25 : 1.0;
+  const curHp = enc.current_hp != null ? enc.current_hp : enc.max_hp;
+  const hpFactor = (3 * enc.max_hp - 2 * curHp) / (3 * enc.max_hp);
+  return Math.round(Math.min(100, Math.max(0, hpFactor * enc.baseCatchRate * ballMult * berryMult)));
+}
 const TYPE_COLORS = { normal:'#a8a878',fire:'#f08030',water:'#6890f0',electric:'#f8d030',grass:'#78c850',ice:'#98d8d8',
   fighting:'#c03028',poison:'#a040a0',ground:'#e0c068',flying:'#a890f0',psychic:'#f85888',bug:'#a8b820',rock:'#b8a038',
   ghost:'#705898',dragon:'#7038f8',dark:'#705848',steel:'#b8b8d0',fairy:'#ee99ac' };
@@ -452,6 +483,7 @@ function renderExploreResult() {
   if (r.event_type === 'wild') return `<div class="cz-wild-card"><div class="cz-catch-result">🐾 Dziki Pokémon! (Lvl ${r.level})</div><button class="cz-btn cz-btn-primary" onclick="openCatchScreen('${r.encounter_id}',${r.species_id})">Podejdź bliżej</button></div>`;
   if (r.event_type === 'bot') return `<div class="cz-wild-card"><div class="cz-catch-result">🤖 Trener-Bot chce walczyć!</div><button class="cz-btn cz-btn-primary" onclick="startBotBattle()">Walcz</button></div>`;
   if (r.event_type === 'pvp') return `<div class="cz-wild-card"><div class="cz-catch-result">👤 Napotkano gracza: ${escapeHtml(r.opponent_name)}!</div><button class="cz-btn cz-btn-primary" onclick="startPvp('${r.opponent_id}')">Wyzwij</button></div>`;
+  if (r.event_type === 'item') return `<div class="cz-wild-card cz-item-found"><img class="cz-item-icon cz-item-icon-lg" src="${itemSpriteUrl(r.found_item_slug)}" alt=""/><div class="cz-catch-result" style="color:var(--gold)">🎁 Znaleziono ${r.found_item_qty}× Poké Ball!</div></div>`;
   return `<div class="cz-catch-result" style="color:var(--gray)">Cisza... nic się nie wydarzyło.</div>`;
 }
 async function doExploreStep() {
@@ -463,35 +495,79 @@ async function doExploreStep() {
     const row = Array.isArray(data) ? data[0] : data;
     czState.profile.energy = row.energy;
     czState.lastExploreResult = row;
+    if (row.event_type === 'item') await refreshInventory();
   } catch (e) { czState.error = friendlyError(e); }
   finally { czState.busy = false; render(); }
 }
 
 /* ---- MODUL 3: Catch Engine ---- */
-function openCatchScreen(encounterId, speciesId) {
-  czState.currentEncounter = { id: encounterId, species_id: speciesId, ball: 'poke-ball', useBerry: false };
+async function openCatchScreen(encounterId, speciesId) {
+  czState.currentEncounter = {
+    id: encounterId, species_id: speciesId, ball: 'poke-ball', useBerry: false,
+    current_hp: null, max_hp: null, speciesName: null, baseCatchRate: null, battle: null
+  };
   czState.catchOutcome = null; czState.screen = 'catch'; czState.error = null; render();
+  // Podglad HP + wsp. lapania jest tylko pomocniczy (UI) — autorytatywna szansa
+  // i tak liczy sie od nowa na serwerze w catch-attempt, wiec brak internetu tutaj
+  // nie blokuje rzutu Ballem, po prostu nie pokaze paska szansy.
+  try {
+    const [{ data: enc }, { data: sp }] = await Promise.all([
+      sbClient.from('encounters').select('current_hp,max_hp').eq('id', encounterId).maybeSingle(),
+      sbClient.from('pokemon_species').select('name,base_catch_rate').eq('id', speciesId).maybeSingle()
+    ]);
+    if (enc && czState.currentEncounter) { czState.currentEncounter.current_hp = enc.current_hp; czState.currentEncounter.max_hp = enc.max_hp; }
+    if (sp && czState.currentEncounter) { czState.currentEncounter.speciesName = sp.name; czState.currentEncounter.baseCatchRate = sp.base_catch_rate; }
+  } catch (e) { /* podglad opcjonalny, ignorujemy */ }
+  render();
+}
+function renderBallPicker(enc, inv) {
+  const opts = BALLS.map((b) => {
+    const qty = inv[b.slug] || 0;
+    const sel = enc.ball === b.slug ? 'selected' : '';
+    return `<button type="button" class="cz-ball-option ${sel}" onclick="selectBall('${b.slug}')" title="${escapeAttr(b.name)}">
+      <img src="${itemSpriteUrl(b.slug)}" alt="${escapeAttr(b.name)}"/><span class="cz-ball-qty">${qty}</span>
+    </button>`;
+  }).join('');
+  return `<div class="cz-name-row"><label>Poké Ball</label><div class="cz-ball-picker">${opts}</div></div>`;
+}
+function selectBall(slug) {
+  if (!czState.currentEncounter) return;
+  czState.currentEncounter.ball = slug;
+  render();
 }
 function renderCatch() {
   const enc = czState.currentEncounter;
   if (!enc) return renderExplore();
-  const urls = spriteUrls(enc.species_id, String(enc.species_id));
+  if (enc.battle) return renderBattle();
+  if (enc.teamSelect) return renderTeamSelectForBattle(enc);
+  const name = enc.speciesName || ('pokemon-' + enc.species_id);
+  const urls = spriteUrls(enc.species_id, name);
   const inv = czState.inventory || {};
-  const ballOpts = BALLS.map((b) => `<option value="${b.slug}" ${enc.ball === b.slug ? 'selected' : ''}>${b.icon} ${b.name} (${inv[b.slug] || 0})</option>`).join('');
   if (czState.catchOutcome) {
     const o = czState.catchOutcome;
+    const resultLabel = o.fledAfterFaint ? '💀 Dziki Pokémon zemdlał w walce i uciekł!'
+      : o.fledAfterLoss ? '💀 Twoja drużyna zemdlała — Pokémon uciekł w zamieszaniu!'
+      : (o.success ? '✨ Złapano!' : '💨 Pokémon uciekł...');
     return `${screenHeader('🎯 Łapanie')}<div class="cz-summary">
-      <div class="cz-catch-result" style="font-size:16px;color:${o.success ? 'var(--green)' : 'var(--red)'}">${o.success ? '✨ Złapano!' : '💨 Pokémon uciekł...'}</div>
-      <div style="color:var(--gray);font-size:12px;margin-top:6px">Szansa: ${o.chance}% • Pozostało Ballów: ${o.balls_remaining}</div>
+      <div class="cz-catch-result" style="font-size:16px;color:${o.success ? 'var(--green)' : 'var(--red)'}">${resultLabel}</div>
+      ${(o.fledAfterFaint || o.fledAfterLoss) ? '' : `<div style="color:var(--gray);font-size:12px;margin-top:6px">Szansa: ${o.chance}% • Pozostało Ballów: ${o.balls_remaining}</div>`}
       <div class="cz-step-actions" style="justify-content:center"><button class="cz-btn cz-btn-primary" onclick="openScreen('explore')">◀ Wróć do eksploracji</button></div>
     </div>`;
   }
+  const chance = computeCatchChancePreview();
+  const hpKnown = !!enc.max_hp;
+  const curHp = enc.current_hp != null ? enc.current_hp : enc.max_hp;
+  const hpPct = hpKnown ? Math.max(0, Math.round((curHp / enc.max_hp) * 100)) : 100;
+  const hpColor = hpPct > 50 ? 'var(--green)' : hpPct > 20 ? 'var(--gold)' : 'var(--red)';
   return `${screenHeader('🎯 Łapanie')}
     <div class="cz-catch-scene"><div class="cz-wild-card"><img src="${urls.animated}" data-fallback="${urls.artwork}|${urls.sprite}" onerror="imgFallback(this)"/></div></div>
-    <div class="cz-name-row"><label>Poké Ball</label><select class="cz-input" onchange="czState.currentEncounter.ball=this.value">${ballOpts}</select></div>
-    <label style="display:flex;align-items:center;gap:8px;margin:10px 0;font-size:13px"><input type="checkbox" onchange="czState.currentEncounter.useBerry=this.checked" ${inv['razz-berry'] ? '' : 'disabled'}/> Użyj Razz Berry (+25%, ${inv['razz-berry'] || 0} szt.)</label>
+    ${hpKnown ? `<div class="cz-energy-bar-bg"><div class="cz-energy-bar-fill" style="width:${hpPct}%;background:${hpColor}"></div></div><div class="cz-energy-caption">${curHp}/${enc.max_hp} HP</div>` : ''}
+    ${renderBallPicker(enc, inv)}
+    <label style="display:flex;align-items:center;gap:8px;margin:10px 0;font-size:13px"><input type="checkbox" onchange="czState.currentEncounter.useBerry=this.checked;render()" ${inv['razz-berry'] ? '' : 'disabled'}/> <img class="cz-item-icon" src="${itemSpriteUrl('razz-berry')}" alt=""/> Użyj Razz Berry (+25%, ${inv['razz-berry'] || 0} szt.)</label>
+    ${chance != null ? `<div class="cz-catch-chance"><span class="cz-catch-chance-label">🎯 Szansa na złapanie</span><div class="cz-catch-chance-bar-bg"><div class="cz-catch-chance-bar-fill" style="width:${chance}%"></div></div><span class="cz-catch-chance-pct">${chance}%</span></div>` : ''}
     ${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}
-    <div class="cz-step-actions" style="justify-content:center">
+    <div class="cz-step-actions" style="justify-content:space-between">
+      <button class="cz-btn" ${czState.busy ? 'disabled' : ''} onclick="startWildBattle()">⚔️ Walcz</button>
       <button class="cz-btn cz-btn-primary" ${czState.busy ? 'disabled' : ''} onclick="throwRealBall()">🔴 ${czState.busy ? 'Rzucanie...' : 'Rzuć Ballem'}</button>
     </div>`;
 }
@@ -505,6 +581,75 @@ async function throwRealBall() {
     await refreshInventory();
   } catch (e) { czState.error = friendlyError(e); }
   finally { czState.busy = false; render(); }
+}
+/* ---- MODUL 4b: Wybor Pokemona z druzyny przed walka z dzikim stworkiem ---- */
+// "Walcz" nie rusza od razu z domyslnym slotem #1 — najpierw pokazujemy siatke
+// calej aktywnej druzyny (sprite, poziom, pasek HP, wskaznik przywiazania),
+// dopiero wybor gracza tworzy realna instancje walki (rpc_create_wild_battle).
+async function startWildBattle() {
+  const enc = czState.currentEncounter;
+  if (!enc || czState.busy) return;
+  czState.busy = true; czState.error = null; render();
+  try {
+    const { data, error } = await sbClient.from('user_pokemon').select('*,pokemon_species(name)')
+      .eq('owner_id', czState.profile.id).not('party_slot', 'is', null).order('party_slot');
+    if (error) throw error;
+    if (!data || !data.length) throw new Error('Twoja drużyna jest pusta — dodaj Pokémona do drużyny.');
+    enc.teamSelect = data;
+  } catch (e) { czState.error = friendlyError(e); }
+  finally { czState.busy = false; render(); }
+}
+function renderTeamSelectForBattle(enc) {
+  const cards = enc.teamSelect.map((p) => {
+    const name = (p.pokemon_species && p.pokemon_species.name) || ('pokemon-' + p.species_id);
+    const urls = spriteUrls(p.species_id, name);
+    const fainted = p.current_hp <= 0;
+    return `<div class="cz-mon-pick-card ${fainted ? 'fainted' : ''}" ${fainted ? '' : `onclick="confirmBattleLead('${p.id}')"`}>
+      <img class="cz-mon-pick-sprite" src="${urls.animated}" data-fallback="${urls.artwork}|${urls.sprite}" onerror="imgFallback(this)" alt="${escapeAttr(name)}"/>
+      <div class="cz-mon-pick-name">${escapeHtml(p.nickname || name)} Lv${p.level} ${bondBadge(p)}</div>
+      ${hpBarHtml(p)}
+      ${fainted ? '<div class="cz-mon-pick-fainted">Zemdlał</div>' : ''}
+    </div>`;
+  }).join('');
+  return `${screenHeader('🐾 Wybierz Pokémona do walki')}
+    ${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}
+    <div class="cz-mon-pick-grid">${cards}</div>
+    <div class="cz-step-actions" style="justify-content:center"><button class="cz-btn" onclick="cancelTeamSelect()">✕ Anuluj</button></div>`;
+}
+function cancelTeamSelect() {
+  const enc = czState.currentEncounter;
+  if (enc) enc.teamSelect = null;
+  render();
+}
+async function confirmBattleLead(pokemonId) {
+  const enc = czState.currentEncounter;
+  if (!enc || czState.busy) return;
+  czState.busy = true; czState.error = null; render();
+  try {
+    const { data, error } = await sbClient.rpc('rpc_create_wild_battle', { p_encounter_id: enc.id, p_lead_pokemon_id: pokemonId });
+    if (error) throw error;
+    const row = Array.isArray(data) ? data[0] : data;
+    enc.teamSelect = null;
+    enc.battle = { id: row.battle_id, state: row.state, result: null, mustSwitch: false, returnTo: 'catch' };
+    czState.currentBattle = enc.battle;
+  } catch (e) { czState.error = friendlyError(e); }
+  finally { czState.busy = false; render(); }
+}
+// Wywolywane po zakonczeniu walki (win/loss) zamiast goToMenu(), gdy walka
+// wystartowala z ekranu Lapania — wraca do Lapania z zaktualizowanym HP dzikiego.
+function endBattleReturn() {
+  const b = czState.currentBattle;
+  if (b && b.returnTo === 'catch' && czState.currentEncounter) {
+    const wildAfter = b.state.bot_team[0];
+    czState.currentEncounter.current_hp = Math.max(0, wildAfter.current_hp);
+    czState.currentEncounter.battle = null;
+    czState.currentBattle = null;
+    czState.catchOutcome = b.result === 'win' ? { success: false, fledAfterFaint: true } : { success: false, fledAfterLoss: true };
+    render();
+    return;
+  }
+  czState.currentBattle = null;
+  goToMenu();
 }
 
 /* ---- MODUL 4: Walka (Boty / Sale / PvP) ---- */
@@ -530,43 +675,78 @@ async function startGymBattle(gymId) {
   } catch (e) { czState.error = friendlyError(e); }
   finally { czState.busy = false; render(); }
 }
+const WEATHER_INFO = { sandstorm: '🌪 Burza piaskowa', hail: '🌨 Grad', rain: '🌧 Deszcz', 'harsh-sun': '☀ Silne słońce' };
+// Celnosc (C) nie jest realna staty Pokemona w tym silniku (brak systemu etapow
+// celnosci/unikania) — pokazujemy staly bazowy poziom 100%, zeby karta nie klamala.
+function renderCombatantCard(c) {
+  const hpPct = Math.max(0, Math.round((c.current_hp / c.max_hp) * 100));
+  const hpColor = hpPct > 50 ? 'var(--green)' : hpPct > 20 ? 'var(--gold)' : 'var(--red)';
+  const types = (Array.isArray(c.types) ? c.types : []).map((t) => `<span class="cz-type-chip cz-type-${t}">${t}</span>`).join('');
+  return `<div class="cz-battle-side">
+    <div class="cz-battle-name">${escapeHtml(c.name)} Lvl${c.level}${c.mega_active ? ' ✨MEGA' : ''}</div>
+    <div class="cz-battle-types">${types}</div>
+    <div class="cz-energy-bar-bg"><div class="cz-energy-bar-fill" style="width:${hpPct}%;background:${hpColor}"></div></div>
+    <div style="font-size:11px;color:var(--gray)">${Math.max(0, c.current_hp)}/${c.max_hp} HP</div>
+    <div class="cz-battle-statgrid">
+      <div>A <b>${c.attack}</b></div><div>O <b>${c.defense}</b></div>
+      <div>SA <b>${c.special_attack}</b></div><div>SO <b>${c.special_defense}</b></div>
+      <div>P <b>${c.speed}</b></div><div>C <b>100%</b></div>
+    </div>
+    <div class="cz-battle-ability">Zdolność: <b>${c.ability ? escapeHtml(c.ability) : '—'}</b></div>
+  </div>`;
+}
+// Log jest teraz {turn,text} (zamiast plaskich stringow) — grupujemy po rundach.
+// Defensywnie obslugujemy tez stary format (plain string), gdyby jakas walka
+// sprzed tej zmiany mial jeszcze taki log.
+function renderRoundLog(log) {
+  if (!log || !log.length) return '';
+  const rounds = []; const byTurn = {};
+  log.forEach((entry) => {
+    const isObj = entry && typeof entry === 'object';
+    const t = isObj && entry.turn != null ? entry.turn : 1;
+    const text = isObj ? entry.text : entry;
+    if (!byTurn[t]) { byTurn[t] = []; rounds.push(t); }
+    byTurn[t].push(text);
+  });
+  return rounds.slice(-4).map((t) => `<div class="cz-round-block"><div class="cz-round-title">Runda ${t}</div>${byTurn[t].map((l) => `<div class="cz-round-line">${escapeHtml(l)}</div>`).join('')}</div>`).join('');
+}
 function renderBattle() {
   const b = czState.currentBattle;
   if (!b) return renderMainMenu();
   const st = b.state;
   const player = st.player_team[st.active_player_idx];
   const bot = st.bot_team[st.active_bot_idx];
-  const pHpPct = Math.max(0, (player.current_hp / player.max_hp) * 100);
-  const bHpPct = Math.max(0, (bot.current_hp / bot.max_hp) * 100);
-  const hpColor = (pct) => (pct > 50 ? 'var(--green)' : pct > 20 ? 'var(--gold)' : 'var(--red)');
   const movesHtml = (player.moves && player.moves.length ? player.moves : [{ slug: 'tackle', name: 'Tackle' }])
     .map((m) => `<button class="cz-btn" ${b.result || b.mustSwitch || czState.busy ? 'disabled' : ''} onclick="doBattleAction({type:'attack',move_slug:'${m.slug}'})">${escapeHtml(m.name)}</button>`).join('');
   const switchHtml = st.player_team.map((pm, i) => (i === st.active_player_idx || pm.current_hp <= 0) ? '' :
     `<button class="cz-btn" ${czState.busy ? 'disabled' : ''} onclick="doBattleAction({type:'switch',to_index:${i}})">🔄 ${escapeHtml(pm.name)}</button>`).join('');
-  const logHtml = (st.log || []).slice(-8).map((l) => `<div>${escapeHtml(l)}</div>`).join('');
+  const weatherBadge = st.weather ? `<div class="cz-weather-badge">${WEATHER_INFO[st.weather] || st.weather}</div>` : '';
   let resultHtml = '';
   if (b.result) {
+    const backLabel = b.returnTo === 'catch' ? '◀ Wróć do Łapania' : '◀ Menu';
+    const levelUpLine = b.monLeveledUp ? `<div style="color:var(--gold);font-weight:800;margin-top:6px">🎉 ${escapeHtml(player.name)} awansował na poziom ${b.monLevel}!</div>` : '';
     resultHtml = `<div class="cz-summary-reward" style="margin-top:14px;text-align:center">
       <div style="font-weight:800;color:${b.result === 'win' ? 'var(--green)' : 'var(--red)'}">${b.result === 'win' ? '🏆 Zwycięstwo!' : '💀 Porażka'}</div>
-      ${b.result === 'win' ? `<div style="font-size:12px;color:var(--gray);margin-top:4px">+${b.expGain || 0} EXP, +${b.coinGain || 0} Coins</div>` : ''}
-      <div class="cz-step-actions" style="justify-content:center"><button class="cz-btn cz-btn-primary" onclick="goToMenu()">◀ Menu</button></div>
+      ${b.result === 'win' ? `<div style="font-size:13px;color:var(--white);margin-top:8px;line-height:1.9;text-align:left;max-width:260px;margin-inline:auto">
+        <div>🧑 Postać +${b.expGain || 0} doświadczenia</div>
+        <div>🐾 ${escapeHtml(player.name)} +${b.monExpGain || 0} doświadczenia</div>
+        <div>💰 +${b.coinGain || 0} Catch Coins</div>
+      </div>${levelUpLine}` : ''}
+      <div class="cz-step-actions" style="justify-content:center"><button class="cz-btn cz-btn-primary" onclick="endBattleReturn()">${backLabel}</button></div>
     </div>`;
   }
   return `${screenHeader('⚔️ Walka')}
+    ${weatherBadge}
     <div class="cz-battle-grid">
-      <div class="cz-battle-side"><div class="cz-battle-name">${escapeHtml(player.name)} Lvl${player.level}${player.mega_active ? ' ✨MEGA' : ''}</div>
-        <div class="cz-energy-bar-bg"><div class="cz-energy-bar-fill" style="width:${pHpPct}%;background:${hpColor(pHpPct)}"></div></div>
-        <div style="font-size:11px;color:var(--gray)">${Math.max(0, player.current_hp)}/${player.max_hp} HP</div></div>
-      <div class="cz-battle-side"><div class="cz-battle-name">${escapeHtml(bot.name)} Lvl${bot.level}</div>
-        <div class="cz-energy-bar-bg"><div class="cz-energy-bar-fill" style="width:${bHpPct}%;background:${hpColor(bHpPct)}"></div></div>
-        <div style="font-size:11px;color:var(--gray)">${Math.max(0, bot.current_hp)}/${bot.max_hp} HP</div></div>
+      ${renderCombatantCard(player)}
+      ${renderCombatantCard(bot)}
     </div>
     ${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}
     ${b.mustSwitch && !b.result ? '<div class="cz-error-box" style="color:var(--gold);border-color:rgba(255,176,32,.35);background:rgba(255,176,32,.08)">Twój Pokémon zemdlał — wybierz następnego!</div>' : ''}
     <div class="cz-battle-actions">${b.mustSwitch ? '' : movesHtml}${switchHtml}
       <button class="cz-btn" ${b.result || czState.busy ? 'disabled' : ''} onclick="doBattleAction({type:'mega'})">✨ Mega Ewolucja</button>
     </div>
-    <div class="cz-battle-log">${logHtml}</div>
+    <div class="cz-battle-log">${renderRoundLog(st.log)}</div>
     ${resultHtml}`;
 }
 async function doBattleAction(action) {
@@ -577,6 +757,7 @@ async function doBattleAction(action) {
     const data = await callFn('battle-turn', { battle_id: b.id, action });
     b.state = data.state; b.result = data.result; b.mustSwitch = data.must_switch;
     b.expGain = data.exp_gain; b.coinGain = data.coin_gain;
+    b.monExpGain = data.mon_exp_gain; b.monLevel = data.mon_level; b.monLeveledUp = data.mon_leveled_up;
     if (data.profile) { czState.profile.trainer_level = data.profile.trainer_level; czState.profile.catch_coins = data.profile.catch_coins; }
   } catch (e) { czState.error = friendlyError(e); }
   finally { czState.busy = false; render(); }
@@ -667,7 +848,7 @@ async function setFeaturedBadge(badgeId) {
 }
 async function loadTrainerCardData() {
   const [{ data: party }, { data: badgesData }] = await Promise.all([
-    sbClient.from('user_pokemon').select('*').eq('owner_id', czState.profile.id).not('party_slot', 'is', null).order('party_slot'),
+    sbClient.from('user_pokemon').select('*,pokemon_species(name)').eq('owner_id', czState.profile.id).not('party_slot', 'is', null).order('party_slot'),
     sbClient.from('player_badges').select('badges(name)').eq('profile_id', czState.profile.id)
   ]);
   czState.cardParty = party || [];
@@ -678,7 +859,7 @@ function renderCard() {
     <canvas id="cz-trainer-canvas" width="640" height="360" style="width:100%;max-width:640px;border-radius:12px;border:1px solid var(--border);display:block;margin:0 auto"></canvas>
     <div class="cz-step-actions" style="justify-content:center"><button class="cz-btn cz-btn-primary" onclick="downloadTrainerCard()">⬇ Pobierz PNG</button></div>`;
 }
-function drawTrainerCard() {
+async function drawTrainerCard() {
   const canvas = document.getElementById('cz-trainer-canvas');
   if (!canvas || !czState.profile) return;
   const ctx = canvas.getContext('2d');
@@ -693,21 +874,45 @@ function drawTrainerCard() {
   ctx.fillStyle = '#94a3b8'; ctx.font = '13px Inter, sans-serif';
   ctx.fillText('Odznaki: ' + (czState.cardBadges && czState.cardBadges.length ? czState.cardBadges.join(', ') : 'brak'), 24, 122);
   ctx.fillText('Drużyna:', 24, 150);
-  (czState.cardParty || []).slice(0, 6).forEach((mon, i) => {
+  const party = (czState.cardParty || []).slice(0, 6);
+  // Ramka+etykieta rysuja sie od razu (zawsze widoczne); sprite doladowuje sie
+  // asynchronicznie i nadpisuje szare tlo, z fallbackiem artwork -> staty sprite.
+  party.forEach((mon, i) => {
     const x = 24 + i * 100;
     ctx.fillStyle = 'rgba(255,255,255,.05)'; ctx.fillRect(x, 166, 88, 88);
     ctx.strokeStyle = 'rgba(255,255,255,.15)'; ctx.strokeRect(x, 166, 88, 88);
     ctx.fillStyle = '#f1f5f9'; ctx.font = '11px Inter, sans-serif';
     ctx.fillText((mon.nickname || ('#' + mon.species_id)) + ' Lv' + mon.level, x + 4, 262);
   });
+  await Promise.all(party.map((mon, i) => new Promise((resolve) => {
+    const name = (mon.pokemon_species && mon.pokemon_species.name) || ('pokemon-' + mon.species_id);
+    const urls = spriteUrls(mon.species_id, name);
+    const x = 24 + i * 100;
+    const draw = (img) => { ctx.fillStyle = 'rgba(255,255,255,.05)'; ctx.fillRect(x, 166, 88, 88); ctx.drawImage(img, x, 166, 88, 88); resolve(); };
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => draw(img);
+    img.onerror = () => {
+      const img2 = new Image(); img2.crossOrigin = 'anonymous';
+      img2.onload = () => draw(img2);
+      img2.onerror = () => resolve(); // ramka+etykieta zostaja jako fallback
+      img2.src = urls.sprite;
+    };
+    img.src = urls.artwork;
+  })));
 }
 function downloadTrainerCard() {
   const canvas = document.getElementById('cz-trainer-canvas');
   if (!canvas) return;
-  const a = document.createElement('a');
-  a.download = 'karta-trenera-' + (czState.profile.trainer_name || 'trener') + '.png';
-  a.href = canvas.toDataURL('image/png');
-  a.click();
+  try {
+    const a = document.createElement('a');
+    a.download = 'karta-trenera-' + (czState.profile.trainer_name || 'trener') + '.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  } catch (e) {
+    czState.error = 'Nie udało się wygenerować obrazu karty (błąd CORS grafik). Spróbuj ponownie.';
+    render();
+  }
 }
 
 /* ---- MODUL 6: GTS + Sklep ---- */
@@ -785,7 +990,7 @@ async function buySku(sku) {
 
 /* ---- Drużyna / PC Box / Ekwipunek / Ranking ---- */
 async function loadTeamAndBox() {
-  const { data } = await sbClient.from('user_pokemon').select('*').eq('owner_id', czState.profile.id).order('party_slot', { ascending: true, nullsFirst: false });
+  const { data } = await sbClient.from('user_pokemon').select('*,pokemon_species(name)').eq('owner_id', czState.profile.id).order('party_slot', { ascending: true, nullsFirst: false });
   czState.myPokemon = data || [];
 }
 function nextFreeSlot() {
@@ -793,12 +998,27 @@ function nextFreeSlot() {
   for (let i = 1; i <= 6; i++) if (!used.has(i)) return i;
   return null;
 }
+// "Partner od poczatku" — brak realnego systemu przyjazni w danych, wiec jako
+// wskaznik przywiazania uzywamy faktu, ze ten Pokemon to oryginalny starter (Krok 1 samouczka).
+function bondBadge(p) { return p.caught_biome === 'tutorial' ? '<span class="cz-bond-badge" title="Partner od początku przygody">❤</span>' : ''; }
+function hpBarHtml(p) {
+  const pct = p.max_hp ? Math.max(0, Math.round((p.current_hp / p.max_hp) * 100)) : 100;
+  const color = pct > 50 ? 'var(--green)' : pct > 20 ? 'var(--gold)' : 'var(--red)';
+  return `<div class="cz-energy-bar-bg" style="height:9px"><div class="cz-energy-bar-fill" style="width:${pct}%;background:${color}"></div></div><div class="cz-mon-hp-label">${Math.max(0, p.current_hp)}/${p.max_hp} HP</div>`;
+}
 function renderTeam() {
   if (czState.myPokemon === null) return `${screenHeader('🐾 Drużyna i PC Box')}<div class="cz-loading">Ładowanie...</div>`;
   const rows = czState.myPokemon.map((p) => {
     const inParty = p.party_slot != null;
-    return `<div class="cz-gym-row"><div>${escapeHtml(p.nickname || ('#' + p.species_id))} Lv${p.level}
-      ${inParty ? `<span style="color:var(--green);font-size:11px">(Drużyna #${p.party_slot})</span>` : '<span style="color:var(--gray);font-size:11px">(PC Box)</span>'}</div>
+    const name = (p.pokemon_species && p.pokemon_species.name) || ('pokemon-' + p.species_id);
+    const urls = spriteUrls(p.species_id, name);
+    return `<div class="cz-gym-row"><div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+      <img class="cz-team-sprite" src="${urls.animated}" data-fallback="${urls.artwork}|${urls.sprite}" onerror="imgFallback(this)" alt="${escapeAttr(name)}"/>
+      <div style="flex:1;min-width:0">
+        <div>${escapeHtml(p.nickname || name)} Lv${p.level} ${bondBadge(p)}
+        ${inParty ? `<span style="color:var(--green);font-size:11px">(Drużyna #${p.party_slot})</span>` : '<span style="color:var(--gray);font-size:11px">(PC Box)</span>'}</div>
+        <div style="max-width:180px;margin-top:4px">${hpBarHtml(p)}</div>
+      </div></div>
       ${inParty ? `<button class="cz-btn" onclick="setPartySlot('${p.id}',null)">Do Boxa</button>` : `<button class="cz-btn cz-btn-primary" onclick="setPartySlot('${p.id}',${nextFreeSlot()})">Do Drużyny</button>`}
     </div>`;
   }).join('') || '<div style="color:var(--gray);text-align:center;padding:16px">Brak Pokémonów</div>';
@@ -818,7 +1038,7 @@ async function loadInventoryFull() {
 }
 function renderInventory() {
   if (!czState.fullInventory) return `${screenHeader('🎒 Ekwipunek')}<div class="cz-loading">Ładowanie...</div>`;
-  const rows = czState.fullInventory.map((i) => `<div class="cz-inv-chip"><div class="cz-inv-qty">${i.quantity}×</div><div class="cz-inv-label">${escapeHtml((i.item_catalog && i.item_catalog.name) || i.item_slug)}</div></div>`).join('');
+  const rows = czState.fullInventory.map((i) => `<div class="cz-inv-chip"><img class="cz-item-icon" src="${itemSpriteUrl(i.item_slug)}" alt=""/><div class="cz-inv-qty">${i.quantity}×</div><div class="cz-inv-label">${escapeHtml((i.item_catalog && i.item_catalog.name) || i.item_slug)}</div></div>`).join('');
   return `${screenHeader('🎒 Ekwipunek')}<div class="cz-inventory-preview">${rows || '<div style="color:var(--gray)">Pusto</div>'}</div>`;
 }
 async function loadRanking() {

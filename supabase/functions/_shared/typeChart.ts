@@ -25,8 +25,11 @@ export const TYPE_EFF: Record<TypeName, { weak: TypeName[]; resist: TypeName[]; 
 };
 
 export function typeEffectiveness(moveType: string, defenderTypes: string[]): number {
+  // defenderTypes moze przyjsc jako null/undefined (brak kolumny 'types' u obrońcy)
+  // albo jako pojedynczy string/obiekt zamiast tablicy — nigdy nie ufamy ksztaltowi z zewnatrz.
+  const types: unknown[] = Array.isArray(defenderTypes) ? defenderTypes : [defenderTypes].filter(Boolean);
   let mult = 1;
-  for (const dt of defenderTypes) {
+  for (const dt of types) {
     const chart = TYPE_EFF[dt as TypeName];
     if (!chart) continue;
     if (chart.immune.includes(moveType as TypeName)) mult *= 0;

@@ -469,6 +469,19 @@ insert into pokemon_species (id, name, base_stats, types, base_catch_rate, prima
   (21,'spearow','{"hp":40,"attack":60,"defense":30,"special_attack":31,"special_defense":31,"speed":70}', array['normal','flying'], 255, 'sky')
 on conflict (id) do nothing;
 
+-- Zdolnosc (Ability) do wyswietlenia na karcie stworka w walce (Modul 4) — realne,
+-- kanoniczne zdolnosci startowe z gier Pokemon (jedna na gatunek, bez ukrytych/altow).
+alter table pokemon_species add column if not exists ability text;
+update pokemon_species set ability = v.ability from (values
+  (1,'overgrow'), (4,'blaze'), (7,'torrent'),
+  (16,'keen-eye'), (19,'run-away'), (10,'shield-dust'), (13,'shield-dust'),
+  (43,'chlorophyll'), (41,'inner-focus'), (74,'rock-head'), (95,'rock-head'),
+  (54,'damp'), (60,'water-absorb'), (81,'magnet-pull'), (100,'soundproof'),
+  (58,'intimidate'), (37,'flash-fire'), (27,'sand-veil'), (50,'sand-veil'),
+  (63,'synchronize'), (92,'levitate'), (66,'guts'), (86,'thick-fat'),
+  (124,'oblivious'), (23,'intimidate'), (88,'stench'), (147,'shed-skin'), (21,'keen-eye')
+) as v(id, ability) where pokemon_species.id = v.id and pokemon_species.ability is null;
+
 /* ================================================================
    MODUL 2: EKSPLORACJA, ENERGIA, GENERATOR ENCOUNTEROW (SQL RPC)
    ================================================================ */
@@ -499,7 +512,7 @@ $$ language plpgsql immutable;
 create or replace function rpc_explore_step(p_biome text)
 returns table(
   energy int, event_type text, encounter_id uuid, species_id int, level int,
-  opponent_id uuid, opponent_name text
+  opponent_id uuid, opponent_name text, found_item_slug text, found_item_qty int
 ) as $$
 declare
   v_profile profiles%rowtype;
@@ -512,6 +525,8 @@ declare
   v_iv      int;
   v_enc_id  uuid;
   v_opponent record;
+  v_item_qty int;
+  v_item_balance int;
 begin
   select * into v_profile from profiles where id = auth.uid() for update;
   if not found then raise exception 'Brak profilu gracza'; end if;
@@ -543,15 +558,15 @@ begin
       where pp.biome = p_biome and pp.profile_id <> auth.uid() and pp.last_seen > now() - interval '5 minutes'
       order by random() limit 1;
     if found then
-      return query select v_profile.energy, 'pvp'::text, null::uuid, null::int, null::int, v_opponent.profile_id, v_opponent.trainer_name;
+      return query select v_profile.energy, 'pvp'::text, null::uuid, null::int, null::int, v_opponent.profile_id, v_opponent.trainer_name, null::text, null::int;
     else
-      return query select v_profile.energy, 'none'::text, null::uuid, null::int, null::int, null::uuid, null::text;
+      return query select v_profile.energy, 'none'::text, null::uuid, null::int, null::int, null::uuid, null::text, null::text, null::int;
     end if;
     return;
-  elsif v_roll < 0.32 then -- 20%: Trener-Bot (roster generuje osobny endpoint)
-    return query select v_profile.energy, 'bot'::text, null::uuid, null::int, null::int, null::uuid, null::text;
+  elsif v_roll < 0.30 then -- 18%: Trener-Bot (roster generuje osobny endpoint)
+    return query select v_profile.energy, 'bot'::text, null::uuid, null::int, null::int, null::uuid, null::text, null::text, null::int;
     return;
-  elsif v_roll < 0.90 then -- 58%: dziki Pokemon
+  elsif v_roll < 0.82 then -- 52%: dziki Pokemon
     select * into v_species from pokemon_species where primary_biome = p_biome order by random() limit 1;
     if not found then select * into v_species from pokemon_species order by random() limit 1; end if;
     v_lvl := greatest(1, least(v_profile.trainer_level + 5, v_profile.trainer_level + (floor(random() * 5)::int - 2)));
@@ -567,10 +582,21 @@ begin
       fn_calc_stat((v_species.base_stats->>'speed')::int, v_iv, 0, v_lvl, false)
     ) returning id into v_enc_id;
 
-    return query select v_profile.energy, 'wild'::text, v_enc_id, v_species.id, v_lvl, null::uuid, null::text;
+    return query select v_profile.energy, 'wild'::text, v_enc_id, v_species.id, v_lvl, null::uuid, null::text, null::text, null::int;
     return;
-  else -- 10%: spokojny krok, nic sie nie dzieje
-    return query select v_profile.energy, 'none'::text, null::uuid, null::int, null::int, null::uuid, null::text;
+  elsif v_roll < 0.92 then -- 10%: znaleziono paczke Pokeballi (1-6 szt., atomowo do ekwipunku)
+    v_item_qty := 1 + floor(random() * 6)::int;
+    insert into inventory(owner_id, item_slug, quantity) values (auth.uid(), 'poke-ball', v_item_qty)
+      on conflict (owner_id, item_slug) do update set quantity = inventory.quantity + excluded.quantity
+      returning quantity into v_item_balance;
+
+    insert into transaction_logs(profile_id, kind, delta, balance_after, reason, meta)
+      values (auth.uid(), 'item', v_item_qty, v_item_balance, 'exploration_item_find', jsonb_build_object('item_slug','poke-ball','qty',v_item_qty));
+
+    return query select v_profile.energy, 'item'::text, null::uuid, null::int, null::int, null::uuid, null::text, 'poke-ball'::text, v_item_qty;
+    return;
+  else -- 8%: spokojny krok, nic sie nie dzieje
+    return query select v_profile.energy, 'none'::text, null::uuid, null::int, null::int, null::uuid, null::text, null::text, null::int;
   end if;
 end;
 $$ language plpgsql security definer set search_path = public;
@@ -733,8 +759,11 @@ begin
   select * into v_profile from profiles where id = auth.uid();
   if not found then raise exception 'Brak profilu gracza'; end if;
 
-  select coalesce(jsonb_agg(to_jsonb(up) order by up.party_slot), '[]'::jsonb) into v_party
-    from user_pokemon up where up.owner_id = auth.uid() and up.party_slot is not null;
+  -- 'types' nie jest kolumna user_pokemon — dolaczamy z pokemon_species, inaczej
+  -- battleEngine.ts dostaje player_team bez types i wywala sie na obronie gracza.
+  select coalesce(jsonb_agg((to_jsonb(up) || jsonb_build_object('types', ps.types)) order by up.party_slot), '[]'::jsonb) into v_party
+    from user_pokemon up join pokemon_species ps on ps.id = up.species_id
+    where up.owner_id = auth.uid() and up.party_slot is not null;
   if v_party = '[]'::jsonb then raise exception 'Twoja druzyna jest pusta — dodaj Pokemona do druzyny'; end if;
 
   v_count := 2 + floor(random() * 3)::int; -- 2-4
@@ -751,14 +780,21 @@ begin
       'special_attack', fn_calc_stat((v_species.base_stats->>'special_attack')::int,20,0,v_lvl,false),
       'special_defense', fn_calc_stat((v_species.base_stats->>'special_defense')::int,20,0,v_lvl,false),
       'speed', fn_calc_stat((v_species.base_stats->>'speed')::int,20,0,v_lvl,false),
-      'types', v_species.types
+      'types', v_species.types, 'ability', v_species.ability
     );
   end loop;
 
   insert into battles(player_id, opponent_kind, state)
   values (auth.uid(), 'bot', jsonb_build_object(
     'player_team', v_party, 'bot_team', v_bot,
-    'active_player_idx', 0, 'active_bot_idx', 0, 'turn', 0, 'log', '[]'::jsonb
+    'active_player_idx', 0, 'active_bot_idx', 0, 'turn', 0, 'log', '[]'::jsonb,
+    'weather', case p_biome
+      when 'desert' then 'sandstorm' when 'mountain' then 'sandstorm'
+      when 'snow' then 'hail'
+      when 'ocean' then 'rain' when 'swamp' then 'rain'
+      when 'volcano' then 'harsh-sun'
+      else null
+    end
   )) returning id into v_battle_id;
 
   return query select v_battle_id, state from battles where id = v_battle_id;
@@ -767,13 +803,105 @@ $$ language plpgsql security definer set search_path = public;
 revoke all on function rpc_create_bot_battle(text) from public;
 grant execute on function rpc_create_bot_battle(text) to authenticated;
 
+-- Walka z dzikim Pokemonem napotkanym podczas eksploracji (przycisk "Walcz" na
+-- ekranie Lapania) — reuzywa DOKLADNIE ten sam silnik/edge function co Boty/Sale
+-- (battle-turn), tylko bot_team ma zawsze 1 czlonka zbudowanego z juz wylosowanego
+-- encountera (te same staty, ktore widzi tez Catch Engine).
+-- p_lead_pokemon_id: ktorego Pokemona z druzyny gracz wybral na ekranie wyboru
+-- druzyny (Modul 4b) — ustawia active_player_idx; null/nietrafiony -> slot 1.
+create or replace function rpc_create_wild_battle(p_encounter_id uuid, p_lead_pokemon_id uuid default null)
+returns table(battle_id uuid, state jsonb) as $$
+declare
+  v_enc encounters%rowtype; v_species pokemon_species%rowtype;
+  v_party jsonb; v_bot jsonb; v_battle_id uuid; v_lead_idx int; v_weather text;
+begin
+  select * into v_enc from encounters where id = p_encounter_id and player_id = auth.uid() for update;
+  if not found then raise exception 'Nieprawidlowy encounter'; end if;
+  if v_enc.resolved then raise exception 'Ten encounter zostal juz rozwiazany'; end if;
+  if v_enc.expires_at < now() then raise exception 'Encounter wygasl'; end if;
+
+  select * into v_species from pokemon_species where id = v_enc.species_id;
+  if not found then raise exception 'Brak danych gatunku % w pokemon_species', v_enc.species_id; end if;
+
+  select coalesce(jsonb_agg((to_jsonb(up) || jsonb_build_object('types', ps.types)) order by up.party_slot), '[]'::jsonb) into v_party
+    from user_pokemon up join pokemon_species ps on ps.id = up.species_id
+    where up.owner_id = auth.uid() and up.party_slot is not null;
+  if v_party = '[]'::jsonb then raise exception 'Twoja druzyna jest pusta'; end if;
+
+  v_lead_idx := 0;
+  if p_lead_pokemon_id is not null then
+    select (ord - 1) into v_lead_idx from jsonb_array_elements(v_party) with ordinality as t(elem, ord)
+      where elem->>'id' = p_lead_pokemon_id::text;
+    v_lead_idx := coalesce(v_lead_idx, 0);
+  end if;
+
+  v_weather := case v_enc.biome
+    when 'desert' then 'sandstorm' when 'mountain' then 'sandstorm'
+    when 'snow' then 'hail'
+    when 'ocean' then 'rain' when 'swamp' then 'rain'
+    when 'volcano' then 'harsh-sun'
+    else null
+  end;
+
+  v_bot := jsonb_build_array(jsonb_build_object(
+    'species_id', v_enc.species_id, 'name', v_species.name, 'level', v_enc.level,
+    'current_hp', v_enc.current_hp, 'max_hp', v_enc.max_hp,
+    'attack', coalesce(v_enc.attack,10), 'defense', coalesce(v_enc.defense,10),
+    'special_attack', coalesce(v_enc.special_attack,10), 'special_defense', coalesce(v_enc.special_defense,10),
+    'speed', coalesce(v_enc.speed,10), 'types', v_species.types, 'ability', v_species.ability
+  ));
+
+  insert into battles(player_id, opponent_kind, state)
+  values (auth.uid(), 'wild', jsonb_build_object(
+    'player_team', v_party, 'bot_team', v_bot,
+    'active_player_idx', v_lead_idx, 'active_bot_idx', 0, 'turn', 0, 'log', '[]'::jsonb,
+    'encounter_id', p_encounter_id, 'weather', v_weather
+  )) returning id into v_battle_id;
+
+  return query select v_battle_id, state from battles where id = v_battle_id;
+end;
+$$ language plpgsql security definer set search_path = public;
+revoke all on function rpc_create_wild_battle(uuid, uuid) from public;
+grant execute on function rpc_create_wild_battle(uuid, uuid) to authenticated;
+
 -- Zapisuje stan tury wyliczonej przez Edge Function battle-turn + rozlicza
 -- nagrody na koniec walki. Bez grant do "authenticated": p_result/p_exp_gain/
 -- p_coin_gain sa obliczone przez zaufany serwer (Edge Function), nie przez klienta.
+--
+-- EXP dla konkretnego Pokemona (nie tylko dla Trenera): celowo NIE przeliczamy tu
+-- na nowo statow (attack/defense/...) po awansie poziomu — user_pokemon.ivs jest
+-- w praktyce zawsze puste (nie jest jeszcze nigdzie wypelniane), wiec proba
+-- odtworzenia statow z IV skonczylaby sie NULL-ami. Level/experience rosna od razu,
+-- realny przelicznik statow to osobna, przyszla poprawka.
+create or replace function fn_grant_pokemon_exp(p_pokemon_id uuid, p_amount int)
+returns table(new_level int, leveled_up boolean) as $$
+declare v_mon user_pokemon%rowtype; v_required bigint; v_start_level int;
+begin
+  if p_amount <= 0 or p_pokemon_id is null then
+    return query select level, false from user_pokemon where id = p_pokemon_id;
+    return;
+  end if;
+  select * into v_mon from user_pokemon where id = p_pokemon_id for update;
+  if not found then return; end if;
+  v_start_level := v_mon.level;
+  v_mon.experience := v_mon.experience + p_amount;
+  v_required := fn_exp_required(v_mon.level);
+  while v_mon.experience >= v_required and v_mon.level < 100 loop
+    v_mon.experience := v_mon.experience - v_required;
+    v_mon.level := v_mon.level + 1;
+    v_required := fn_exp_required(v_mon.level);
+  end loop;
+  update user_pokemon set experience = v_mon.experience, level = v_mon.level where id = p_pokemon_id;
+  return query select v_mon.level, v_mon.level > v_start_level;
+end;
+$$ language plpgsql security definer set search_path = public;
+revoke all on function fn_grant_pokemon_exp(uuid,int) from public;
+
 create or replace function fn_apply_battle_state(
-  p_battle_id uuid, p_player_id uuid, p_state jsonb, p_result text, p_exp_gain int, p_coin_gain int
-) returns table(trainer_level int, trainer_exp bigint, catch_coins bigint) as $$
-declare v_battle battles%rowtype; v_gym_id uuid;
+  p_battle_id uuid, p_player_id uuid, p_state jsonb, p_result text, p_exp_gain int, p_coin_gain int, p_mon_exp_gain int default 0
+) returns table(trainer_level int, trainer_exp bigint, catch_coins bigint, mon_level int, mon_leveled_up boolean) as $$
+declare v_battle battles%rowtype; v_gym_id uuid; v_encounter_id uuid; v_bot_hp int;
+  v_active_mon_id uuid; v_mon_level int; v_mon_leveled_up boolean;
 begin
   select * into v_battle from battles where id = p_battle_id and player_id = p_player_id for update;
   if not found then raise exception 'Nieprawidlowa walka'; end if;
@@ -788,6 +916,16 @@ begin
     from jsonb_array_elements(p_state->'player_team') as elem
     where up.id = (elem->>'id')::uuid and up.owner_id = p_player_id;
 
+  -- Walka z dzikim Pokemonem (przycisk Walcz w Module Eksploracji): synchronizujemy
+  -- HP encountera po kazdej turze, zeby kolejna proba zlapania (catch-attempt)
+  -- liczyla szanse z aktualnymi obrazeniami; omdlenie/koniec walki zamyka encounter.
+  v_encounter_id := (p_state->>'encounter_id')::uuid;
+  if v_encounter_id is not null then
+    v_bot_hp := greatest(0, ((p_state->'bot_team'->0)->>'current_hp')::int);
+    update encounters set current_hp = v_bot_hp, resolved = (resolved or v_bot_hp <= 0 or p_result is not null)
+      where id = v_encounter_id and player_id = p_player_id;
+  end if;
+
   if p_result = 'win' then
     update profiles set catch_coins = catch_coins + greatest(0,p_coin_gain) where id = p_player_id;
     insert into transaction_logs(profile_id,kind,delta,balance_after,reason)
@@ -800,13 +938,17 @@ begin
         select p_player_id, b.id from badges b where b.gym_id = v_gym_id
         on conflict do nothing;
     end if;
+
+    v_active_mon_id := (p_state->'player_team'->((p_state->>'active_player_idx')::int)->>'id')::uuid;
+    select gpe.new_level, gpe.leveled_up into v_mon_level, v_mon_leveled_up
+      from fn_grant_pokemon_exp(v_active_mon_id, greatest(0,p_mon_exp_gain)) gpe;
   end if;
 
-  return query select trainer_level, trainer_exp, catch_coins from profiles where id = p_player_id;
+  return query select trainer_level, trainer_exp, catch_coins, v_mon_level, coalesce(v_mon_leveled_up,false) from profiles where id = p_player_id;
 end;
 $$ language plpgsql security definer set search_path = public;
-revoke all on function fn_apply_battle_state(uuid,uuid,jsonb,text,int,int) from public;
-grant execute on function fn_apply_battle_state(uuid,uuid,jsonb,text,int,int) to service_role;
+revoke all on function fn_apply_battle_state(uuid,uuid,jsonb,text,int,int,int) from public;
+grant execute on function fn_apply_battle_state(uuid,uuid,jsonb,text,int,int,int) to service_role;
 
 -- ---------------- PVP ----------------
 -- Kto wygral jest wyliczane przez Edge Function pvp-challenge (symulacja obu
@@ -878,7 +1020,7 @@ begin
         'special_attack', fn_calc_stat((v_species.base_stats->>'special_attack')::int,25,0,v_lvl,false),
         'special_defense', fn_calc_stat((v_species.base_stats->>'special_defense')::int,25,0,v_lvl,false),
         'speed', fn_calc_stat((v_species.base_stats->>'speed')::int,25,0,v_lvl,false),
-        'types', v_species.types
+        'types', v_species.types, 'ability', v_species.ability
       );
     end loop;
 
@@ -914,8 +1056,9 @@ begin
     raise exception 'Najpierw pokonaj poprzednia Sale regionu %', v_gym.region;
   end if;
 
-  select coalesce(jsonb_agg(to_jsonb(up) order by up.party_slot), '[]'::jsonb) into v_party
-    from user_pokemon up where up.owner_id = auth.uid() and up.party_slot is not null;
+  select coalesce(jsonb_agg((to_jsonb(up) || jsonb_build_object('types', ps.types)) order by up.party_slot), '[]'::jsonb) into v_party
+    from user_pokemon up join pokemon_species ps on ps.id = up.species_id
+    where up.owner_id = auth.uid() and up.party_slot is not null;
   if v_party = '[]'::jsonb then raise exception 'Twoja druzyna jest pusta'; end if;
 
   insert into battles(player_id, opponent_kind, state)

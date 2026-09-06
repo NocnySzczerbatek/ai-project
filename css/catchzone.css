@@ -50,7 +50,7 @@ header{background:rgba(13,16,26,0.72);-webkit-backdrop-filter:blur(20px) saturat
 .cz-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow-y:auto}
 .cz-overlay-card{background:rgba(15,23,42,0.75);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,0.2);border-radius:24px 24px 0 0;max-width:640px;width:100%;padding:24px;box-shadow:0 -12px 40px rgba(0,0,0,0.35);position:relative;max-height:92vh;overflow-y:auto}
 
-.cz-skip-btn{position:fixed;top:14px;right:14px;z-index:1001;font-family:var(--font-main);font-weight:700;font-size:13px;background:rgba(255,77,106,0.16);color:var(--red);border:1px solid rgba(255,77,106,0.4);border-radius:999px;padding:10px 16px;min-height:48px;cursor:pointer;transition:all .15s var(--ease)}
+.cz-skip-btn{position:absolute;top:14px;right:14px;z-index:10;font-family:var(--font-main);font-weight:700;font-size:13px;background:rgba(255,77,106,0.16);color:var(--red);border:1px solid rgba(255,77,106,0.4);border-radius:999px;padding:10px 16px;min-height:48px;cursor:pointer;transition:all .15s var(--ease)}
 .cz-skip-btn:hover{background:rgba(255,77,106,0.28)}
 
 .cz-step-indicator{display:flex;gap:8px;justify-content:center;margin-bottom:20px}
@@ -79,7 +79,11 @@ header{background:rgba(13,16,26,0.72);-webkit-backdrop-filter:blur(20px) saturat
 .cz-starter-name{font-size:13px;font-weight:700;margin-top:6px;text-transform:capitalize}
 .cz-starter-types{display:flex;gap:4px;justify-content:center;margin-top:4px;flex-wrap:wrap}
 .cz-type-chip{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;text-transform:uppercase;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5)}
-.cz-type-grass{background:#78c850}.cz-type-poison{background:#a040a0}.cz-type-fire{background:#f08030}.cz-type-water{background:#6890f0}
+.cz-type-normal{background:#a8a878}.cz-type-fire{background:#f08030}.cz-type-water{background:#6890f0}.cz-type-electric{background:#f8d030}
+.cz-type-grass{background:#78c850}.cz-type-ice{background:#98d8d8}.cz-type-fighting{background:#c03028}.cz-type-poison{background:#a040a0}
+.cz-type-ground{background:#e0c068}.cz-type-flying{background:#a890f0}.cz-type-psychic{background:#f85888}.cz-type-bug{background:#a8b820}
+.cz-type-rock{background:#b8a038}.cz-type-ghost{background:#705898}.cz-type-dragon{background:#7038f8}.cz-type-dark{background:#705848}
+.cz-type-steel{background:#b8b8d0}.cz-type-fairy{background:#ee99ac}
 
 /* ── Step 2: scripted catch scene ── */
 .cz-catch-scene{text-align:center;padding:10px 0}
@@ -98,9 +102,31 @@ header{background:rgba(13,16,26,0.72);-webkit-backdrop-filter:blur(20px) saturat
 .cz-energy-caption{font-size:12px;color:var(--gray);margin-top:6px;text-align:center}
 .cz-inventory-preview{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
 .cz-inv-chip{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;text-align:center;min-width:100px}
-.cz-inv-chip .cz-inv-icon{font-size:24px}
 .cz-inv-chip .cz-inv-qty{font-family:var(--font-pixel);font-size:13px;color:var(--gold);margin-top:6px}
 .cz-inv-chip .cz-inv-label{font-size:11px;color:var(--gray);margin-top:2px}
+
+/* ── Mini-grafiki przedmiotów (prawdziwe sprite'y PokeAPI zamiast emoji) ── */
+.cz-item-icon{width:26px;height:26px;object-fit:contain;image-rendering:pixelated;vertical-align:middle}
+.cz-item-icon-lg{width:56px;height:56px}
+
+/* ── Ball picker (kafelki ze sprite'ami zamiast <select>) ── */
+.cz-ball-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.cz-ball-option{position:relative;background:rgba(255,255,255,0.03);border:2px solid var(--border);border-radius:var(--radius-sm);min-width:52px;min-height:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s var(--ease)}
+.cz-ball-option img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated}
+.cz-ball-option:hover{border-color:rgba(52,230,164,0.4)}
+.cz-ball-option.selected{border-color:var(--green);background:rgba(52,230,164,0.14);box-shadow:0 0 14px rgba(52,230,164,0.25)}
+.cz-ball-qty{position:absolute;bottom:-6px;right:-6px;background:var(--surface-solid);border:1px solid var(--border);border-radius:999px;font-size:10px;font-weight:800;padding:1px 5px;color:var(--white)}
+
+/* ── Wskaźnik szansy na złapanie ── */
+.cz-catch-chance{margin:14px 0;text-align:center}
+.cz-catch-chance-label{font-size:12px;color:var(--gray);display:block;margin-bottom:6px}
+.cz-catch-chance-bar-bg{width:100%;height:16px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+.cz-catch-chance-bar-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));border-radius:999px;transition:width .2s var(--ease)}
+.cz-catch-chance-pct{display:block;margin-top:4px;font-weight:800;color:var(--green);font-size:15px}
+.cz-item-found{text-align:center}
+
+/* ── Sprite'y Pokémonów w Drużynie/PC Box ── */
+.cz-team-sprite{width:44px;height:44px;object-fit:contain;image-rendering:pixelated;flex-shrink:0}
 
 /* ── Step 4: summary ── */
 .cz-summary{text-align:center}
@@ -158,7 +184,32 @@ header{background:rgba(13,16,26,0.72);-webkit-backdrop-filter:blur(20px) saturat
 .cz-battle-name{font-weight:800;font-size:13px;margin-bottom:6px}
 .cz-battle-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
 .cz-battle-actions .cz-btn{min-height:48px;width:100%}
-.cz-battle-log{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-size:12px;line-height:1.7;max-height:160px;overflow-y:auto}
+.cz-battle-log{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-size:12px;line-height:1.7;max-height:220px;overflow-y:auto}
+
+/* ── Szczegolowa karta stworka w walce (typy/staty/zdolnosc) ── */
+.cz-battle-types{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.cz-battle-statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 10px;margin-top:10px;font-size:11px;color:var(--gray)}
+.cz-battle-statgrid b{color:var(--white);font-size:12px}
+.cz-battle-ability{margin-top:8px;font-size:11px;color:var(--gray);border-top:1px solid var(--border);padding-top:8px}
+.cz-battle-ability b{color:var(--aqua)}
+.cz-weather-badge{text-align:center;font-size:12px;color:var(--gray);margin-bottom:10px;font-weight:700}
+
+/* ── Dziennik walki pogrupowany w rundy ── */
+.cz-round-block{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.cz-round-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.cz-round-title{font-family:var(--font-pixel);font-size:11px;color:var(--gold);margin-bottom:6px}
+.cz-round-line{padding:2px 0}
+
+/* ── Wybor Pokemona z druzyny przed walka z dzikim stworkiem ── */
+.cz-mon-pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin:14px 0}
+.cz-mon-pick-card{background:rgba(255,255,255,0.03);border:2px solid var(--border);border-radius:var(--radius);padding:12px 10px;text-align:center;cursor:pointer;transition:all .18s var(--ease)}
+.cz-mon-pick-card:hover{border-color:rgba(52,230,164,0.4);background:rgba(52,230,164,0.06);transform:translateY(-2px)}
+.cz-mon-pick-card.fainted{opacity:.4;cursor:not-allowed}
+.cz-mon-pick-sprite{width:64px;height:64px;image-rendering:pixelated}
+.cz-mon-pick-name{font-size:12px;font-weight:700;margin:6px 0 8px}
+.cz-mon-pick-fainted{font-size:11px;color:var(--red);font-weight:700;margin-top:6px}
+.cz-mon-hp-label{font-size:10px;color:var(--gray);margin-top:3px}
+.cz-bond-badge{color:var(--red);font-size:11px}
 
 .cz-badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .cz-badge-3d{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;perspective:600px}
@@ -168,5 +219,6 @@ header{background:rgba(13,16,26,0.72);-webkit-backdrop-filter:blur(20px) saturat
 
 @media(max-width:640px){
   .cz-battle-actions{grid-template-columns:1fr}
+  .cz-mon-pick-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
 }
 
