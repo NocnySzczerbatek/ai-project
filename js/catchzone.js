@@ -161,6 +161,8 @@ function renderScreen() {
     case 'team': return renderTeam();
     case 'inventory': return renderInventory();
     case 'ranking': return renderRanking();
+    case 'announcements': return renderAnnouncements();
+    case 'weather': return renderWeather();
     default: return renderMainMenu();
   }
 }
@@ -377,9 +379,12 @@ function renderMainMenu() {
     { icon: '🏆', label: 'Ranking', action: "openScreenAsync('ranking',loadRanking)" },
     { icon: '👤', label: 'Profil', action: "openScreenAsync('card',loadTrainerCardData)" },
     { icon: '🛒', label: 'Sklep', action: "openScreen('shop')" },
-    { icon: '🔄', label: 'GTS', action: "openScreenAsync('gts',loadGts)" }
+    { icon: '🔄', label: 'GTS', action: "openScreenAsync('gts',loadGts)" },
+    { icon: '📢', label: 'Ogłoszenia', action: "openScreen('announcements')" },
+    { icon: '✨', label: 'Wydarzenie dnia', locked: true },
+    { icon: '🌤️', label: 'Pogoda', action: "openScreen('weather')" }
   ];
-  const tiles = menuItems.map(m => `<div class="cz-menu-tile" onclick="${m.action}">
+  const tiles = menuItems.map(m => `<div class="cz-menu-tile${m.locked ? ' locked' : ''}" ${m.locked ? '' : `onclick="${m.action}"`}>
     <div class="cz-menu-icon">${m.icon}</div><div class="cz-menu-label">${m.label}</div>
   </div>`).join('');
   return `
@@ -396,6 +401,34 @@ function renderMainMenu() {
       </div>
     </div>
     <div class="cz-menu-grid">${tiles}</div>`;
+}
+
+// Statyczna tresc (latwa do zmiany w kodzie) — brief pkt 4: kafelek zamiast
+// rozwijania pelnej tresci na glownym ekranie menu.
+const ANNOUNCEMENTS = [
+  { date: '2026-09-06', title: 'Auto-Battle na żywo!', text: 'Walki z Trenerami, Salami i dzikimi Pokémonami toczą się teraz automatycznie — silnik sam wybiera ataki, Ty oglądasz pełny log rundy po rundzie.' },
+  { date: '2026-09-06', title: 'Kupiec w Drużynie', text: 'Możesz teraz sprzedawać złapane Pokémony za Catch Coins na ekranie Drużyna/PC Box.' },
+  { date: '2026-09-06', title: 'Darmowe leczenie', text: 'Ulecz całą drużynę za darmo, bez limitu, przyciskiem na ekranie Drużyny.' }
+];
+function renderAnnouncements() {
+  const rows = ANNOUNCEMENTS.map((a) => `<div class="cz-gym-row" style="align-items:flex-start;flex-direction:column;gap:4px">
+    <div style="display:flex;justify-content:space-between;width:100%"><b>${escapeHtml(a.title)}</b><span style="color:var(--gray);font-size:11px">${escapeHtml(a.date)}</span></div>
+    <div style="color:var(--gray);font-size:13px">${escapeHtml(a.text)}</div>
+  </div>`).join('');
+  return `${screenHeader('📢 Ogłoszenia')}<div class="cz-gym-list">${rows}</div>`;
+}
+// Pogoda per biom to REALNY mechanizm juz uzywany w walkach (obrazenia od pogody
+// co runde — patrz battleEngine.ts weatherChipDamage) — ten ekran tylko go tlumaczy
+// graczowi, nie wymysla nowej mechaniki.
+const BIOME_WEATHER = {
+  desert: '🌪 Burza piaskowa', mountain: '🌪 Burza piaskowa', snow: '🌨 Grad',
+  ocean: '🌧 Deszcz', swamp: '🌧 Deszcz', volcano: '☀ Silne słońce'
+};
+function renderWeather() {
+  const rows = BIOMES.map((b) => `<div class="cz-gym-row"><div>${b.icon} <b>${escapeHtml(b.pl)}</b></div><div style="color:var(--gray);font-size:12px">${BIOME_WEATHER[b.key] || 'Brak (neutralnie)'}</div></div>`).join('');
+  return `${screenHeader('🌤️ Pogoda')}
+    <div style="color:var(--gray);font-size:12px;margin-bottom:10px">Pogoda w biomie wpływa na walki — co rundę zadaje obrażenia Pokémonom nieodpornym na dany typ pogody (np. Burza piaskowa nie szkodzi typom Skała/Ziemia/Stal).</div>
+    <div class="cz-gym-list">${rows}</div>`;
 }
 
 
@@ -466,11 +499,14 @@ async function refreshInventory() {
 /* ---- MODUL 2: Eksploracja ---- */
 function renderExplore() {
   const p = czState.profile;
-  const biomeOpts = BIOMES.map((b) => `<option value="${b.key}" ${czState.selectedBiome === b.key ? 'selected' : ''}>${b.icon} ${b.pl}</option>`).join('');
+  const biomeTiles = BIOMES.map((b) => `<button class="cz-biome-tile ${czState.selectedBiome === b.key ? 'selected' : ''}" onclick="czState.selectedBiome='${b.key}';render()">
+    <div class="cz-biome-icon">${b.icon}</div><div class="cz-biome-label">${b.pl}</div>
+  </button>`).join('');
   return `${screenHeader('🗺️ Eksploracja')}
     <div class="cz-energy-demo"><div class="cz-energy-bar-bg"><div class="cz-energy-bar-fill" style="width:${p.energy}%"></div></div>
       <div class="cz-energy-caption">${p.energy} / 100 Energii</div></div>
-    <div class="cz-name-row"><label>Biom</label><select class="cz-input" onchange="czState.selectedBiome=this.value">${biomeOpts}</select></div>
+    <label class="cz-biome-heading">Biom</label>
+    <div class="cz-biome-grid">${biomeTiles}</div>
     ${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}
     <div>${renderExploreResult()}</div>
     <div class="cz-step-actions" style="justify-content:center">

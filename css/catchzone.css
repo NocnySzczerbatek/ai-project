@@ -157,11 +157,20 @@ header{background:rgba(13,16,26,0.72);-webkit-backdrop-filter:blur(20px) saturat
 .cz-menu-tile.locked{opacity:.45;cursor:not-allowed}
 .cz-menu-tile.locked::after{content:'🔒 Wkrótce';position:absolute;bottom:6px;font-size:9px;color:var(--gray);font-weight:700}
 
+.cz-biome-heading{display:block;font-size:12px;color:var(--gray);font-weight:700;margin:4px 0 8px}
+.cz-biome-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.cz-biome-tile{background:rgba(255,255,255,0.03);border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s var(--ease);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:64px}
+.cz-biome-tile:hover{border-color:rgba(52,230,164,0.4)}
+.cz-biome-tile.selected{border-color:var(--green);background:rgba(52,230,164,0.14);box-shadow:0 0 14px rgba(52,230,164,0.25)}
+.cz-biome-tile .cz-biome-icon{font-size:20px}
+.cz-biome-tile .cz-biome-label{font-size:10px;font-weight:700;line-height:1.2}
+
 @media(max-width:640px){
   .cz-layout{padding:14px}
   .cz-overlay-card{padding:18px}
   .cz-starter-grid{grid-template-columns:1fr}
   .cz-menu-grid{grid-template-columns:repeat(2,1fr)}
+  .cz-biome-grid{grid-template-columns:repeat(3,1fr)}
   .cz-skip-btn{top:10px;right:10px;font-size:12px;padding:9px 13px}
   header{padding:10px 14px}
   .cz-battle-grid{grid-template-columns:1fr}
