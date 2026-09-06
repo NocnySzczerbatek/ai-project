@@ -875,7 +875,7 @@ grant execute on function rpc_create_wild_battle(uuid, uuid) to authenticated;
 -- realny przelicznik statow to osobna, przyszla poprawka.
 create or replace function fn_grant_pokemon_exp(p_pokemon_id uuid, p_amount int)
 returns table(new_level int, leveled_up boolean) as $$
-declare v_mon user_pokemon%rowtype; v_required bigint; v_start_level int;
+declare v_mon user_pokemon%rowtype; v_required bigint; v_start_level int; v_cap int;
 begin
   if p_amount <= 0 or p_pokemon_id is null then
     return query select level, false from user_pokemon where id = p_pokemon_id;
@@ -883,10 +883,15 @@ begin
   end if;
   select * into v_mon from user_pokemon where id = p_pokemon_id for update;
   if not found then return; end if;
+  -- Respektujemy trg_pokemon_level_cap (poziom Pokemona <= Trainer Level + 5):
+  -- bez tego, Pokemon juz na limicie ktory zdobyl dosc EXP na kolejny poziom
+  -- wywalilby UPDATE ponizej (i cala nagrode z walki) wyjatkiem z triggera.
+  select trainer_level + 5 into v_cap from profiles where id = v_mon.owner_id;
+  v_cap := coalesce(v_cap, 100);
   v_start_level := v_mon.level;
   v_mon.experience := v_mon.experience + p_amount;
   v_required := fn_exp_required(v_mon.level);
-  while v_mon.experience >= v_required and v_mon.level < 100 loop
+  while v_mon.experience >= v_required and v_mon.level < 100 and v_mon.level < v_cap loop
     v_mon.experience := v_mon.experience - v_required;
     v_mon.level := v_mon.level + 1;
     v_required := fn_exp_required(v_mon.level);
