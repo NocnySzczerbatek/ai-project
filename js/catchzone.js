@@ -630,10 +630,10 @@ async function confirmBattleLead(pokemonId) {
     if (error) throw error;
     const row = Array.isArray(data) ? data[0] : data;
     enc.teamSelect = null;
-    enc.battle = { id: row.battle_id, state: row.state, result: null, mustSwitch: false, returnTo: 'catch' };
+    enc.battle = { id: row.battle_id, state: row.state, result: null, returnTo: 'catch' };
     czState.currentBattle = enc.battle;
-  } catch (e) { czState.error = friendlyError(e); }
-  finally { czState.busy = false; render(); }
+  } catch (e) { czState.error = friendlyError(e); czState.busy = false; render(); return; }
+  await runAutoBattle();
 }
 // Wywolywane po zakonczeniu walki (win/loss) zamiast goToMenu(), gdy walka
 // wystartowala z ekranu Lapania — wraca do Lapania z zaktualizowanym HP dzikiego.
@@ -652,17 +652,17 @@ function endBattleReturn() {
   goToMenu();
 }
 
-/* ---- MODUL 4: Walka (Boty / Sale / PvP) ---- */
+/* ---- MODUL 4: Walka (Boty / Sale / PvP) — auto-battle, silnik gra za gracza ---- */
 async function startBotBattle() {
   czState.busy = true; czState.error = null; render();
   try {
     const { data, error } = await sbClient.rpc('rpc_create_bot_battle', { p_biome: czState.selectedBiome || 'plains' });
     if (error) throw error;
     const row = Array.isArray(data) ? data[0] : data;
-    czState.currentBattle = { id: row.battle_id, state: row.state, result: null, mustSwitch: false };
+    czState.currentBattle = { id: row.battle_id, state: row.state, result: null };
     czState.screen = 'battle';
-  } catch (e) { czState.error = friendlyError(e); }
-  finally { czState.busy = false; render(); }
+  } catch (e) { czState.error = friendlyError(e); czState.busy = false; render(); return; }
+  await runAutoBattle();
 }
 async function startGymBattle(gymId) {
   czState.busy = true; czState.error = null; render();
@@ -670,10 +670,10 @@ async function startGymBattle(gymId) {
     const { data, error } = await sbClient.rpc('rpc_create_gym_battle', { p_gym_id: gymId });
     if (error) throw error;
     const row = Array.isArray(data) ? data[0] : data;
-    czState.currentBattle = { id: row.battle_id, state: row.state, result: null, mustSwitch: false };
+    czState.currentBattle = { id: row.battle_id, state: row.state, result: null };
     czState.screen = 'battle';
-  } catch (e) { czState.error = friendlyError(e); }
-  finally { czState.busy = false; render(); }
+  } catch (e) { czState.error = friendlyError(e); czState.busy = false; render(); return; }
+  await runAutoBattle();
 }
 const WEATHER_INFO = { sandstorm: '🌪 Burza piaskowa', hail: '🌨 Grad', rain: '🌧 Deszcz', 'harsh-sun': '☀ Silne słońce' };
 // Celnosc (C) nie jest realna staty Pokemona w tym silniku (brak systemu etapow
@@ -683,7 +683,7 @@ function renderCombatantCard(c) {
   const hpColor = hpPct > 50 ? 'var(--green)' : hpPct > 20 ? 'var(--gold)' : 'var(--red)';
   const types = (Array.isArray(c.types) ? c.types : []).map((t) => `<span class="cz-type-chip cz-type-${t}">${t}</span>`).join('');
   return `<div class="cz-battle-side">
-    <div class="cz-battle-name">${escapeHtml(c.name)} Lvl${c.level}${c.mega_active ? ' ✨MEGA' : ''}</div>
+    <div class="cz-battle-name">${escapeHtml(c.name)} Lvl${c.level}</div>
     <div class="cz-battle-types">${types}</div>
     <div class="cz-energy-bar-bg"><div class="cz-energy-bar-fill" style="width:${hpPct}%;background:${hpColor}"></div></div>
     <div style="font-size:11px;color:var(--gray)">${Math.max(0, c.current_hp)}/${c.max_hp} HP</div>
@@ -695,9 +695,10 @@ function renderCombatantCard(c) {
     <div class="cz-battle-ability">Zdolność: <b>${c.ability ? escapeHtml(c.ability) : '—'}</b></div>
   </div>`;
 }
-// Log jest teraz {turn,text} (zamiast plaskich stringow) — grupujemy po rundach.
+// Log jest {turn,text} (zamiast plaskich stringow) — grupujemy po rundach.
 // Defensywnie obslugujemy tez stary format (plain string), gdyby jakas walka
-// sprzed tej zmiany mial jeszcze taki log.
+// sprzed tej zmiany mial jeszcze taki log. Auto-battle pokazuje CALA historie
+// (walka jest juz rozstrzygnieta w calosci, wiec nie ma potrzeby ciac do 4 ostatnich rund).
 function renderRoundLog(log) {
   if (!log || !log.length) return '';
   const rounds = []; const byTurn = {};
@@ -708,18 +709,16 @@ function renderRoundLog(log) {
     if (!byTurn[t]) { byTurn[t] = []; rounds.push(t); }
     byTurn[t].push(text);
   });
-  return rounds.slice(-4).map((t) => `<div class="cz-round-block"><div class="cz-round-title">Runda ${t}</div>${byTurn[t].map((l) => `<div class="cz-round-line">${escapeHtml(l)}</div>`).join('')}</div>`).join('');
+  return rounds.map((t) => `<div class="cz-round-block"><div class="cz-round-title">Runda ${t}</div>${byTurn[t].map((l) => `<div class="cz-round-line">${escapeHtml(l)}</div>`).join('')}</div>`).join('');
 }
+// Auto-battle: gracz nie wybiera ataku/zamiany/mega — silnik serwerowy rozstrzyga
+// cala walke za jednym zapytaniem (patrz runAutoBattle) i tu pokazujemy juz gotowy wynik.
 function renderBattle() {
   const b = czState.currentBattle;
   if (!b) return renderMainMenu();
   const st = b.state;
   const player = st.player_team[st.active_player_idx];
   const bot = st.bot_team[st.active_bot_idx];
-  const movesHtml = (player.moves && player.moves.length ? player.moves : [{ slug: 'tackle', name: 'Tackle' }])
-    .map((m) => `<button class="cz-btn" ${b.result || b.mustSwitch || czState.busy ? 'disabled' : ''} onclick="doBattleAction({type:'attack',move_slug:'${m.slug}'})">${escapeHtml(m.name)}</button>`).join('');
-  const switchHtml = st.player_team.map((pm, i) => (i === st.active_player_idx || pm.current_hp <= 0) ? '' :
-    `<button class="cz-btn" ${czState.busy ? 'disabled' : ''} onclick="doBattleAction({type:'switch',to_index:${i}})">🔄 ${escapeHtml(pm.name)}</button>`).join('');
   const weatherBadge = st.weather ? `<div class="cz-weather-badge">${WEATHER_INFO[st.weather] || st.weather}</div>` : '';
   let resultHtml = '';
   if (b.result) {
@@ -742,20 +741,19 @@ function renderBattle() {
       ${renderCombatantCard(bot)}
     </div>
     ${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}
-    ${b.mustSwitch && !b.result ? '<div class="cz-error-box" style="color:var(--gold);border-color:rgba(255,176,32,.35);background:rgba(255,176,32,.08)">Twój Pokémon zemdlał — wybierz następnego!</div>' : ''}
-    <div class="cz-battle-actions">${b.mustSwitch ? '' : movesHtml}${switchHtml}
-      <button class="cz-btn" ${b.result || czState.busy ? 'disabled' : ''} onclick="doBattleAction({type:'mega'})">✨ Mega Ewolucja</button>
-    </div>
+    ${!b.result && czState.busy ? '<div class="cz-loading">⚔️ Walka trwa automatycznie...</div>' : ''}
     <div class="cz-battle-log">${renderRoundLog(st.log)}</div>
     ${resultHtml}`;
 }
-async function doBattleAction(action) {
+// Jedno zapytanie rozstrzyga CALA walke (silnik gra za obie strony az do konca) —
+// patrz autoResolveBattle w supabase/functions/_shared/battleEngine.ts.
+async function runAutoBattle() {
   const b = czState.currentBattle;
-  if (!b || czState.busy || b.result) return;
+  if (!b || b.result) return;
   czState.busy = true; czState.error = null; render();
   try {
-    const data = await callFn('battle-turn', { battle_id: b.id, action });
-    b.state = data.state; b.result = data.result; b.mustSwitch = data.must_switch;
+    const data = await callFn('battle-turn', { battle_id: b.id });
+    b.state = data.state; b.result = data.result;
     b.expGain = data.exp_gain; b.coinGain = data.coin_gain;
     b.monExpGain = data.mon_exp_gain; b.monLevel = data.mon_level; b.monLeveledUp = data.mon_leveled_up;
     if (data.profile) { czState.profile.trainer_level = data.profile.trainer_level; czState.profile.catch_coins = data.profile.catch_coins; }
@@ -1008,21 +1006,30 @@ function hpBarHtml(p) {
 }
 function renderTeam() {
   if (czState.myPokemon === null) return `${screenHeader('🐾 Drużyna i PC Box')}<div class="cz-loading">Ładowanie...</div>`;
+  const anyDamaged = czState.myPokemon.some((p) => p.current_hp < p.max_hp);
+  const healBtn = anyDamaged ? `<div class="cz-step-actions" style="justify-content:center;margin-bottom:10px"><button class="cz-btn cz-btn-primary" ${czState.busy ? 'disabled' : ''} onclick="healTeam()">💊 Ulecz drużynę (za darmo)</button></div>` : '';
   const rows = czState.myPokemon.map((p) => {
     const inParty = p.party_slot != null;
+    const fainted = p.current_hp <= 0;
     const name = (p.pokemon_species && p.pokemon_species.name) || ('pokemon-' + p.species_id);
     const urls = spriteUrls(p.species_id, name);
     return `<div class="cz-gym-row"><div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
       <img class="cz-team-sprite" src="${urls.animated}" data-fallback="${urls.artwork}|${urls.sprite}" onerror="imgFallback(this)" alt="${escapeAttr(name)}"/>
       <div style="flex:1;min-width:0">
-        <div>${escapeHtml(p.nickname || name)} Lv${p.level} ${bondBadge(p)}
+        <div>${escapeHtml(p.nickname || name)} Lv${p.level} ${bondBadge(p)}${fainted ? ' <span class="cz-mon-pick-fainted" style="margin:0">Zemdlony</span>' : ''}
         ${inParty ? `<span style="color:var(--green);font-size:11px">(Drużyna #${p.party_slot})</span>` : '<span style="color:var(--gray);font-size:11px">(PC Box)</span>'}</div>
         <div style="max-width:180px;margin-top:4px">${hpBarHtml(p)}</div>
       </div></div>
       ${inParty ? `<button class="cz-btn" onclick="setPartySlot('${p.id}',null)">Do Boxa</button>` : `<button class="cz-btn cz-btn-primary" onclick="setPartySlot('${p.id}',${nextFreeSlot()})">Do Drużyny</button>`}
     </div>`;
   }).join('') || '<div style="color:var(--gray);text-align:center;padding:16px">Brak Pokémonów</div>';
-  return `${screenHeader('🐾 Drużyna i PC Box')}${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}<div class="cz-gym-list">${rows}</div>`;
+  return `${screenHeader('🐾 Drużyna i PC Box')}${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}${healBtn}<div class="cz-gym-list">${rows}</div>`;
+}
+async function healTeam() {
+  czState.busy = true; czState.error = null; render();
+  try { await sbClient.rpc('rpc_heal_team'); await loadTeamAndBox(); }
+  catch (e) { czState.error = friendlyError(e); }
+  finally { czState.busy = false; render(); }
 }
 async function setPartySlot(pokemonId, slot) {
   if (slot !== null && !slot) { czState.error = 'Drużyna jest pełna (max 6)'; render(); return; }

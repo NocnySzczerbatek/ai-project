@@ -1,7 +1,7 @@
 /* Service Worker — Cobblemon Mastery Guide
    Cache'uje statyczne zasoby dla szybszego ladowania */
 
-const CACHE_NAME = 'cobblemon-v29.6';
+const CACHE_NAME = 'cobblemon-v29.7';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -37,7 +37,7 @@ const STATIC_ASSETS = [
   '/js/pages.js?v=27',
   '/js/app.js?v=25',
   '/js/arena.js?v=3',
-  '/js/catchzone.js?v=6'
+  '/js/catchzone.js?v=7'
 ];
 
 /* Instalacja — cache'uj zasoby statyczne */

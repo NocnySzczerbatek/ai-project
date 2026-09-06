@@ -797,7 +797,7 @@ begin
     end
   )) returning id into v_battle_id;
 
-  return query select v_battle_id, state from battles where id = v_battle_id;
+  return query select v_battle_id, battles.state from battles where id = v_battle_id;
 end;
 $$ language plpgsql security definer set search_path = public;
 revoke all on function rpc_create_bot_battle(text) from public;
@@ -858,7 +858,7 @@ begin
     'encounter_id', p_encounter_id, 'weather', v_weather
   )) returning id into v_battle_id;
 
-  return query select v_battle_id, state from battles where id = v_battle_id;
+  return query select v_battle_id, battles.state from battles where id = v_battle_id;
 end;
 $$ language plpgsql security definer set search_path = public;
 revoke all on function rpc_create_wild_battle(uuid, uuid) from public;
@@ -927,9 +927,9 @@ begin
   end if;
 
   if p_result = 'win' then
-    update profiles set catch_coins = catch_coins + greatest(0,p_coin_gain) where id = p_player_id;
+    update profiles set catch_coins = profiles.catch_coins + greatest(0,p_coin_gain) where id = p_player_id;
     insert into transaction_logs(profile_id,kind,delta,balance_after,reason)
-      values (p_player_id,'coins',greatest(0,p_coin_gain),(select catch_coins from profiles where id=p_player_id),'battle_reward');
+      values (p_player_id,'coins',greatest(0,p_coin_gain),(select pr.catch_coins from profiles pr where pr.id=p_player_id),'battle_reward');
     perform fn_grant_exp(p_player_id, greatest(0,p_exp_gain));
 
     v_gym_id := (v_battle.state->>'gym_id')::uuid;
@@ -944,7 +944,7 @@ begin
       from fn_grant_pokemon_exp(v_active_mon_id, greatest(0,p_mon_exp_gain)) gpe;
   end if;
 
-  return query select trainer_level, trainer_exp, catch_coins, v_mon_level, coalesce(v_mon_leveled_up,false) from profiles where id = p_player_id;
+  return query select profiles.trainer_level, profiles.trainer_exp, profiles.catch_coins, v_mon_level, coalesce(v_mon_leveled_up,false) from profiles where id = p_player_id;
 end;
 $$ language plpgsql security definer set search_path = public;
 revoke all on function fn_apply_battle_state(uuid,uuid,jsonb,text,int,int,int) from public;
@@ -959,7 +959,7 @@ create or replace function fn_resolve_pvp(p_winner uuid, p_loser uuid, p_battle_
 returns table(catch_coins bigint, coins_stolen bigint) as $$
 declare v_loser_coins bigint; v_steal_pct numeric; v_steal bigint;
 begin
-  select catch_coins into v_loser_coins from profiles where id = p_loser for update;
+  select profiles.catch_coins into v_loser_coins from profiles where id = p_loser for update;
   if v_loser_coins is null then raise exception 'Nieprawidlowy przegrany'; end if;
 
   v_steal_pct := 0.05 + random() * 0.05; -- 5-10%
@@ -968,17 +968,17 @@ begin
     v_steal := greatest(0, v_loser_coins - 100);
   end if;
 
-  update profiles set catch_coins = catch_coins - v_steal where id = p_loser;
-  update profiles set catch_coins = catch_coins + v_steal where id = p_winner;
+  update profiles set catch_coins = profiles.catch_coins - v_steal where id = p_loser;
+  update profiles set catch_coins = profiles.catch_coins + v_steal where id = p_winner;
 
   insert into transaction_logs(profile_id,kind,delta,balance_after,reason,meta)
-    values (p_loser,'coins',-v_steal,(select catch_coins from profiles where id=p_loser),'pvp_stolen',jsonb_build_object('opponent',p_winner));
+    values (p_loser,'coins',-v_steal,(select pr.catch_coins from profiles pr where pr.id=p_loser),'pvp_stolen',jsonb_build_object('opponent',p_winner));
   insert into transaction_logs(profile_id,kind,delta,balance_after,reason,meta)
-    values (p_winner,'coins',v_steal,(select catch_coins from profiles where id=p_winner),'pvp_steal',jsonb_build_object('opponent',p_loser));
+    values (p_winner,'coins',v_steal,(select pr.catch_coins from profiles pr where pr.id=p_winner),'pvp_steal',jsonb_build_object('opponent',p_loser));
 
   insert into pvp_battles_log(winner_id, loser_id, coins_stolen) values (p_winner, p_loser, v_steal);
 
-  return query select catch_coins, v_steal from profiles where id = p_winner;
+  return query select profiles.catch_coins, v_steal from profiles where id = p_winner;
 end;
 $$ language plpgsql security definer set search_path = public;
 revoke all on function fn_resolve_pvp(uuid,uuid,jsonb) from public;
@@ -1067,7 +1067,7 @@ begin
     'active_player_idx', 0, 'active_bot_idx', 0, 'turn', 0, 'log', '[]'::jsonb, 'gym_id', p_gym_id
   )) returning id into v_battle_id;
 
-  return query select v_battle_id, state from battles where id = v_battle_id;
+  return query select v_battle_id, battles.state from battles where id = v_battle_id;
 end;
 $$ language plpgsql security definer set search_path = public;
 revoke all on function rpc_create_gym_battle(uuid) from public;
@@ -1125,7 +1125,7 @@ begin
   if not found then raise exception 'Oferta nie istnieje'; end if;
   if v_listing.seller_id = auth.uid() then raise exception 'Nie mozesz kupic wlasnej oferty'; end if;
 
-  select catch_coins into v_buyer_coins from profiles where id = auth.uid() for update;
+  select profiles.catch_coins into v_buyer_coins from profiles where id = auth.uid() for update;
   if v_buyer_coins < v_listing.asking_price then raise exception 'Za malo Catch Coins'; end if;
 
   -- atomowe "zaklepanie" oferty: jesli ktos inny juz kupil, ROW_COUNT=0
@@ -1136,16 +1136,16 @@ begin
   v_commission := ceil(v_listing.asking_price * 0.05);
   v_seller_gain := v_listing.asking_price - v_commission;
 
-  update profiles set catch_coins = catch_coins - v_listing.asking_price where id = auth.uid();
-  update profiles set catch_coins = catch_coins + v_seller_gain where id = v_listing.seller_id;
+  update profiles set catch_coins = profiles.catch_coins - v_listing.asking_price where id = auth.uid();
+  update profiles set catch_coins = profiles.catch_coins + v_seller_gain where id = v_listing.seller_id;
   update user_pokemon set owner_id = auth.uid(), party_slot = null where id = v_listing.pokemon_id;
 
   insert into transaction_logs(profile_id,kind,delta,balance_after,reason,meta)
-    values (auth.uid(),'coins',-v_listing.asking_price,(select catch_coins from profiles where id=auth.uid()),'gts_purchase',jsonb_build_object('listing_id',p_listing_id));
+    values (auth.uid(),'coins',-v_listing.asking_price,(select pr.catch_coins from profiles pr where pr.id=auth.uid()),'gts_purchase',jsonb_build_object('listing_id',p_listing_id));
   insert into transaction_logs(profile_id,kind,delta,balance_after,reason,meta)
-    values (v_listing.seller_id,'coins',v_seller_gain,(select catch_coins from profiles where id=v_listing.seller_id),'gts_sale',jsonb_build_object('listing_id',p_listing_id,'commission',v_commission));
+    values (v_listing.seller_id,'coins',v_seller_gain,(select pr.catch_coins from profiles pr where pr.id=v_listing.seller_id),'gts_sale',jsonb_build_object('listing_id',p_listing_id,'commission',v_commission));
 
-  return query select catch_coins from profiles where id = auth.uid();
+  return query select profiles.catch_coins from profiles where id = auth.uid();
 end;
 $$ language plpgsql security definer set search_path = public;
 revoke all on function rpc_gts_buy(uuid) from public;
@@ -1239,3 +1239,13 @@ end;
 $$ language plpgsql security definer set search_path = public;
 revoke all on function rpc_set_party_slot(uuid,int) from public;
 grant execute on function rpc_set_party_slot(uuid,int) to authenticated;
+
+-- Leczenie druzyny (Pokemon Center) — darmowe i bez limitu (decyzja produktowa
+-- 2026-09-06), dlatego prosta funkcja bez licznikow/transaction_logs.
+create or replace function rpc_heal_team() returns void as $$
+begin
+  update user_pokemon set current_hp = max_hp where owner_id = auth.uid() and current_hp < max_hp;
+end;
+$$ language plpgsql security definer set search_path = public;
+revoke all on function rpc_heal_team() from public;
+grant execute on function rpc_heal_team() to authenticated;

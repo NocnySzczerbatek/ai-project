@@ -142,3 +142,109 @@ export async function simulateFullBattle(admin: any, teamA: Combatant[], teamB: 
   }
   return { winner, log, turns: turn };
 }
+
+const WEATHER_LABEL: Record<string, string> = {
+  sandstorm: '🌪 Burza piaskowa', hail: '🌨 Grad', rain: '🌧 Deszcz', 'harsh-sun': '☀ Silne słońce',
+};
+
+// Auto-battle (Boty/Sale/Dzikie): rozstrzyga CALA walke w jednym wywolaniu —
+// gracz nie wybiera ruchow/zamian (brief "auto-battle" 2026-09-06). Silnik sam
+// dobiera ruch obu stron (jak PvP) i automatycznie wystawia kolejnego zdrowego
+// Pokemona po zemdleniu, az do konca walki. W odroznieniu od simulateFullBattle
+// (2 "surowe" druzyny PvP): tu jest 1 pogoda + log {turn,text} identyczny jak
+// dawny per-turn silnik, zeby UI (round log) dzialalo bez zmian.
+export async function autoResolveBattle(admin: any, state: {
+  player_team: Combatant[]; bot_team: Combatant[];
+  active_player_idx: number; active_bot_idx: number; turn: number;
+  log: { turn: number; text: string }[]; weather?: string | null;
+}): Promise<{ result: 'win' | 'loss' }> {
+  const movesCache = new Map<Combatant, Move[]>();
+  const movesFor = async (c: Combatant) => {
+    if (!movesCache.has(c)) movesCache.set(c, await resolveMoves(admin, c));
+    return movesCache.get(c)!;
+  };
+
+  let rounds = 0;
+  while (rounds < 200 && !allFainted(state.player_team) && !allFainted(state.bot_team)) {
+    rounds++;
+    const roundNumber = state.turn + 1;
+    const pushLog = (text: string) => state.log.push({ turn: roundNumber, text });
+
+    const player = state.player_team[state.active_player_idx];
+    const bot = state.bot_team[state.active_bot_idx];
+    const playerMove = pickRandomMove(await movesFor(player));
+    const botMove = pickRandomMove(await movesFor(bot));
+    const playerFirst = player.speed >= bot.speed;
+
+    const applyAttack = (attacker: Combatant, defender: Combatant, move: Move, attackerLabel: string, defenderLabel: string) => {
+      const r = calcDamage(attacker, defender, move);
+      if (r.missed) { pushLog(`${attackerLabel} użył ${move.name} — Atak spudłował!`); return; }
+      defender.current_hp = Math.max(0, defender.current_hp - r.damage);
+      let msg = `${attackerLabel} użył ${move.name} (-${r.damage} HP)`;
+      if (r.effectiveness >= 2) msg += ' Bardzo skuteczne!';
+      else if (r.effectiveness > 0 && r.effectiveness < 1) msg += ' Mało skuteczne...';
+      else if (r.effectiveness === 0) msg += ' Brak efektu!';
+      if (r.crit) msg += ' Trafienie krytyczne!';
+      pushLog(msg);
+      for (const line of resolveMoveEffects(attacker, defender, move, attackerLabel, defenderLabel)) pushLog(line);
+    };
+
+    if (playerFirst) {
+      applyAttack(player, bot, playerMove, player.name, bot.name);
+      if (!isFainted(bot)) applyAttack(bot, player, botMove, bot.name, player.name);
+    } else {
+      applyAttack(bot, player, botMove, bot.name, player.name);
+      if (!isFainted(player)) applyAttack(player, bot, playerMove, player.name, bot.name);
+    }
+
+    if (isFainted(bot)) {
+      pushLog(`${bot.name} zemdlało!`);
+      const next = firstAliveIndex(state.bot_team);
+      if (next !== -1) state.active_bot_idx = next;
+    }
+    if (isFainted(player)) {
+      pushLog(`${player.name} zemdlał!`);
+      const next = firstAliveIndex(state.player_team);
+      if (next !== -1) state.active_player_idx = next;
+    }
+
+    if (state.weather && !allFainted(state.player_team) && !allFainted(state.bot_team)) {
+      const wLabel = WEATHER_LABEL[state.weather] || state.weather;
+      const curBot = state.bot_team[state.active_bot_idx];
+      const curPlayer = state.player_team[state.active_player_idx];
+      const wDmgBot = weatherChipDamage(state.weather, curBot);
+      if (wDmgBot > 0) {
+        curBot.current_hp = Math.max(0, curBot.current_hp - wDmgBot);
+        pushLog(`${wLabel} szarpie ${curBot.name}! (-${wDmgBot} HP)`);
+        if (isFainted(curBot)) {
+          pushLog(`${curBot.name} zemdlało!`);
+          const next = firstAliveIndex(state.bot_team);
+          if (next !== -1) state.active_bot_idx = next;
+        }
+      }
+      const wDmgPlayer = weatherChipDamage(state.weather, curPlayer);
+      if (wDmgPlayer > 0) {
+        curPlayer.current_hp = Math.max(0, curPlayer.current_hp - wDmgPlayer);
+        pushLog(`${wLabel} szarpie ${curPlayer.name}! (-${wDmgPlayer} HP)`);
+        if (isFainted(curPlayer)) {
+          pushLog(`${curPlayer.name} zemdlał!`);
+          const next = firstAliveIndex(state.player_team);
+          if (next !== -1) state.active_player_idx = next;
+        }
+      }
+    }
+
+    state.turn += 1;
+  }
+
+  let result: 'win' | 'loss';
+  if (allFainted(state.bot_team)) result = 'win';
+  else if (allFainted(state.player_team)) result = 'loss';
+  else {
+    // Limit rund bez KO (skrajnie rzadkie) — rozstrzygamy po sumie % HP.
+    const hpPctPlayer = state.player_team.reduce((s, c) => s + c.current_hp / c.max_hp, 0);
+    const hpPctBot = state.bot_team.reduce((s, c) => s + c.current_hp / c.max_hp, 0);
+    result = hpPctPlayer >= hpPctBot ? 'win' : 'loss';
+  }
+  return { result };
+}
