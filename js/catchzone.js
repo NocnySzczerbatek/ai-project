@@ -65,6 +65,7 @@ const czState = {
   practiceCaught: false,
   profile: null,
   initError: null,
+  needsLogin: false,
   busy: false,
   error: null,
   result: null,
@@ -98,12 +99,11 @@ async function initCatchZone() {
   if (!SUPABASE_CONFIGURED || !sbClient) return;
   try {
     const { data: sessionData } = await sbClient.auth.getSession();
-    let session = sessionData && sessionData.session;
-    if (!session) {
-      const { data, error } = await sbClient.auth.signInAnonymously();
-      if (error) throw error;
-      session = data.session;
-    }
+    const session = sessionData && sessionData.session;
+    // Brief pkt 6: bez cichego auto-logowania anonimowego dla NOWYCH wizyt —
+    // gracz musi wybrac Discord/Google/Microsoft. Istniejace sesje (w tym stare
+    // anonimowe konta testowe) dzialaja dalej bez zmian, zeby nic nie zgubic.
+    if (!session) { czState.needsLogin = true; render(); return; }
     const userId = session.user.id;
     let profile = null;
     // trigger fn_handle_new_user tworzy profil synchronicznie, ale dajemy
@@ -136,7 +136,9 @@ function render() {
     app.innerHTML = `<div class="cz-setup-banner" style="color:var(--red);border-color:rgba(255,77,106,.35);background:rgba(255,77,106,.08)">⚠ Błąd połączenia z Supabase: ${escapeHtml(czState.initError)}</div>`;
     return;
   }
+  if (czState.needsLogin && !czState.profile) { app.innerHTML = renderLoginScreen(); return; }
   if (!czState.profile) { app.innerHTML = '<div class="cz-loading">⏳ Ładowanie profilu Trenera...</div>'; return; }
+  if (!czState.profile.starter_region) { app.innerHTML = renderRegionSelect(); return; }
   if (!czState.profile.tutorial_completed || czState.result) {
     // trzymamy ekran nagrody (Krok 4) dopoki gracz go nie potwierdzi (enterGame),
     // inaczej tutorial_completed=true w tym samym takcie od razu przeskakuje do menu
@@ -174,6 +176,87 @@ function renderSetupBanner() {
     uruchom <code>supabase/schema.sql</code> w swoim projekcie i włącz Anonymous Sign-In
     (Authentication → Providers) w Supabase Dashboard.
   </div>`;
+}
+
+/* ================================================================
+   EKRAN LOGOWANIA (brief pkt 6) — Discord/Google/Microsoft (OAuth).
+   UWAGA: to tylko KOD klienta. Zeby przyciski realnie dzialaly, trzeba
+   jeszcze w Supabase Dashboard -> Authentication -> Providers wlaczyc kazdy
+   z tych 3 providerow i podac Client ID/Secret zalozone osobno w Discord
+   Developer Portal / Google Cloud Console / Microsoft Entra — to jedyny krok,
+   ktorego nie da sie zrobic z poziomu kodu (wymaga Twoich kont deweloperskich).
+   ================================================================ */
+const OAUTH_PROVIDERS = [
+  { key: 'discord', label: 'Discord' },
+  { key: 'google', label: 'Google' },
+  { key: 'azure', label: 'Microsoft' }
+];
+function renderLoginScreen() {
+  const tiles = OAUTH_PROVIDERS.map((p) => `<button class="cz-oauth-tile cz-oauth-${p.key}" ${czState.busy ? 'disabled' : ''} onclick="signInWithProvider('${p.key}')">
+    ${p.key === 'azure' ? '<div class="cz-oauth-ms-logo"><span></span><span></span><span></span><span></span></div>' : `<div class="cz-oauth-glyph">${p.key === 'discord' ? '🎮' : 'G'}</div>`}
+    <div class="cz-oauth-label">Zaloguj przez ${p.label}</div>
+  </button>`).join('');
+  return `<div class="cz-overlay"><div class="cz-overlay-card">
+    <div class="cz-professor"><div class="cz-professor-avatar">🧑‍🔬</div>
+      <div class="cz-speech-bubble">Witaj w Cobblemon Catch Zone! Zaloguj się, żeby zapisać swój postęp.</div></div>
+    <div class="cz-oauth-grid">${tiles}</div>
+    ${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}
+  </div></div>`;
+}
+async function signInWithProvider(provider) {
+  if (czState.busy) return;
+  czState.busy = true; czState.error = null; render();
+  try {
+    const { data: sessionData } = await sbClient.auth.getSession();
+    const session = sessionData && sessionData.session;
+    const redirectTo = window.location.origin + window.location.pathname;
+    // Sesja anonimowa juz istnieje (stare konto testowe) -> laczymy tozsamosc
+    // zamiast zakladac nowe konto, zeby nie zgubic postepu gracza.
+    const { error } = session && session.user && session.user.is_anonymous
+      ? await sbClient.auth.linkIdentity({ provider, options: { redirectTo } })
+      : await sbClient.auth.signInWithOAuth({ provider, options: { redirectTo } });
+    if (error) throw error;
+    // signInWithOAuth/linkIdentity przekierowuja przegladarke — kod po tym
+    // punkcie zwykle sie nie wykona (strona i tak nawiguje do providera).
+  } catch (e) { czState.error = friendlyError(e); czState.busy = false; render(); }
+}
+
+/* ================================================================
+   WYBOR REGIONU STARTOWEGO (brief pkt 6) — jednorazowy, jak samouczek.
+   Tylko Kanto ma dane (startery/dzikie spawny/itd.) — reszta regionow to
+   zapowiedz ".locked" (brief pkt 9: rozbudowa bazy region po regionie).
+   ================================================================ */
+const REGIONS = [
+  { key: 'kanto', pl: 'Kanto', icon: '🌿', locked: false },
+  { key: 'johto', pl: 'Johto', icon: '🔔', locked: true },
+  { key: 'hoenn', pl: 'Hoenn', icon: '🌋', locked: true },
+  { key: 'sinnoh', pl: 'Sinnoh', icon: '❄️', locked: true },
+  { key: 'unova', pl: 'Unova', icon: '🌆', locked: true },
+  { key: 'kalos', pl: 'Kalos', icon: '🗼', locked: true },
+  { key: 'alola', pl: 'Alola', icon: '🌴', locked: true },
+  { key: 'galar', pl: 'Galar', icon: '⚔️', locked: true },
+  { key: 'paldea', pl: 'Paldea', icon: '🍇', locked: true }
+];
+function renderRegionSelect() {
+  const tiles = REGIONS.map((r) => `<div class="cz-menu-tile${r.locked ? ' locked' : ''}" ${r.locked ? '' : `onclick="confirmRegion('${r.key}')"`}>
+    <div class="cz-menu-icon">${r.icon}</div><div class="cz-menu-label">${r.pl}</div>
+  </div>`).join('');
+  return `<div class="cz-overlay"><div class="cz-overlay-card">
+    <div class="cz-professor"><div class="cz-professor-avatar">🧑‍🔬</div>
+      <div class="cz-speech-bubble">Z jakiego regionu pochodzisz, młody Trenerze? To określi, jakie Pokémony spotkasz na swojej drodze.</div></div>
+    <div class="cz-menu-grid">${tiles}</div>
+    ${czState.error ? `<div class="cz-error-box">⚠ ${escapeHtml(czState.error)}</div>` : ''}
+  </div></div>`;
+}
+async function confirmRegion(region) {
+  if (czState.busy) return;
+  czState.busy = true; czState.error = null; render();
+  try {
+    const { error } = await sbClient.rpc('rpc_set_starter_region', { p_region: region });
+    if (error) throw error;
+    czState.profile.starter_region = region;
+  } catch (e) { czState.error = friendlyError(e); }
+  finally { czState.busy = false; render(); }
 }
 
 /* ================================================================

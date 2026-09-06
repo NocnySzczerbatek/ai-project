@@ -165,6 +165,22 @@ header{background:rgba(13,16,26,0.72);-webkit-backdrop-filter:blur(20px) saturat
 .cz-biome-tile .cz-biome-icon{font-size:20px}
 .cz-biome-tile .cz-biome-label{font-size:10px;font-weight:700;line-height:1.2}
 
+.cz-oauth-grid{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.cz-oauth-tile{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius);border:1px solid var(--border);cursor:pointer;transition:transform .15s var(--ease);font-weight:700;font-size:14px;color:var(--white)}
+.cz-oauth-tile:hover{transform:translateY(-2px)}
+.cz-oauth-tile:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.cz-oauth-tile.cz-oauth-discord{background:#5865F2}
+.cz-oauth-tile.cz-oauth-google{background:#fff;color:#3c4043}
+.cz-oauth-tile.cz-oauth-azure{background:#2f2f2f}
+.cz-oauth-glyph{font-size:20px;width:26px;text-align:center}
+.cz-oauth-tile.cz-oauth-google .cz-oauth-glyph{color:#4285F4;font-weight:800}
+.cz-oauth-ms-logo{display:grid;grid-template-columns:repeat(2,9px);grid-template-rows:repeat(2,9px);gap:2px}
+.cz-oauth-ms-logo span:nth-child(1){background:#F25022}
+.cz-oauth-ms-logo span:nth-child(2){background:#7FBA00}
+.cz-oauth-ms-logo span:nth-child(3){background:#00A4EF}
+.cz-oauth-ms-logo span:nth-child(4){background:#FFB900}
+.cz-oauth-label{flex:1;text-align:left}
+
 @media(max-width:640px){
   .cz-layout{padding:14px}
   .cz-overlay-card{padding:18px}
